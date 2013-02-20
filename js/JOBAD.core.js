@@ -43,21 +43,20 @@ var JOBAD = function(element){
 			return;	
 		}
 
-		var ignoredeps = module;
-
-		if(typeof ignoredeps != 'boolean'){
-		
-		}
+		var ignoredeps = (typeof ignoredeps == 'boolean')?ignoredeps:false;
 	
 		if(ignoredeps){
-			if(!JOBAD.modules.available(ignoredeps)){
+		        console.log("in true");
+			if(!JOBAD.modules.available(module)){
 				JOBAD.error('Missing module: '+module);			
 			}
 			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
 			return true;
 		} else {
+		        console.log(module);
 			var deps = JOBAD.modules.getDependencyList(module);
-			if(!module){
+			console.log(deps);
+		        if(!deps){
 				return false;	
 			}
 			for(var i=0;i<deps.length;i++){
@@ -163,7 +162,7 @@ var JOBAD = function(element){
 	*/
 	this.Event.KeyPressed = function(key){
 		me.modules.iterate(function(module){
-			return (module.keyPthis.elementressed(key))?false:true;
+			return (module.keyPressed(key))?false:true;
 		});
 	};
 
@@ -310,7 +309,7 @@ if(!_.isUndefined(console) && JOBAD.config.debug){//Debugging enabled / console 
 	}
 }
 
-/*eferenceError: object is not defined
+/*
 	JOBAD.error: Produces an error message
 */
 JOBAD.error = function(msg){
@@ -498,7 +497,8 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 JOBAD.modules.available = function(name, checkDeps){
 	var checkDeps = (typeof checkDeps == 'boolean')?checkDeps:false;
 	var selfAvailable = moduleList.hasOwnProperty(name);
-
+        console.log("selfAvailable:" + name);
+        console.log(selfAvailable);
 	if(checkDeps && selfAvailable){
 		var deps = moduleList[name].info.dependencies;
 		for(var i=0;i<deps.length;i++){
@@ -518,12 +518,13 @@ JOBAD.modules.available = function(name, checkDeps){
 	@returns array of strings or false if some module is not available. 
 */
 JOBAD.modules.getDependencyList = function(name){
-	if(JOBAD.modules.available(name, true)){
+	if(!JOBAD.modules.available(name, true)){
 		return false;	
 	}
 	var depArray = [name];
 	var deps = moduleList[name].info.dependencies;
-	for(var i=deps.length-1;i>=0;i--){
+
+        for(var i=deps.length-1;i>=0;i--){
 		depArray = _.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
 	return depArray;
@@ -614,7 +615,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	this.contextMenuEntries = function(target){
 		var entries = ServiceObject.contextMenuEntries.call(this, target, this.getJOBAD());
 
-		return (_.isArray(entries))?entries:(_.pairs(entries)); JOBAD
+		return (_.isArray(entries))?entries:(_.pairs(entries));
 	};
 
 	/*
