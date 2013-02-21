@@ -1,9 +1,14 @@
+/* 
+	JOBAD 3 Core Functions
+	requires JOBAD.ui.js at runtime to generate UI
+*/
+
+
 var JOBAD = 
 (function(){
 
 /* 
 	JOBAD 3 Main Function
-	"CHAOS"
 	Creates a new JOBAD instance on a specefied DOM element.  
 	@param element Element to link this element to. May be a DOM Element or a jQuery Object. 
 */
@@ -46,16 +51,13 @@ var JOBAD = function(element){
 		var ignoredeps = (typeof ignoredeps == 'boolean')?ignoredeps:false;
 	
 		if(ignoredeps){
-		        console.log("in true");
 			if(!JOBAD.modules.available(module)){
 				JOBAD.error('Missing module: '+module);			
 			}
 			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
 			return true;
 		} else {
-		        console.log(module);
 			var deps = JOBAD.modules.getDependencyList(module);
-			console.log(deps);
 		        if(!deps){
 				return false;	
 			}
@@ -108,7 +110,7 @@ var JOBAD = function(element){
 	};
 	
 	/*
-		Itaterate over all active modules with callback. 
+		Iterate over all active modules with callback. 
 		if cb returns false, abort. 
 		@param callback Function to call. 
 		@returns Array of results. 
@@ -130,7 +132,26 @@ var JOBAD = function(element){
 		return res;
 	};
 	
-	/* Events */
+	/*
+		Iterate over all active modules with callback. Abort once some callback returns false. 
+		@param callback Function to call. 
+		@returns true if no callback returns false, otherwise false. 
+	*/
+	this.modules.iterateAnd = function(callback){
+		for(var key in InstanceModules){
+			if(InstanceModules.hasOwnProperty(key)){
+				if(me.modules.isActive(key)){
+					var cb = callback(InstanceModules[key]);
+					if(!cb){
+						return false;					
+					}
+				}			
+			}		
+		}
+		return true;
+	};
+	
+	/* Event core function(s) */
 
 	/*
 		Simulates an event. This will intervene with the page. 
@@ -153,90 +174,18 @@ var JOBAD = function(element){
 		}
 	}
 
-	/* Event results */
-
-	/*
-		Returns the result of pressing a key. 
-		@param key The key to press. 
-		@returns nothing
-	*/
-	this.Event.KeyPressed = function(key){
-		me.modules.iterate(function(module){
-			return (module.keyPressed(key))?false:true;
-		});
-	};
-
-	/*
-		Returns of left clicking an argument. 
-		@param target Element to left click. 
-		@returns nothing
-	*/
-	this.Event.LeftClick = function(target){
-		me.modules.iterate(function(module){
-			module.leftClick(target);
-			return true;
-		});
-	};
-
-	/*
-		Returns the result of requesting a contextMenu. 
-		@param target Element to left click. 
-		@returns array of context menu entries / callback tuples
-	*/
-	this.Event.ContextMenuEntries = function(target){
-		return _.compact(_.flatten(
-			me.modules.iterate(function(module){
-				return module.contextMenuEntries(target);
-			})
-		));
-	};
-
-	/*
-		Returns the result of hovering. 
-		@param target Element to Hover. 
-		@returns a jquery object to use as text or false
-	*/
-	this.Event.HoverText = function(target){
-		var res = false;
-		this.modules.iterate(function(module){
-			var hoverText = module.hoverText(text);
-			if(typeof hoverText != 'undefined'){
-				res = jQuery(hoverText);
-				return false;
-			} else {
-				return true;			
-			}
-		});
-		return res;
-	}
-
-	/* Event execution */
-
-	/*
-		Creates a hover effect on an element
-		@param target Element to Hover. 
-		@returns a jquery object to use as text or false
-	*/
-	this.Event.triggerHoverText = function(source){
-		var EventResult = me.Event.HoverText(source);
-		if(EventResult = false){
-			return false;		
-		} else {
-			/* showToolTip(source, 	EventResult.html()) */	
-		}
-	}
-
+	/* Setup core function */
 	/* Setup on an Element */
 
 	var enabled = false;
 
 	/*
 		Enables or disables this JOBAD instance. 
-		@return nothing. 
+		@returns boolean indicating if the status was changed.  
 	*/
 	this.Setup = function(){
 		if(enabled){
-			// return me.Setup.disable();	//unimplemented
+			return me.Setup.disable();	//unimplemented
 		} else {
 			return me.Setup.enable();
 		}
@@ -251,24 +200,215 @@ var JOBAD = function(element){
 			return false;
 		}
 
-		me.element.on('click', function(event){
+		var root = me.element;
+
+		me.Setup.enableLeftClick(root);
+		me.Setup.enableHover(root);
+
+		return true;
+	}
+
+	/*
+		Disables this JOBAD instance. 
+		@returns boolean indicating success. 
+	*/
+	this.Setup.disable = function(){
+		if(!enabled){
+			return false;
+		}		
+		var root = me.element;
+
+		me.Setup.disableLeftClick(root);
+		me.Setup.disableHover(root);
+
+		return true;
+	}
+
+	/* Events */ 
+
+	/* left Click */
+
+	/*
+		Returns of left clicking an argument. 
+		@param target Element to left click. 
+		@returns true
+	*/
+	this.Event.LeftClick = function(target){
+		return me.modules.iterateAnd(function(module){
+			module.leftClick(target);
+			return true;
+		});
+	};	
+
+	/*
+		Triggers a left click on an element. 
+		@param source Element to left click. 
+		@returns true
+	*/
+	this.Event.triggerLeftClick = function(source){
+		var EventResult = me.Event.LeftClick(source);
+		return EventResult;
+	}
+
+	/*
+		enables the left click on a certain element. 
+		@param root The root element to register left clicking on. 
+	*/
+	this.Setup.enableLeftClick = function(root){
+		root.delegate("*", 'click.JOBAD.leftClick', function(event){
 			var element = $(event.target); //The base element. 
 			switch (event.which) {
 				case 1:
 					/* left mouse button => left click */
-					me.Event.LeftClick(element);
+					me.Event.triggerLeftClick(element);
 					event.stopPropagation(); //Not for the parent. 
-					break;
-				case 3:
-					/* right mouse button => context menu */
 					break;
 				default:
 					/* nothing */
 			}
-			});		
+		});
+	}
+	/*
+		disables the left click on a certain element. 
+		@param root The root element to deregister left clicking on. 
+	*/
+	this.Setup.disableLeftClick = function(root){
+		root.undelegate("*", 'click.JOBAD.leftClick');	
+	}
 
+	/* hoverText */
+
+	var activeHoverElement = undefined;
+	
+	/*
+		Returns the result of hovering. 
+		@param target Element to Hover. 
+		@returns a jquery object to use as text or false
+	*/
+	this.Event.HoverText = function(target){
+		var res = false;
+		me.modules.iterate(function(module){
+			var hoverText = module.hoverText(target);
+			if(typeof hoverText != 'undefined'){
+				res = jQuery(hoverText);
+				return false;
+			} else {
+				return true;			
+			}
+		});
+		return res;
+	};
+
+	/*
+		Creates a hover effect on an element
+		@param source Element to Hover. 
+		@returns boolean indicating success. 
+	*/
+	this.Event.triggerHoverText = function(source){
+		if(source.data('JOBAD.hover.Active')){
+			return false;		
+		}
+
+		if(activeHoverElement instanceof jQuery)
+		{
+			me.Event.unTriggerHoverText(activeHoverElement);	
+		}
+
+		var EventResult = me.Event.HoverText(source);
+		if(!EventResult){
+			return false;		
+		}
+
+		activeHoverElement = source;
+
+		source.data('JOBAD.hover.Active', true);		
+		
+		var tid = window.setTimeout(function(){
+			source.removeData('JOBAD.hover.timerId');
+			JOBAD.UI.hover.enable(EventResult.html());
+		}, JOBAD.config.hoverdelay)
+
+		source.data('JOBAD.hover.timerId', tid);//save timeout id
+
+	}
+
+
+	/*
+		Removes a hover effect from an element
+		@param source element from which hover will be removed. 
+		@returns boolean indicating success
+	*/
+	this.Event.unTriggerHoverText = function(source){
+		
+		if(!source.data('JOBAD.hover.Active')){
+			return false;		
+		}
+
+		if(typeof source.data('JOBAD.hover.timerId') == 'number'){
+			window.clearTimeout(source.data('JOBAD.hover.timerId'));
+			source.removeData('JOBAD.hover.timerId');		
+		}
+
+		source.removeData('JOBAD.hover.Active');
+		activeHoverElement = undefined;
+		JOBAD.UI.hover.disable();
 		return true;
 	}
+
+	/*
+		Enables hovering on the specefied element. 
+		@param root the element to enable hovering on. 	
+	*/
+	this.Setup.enableHover = function(root){
+		root
+		.delegate("*", 'mouseenter.JOBAD.hoverText', function(event){
+			me.Event.triggerHoverText($(this));	
+		})
+		.delegate("*", 'mouseleave.JOBAD.hoverText', function(event){
+			me.Event.unTriggerHoverText($(this));	
+		});
+	}
+	/*
+		Disables hovering on the specefied element. 
+		@param root the element to enable hovering on. 	
+	*/
+	this.Setup.disableHover = function(root){
+		if(typeof activeHoverElement != 'undefined')
+		{
+			me.Event.unTriggerHoverText(activeHoverElement); //remove active Hover menu
+		}
+		
+		root
+		.undelegate("*", 'mouseenter.JOBAD.hoverText')
+		.undelegate("*", 'mouseleave.JOBAD.hoverText');
+	}
+
+
+	/*
+		Returns the result of pressing a key. 
+		@param key The key to press. 
+		@returns nothing
+	*/
+	this.Event.KeyPressed = function(key){
+		me.modules.iterate(function(module){
+			return (module.keyPressed(key))?false:true;
+		});
+	};
+
+	
+
+	/*
+		Returns the result of requesting a contextMenu. 
+		@param target Element to left click. 
+		@returns array of context menu entries / callback tuples
+	*/
+	this.Event.ContextMenuEntries = function(target){
+		return _.compact(_.flatten(
+			me.modules.iterate(function(module){
+				return module.contextMenuEntries(target);
+			})
+		));
+	};
 	
 };
 
@@ -497,8 +637,6 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 JOBAD.modules.available = function(name, checkDeps){
 	var checkDeps = (typeof checkDeps == 'boolean')?checkDeps:false;
 	var selfAvailable = moduleList.hasOwnProperty(name);
-        console.log("selfAvailable:" + name);
-        console.log(selfAvailable);
 	if(checkDeps && selfAvailable){
 		var deps = moduleList[name].info.dependencies;
 		for(var i=0;i<deps.length;i++){
@@ -633,7 +771,13 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		ServiceObject.globalinit.apply(undefined, []);
 	}
 
-	ServiceObject.init.apply(this, _.union([this.getJOBAD()], args)); //TODO: Append arrays
+	var params = [JOBADInstance];
+	
+	for(var i=0;i<args.length;i++){
+		params.push(args[i]);	
+	}
+
+	ServiceObject.init.apply(this, params); //TODO: Append arrays
 	
 };
 

@@ -5,25 +5,30 @@
 		<script src="./js/deps/jquery/jquery-1.9.1.min.js"></script>
 		<script src="./js/deps/underscore/underscore-min.js"></script>
 		<script src="./js/JOBAD.core.js"></script>
+		<script src="./js/JOBAD.ui.js"></script>
 		<script type="text/javascript">
 			$(function(){				
 				var testmodule = 
 				{
 					info:{
-						'identifier':	'test.leftclick',
-						'title':	'Test Module',
+						'identifier':	'test.color',
+						'title':	'Test Module: Colors',
 						'author':	'Tom Wiesing',
-						'description':	'A Testing module, used for testing (DUH)',
+						'description':	'A Testing module, colors ps in the color given as first parameter. ',
  					},
 					init: function(JOBADInstance, color){
 						this.localStore.set("color", color);
 						var counter = this.globalStore.get("counter");
-						this.globalStore.set("counter", (typeof counter == 'number')?counter+1:1);
 					},
 					leftClick: function(target, JOBADInstance){
 						if(target.is("p")){
 							target.css("color", this.localStore.get("color"));
-							alert(this.globalStore.get("counter"));
+						}
+					},
+					hoverText: function(target){
+						if(target.is("p")){
+							var wordCount = (target.text().split(" ").length+1).toString()
+							return "<p> I am a p element which contains "+wordCount+" words.&nbsp; </p>";
 						}
 					}
 				};	
@@ -33,8 +38,8 @@
 				var JOBAD1 = new JOBAD($("#1"));
 				var JOBAD2 = new JOBAD($("#2"));
 
-				JOBAD1.modules.load('test.leftclick', ['green']);
-				JOBAD2.modules.load('test.leftclick', ['blue']);
+				JOBAD1.modules.load('test.color', ['green']);
+				JOBAD2.modules.load('test.color', ['blue']);
 
 				JOBAD1.Setup();
 				JOBAD2.Setup();
@@ -42,10 +47,14 @@
 		</script>
 	</head>
 	<body>
+		<h1>JOBAD (Instance 1)</h1>
 		<div id='1'>
-			<p>
+			<div id='3'>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc bibendum, velit molestie eleifend tincidunt, neque metus facilisis nunc, vitae euismod mi neque nec erat. Proin luctus lacinia nisl vel commodo. Integer aliquam erat massa. Pellentesque semper neque vel diam tincidunt luctus dignissim lorem mollis. Donec dui dui, consequat non suscipit et, porttitor nec enim. Sed augue lorem, commodo a mollis eget, scelerisque quis urna. Phasellus ac erat urna, non luctus est. Proin eu mauris dolor, ut pulvinar ipsum. In hac habitasse platea dictumst. Donec eros odio, vulputate id placerat et, venenatis consectetur magna.
-			</p>
+				<p id='4'>
+					Hello WORLD. I am a subparagraph
+				</p>
+			</div>
 			<p>
 				Ut dolor est, pellentesque eu posuere et, faucibus non libero. Vestibulum sit amet augue a urna sagittis fermentum ultricies quis tortor. Aenean lacinia, arcu at bibendum fringilla, nisl sapien ultricies felis, vehicula consequat nisl enim vel mauris. Fusce tempus, velit eget porta placerat, orci arcu aliquam felis, ut vulputate magna erat ac nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam arcu, tempor a tempor at, pulvinar et justo. Nulla eu massa mi. Nunc id diam in arcu luctus facilisis at quis dolor. Aenean id diam orci, at elementum tellus. Donec id nisl nisi.
 			</p>
@@ -56,9 +65,10 @@
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque id massa eget elit condimentum fringilla. Nam malesuada odio eu tortor condimentum id aliquam elit tincidunt. Sed sit amet dolor non lorem interdum interdum eget id dolor. Maecenas congue lectus quis purus ultrices ut interdum enim consectetur. Nunc venenatis neque vitae lacus fringilla mollis. Morbi augue felis, dapibus at ultricies et, tincidunt vel velit. Morbi nisi purus, bibendum eget dapibus elementum, dictum nec diam. Proin ac elit massa, non sollicitudin justo. Etiam id risus mi, at interdum mi. Pellentesque et malesuada enim. Aliquam eros massa, eleifend aliquam feugiat ut, tincidunt quis urna. Vestibulum vehicula dolor eu augue lobortis cursus. Cras vitae urna nulla. Duis placerat orci et dolor egestas vulputate. Donec sed orci augue.
 			</p>
 		</div>
+		<h1>JOBAD (Instance 2)</h1>
 		<div id='2'>
 			<p>
-				Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.
+				Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.
 			</p>
 			<p>
 				Donec cursus neque quis eros tristique facilisis molestie sem consectetur. Pellentesque ut tortor erat, non semper nunc. Phasellus et nibh leo, a posuere ante. In laoreet purus vel nulla mattis id placerat enim rhoncus. Duis quam mi, laoreet quis ullamcorper eu, dignissim sit amet odio. Fusce accumsan mollis augue, facilisis vestibulum mi sodales ut. Nullam ligula libero, tempus ut tempus non, vestibulum ac urna. Phasellus faucibus imperdiet urna, et ullamcorper nisi ultrices vel. Etiam mollis est nibh.
@@ -73,6 +83,7 @@
 				Vestibulum vestibulum est at turpis consequat at ultrices risus lacinia. Quisque accumsan libero at dui vestibulum gravida. Ut tincidunt dui ac lacus ullamcorper eget mollis felis blandit. Donec rutrum aliquet velit, vitae porta eros consectetur eu. In luctus consectetur egestas. Pellentesque nec libero at dui tristique ornare. Nam non ultrices felis. Duis molestie mattis augue in venenatis. Morbi ut tellus velit, a rutrum nisl. Maecenas ac imperdiet quam. Quisque orci est, fringilla sed viverra ut, bibendum id ligula. Morbi at lectus magna, vel mattis orci. Maecenas dictum malesuada dolor, sed porta lacus egestas quis. Mauris ornare leo ac odio interdum suscipit. In imperdiet commodo elit, eu congue augue pretium sit amet. Praesent posuere fringilla nisl vel consequat.
 			</p>
 		</div>
+		<h1>No JOBAD below this line</h1>
 			<p>
 				In hac habitasse platea dictumst. Curabitur laoreet est in tortor vestibulum sed lacinia nibh aliquet. Maecenas facilisis posuere eros in consectetur. Donec sed posuere diam. Proin erat justo, viverra vel rhoncus eget, pulvinar elementum dui. Cras ut lorem quam. In cursus, ipsum in viverra commodo, lectus orci pretium neque, ut dignissim lectus ligula quis nunc.
 			</p>
