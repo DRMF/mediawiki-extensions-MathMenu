@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Index</title>
+		<title>JOBADInstance.Setup</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,25 +461,44 @@
 		</style>
 	</head>
 	<body>
-<p><strong>Index</strong></p>
+<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBADInstance</a> &gt; <strong>JOBADInstance.Setup</strong></p>
 
-<h1>Index</h1>
-
-<p>Welcome to the JOBAD v3 Documentation. </p>
+<h1>JOBADInstance.Setup</h1>
 
 <ul>
-<li><a href="about.html">About</a> - General Information about JOBAD. </li>
-<li><a href="setup.html">Setup</a> - How to setup JOBAD on your website. </li>
-<li><a href="api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-<li><a href="modules/index.html">Module Index</a> - A list of available modules. </li>
-<li><a href="dev/index.html">Intended for developers</a>: 
+<li><strong>Function</strong> <code>.Setup()</code> Toggles the state of this JOBAD instance. </li>
+<li><strong>Function</strong> <code>.Setup.isEnabled()</code> Checks if this JOBAD instance is currently enabled. 
 <ul>
-<li><a href="dev/events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="dev/modules.html">Modules</a> - Information about how to write modules</li>
+<li><strong>returns</strong> a boolean indicating if this instance of JOBAD is active. </li>
 </ul></li>
-<li>Demos: 
+<li><strong>Function</strong> <code>.Setup.enable()</code> Enables this JOBAD instance. 
 <ul>
-<li><a href="../example.html">Demo #1</a> - A JOBAD example page. </li>
+<li><strong>returns</strong> boolean indicating success. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Setup.disable()</code> Disables this JOBAD instance. </p>
+
+<ul>
+<li><strong>returns</strong> boolean indicating success. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Setup.enableLeftClick(root)</code> Enables the left click on a certain (root) element. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>root</code> The root element to register left clicking on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Setup.disableLeftClick(root)</code> Disables the left click on a certain element.</p>
+
+<ul>
+<li><strong>jQuery</strong> <code>root</code> The root element to unregister left clicking on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Setup.enableHover(root)</code> Enables hovering on the specefied (root) element. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>root</code> The element to enable hovering on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Setup.disableHover(root)</code> Disables hovering on the specefied element. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>root</code> The element to disable hovering on. </li>
 </ul></li>
 </ul>
 

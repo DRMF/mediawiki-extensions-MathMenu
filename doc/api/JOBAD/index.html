@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Index</title>
+		<title>JOBAD</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,27 +461,33 @@
 		</style>
 	</head>
 	<body>
-<p><strong>Index</strong></p>
+<p><a href="../../index.html">Index</a> &gt; <a href="../index.html">API Documentation</a> &gt; <strong>JOBAD</strong></p>
 
-<h1>Index</h1>
+<h1>JOBAD</h1>
 
-<p>Welcome to the JOBAD v3 Documentation. </p>
+<p>This object is the main JOBAD Namespace. </p>
 
 <ul>
-<li><a href="about.html">About</a> - General Information about JOBAD. </li>
-<li><a href="setup.html">Setup</a> - How to setup JOBAD on your website. </li>
-<li><a href="api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-<li><a href="modules/index.html">Module Index</a> - A list of available modules. </li>
-<li><a href="dev/index.html">Intended for developers</a>: 
+<li><p><strong>Function</strong> <code>JOBAD(JOBADRootElement)</code> Creates a new instance of <code>JOBAD</code> bound to <code>JOBADRootElement</code>. </p>
+
 <ul>
-<li><a href="dev/events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="dev/modules.html">Modules</a> - Information about how to write modules</li>
+<li><code>JOBADRootElement</code> a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> to bind a new JOBAD instance to. </li>
+<li><strong>returns</strong> a new <a href="JOBADInstance/index.html"><code>JOBAD</code></a> instance. </li>
 </ul></li>
-<li>Demos: 
-<ul>
-<li><a href="../example.html">Demo #1</a> - A JOBAD example page. </li>
-</ul></li>
+<li><p><strong>String</strong> <code>JOBAD.version</code> - The current JOBAD Version ('3.0.0')</p></li>
+<li><strong>Object</strong> <a href="JOBAD.config/index.html"><code>JOBAD.config</code></a> - Global Configuration namespace. </li>
+<li><strong>Object</strong> <a href="JOBAD.UI/index.html"><code>JOBAD.UI</code></a> - Global UI Namespace. 
+<h2>Footnotes</h2></li>
 </ul>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 	</body>
 </html>

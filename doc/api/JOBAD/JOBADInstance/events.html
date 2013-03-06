@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Index</title>
+		<title>JOBADInstance.Events</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,25 +461,62 @@
 		</style>
 	</head>
 	<body>
-<p><strong>Index</strong></p>
+<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBADInstance</a> &gt; <strong>JOBADInstance.Events</strong></p>
 
-<h1>Index</h1>
-
-<p>Welcome to the JOBAD v3 Documentation. </p>
+<h1>JOBADInstance.Events</h1>
 
 <ul>
-<li><a href="about.html">About</a> - General Information about JOBAD. </li>
-<li><a href="setup.html">Setup</a> - How to setup JOBAD on your website. </li>
-<li><a href="api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-<li><a href="modules/index.html">Module Index</a> - A list of available modules. </li>
-<li><a href="dev/index.html">Intended for developers</a>: 
+<li><p><strong>Function</strong> <code>.Event(type, argument)</code> Simulates an event. This will intervene with the page. </p>
+
 <ul>
-<li><a href="dev/events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="dev/modules.html">Modules</a> - Information about how to write modules</li>
+<li><strong>String</strong> <code>type</code> Type of event to trigger. This should be one of the following: 
+<ul>
+<li>'keypress'</li>
+<li>'click'</li>
+<li>'contexmenu'</li>
+<li>'hover'</li>
 </ul></li>
-<li>Demos: 
+<li><strong>Mixed</strong> <code>argument</code> Argument to pass to this Event. See the different events. </li>
+<li><strong>returns</strong> depending on the event simulated. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.LeftClick(target)</code> Returns the result of clicking an element. </p>
+
 <ul>
-<li><a href="../example.html">Demo #1</a> - A JOBAD example page. </li>
+<li><strong>jQuery</strong> <code>target</code> The element to left click. </li>
+<li><strong>returns</strong> boolean indicating if any action was taken. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.triggerLeftClick(source)</code> Triggers a left click on an element.</p>
+
+<ul>
+<li><strong>jQuery</strong> <code>source</code> Element to left click. </li>
+<li><strong>returns</strong> boolean indicating if any action was taken. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.HoverText(target)</code> Returns the result of hovering. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>target</code> Element to Hover. </li>
+<li><strong>returns</strong> a jquery object to use as text or false</li>
+</ul></li>
+<li><strong>Function</strong> <code>.Event.triggerHoverText(source)</code> Creates a hover effect on an element. 
+<ul>
+<li><strong>jQuery</strong> <code>source</code> Element to Hover. </li>
+<li><strong>returns</strong> boolean indicating success. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.unTriggerHoverText(source)</code> Disables the hover effect on an element</p>
+
+<ul>
+<li><strong>jQuery</strong> <code>source</code> Element to remove Hover effect from.</li>
+<li><strong>returns</strong> boolean indicating success. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.KeyPressed(key)</code> Returns the result of pressing a key. Not yet fully implemented. </p>
+
+<ul>
+<li><strong>String</strong> <code>key</code> The key being pressed. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.Event.ContextMenuEntries(target)</code> Returns the result of requesting a contextMenu. Not yet fully implemented. 
+<ul>
+<li><strong>jQuery</strong> Element to request context menu of. </li>
+<li><strong>returns</strong> array of context menu entries / callback tuples. </li>
 </ul></li>
 </ul>
 

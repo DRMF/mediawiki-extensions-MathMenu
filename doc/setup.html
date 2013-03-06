@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Index</title>
+		<title>Setting up JOBAD</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,26 +461,53 @@
 		</style>
 	</head>
 	<body>
-<p><strong>Index</strong></p>
+<p><a href="index.html">Index</a> &gt; <strong>Setting up JOBAD</strong></p>
 
-<h1>Index</h1>
+<h1>Setting up JOBAD</h1>
 
-<p>Welcome to the JOBAD v3 Documentation. </p>
+<p>This page will give instructions on how to include JOBAD into your website. </p>
+
+<h2>Including JOBAD in a website</h2>
+
+<p>To include JOBAD in your website, you will have to include several files in your HTML document. 
+JOBAD itself depends on: </p>
 
 <ul>
-<li><a href="about.html">About</a> - General Information about JOBAD. </li>
-<li><a href="setup.html">Setup</a> - How to setup JOBAD on your website. </li>
-<li><a href="api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-<li><a href="modules/index.html">Module Index</a> - A list of available modules. </li>
-<li><a href="dev/index.html">Intended for developers</a>: 
+<li><a href="http://jquery.com">jQuery</a> - tested with version 1.9.0</li>
+<li><a href="http://underscorejs.org/">UNDERSCORE.JS</a> - tested with version 1.4.4</li>
+</ul>
+
+<p>Both dependencies are bundled with JOBAD. You can include them in your HTML document header like so:</p>
+
+<div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
+    <span class="c">&lt;!-- other header tags --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/underscore/underscore-min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="c">&lt;!-- More files to include --&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</code></pre></div>
+
+<p>After these files are included, you can load the <em>JOBAD.core.js</em> and <em>JOBAD.ui.js</em>: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/JOBAD.core.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/JOBAD.ui.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div>
+
+<p>That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 
+Then you can start JOBAD: </p>
+
+<div class="codehilite"><pre><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">JOBAD1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#my_JOBAD_area&quot;</span><span class="p">));</span> <span class="c1">//bind JOBAD to an element on the page. </span>
+    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">]);</span> <span class="c1">//Load a module</span>
+    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">Setup</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span> <span class="c1">//Enable JOBAD</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<h2>See also</h2>
+
 <ul>
-<li><a href="dev/events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="dev/modules.html">Modules</a> - Information about how to write modules</li>
-</ul></li>
-<li>Demos: 
-<ul>
-<li><a href="../example.html">Demo #1</a> - A JOBAD example page. </li>
-</ul></li>
+<li><a href="api/index.html">API Documentation</a></li>
+<li><a href="modules/index.html">Module Index</a> - A list of all available modules. </li>
 </ul>
 
 	</body>

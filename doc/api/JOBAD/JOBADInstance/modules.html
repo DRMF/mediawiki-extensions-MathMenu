@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Index</title>
+		<title>JOBADInstance.Modules</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,25 +461,58 @@
 		</style>
 	</head>
 	<body>
-<p><strong>Index</strong></p>
+<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBADInstance</a> &gt; <strong>JOBADInstance.Modules</strong></p>
 
-<h1>Index</h1>
-
-<p>Welcome to the JOBAD v3 Documentation. </p>
+<h1>JOBADInstance.Modules</h1>
 
 <ul>
-<li><a href="about.html">About</a> - General Information about JOBAD. </li>
-<li><a href="setup.html">Setup</a> - How to setup JOBAD on your website. </li>
-<li><a href="api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-<li><a href="modules/index.html">Module Index</a> - A list of available modules. </li>
-<li><a href="dev/index.html">Intended for developers</a>: 
+<li><p><strong>Object</strong> <code>.modules</code> Namespace for module related functions. </p></li>
+<li><p><strong>Function</strong> <code>.modules.load(module, options, ignoreDeps=false)</code> loads a JOBAD module if not yet loaded.</p>
+
 <ul>
-<li><a href="dev/events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="dev/modules.html">Modules</a> - Information about how to write modules</li>
+<li><strong>String</strong> <code>module</code> Name of module to load. </li>
+<li><strong>Array[Mixed]</strong> <code>options</code> Array of options to pass to the module. </li>
+<li><strong>Boolean</strong> <code>ignoredeps</code> Set to <code>true</code> to load the module without checking if its dependencies are satisfied. Defaults to <code>false</code>. </li>
 </ul></li>
-<li>Demos: 
+<li><p><strong>Function</strong> <code>.modules.loaded(module)</code> Checks if a module is loaded. </p>
+
 <ul>
-<li><a href="../example.html">Demo #1</a> - A JOBAD example page. </li>
+<li><strong>String</strong> Name of the module to check. </li>
+<li><strong>returns</strong> boolean indicating if the module is loaded. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.modules.activate(module)</code> Activates a module. </p>
+
+<ul>
+<li><strong>String</strong> <code>module</code> The module to activate. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.modules.deactivate(module)</code> Deactivates a module. 
+<ul>
+<li><strong>String</strong> <code>module</code> The module to deactivate. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.modules.isActive(module)</code> Checks if a module is loaded and active. 
+<ul>
+<li><strong>String</strong> <code>module</code> The module to check for.</li>
+<li><strong>returns</strong> boolean indicating if the module is loaded and active. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.modules.iterate(callback)</code> Iterate over all active modules with callback. 
+<ul>
+<li><strong>Function</strong> <code>callback(module)</code>
+<ul>
+<li><strong>Undefined</strong> <code>this</code></li>
+<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>module</code> The current module</li>
+<li><strong>should return</strong> <code>false</code> to abort iteration. Otherwise <code>true</code>. </li>
+</ul></li>
+<li><strong>returns</strong> an array of results of <code>callback</code>. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.modules.iterateAnd(callback)</code> Iterate over all active modules with callback. 
+<ul>
+<li><strong>Function</strong> <code>callback(module)</code>
+<ul>
+<li><strong>Undefined</strong> <code>this</code></li>
+<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>module</code> The current module</li>
+<li><strong>should return</strong> <code>false</code> to abort iteration. Otherwise <code>true</code>. </li>
+</ul></li>
+<li><strong>returns</strong> <code>true</code> if no <code>callback</code> returned <code>false</code>, otherwise <code>false</code>. </li>
 </ul></li>
 </ul>
 
