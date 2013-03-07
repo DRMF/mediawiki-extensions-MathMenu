@@ -308,6 +308,9 @@ var JOBAD = function(element){
 		if(source.data('JOBAD.hover.Active')){
 			return false;		
 		}
+		if(activeHoverElement === source){//we're already active
+			return true;		
+		}
 
 		if(activeHoverElement instanceof jQuery)
 		{
@@ -329,6 +332,7 @@ var JOBAD = function(element){
 		}, JOBAD.config.hoverdelay)
 
 		source.data('JOBAD.hover.timerId', tid);//save timeout id
+		return true;
 
 	}
 
@@ -362,7 +366,10 @@ var JOBAD = function(element){
 	this.Setup.enableHover = function(root){
 		root
 		.delegate("*", 'mouseenter.JOBAD.hoverText', function(event){
-			me.Event.triggerHoverText($(this));	
+			var res = me.Event.triggerHoverText($(this));
+			if(res){//something happened here: dont trigger on parent
+				event.stopPropagation();
+			}
 		})
 		.delegate("*", 'mouseleave.JOBAD.hoverText', function(event){
 			me.Event.unTriggerHoverText($(this));	
