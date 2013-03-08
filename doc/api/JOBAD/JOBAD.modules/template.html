@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Modules</title>
+		<title>JOBAD.modules.TEMPLATE</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,87 +461,78 @@
 		</style>
 	</head>
 	<body>
-<p><a href="../index.html">Index</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Modules</strong></p>
+<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.modules</a> &gt; <strong>JOBAD.modules.TEMPLATE</strong></p>
 
-<h1>Modules</h1>
+<h1>JOBAD.modules.TEMPLATE</h1>
 
-<p>The documentation for this topic is incomplete. 
-So far, please refer to Module Template API. </p>
-
-<h2>Module Template</h2>
-
-<div class="codehilite"><pre><code><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">TEMPLATE</span> <span class="o">=</span> 
-<span class="p">{</span>
-    <span class="cm">/*</span>
-<span class="cm">        Provides info about this module. </span>
-<span class="cm">    */</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;template&#39;</span><span class="p">,</span>  <span class="c1">//(Unique) identifier for this module, preferably human readable. </span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Template Module&#39;</span><span class="p">,</span> <span class="c1">//Human Readable title of the module. </span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span> <span class="c1">//Author</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;A template you may use as a starting point for writing other modules. &#39;</span><span class="p">,</span> <span class="c1">//A human readable description of the module. </span>
-        <span class="s1">&#39;version&#39;</span><span class="o">:</span>  <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="c1">//string containing the version number. May be omitted. </span>
-        <span class="s1">&#39;dependencies&#39;</span><span class="o">:</span> <span class="p">[]</span> <span class="c1">//Array of module dependencies. If ommited, assumed to have no dependencies. </span>
-    <span class="p">},</span>
-        <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="cm">/* </span>
-<span class="cm">        Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </span>
-<span class="cm">        @this undefined. </span>
-<span class="cm">        @returns nothing</span>
-<span class="cm">    */</span>
-    <span class="p">},</span>
-    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">,</span> <span class="nx">param3</span> <span class="cm">/*, ... */</span><span class="p">){</span>
-        <span class="cm">/*  </span>
-<span class="cm">            Called to intialise a new instance of this module. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on. </span>
-<span class="cm">            @param *param Initial parameters passed to this.modules.load</span>
-<span class="cm">            @return nothing. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">keyPressed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param key is a string. The order is: Ctrl, Alt, Super (aka Windows key), Key . For example: &#39;Ctrl+g&#39; or &#39;Ctrl+Alt+G&#39;</span>
-<span class="cm">            @returns Returns true iff it performed some action. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">leftClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a left click is performed.  Every left click action is performed. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element that has been left clicked on. </span>
-<span class="cm">            @returns Returns true iff it performed some action. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a context menu is requested. Context Menu entries will be merged. May be ommitted.  </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element the menu has been requested on. </span>
-<span class="cm">            @returns returns context menu entries as array [[entry_1, function_1], ..., [entry_n, function_1]] or as a map {entry_1: function_1, entry_2: function_2, ...}</span>
-<span class="cm">                All entry names must be non-empty. (Empty ones will be ignored). </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">hoverText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a hover text is requested. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element the hover has been requested on. </span>
-<span class="cm">            @returns a jqueryish ($(...), Domnode, etc) object to use as hover</span>
-
-<span class="cm">        */</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>
-
-<h2>See also</h2>
+<p>This object can be used as a termplate for module objects. </p>
 
 <ul>
-<li><a href="../api/JOBAD/JOBAD.modules/template.html">Module Template API</a> - API for module. Contains the API documentation for the template. </li>
-<li><a href="../modules/index.html">Module Index</a> - A list of available modules. </li>
+<li><strong>Object</strong> <code>JOBAD.modules.TEMPLATE.info</code> Module information namespace. </li>
+<li><strong>String</strong> <code>JOBAD.modules.TEMPLATE.info.identifier</code> A unique identifier for the module. </li>
+<li><strong>String</strong> <code>JOBAD.modules.TEMPLATE.info.author</code> The module author. </li>
+<li><strong>String</strong> <code>JOBAD.modules.TEMPLATE.info.description</code> A human readable description of the module. </li>
+<li><strong>String</strong> <code>JOBAD.modules.TEMPLATE.info.version</code> String containing the version number. May be omitted. </li>
+<li><p><strong>Array[String]</strong> <code>JOBAD.modules.TEMPLATE.info.dependencies</code> Array of module dependencies. If ommited, assumed to have no dependencies. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.globalinit()</code> Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </p>
+
+<ul>
+<li><strong>Undefined</strong> <code>this</code></li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.init(JOBADInstance, param1, param2, param3 /*, ... */)</code> Called to intialise a new instance of this module. 
+<ul>
+<li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>Mixed</strong> <code>*param</code> Initial parameters passed to <a href="../JOBADInstance/modules.html"><code>JOBADInstance.modules.load</code></a>. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.keyPressed(key, JOBADInstance)</code> Called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. 
+<ul>
+<li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>String</strong> <code>key</code> The key that was pressed. The order is: Ctrl, Alt, Super (aka Windows key), Key. For example: 'Ctrl+G' or 'Ctrl+Alt+G'</li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.leftClick(target, JOBADInstance)</code> Called when a left click is performed.  Every left click action is performed. May be ommitted. 
+<ul>
+<li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that was left clicked on. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.contextMenuEntries(target, JOBADInstance)</code> Called when a context menu is requested. Context Menu entries will be merged. May be ommitted. 
+<ul>
+<li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that was right clicked on. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>returns</strong> context menu entries as array [[entry_1, function_1], ..., [entry_n, function_1]] or as a map {entry_1: function_1, entry_2: function_2, ...} All entry names must be non-empty. (Empty ones will be ignored). For the first notation, a function may also be a sub menu. If no context menu is available, it should return false. 
+<ul>
+<li><strong>Function</strong> <code>callback(element, originElement)</code> Callback on menu entries. 
+<ul>
+<li><strong>Undefined</strong> <code>this</code></li>
+<li><strong>jQuery</strong> <code>element</code> The element the context menu was request on. </li>
+<li><strong>jQuery</strong> <code>originElement</code> The lowest level element the menu was requested on. </li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.hoverText(target, JOBADInstance)</code> Called when a hover text is requested. May be ommitted. 
+<ul>
+<li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that was left clicked on. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>returns</strong> a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> to use as hover element or nothing. </li>
+</ul></li>
 </ul>
+
+<h2>Footnotes</h2>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 	</body>
 </html>

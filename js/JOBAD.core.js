@@ -204,6 +204,7 @@ var JOBAD = function(element){
 
 		me.Setup.enableLeftClick(root);
 		me.Setup.enableHover(root);
+		me.Setup.enableContextMenu(root);
 
 		return true;
 	}
@@ -220,6 +221,7 @@ var JOBAD = function(element){
 
 		me.Setup.disableLeftClick(root);
 		me.Setup.disableHover(root);
+		me.Setup.disableContextMenu(root);
 
 		return true;
 	}
@@ -343,7 +345,15 @@ var JOBAD = function(element){
 		@returns boolean indicating success
 	*/
 	this.Event.unTriggerHoverText = function(source){
-		
+
+		if(typeof source == 'undefined'){
+			if(activeHoverElement instanceof jQuery){
+				source = activeHoverElement;
+			} else {
+				return false;			
+			}
+		}		
+
 		if(!source.data('JOBAD.hover.Active')){
 			return false;		
 		}
@@ -390,6 +400,26 @@ var JOBAD = function(element){
 		.undelegate("*", 'mouseleave.JOBAD.hoverText');
 	}
 
+	/* contextMenu */
+
+	/*
+		enables context menu on a certain element. 
+		@param root The root element to register the context menu on. 
+	*/
+	this.Setup.enableContextMenu = function(root){
+		JOBAD.UI.ContextMenu.enable(root, function(target){
+			return me.Event.ContextMenuEntries(target);
+		});
+	};
+
+	/*
+		disables context menu on a certain element. 
+		@param root The root element to register the context menu on. 
+	*/
+	this.Setup.disableContextMenu = function(root){
+		JOBAD.UI.ContextMenu.disable(root);
+	};
+
 
 	/*
 		Returns the result of pressing a key. 
@@ -407,14 +437,24 @@ var JOBAD = function(element){
 	/*
 		Returns the result of requesting a contextMenu. 
 		@param target Element to left click. 
-		@returns array of context menu entries / callback tuples
+		@returns array of context menu entries / callback tuples or false. 
 	*/
 	this.Event.ContextMenuEntries = function(target){
-		return _.compact(_.flatten(
-			me.modules.iterate(function(module){
+		var res = [];
+		var mods = me.modules.iterate(function(module){
 				return module.contextMenuEntries(target);
-			})
-		));
+			});
+		for(var i=0;i<mods.length;i++){
+			var mod = mods[i];
+			for(var j=0;j<mod.length;j++){
+				res.push(mod[j]);
+			}
+		}
+		if(res.length == 0){
+			return false;		
+		} else {
+			return res;		
+		}
 	};
 	
 };
@@ -478,7 +518,7 @@ var moduleStorage = {};
 JOBAD.modules.TEMPLATE = 
 {
 	/*
-		Provides info aboout this module. 
+		Provides info about this module. 
 	*/
 	info:{
 		'identifier':	'template',  //(Unique) identifier for this module, preferably human readable. 
@@ -486,7 +526,7 @@ JOBAD.modules.TEMPLATE =
 		'author':	'Tom Wiesing', //Author
 		'description':	'A template you may use as a starting point for writing other modules. ', //A human readable description of the module. 
 		'version':	'1.0', //string containing the version number. May be omitted. 
-		'dependencies':	[] //Array of module deJOBAD.modules.availablependencies. If ommited, assumed to have no dependencies. 
+		'dependencies':	[] //Array of module dependencies. If ommited, assumed to have no dependencies. 
 	},
     	globalinit: function(){
 	/* 
@@ -561,7 +601,7 @@ JOBAD.modules.register = function(ModuleObject){
 };
 
 /* 
-	Registers a new JOBAD module with JOBAD. 
+	Creates a proper Module Object. 
 	@param ModuleObject The ModuleObject to register. 
 	@returns proper Module Object (adding omitted properties etc. Otherwise false. 
 */
@@ -635,7 +675,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 };
 
-/* globalinit
+/* 
 	Checks if a module is available. 
 	@param name The Name to check. 
 	@param checkDeps Optional. Should dependencies be checked? (Will result in an endless loop if circular dependencies exist.) Default false. 
@@ -678,6 +718,7 @@ JOBAD.modules.getDependencyList = function(name){
 /*
 	Loads a module, assuming the dependencies are already available. 
 	@param name Module to loads
+	@param args Arguments to pass to the module. 
 	@returns new JOBAD.modules.loadedModule instance. 
 */
 JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
@@ -760,7 +801,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	this.contextMenuEntries = function(target){
 		var entries = ServiceObject.contextMenuEntries.call(this, target, this.getJOBAD());
 
-		return (_.isArray(entries))?entries:(_.pairs(entries));
+		return (_.isArray(entries))?entries:JOBAD.modules.generateMenuList(entries);
 	};
 
 	/*
@@ -787,6 +828,29 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	ServiceObject.init.apply(this, params); //TODO: Append arrays
 	
 };
+
+/*
+	Generates a list menu representation from an object representation. 
+	@param menu Menu to generate. 
+	@returns the new representation. 
+*/
+JOBAD.modules.generateMenuList = function(menu){
+	if(typeof menu == 'undefined'){
+		return [];
+	}
+	var res = [];
+	for(var key in menu){
+		if(menu.hasOwnProperty(key)){
+			var val = menu[key];
+			if(typeof val == 'function'){
+				res.push([key, val]);		
+			} else {
+				res.push([key, JOBAD.modules.generateMenuList(val)]);
+			}
+		}
+	}
+	return res;
+}
 
 return JOBAD;
 })();
