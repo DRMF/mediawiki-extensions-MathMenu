@@ -310,18 +310,19 @@ var JOBAD = function(element){
 		if(source.data('JOBAD.hover.Active')){
 			return false;		
 		}
-		if(activeHoverElement === source){//we're already active
-			return true;		
-		}
 
-		if(activeHoverElement instanceof jQuery)
-		{
-			me.Event.unTriggerHoverText(activeHoverElement);	
-		}
+		var EventResult = me.Event.HoverText(source); //try to do the event
 
-		var EventResult = me.Event.HoverText(source);
 		if(!EventResult){
 			return false;		
+		}
+
+		if(activeHoverElement instanceof jQuery)//something already active
+		{
+			if(activeHoverElement.is(source)){
+				return true; //done and die			
+			}
+			me.Event.unTriggerHoverText(activeHoverElement);	
 		}
 
 		activeHoverElement = source;
@@ -358,6 +359,8 @@ var JOBAD = function(element){
 			return false;		
 		}
 
+		
+
 		if(typeof source.data('JOBAD.hover.timerId') == 'number'){
 			window.clearTimeout(source.data('JOBAD.hover.timerId'));
 			source.removeData('JOBAD.hover.timerId');		
@@ -366,6 +369,10 @@ var JOBAD = function(element){
 		source.removeData('JOBAD.hover.Active');
 		activeHoverElement = undefined;
 		JOBAD.UI.hover.disable();
+
+		if(!source.is(me.element)){
+			me.Event.triggerHoverText(source.parent());//we are in the parent now
+		}
 		return true;
 	}
 
@@ -379,6 +386,8 @@ var JOBAD = function(element){
 			var res = me.Event.triggerHoverText($(this));
 			if(res){//something happened here: dont trigger on parent
 				event.stopPropagation();
+			} else if(!$(this).is(root)){ //I have nothing => trigger the parent
+				$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
 			}
 		})
 		.delegate("*", 'mouseleave.JOBAD.hoverText', function(event){
@@ -544,11 +553,11 @@ JOBAD.modules.TEMPLATE =
 			@return nothing. 
 		*/
 	},
-	keyPressed: function(key, JOBADInstance){
+	keyPressed: function(checkFunc, JOBADInstance){
 		/*
 			called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. 
 			@this An instance of JOBAD.modules.loadedModule
-			@param key is a string. The order is: Ctrl, Alt, Super (aka Windows key), Key . For example: 'Ctrl+g' or 'Ctrl+Alt+G'
+			@param checkFunc(key) Checks if the specefied combination was pressed. Order is: alt+ctrl+meta+shift+key
 			@returns Returns true iff it performed some action. 
 		*/
 	},
@@ -779,10 +788,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	
 	/*
 		Simulate a key press event to pass to the module. 
-		@param key The key that has been pressed. 
+		@param key Checks if the specefied combination was pressed. Order is: alt+ctrl+meta+shift+key 
 	*/
-	this.keyPressed = function(key){
-		return ServiceObject.keyPressed.call(this, key, this.getJOBAD());
+	this.keyPressed = function(checkFunc){
+		return ServiceObject.keyPressed.call(this, checkFunc, this.getJOBAD());
 	};
 
 	/*
@@ -825,7 +834,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		params.push(args[i]);	
 	}
 
-	ServiceObject.init.apply(this, params); //TODO: Append arrays
+	ServiceObject.init.apply(this, params);
 	
 };
 

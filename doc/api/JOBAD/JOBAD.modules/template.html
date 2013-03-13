@@ -485,10 +485,10 @@
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 <li><strong>Mixed</strong> <code>*param</code> Initial parameters passed to <a href="../JOBADInstance/modules.html"><code>JOBADInstance.modules.load</code></a>. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.keyPressed(key, JOBADInstance)</code> Called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. 
+<li><strong>Function</strong> <code>JOBAD.modules.TEMPLATE.keyPressed(checkFunc, JOBADInstance)</code> Called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. 
 <ul>
 <li><strong>Instance[ <a href="loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>String</strong> <code>key</code> The key that was pressed. The order is: Ctrl, Alt, Super (aka Windows key), Key. For example: 'Ctrl+G' or 'Ctrl+Alt+G'</li>
+<li><strong>Function</strong> <code>checkFunc(combination)</code> Checks if the specefied combination was pressed. Order is: alt+ctrl+meta+shift+key</li>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 <li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
 </ul></li>
