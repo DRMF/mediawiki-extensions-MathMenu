@@ -8,84 +8,30 @@
 		<link href="./css/jquery-ui-1.10.1.min.css" rel="stylesheet">
 		<script src="./js/JOBAD.core.js"></script>
 		<script src="./js/JOBAD.ui.js"></script>
+
+		<!-- Load all the modules -->
+
+		<script src="./modules/example1.js"></script>
+		<script src="./modules/example2.js"></script>
+		<script src="./modules/example3.js"></script>
+		<script src="./modules/example4.js"></script>
+
 		<script type="text/javascript">
-			$(function(){				
-				var color_test = 
-				{
-					info:{
-						'identifier':	'test.color',
-						'title':	'Test Module: Colors',
-						'author':	'Tom Wiesing',
-						'description':	'A Testing module, colors ps in the color given as first parameter. ',
- 					},
-					init: function(JOBADInstance, color){
-						this.localStore.set("color", color);
-						var counter = this.globalStore.get("counter");
-					},
-					leftClick: function(target, JOBADInstance){
-						if(target.is("p")){
-							target.css("color", this.localStore.get("color"));
-						}
-					},
-					hoverText: function(target){
-						if(target.is("p")){
-							var wordCount = (target.text().split(" ").length+1).toString()
-							return "<p> I am a p element which contains "+wordCount+" words.&nbsp; </p>";
-						}
-					},
-					contextMenuEntries: function(target){
-						if(target.is('#nomenu,#nomenu *')){
-							return false;
-						}
-						return {"Colors": 
-								{
-									"Make me orange": function(element){element.css("color", "orange");}, 
-									"Highlight my background": function(element){
-										element
-										.stop().css("background-color", "#FFFF9C")
-										.animate({ backgroundColor: "#FFFFFF"}, 1500);
-									},
-									"Revert": function(element){element.stop().css('color', '');}
-								}
-							};
-					}
-				};
-				var p_test = 
-				{
-					info:{
-						'identifier':	'test.p',
-						'title':	'Test Module: Paragraphs',
-						'author':	'Tom Wiesing',
-						'description':	'A Testing module',
- 					},
-					contextMenuEntries: function(target){
-						
-						if(target.is('#nomenu,#nomenu *')){
-							return false;
-						}
-						return [
-							["Am I a <p> ?", function(element){
-								if(element.is("p")){
-									alert("I am a <p> element. ");
-								} else {
-									alert("No I'm not. ");
-								}
-								
-							}]
-						];
-					}
-				};	
-				
-				JOBAD.modules.register(color_test);
-				JOBAD.modules.register(p_test);
-				
+			$(function(){	
 				var JOBAD1 = new JOBAD($("#1"));
 				var JOBAD2 = new JOBAD($("#2"));
 
-				JOBAD1.modules.load('test.color', ['green']);
+				JOBAD1.modules.load('test.color.click', ['green']);
+				JOBAD1.modules.load('test.color.hover', []);
+				JOBAD1.modules.load('test.color.menu', []);
 				JOBAD1.modules.load('test.p', []);
-				JOBAD2.modules.load('test.color', ['blue']);
+	
+				JOBAD2.modules.load('test.color.click', ['blue']);
+				JOBAD2.modules.load('test.color.hover', []);
+				JOBAD2.modules.load('test.color.menu', []);
 				JOBAD2.modules.load('test.p', []);
+
+
 				JOBAD1.Setup();
 				JOBAD2.Setup();
 			})		

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Modules</title>
+		<title>Known Issues & TODO</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,85 +461,51 @@
 		</style>
 	</head>
 	<body>
-<p><a href="../index.html">Index</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Modules</strong></p>
+<p><a href="index.html">Index</a> &gt; <strong>Known Issues &amp; TODO</strong></p>
 
-<h1>Modules</h1>
+<h1>Known Issues &amp; TODO</h1>
 
-<p>The documentation for this topic is incomplete. 
-So far, please refer to Module Template API. </p>
-
-<h2>Module Template</h2>
-
-<div class="codehilite"><pre><code><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="cm">/*</span>
-<span class="cm">        Provides info about this module. </span>
-<span class="cm">    */</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;template&#39;</span><span class="p">,</span>  <span class="c1">//(Unique) identifier for this module, preferably human readable. </span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Template Module&#39;</span><span class="p">,</span> <span class="c1">//Human Readable title of the module. </span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span> <span class="c1">//Author</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;A template you may use as a starting point for writing other modules. &#39;</span><span class="p">,</span> <span class="c1">//A human readable description of the module. </span>
-        <span class="s1">&#39;version&#39;</span><span class="o">:</span>  <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="c1">//string containing the version number. May be omitted. </span>
-        <span class="s1">&#39;dependencies&#39;</span><span class="o">:</span> <span class="p">[]</span> <span class="c1">//Array of module dependencies. If ommited, assumed to have no dependencies. </span>
-    <span class="p">},</span>
-        <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="cm">/* </span>
-<span class="cm">        Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </span>
-<span class="cm">        @this undefined. </span>
-<span class="cm">        @returns nothing</span>
-<span class="cm">    */</span>
-    <span class="p">},</span>
-    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">,</span> <span class="nx">param3</span> <span class="cm">/*, ... */</span><span class="p">){</span>
-        <span class="cm">/*  </span>
-<span class="cm">            Called to intialise a new instance of this module. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on. </span>
-<span class="cm">            @param *param Initial parameters passed to this.modules.load</span>
-<span class="cm">            @return nothing. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">keyPressed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a key is pressed. At most one keyPressed event will be activated. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param key is a string. The order is: Ctrl, Alt, Super (aka Windows key), Key . For example: &#39;Ctrl+g&#39; or &#39;Ctrl+Alt+G&#39;</span>
-<span class="cm">            @returns Returns true iff it performed some action. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">leftClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a left click is performed.  Every left click action is performed. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element that has been left clicked on. </span>
-<span class="cm">            @returns Returns true iff it performed some action. </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a context menu is requested. Context Menu entries will be merged. May be ommitted.  </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element the menu has been requested on. </span>
-<span class="cm">            @returns returns context menu entries as array [[entry_1, function_1], ..., [entry_n, function_1]] or as a map {entry_1: function_1, entry_2: function_2, ...}</span>
-<span class="cm">                All entry names must be non-empty. (Empty ones will be ignored). </span>
-<span class="cm">        */</span>
-    <span class="p">},</span>
-    <span class="nx">hoverText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="cm">/*</span>
-<span class="cm">            called when a hover text is requested. May be ommitted. </span>
-<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
-<span class="cm">            @param target The element the hover has been requested on. </span>
-<span class="cm">            @returns a text, a jqueryish ($(...), Domnode, etc) object to use as hover or a boolean indicating either the text or if something was done. </span>
-
-<span class="cm">        */</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-</code></pre></div>
-
-<h2>See also</h2>
+<h2>TODO / API Drafts</h2>
 
 <ul>
-<li><a href="../api/JOBAD/JOBAD.modules/template.html">Module Template API</a> - API for module. Contains the API documentation for the template. </li>
-<li><a href="../modules/index.html">Module Index</a> - A list of available modules. </li>
+<li>Implement Sidebar Event
+<ul>
+<li>register on certain elements. Possible API: 
+<ul>
+<li><code>ModuleObject.onUpdate(JOBADInstance)</code> - Called when any update on the element occurs (jQuery mutation events / or just after every call?)</li>
+<li><code>JOBADInstance.sidebar.forceupdate()</code> - force an update on the sidebar
+<ul>
+<li><code>loadedModule.reportChange()</code> - calls the mathod above. (report when an element changed)</li>
+</ul></li>
+<li><code>JOBADInstance.sidebar.register(target, options, callback, UUID_PREFIX)</code> - register on an element - returns UUID
+<ul>
+<li><code>loadedModule.registerSidebarElement(target, options, callback)</code> - calls above with prefix</li>
+</ul></li>
+<li><code>JOBADInstance.sidebar.unregister(UUID)</code> - unregister by UUID
+<ul>
+<li><code>loadedModule.unregisterSidebarElement(target, options, callback)</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Add options for <code>JOBADInstance</code> (allow for local disabling of certain events). Possible API: 
+<ul>
+<li><code>JOBADInstance(element, [modules2Load | options])</code></li>
+<li><code>JOBADInstance.Events.enable(eventName)</code></li>
+<li><code>JOBADInstance.Events.disable(eventName)</code></li>
+<li><code>JOBADInstance.Events.isEnabled(eventName)</code></li>
+</ul></li>
+<li>Implement keyPress Event</li>
+</ul>
+
+<h2>Known Issues</h2>
+
+<ul>
+<li>Hover / Context Menu UI sometimes overlap</li>
+<li>Hover behaves strangely with children</li>
+<li>ContextMenu submenu sometimes not wide enough (jQuery UI bug?)</li>
+<li>Example modules undocumented</li>
+<li>Debug enabled by default</li>
+<li><code>6 * 9 == 42</code> evaluates to <code>false</code>. <!-- The answer must be wrong then. --></li>
 </ul>
 
 	</body>

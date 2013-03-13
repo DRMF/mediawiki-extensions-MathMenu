@@ -1,0 +1,14 @@
+JOBAD.modules.register({
+	info:{
+		'identifier':	'test.color.hover',
+		'title':	'Test Module: Colors Hover',
+		'author':	'Tom Wiesing',
+		'description':	'A Testing module, colors ps in the color given as first parameter. ',
+	},
+	hoverText: function(target){
+		if(target.is("p")){
+			var wordCount = (target.text().split(" ").length+1).toString()
+			return "<p> I am a p element which contains "+wordCount+" words.&nbsp; </p>";
+		}
+	}
+});

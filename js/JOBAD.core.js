@@ -59,6 +59,7 @@ var JOBAD = function(element){
 		} else {
 			var deps = JOBAD.modules.getDependencyList(module);
 		        if(!deps){
+				JOBAD.console.warn("Warning: Can't load module <"+module+">: Module not found. "); //Module not found (has no dependecnies)
 				return false;	
 			}
 			for(var i=0;i<deps.length;i++){
@@ -285,24 +286,32 @@ var JOBAD = function(element){
 	/*
 		Returns the result of hovering. 
 		@param target Element to Hover. 
-		@returns a jquery object to use as text or false
+		@returns a jquery object to use as hover text or false. 
 	*/
 	this.Event.HoverText = function(target){
 		var res = false;
 		me.modules.iterate(function(module){
 			var hoverText = module.hoverText(target);
-			if(typeof hoverText != 'undefined'){
-				res = jQuery(hoverText);
-				return false;
-			} else {
-				return true;			
+			if(typeof hoverText != 'undefined' && typeof res == "boolean"){//trigger all hover handlers ; display only the first one. 
+				if(typeof hoverText == "string"){
+					res = $("<p>").text(hoverText)			
+				} else if(typeof hoverText != "boolean"){
+					try{
+						res = jQuery(hoverText);
+					} catch(e){
+						JOBAD.error("Error (FATAL): Module <"+module.info().identifier+"> returned invalid HOVER result. ");
+					}
+				} else if(hoverText === true){
+					res = true;
+				}
 			}
+			return false;
 		});
 		return res;
 	};
 
 	/*
-		Creates a hover effect on an element
+		Creates a hover effect on an element. 
 		@param source Element to Hover. 
 		@returns boolean indicating success. 
 	*/
@@ -313,8 +322,8 @@ var JOBAD = function(element){
 
 		var EventResult = me.Event.HoverText(source); //try to do the event
 
-		if(!EventResult){
-			return false;		
+		if(typeof EventResult == 'boolean'){
+			return EventResult;		
 		}
 
 		if(activeHoverElement instanceof jQuery)//something already active
@@ -583,7 +592,7 @@ JOBAD.modules.TEMPLATE =
 			called when a hover text is requested. May be ommitted. 
 			@this An instance of JOBAD.modules.loadedModule
 			@param target The element the hover has been requested on. 
-			@returns a jqueryish ($(...), Domnode, etc) object to use as hover
+			@returns a text, a jqueryish ($(...), Domnode, etc) object to use as hover or a boolean indicating either the text or if something was done. 
 				
 		*/
 	}
