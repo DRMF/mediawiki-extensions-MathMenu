@@ -8,6 +8,7 @@
 	//Mouse coordinates
 	var mouseCoords = [0, 0];
 
+
 	$(document).on("mousemove.JOBADListener", function(e){
 		mouseCoords = [e.pageX-$(window).scrollLeft(), e.pageY-$(window).scrollTop()];
 	});
@@ -108,6 +109,9 @@
 		}
 
 		element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
+			if(e.ctrlKey){
+				return true;
+			}
 			var targetElement = $(e.target);
 			var elementOrg = $(e.target);
 			var result = false;
@@ -219,9 +223,116 @@
 	};
 
 
-	//KeyPress
+	//Sidebar UI
+	JOBAD.UI.Sidebar = {}; 
+
+	JOBAD.UI.Sidebar.config = 
+	{
+		"width": 100 //Sidebar Width
+	};
+
+	/*
+		Wraps an element to create a sidebar UI. 
+		@param element The element to wrap. 
+		@returns the original element, now wrapped. 
+	*/
+	JOBAD.UI.Sidebar.wrap = function(element){
+		var org = $(element);
+
+		var orgWrapper = $("<div>").css({"overflow": "hidden"});
+
+		var sideBarElement = $("<div>").css({
+			"float": "right",
+			"width": JOBAD.UI.Sidebar.config.width,
+			"height": 1, //something >0
+			"position":"relative"
+		});
+
+		var container = $("<div>").css({
+			"width": "100%",
+			"float":"left",
+			"overflow":"hidden"	
+		});
+	
+		org.wrap(orgWrapper);
+
+		orgWrapper = org.parent();
+
+		orgWrapper.wrap(container);
+	
+		container = orgWrapper.parent();
+
+		container.prepend(sideBarElement);
+
+		return org;
+	};
+
+	/*
+		Unwraps an element, destroying the sidebar. 
+		@param The element which has a sidebar. 
+		@returns the original element unwrapped. 
+	*/
+	JOBAD.UI.Sidebar.unwrap = function(element){
+		var org = $(element);
+		org
+		.unwrap()
+		.parent()
+		.find("div")
+		.first().remove();
+
+		return org.unwrap();
+	};
+
+	/*
+		Adds a new notification to the sidebar. (It must already exist)
+		@param sidebar The element which has a sidebar. 
+		@param element The element to bind the notification to. 
+		@returns an empty new notification element. 
+	*/
+	JOBAD.UI.Sidebar.addNotification = function(sidebar, element){
+		var sbar = $(sidebar);
+		var child = $(element);
+		var offset = child.offset().top - sbar.offset().top; //offset
+		sbar = sbar.parent().parent().find("div").first();
+	
+		var newGuy =  $("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
+
+
+		var callback = function(){
+			var offset = child.offset().top - sbar.offset().top; //offset
+			newGuy.css({"top": offset});
+		
+		};
+	
+
+		$(window).on("resize.JOBAD.UI.Sidebar", callback);
+
+		return newGuy.data("JOBAD.UI.Sidebar.ResizeHook", callback);
+	};
+
+	/*
+		Forces a sidebar notification position update. 
+		@returns nothing. 
+	*/
+	JOBAD.UI.Sidebar.forceNotificationUpdate = function(){
+		$(window).trigger("resize.JOBAD.UI.Sidebar");
+	};
+
+	/*
+		Removes a notification
+		@param notification The notification element. 
+		@returns nothing. 
+	*/
+	JOBAD.UI.Sidebar.removeNotification = function(notification){
+		var callback = notification.data("JOBAD.UI.Sidebar.ResizeHook");
+		$(window).off("resize.JOBAD.UI.Sidebar", callback);
+		notification.remove();
+	};
+
+
+	/*
+	JOBAD Keypress UI - Removed temporarily
 	JOBAD.UI.keypress = {};
-	/* Matches keypress */
 	//adapted code from https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js
 	JOBAD.UI.keypress.keys = {
 		specialKeys: {
@@ -280,4 +391,5 @@
 		return possible.hasOwnProperty(comb.toLowerCase());
 	};
 
+	*/
 })(JOBAD)

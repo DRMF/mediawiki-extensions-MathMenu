@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Event Handling</title>
+		<title>JOBAD.UI.Sidebar</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,59 +461,50 @@
 		</style>
 	</head>
 	<body>
-<p><a href="../index.html">Index</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Event Handling</strong></p>
+<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.UI</a> &gt; <strong>JOBAD.UI.Sidebar</strong></p>
 
-<h1>Event Handling</h1>
-
-<p>Every module can register listeners to events. Whenever an event occurs JOBAD will check if there is a handler for this from any of the active modules. </p>
-
-<h2>Available events</h2>
+<h1>JOBAD.UI.Sidebar</h1>
 
 <ul>
-<li><code>leftClick</code>: When an element is left clicked on. </li>
-<li><code>contextMenu</code>: When an element is right clicked on, a context menu may appear. Is not triggered when the control key is pressed to allow override. </li>
-<li><code>keyPressed</code>: When somewhere in the document a key is pressed. Is not bound to an element. </li>
-<li><code>hoverText</code>: A text which will appear in a tooltip hovering over the hovered element. </li>
-</ul>
-
-<h2>Event handling and DOM nodes</h2>
-
-<p>JOBAD catches events at every level of the DOM tree up to the JOBAD root node. Then it performs the following algorithm to try to handle the event: </p>
+<li><strong>Object</strong> <code>JOBAD.UI.Sidebar.config</code> - JOBAD Sidebar UI Configuration namespace</li>
+<li><p><strong>Number</strong> <code>JOBAD.UI.Sidebar.config.width</code> Width of the sidebar. Default: 100. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.wrap(element)</code> - Wraps an element to create a sidebar UI. </p>
 
 <ul>
-<li>Does a module provide event handling for this event at this DOM node?
-<ul>
-<li>If yes, allow the module to handle the event and prevent the browser from handling it. </li>
-<li>If not, continue below. </li>
+<li><code>element</code> a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> to create a sidebar for. </li>
+<li><strong>returns</strong> the original element, now wrapped. </li>
 </ul></li>
-<li>Does this node have a parent for which JOBAD is active?
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.unwrap(element)</code> - Unwraps an element, destroying the sidebar. </p>
+
 <ul>
-<li>If so, allow the parent element to handle this event (i. e. pass it back to browser which will automatically bubble it up. )</li>
-<li>If not, allow the browser to handle the event. </li>
+<li><code>element</code> a jQuery-ish object to remove the sidebar from. </li>
+<li><strong>returns</strong> the original element, now unwrapped. </li>
 </ul></li>
-</ul>
-
-<p>This means that if, for example, the user click on a &lt;b&gt; element within a &lt;div&gt;, 
-JOBAD will first check if any active module handles the left click on the &lt;b&gt;
-element. If so <strong>only</strong> that specific module will handle this event. If not, JOBAD will check the parent &lt;div&gt; if some module can handle a click on 
-the &lt;div&gt; element. </p>
-
-<h2>Multiple event handler</h2>
-
-<p>If there are multiple event handlers for one event, JOBAD might only execute only one. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(sidebar, element)</code> - Adds a new notification to the sidebar. </p>
 
 <ul>
-<li><code>leftClick</code>: Every handler is executed. </li>
-<li><code>contextMenu</code>: Context Menu entries will be merged. </li>
-<li><code>keyPressed</code>: Every handler is called. </li>
-<li><code>hoverText</code>: Only the first handler is called. </li>
-</ul>
-
-<h2>See also</h2>
+<li><code>sidebar</code> Sidebar to bind notification to. </li>
+<li><code>element</code> Element to bind notification to. </li>
+<li><strong>returns</strong> a new empty jQuery sidebar notification element. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(notification)</code> - Removes a notification from the sidebar. </p>
 
 <ul>
-<li><a href="modules.html">Modules</a></li>
+<li><code>notification</code> Notification to remove. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.forceNotificationUpdate()</code> - Forces a sidebar notification position update. </p></li>
 </ul>
+
+<h2>Footnotes</h2>
+
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 	</body>
 </html>
