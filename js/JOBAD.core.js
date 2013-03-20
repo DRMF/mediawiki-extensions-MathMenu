@@ -685,6 +685,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			return false;		
 		}
 		
+		properObject.original = ModuleObject;
 		return properObject;
 
 	} else {
@@ -843,6 +844,14 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		params.push(args[i]);	
 	}
 
+	var orgClone = _.clone(ServiceObject.original);
+
+	for(var key in orgClone){
+		if(!this.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
+			this[key] = orgClone[key];
+		}
+	}
+	
 	ServiceObject.init.apply(this, params);
 	
 };
