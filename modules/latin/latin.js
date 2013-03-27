@@ -82,22 +82,24 @@
 	
 		contextMenuEntries: function(target, JOBADInstance) {
 			this.focus = target;
-		this.focusIsMath = ($(this.focus).closest('math').length !== 0);
+			this.focusIsMath = ($(this.focus).closest('math').length !== 0);
 			var res = this.visibMenu();
-		  if (this.isSelected(target)) {
+
+			if (this.isSelected(target)) {
 				//setCurrentPosition(target);		
 				res["infer type"] = this.inferType();
 	  			return res;
-			} else if ($(target).hasClass('folder') || this.focusIsMath)
+			} else if ($(target).hasClass('folder') || this.focusIsMath) {
 				return res;
-			else
+			} else {
 				return false;
+			}
 		},
 	
 
 		/* Helper Functions  */
 		setVisib : function(prop, val){
-			var root = this.focusIsMath ? getSelectedParent(this.focus) : this.focus.parentNode;
+			var root = this.focusIsMath ? this.getSelectedParent(this.focus) : this.focus.parentNode;
 			if (val == 'true')
 				$(root).find('.' + prop).removeClass(prop + '-hidden');
 			if (val == 'false')
@@ -105,18 +107,18 @@
 		},
 	
 		quoteSetVisib : function(prop, val){
-			return "setVisib('" + prop + "','" + val + "')";
+			var me = this;
+			return function(){ me.setVisib(prop,val) };
 		},
 	
 		visibSubmenu : function(prop){
 			return {
-				"show" : this.quoteSetVisib(prop, 'true'),
-				"hide" : this.quoteSetVisib(prop, 'false')
+				"show" : this.quoteSetVisib(prop, true),
+				"hide" : this.quoteSetVisib(prop, false)
 		    };
 		},
 
 		visibMenu : function(){
-	       console.log(this);
 	       return {
 			"reconstructed types" :  this.visibSubmenu('reconstructed'),
 			"implicit arguments" : this.visibSubmenu('implicit-arg'),
