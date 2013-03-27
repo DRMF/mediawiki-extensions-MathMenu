@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Setting up JOBAD</title>
+		<title>JOBAD.Events</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -458,57 +458,10 @@
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
 		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style><p><a href="index.html">Index</a> &gt; <strong>Setting up JOBAD</strong></p>
-<!-- Generated: Wed, 27 Mar 2013 18:04:28 +0100 --><h1>Setting up JOBAD</h1>
+		</style><p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <strong>JOBAD.Events</strong></p>
+<!-- Generated: Wed, 27 Mar 2013 18:04:28 +0100 --><h1>JOBAD.Events</h1>
 
-<p>This page will give instructions on how to include JOBAD into your website. </p>
-
-<h2>Including JOBAD in a website</h2>
-
-<p>To include JOBAD in your website, you will have to include several files in your HTML document. 
-JOBAD itself depends on: </p>
-
-<ul>
-<li><a href="http://jquery.com">jQuery</a> - tested with version 1.9.0</li>
-<li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.1</li>
-<li><a href="http://underscorejs.org/">UNDERSCORE.JS</a> - tested with version 1.4.4</li>
-</ul>
-
-<p>All 3 dependencies are bundled with JOBAD. You can include them in your HTML document header like so:</p>
-
-<div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
-    <span class="c">&lt;!-- other header tags --&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-ui-1.10.1.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/underscore/underscore-min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./css/jquery-ui-1.10.1.min.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- More files to include --&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-</code></pre></div>
-
-<p>After these files are included, you can load the <em>JOBAD.core.js</em>, <em>JOBAD.ui.js</em> and <em>JOBAD.event.js</em>: </p>
-
-<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/JOBAD.core.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/JOBAD.ui.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/JOBAD.event.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div>
-
-<p>That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 
-Then you can start JOBAD: </p>
-
-<div class="codehilite"><pre><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">JOBAD1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#my_JOBAD_area&quot;</span><span class="p">));</span> <span class="c1">//bind JOBAD to an element on the page. </span>
-    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">]);</span> <span class="c1">//Load a module</span>
-    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">Setup</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span> <span class="c1">//Enable JOBAD</span>
-<span class="p">});</span>
-</code></pre></div>
-
-<h2>See also</h2>
-
-<ul>
-<li><a href="api/index.html">API Documentation</a></li>
-<li><a href="modules/index.html">Module Index</a> - A list of all available modules. </li>
-</ul>
+<p>Undocumented so far. </p>
 
 	</body>
 </html>

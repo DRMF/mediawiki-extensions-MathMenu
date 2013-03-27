@@ -13,7 +13,7 @@ var JOBAD =
 
 */
 
-var JOBAD = function(element, config){
+var JOBAD = function(element){
 
 	if(!(this instanceof JOBAD)){
 		return new JOBAD(element);	
@@ -152,28 +152,8 @@ var JOBAD = function(element, config){
 		return true;
 	};
 	
-	/* Event core function(s) */
-
-	/*
-		Simulates an event. This will intervene with the page. 
-		@param type Type of the event to trigger. Should be 'keypress', 'click', 'contextmenu', 'hover' 
-		@param argument Argument for the event. 
-		@returns booelan: was something done.  
-	*/
-	this.Event = function(type, argument){
-		switch(type){
-			case 'keypress':
-				break;
-			case 'click':
-				break;
-			case 'contextmenu':
-				break;
-			case 'hover':
-				break;
-			default:
-				break;
-		}
-	}
+	/* Event namespace */
+	this.Event = {};
 
 	/* Setup core function */
 	/* Setup on an Element */
@@ -186,7 +166,7 @@ var JOBAD = function(element, config){
 	*/
 	this.Setup = function(){
 		if(enabled){
-			return me.Setup.disable();	//unimplemented
+			return me.Setup.disable();
 		} else {
 			return me.Setup.enable();
 		}
@@ -203,9 +183,18 @@ var JOBAD = function(element, config){
 
 		var root = me.element;
 
-		me.Setup.enableLeftClick(root);
-		me.Setup.enableHover(root);
-		me.Setup.enableContextMenu(root);
+		for(var key in JOBAD.Events){
+			if(JOBAD.Events.hasOwnProperty(key) && !JOBAD.isEventDisabled(key)){
+				me.Event[key] = {};
+
+				for(var funkey in JOBAD.Events[key].namespace){
+					me.Event[key][funkey] = _.bind(JOBAD.Events[key].namespace[funkey], me);
+				}
+
+				JOBAD.Events[key].Setup.enable.call(me, root);
+
+			}	
+		}
 
 		return true;
 	}
@@ -220,271 +209,16 @@ var JOBAD = function(element, config){
 		}		
 		var root = me.element;
 
-		me.Setup.disableLeftClick(root);
-		me.Setup.disableHover(root);
-		me.Setup.disableContextMenu(root);
-
-		return true;
-	}
-
-	/* Events */ 
-
-	/* left Click */
-
-	/*
-		Returns of left clicking an argument. 
-		@param target Element to left click. 
-		@returns true
-	*/
-	this.Event.LeftClick = function(target){
-		return me.modules.iterateAnd(function(module){
-			module.leftClick(target);
-			return true;
-		});
-	};	
-
-	/*
-		Triggers a left click on an element. 
-		@param source Element to left click. 
-		@returns true
-	*/
-	this.Event.triggerLeftClick = function(source){
-		var EventResult = me.Event.LeftClick(source);
-		return EventResult;
-	}
-
-	/*
-		enables the left click on a certain element. 
-		@param root The root element to register left clicking on. 
-	*/
-	this.Setup.enableLeftClick = function(root){
-		root.delegate("*", 'click.JOBAD.leftClick', function(event){
-			var element = $(event.target); //The base element. 
-			switch (event.which) {
-				case 1:
-					/* left mouse button => left click */
-					me.Event.triggerLeftClick(element);
-					event.stopPropagation(); //Not for the parent. 
-					break;
-				default:
-					/* nothing */
-			}
-		});
-	}
-	/*
-		disables the left click on a certain element. 
-		@param root The root element to deregister left clicking on. 
-	*/
-	this.Setup.disableLeftClick = function(root){
-		root.undelegate("*", 'click.JOBAD.leftClick');	
-	}
-
-	/* hoverText */
-
-	var activeHoverElement = undefined;
-	
-	/*
-		Returns the result of hovering. 
-		@param target Element to Hover. 
-		@returns a jquery object to use as hover text or false. 
-	*/
-	this.Event.HoverText = function(target){
-		var res = false;
-		me.modules.iterate(function(module){
-			var hoverText = module.hoverText(target);
-			if(typeof hoverText != 'undefined' && typeof res == "boolean"){//trigger all hover handlers ; display only the first one. 
-				if(typeof hoverText == "string"){
-					res = $("<p>").text(hoverText)			
-				} else if(typeof hoverText != "boolean"){
-					try{
-						res = jQuery(hoverText);
-					} catch(e){
-						JOBAD.error("Error (FATAL): Module <"+module.info().identifier+"> returned invalid HOVER result. ");
-					}
-				} else if(hoverText === true){
-					res = true;
-				}
-			}
-			return true;
-		});
-		return res;
-	};
-
-	/*
-		Creates a hover effect on an element. 
-		@param source Element to Hover. 
-		@returns boolean indicating success. 
-	*/
-	this.Event.triggerHoverText = function(source){
-		if(source.data('JOBAD.hover.Active')){
-			return false;		
-		}
-
-		var EventResult = me.Event.HoverText(source); //try to do the event
-		
-		if(typeof EventResult == 'boolean'){
-			return EventResult;		
-		}
-
-		if(activeHoverElement instanceof jQuery)//something already active
-		{
-			if(activeHoverElement.is(source)){
-				return true; //done and die			
-			}
-			me.Event.unTriggerHoverText(activeHoverElement);	
-		}
-
-		activeHoverElement = source;
-
-		source.data('JOBAD.hover.Active', true);		
-		
-		var tid = window.setTimeout(function(){
-			source.removeData('JOBAD.hover.timerId');
-			JOBAD.UI.hover.enable(EventResult.html());
-		}, JOBAD.config.hoverdelay)
-
-		source.data('JOBAD.hover.timerId', tid);//save timeout id
-		return true;
-
-	}
-
-
-	/*
-		Removes a hover effect from an element
-		@param source element from which hover will be removed. 
-		@returns boolean indicating success
-	*/
-	this.Event.unTriggerHoverText = function(source){
-
-		if(typeof source == 'undefined'){
-			if(activeHoverElement instanceof jQuery){
-				source = activeHoverElement;
-			} else {
-				return false;			
-			}
-		}		
-
-		if(!source.data('JOBAD.hover.Active')){
-			return false;		
-		}
-
-		
-
-		if(typeof source.data('JOBAD.hover.timerId') == 'number'){
-			window.clearTimeout(source.data('JOBAD.hover.timerId'));
-			source.removeData('JOBAD.hover.timerId');		
-		}
-
-		source.removeData('JOBAD.hover.Active');
-		activeHoverElement = undefined;
-		JOBAD.UI.hover.disable();
-
-		if(!source.is(me.element)){
-			me.Event.triggerHoverText(source.parent());//we are in the parent now
-			return false;
+		for(var key in JOBAD.Events){
+			if(JOBAD.Events.hasOwnProperty(key) && !JOBAD.isEventDisabled(key)){
+				JOBAD.Events[key].Setup.disable.call(me, root);
+			}	
 		}
 
 		return true;
 	}
-
-	/*
-		Enables hovering on the specefied element. 
-		@param root the element to enable hovering on. 	
-	*/
-	this.Setup.enableHover = function(root){
-
-		var trigger = function(event){
-			var res = me.Event.triggerHoverText($(this));
-			if(res){//something happened here: dont trigger on parent
-				event.stopPropagation();
-			} else if(!$(this).is(root)){ //I have nothing => trigger the parent
-				$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
-			}
-			return false;
-		};
-
-
-		var untrigger = function(event){
-			return me.Event.unTriggerHoverText($(this));	
-		};
-
-		root
-		.delegate("*", 'mouseenter.JOBAD.hoverText', trigger)
-		.on('mouseenter.JOBAD.hoverText', trigger)
-		.delegate("*", 'mouseleave.JOBAD.hoverText', untrigger)
-		.on('mouseleave.JOBAD.hoverText', untrigger);
-	}
-	/*
-		Disables hovering on the specefied element. 
-		@param root the element to enable hovering on. 	
-	*/
-	this.Setup.disableHover = function(root){
-		if(typeof activeHoverElement != 'undefined')
-		{
-			me.Event.unTriggerHoverText(activeHoverElement); //remove active Hover menu
-		}
-		
-		root
-		.undelegate("*", 'mouseenter.JOBAD.hoverText')
-		.undelegate("*", 'mouseleave.JOBAD.hoverText');
-	}
-
-	/* contextMenu */
-
-	/*
-		enables context menu on a certain element. 
-		@param root The root element to register the context menu on. 
-	*/
-	this.Setup.enableContextMenu = function(root){
-		JOBAD.UI.ContextMenu.enable(root, function(target){
-			return me.Event.ContextMenuEntries(target);
-		});
-	};
-
-	/*
-		disables context menu on a certain element. 
-		@param root The root element to register the context menu on. 
-	*/
-	this.Setup.disableContextMenu = function(root){
-		JOBAD.UI.ContextMenu.disable(root);
-	};
-
-
-	/*
-		Returns the result of pressing a key. 
-		@param key The key to press. 
-		@returns nothing
-	*/
-	this.Event.KeyPressed = function(key){
-		me.modules.iterate(function(module){
-			return (module.keyPressed(key))?false:true;
-		});
-	};
 
 	
-
-	/*
-		Returns the result of requesting a contextMenu. 
-		@param target Element to left click. 
-		@returns array of context menu entries / callback tuples or false. 
-	*/
-	this.Event.ContextMenuEntries = function(target){
-		var res = [];
-		var mods = me.modules.iterate(function(module){
-				return module.contextMenuEntries(target);
-			});
-		for(var i=0;i<mods.length;i++){
-			var mod = mods[i];
-			for(var j=0;j<mod.length;j++){
-				res.push(mod[j]);
-			}
-		}
-		if(res.length == 0){
-			return false;		
-		} else {
-			return res;		
-		}
-	};
 	
 };
 
@@ -497,9 +231,16 @@ JOBAD.config =
 	    'debug': true, //Debugging enabled? (Logs etc)
 	    'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
 	    'cleanModuleNamespace': false,//if set to true this.loadedModule instances will not allow additional functions
-	    'disabledEvents': ['leftclick']
+	    'disabledEvents': []
 };
 
+/* Available JOBAD Events */
+JOBAD.Events = {};
+
+/*
+	Checks if an Event is disabled by the configuration. 
+	@param evtname Name of the event that is disabled. 
+*/
 JOBAD.isEventDisabled = function(evtname){
 	return (JOBAD.config.disabledEvents.indexOf(evtname) != -1);
 };
@@ -647,11 +388,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 	var properObject = 
 	{
 		"globalinit": function(){},
-		"init": function(){},
-		"keyPressed": function(){},
-		"leftClick": function(){},
-		"contextMenuEntries": function(){},
-		"hoverText": function(){},
+		"init": function(){}
 	};
 	
 	for(var key in properObject){
@@ -712,23 +449,19 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			return false;		
 		}
 
-		//TODO: Check for cleanModuleNameSpace
+
 		/* properties which are allowed (clean) */		
 		var CleanProperties = 
 		[
 			'info',
 			'globalinit',
-			'init',
-			'keyPressed',
-			'leftClick',
-			'contextMenuEntries',
-			'hoverText'
+			'init'
 		];
 
 		properObject.namespace = {};
 
 		for(var key in ModuleObject){
-			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1){
+			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1 && !JOBAD.Events.hasOwnProperty(key)){
 				if(properObject.info.hasCleanNamespace){
 					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
 				} else {
@@ -737,6 +470,11 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 		}
 
+		for(var key in JOBAD.Events){
+			if(ModuleObject.hasOwnProperty(key)){
+				properObject[key] = ModuleObject[key];
+			}
+		}
 		
 		
 		
@@ -848,42 +586,6 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		return JOBADInstance;	
 	};
 
-	//Events
-	
-	/*
-		Simulate a key press event to pass to the module. 
-		@param key Checks if the specefied combination was pressed. Order is: alt+ctrl+meta+shift+key 
-	*/
-	this.keyPressed = function(checkFunc){
-		return ServiceObject.keyPressed.call(this, checkFunc, this.getJOBAD());
-	};
-
-	/*
-		Simulate a left click event to pass to the Module. 
-		@param target The Element to click left on. 
-	*/
-	this.leftClick = function(target){
-		return ServiceObject.leftClick.call(this, target, this.getJOBAD());
-	};
-
-	/*
-		Simulate a context menu request to the object. 
-		@param target The element to request the context menu of. 
-		@returns an array of [menu_entry_name, callback]
-	*/
-	this.contextMenuEntries = function(target){
-		var entries = ServiceObject.contextMenuEntries.call(this, target, this.getJOBAD());
-
-		return (_.isArray(entries))?entries:JOBAD.modules.generateMenuList(entries);
-	};
-
-	/*
-		Simulate a hoverText request to pass to the object
-		@param target The element to request the hover of. 
-	*/
-	this.hoverText = function(target){
-		return ServiceObject.hoverText.call(this, target, this.getJOBAD());
-	};
 
 	//Initilisation
 
@@ -907,9 +609,17 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		var orgClone = _.clone(ServiceObject.namespace);
 
 		for(var key in orgClone){
-			if(!this.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
+			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){//TODO: Read Event Names dynamically
 				this[key] = orgClone[key];
 			}
+		}
+	}
+
+	for(var key in JOBAD.Events){
+		if(ServiceObject.hasOwnProperty(key)){
+			this[key] = ServiceObject[key];
+		} else {
+			this[key] = JOBAD.Events[key]["default"];
 		}
 	}
 
