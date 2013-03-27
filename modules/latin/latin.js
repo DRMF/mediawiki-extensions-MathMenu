@@ -22,7 +22,8 @@
 			'author': 'Kwarc',
 			'description' : 'The main service for browsing LATIN repository',
 			'version' : '1.0',
-			'dependencies' : []
+			'dependencies' : [],
+			'hasCleanNamespace': false
 	    },
 
 	    leftClick: function(target, JOBADInstance) {
@@ -53,7 +54,7 @@
 			return true;	//we did stuff also
 	    },
 
-	    /*
+	    
 	    hoverText: function(target, JOBADInstance) {
 			//handling clicks on parts of the document - active only for elements that have jobad:href
 			//console.log(this);
@@ -78,8 +79,7 @@
 			// maybe return false
 			return true;
 		},
-	*/
-	/*
+	
 		contextMenuEntries: function(target, JOBADInstance) {
 			this.focus = target;
 		this.focusIsMath = ($(this.focus).closest('math').length !== 0);
@@ -94,7 +94,6 @@
 				return false;
 		},
 	
-	*/
 
 		/* Helper Functions  */
 		setVisib : function(prop, val){

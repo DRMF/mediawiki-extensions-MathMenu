@@ -305,7 +305,7 @@ var JOBAD = function(element, config){
 					res = true;
 				}
 			}
-			return false;
+			return true;
 		});
 		return res;
 	};
@@ -321,7 +321,7 @@ var JOBAD = function(element, config){
 		}
 
 		var EventResult = me.Event.HoverText(source); //try to do the event
-
+		
 		if(typeof EventResult == 'boolean'){
 			return EventResult;		
 		}
@@ -381,7 +381,9 @@ var JOBAD = function(element, config){
 
 		if(!source.is(me.element)){
 			me.Event.triggerHoverText(source.parent());//we are in the parent now
+			return false;
 		}
+
 		return true;
 	}
 
@@ -390,18 +392,27 @@ var JOBAD = function(element, config){
 		@param root the element to enable hovering on. 	
 	*/
 	this.Setup.enableHover = function(root){
-		root
-		.delegate("*", 'mouseenter.JOBAD.hoverText', function(event){
+
+		var trigger = function(event){
 			var res = me.Event.triggerHoverText($(this));
 			if(res){//something happened here: dont trigger on parent
 				event.stopPropagation();
 			} else if(!$(this).is(root)){ //I have nothing => trigger the parent
 				$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
 			}
-		})
-		.delegate("*", 'mouseleave.JOBAD.hoverText', function(event){
-			me.Event.unTriggerHoverText($(this));	
-		});
+			return false;
+		};
+
+
+		var untrigger = function(event){
+			return me.Event.unTriggerHoverText($(this));	
+		};
+
+		root
+		.delegate("*", 'mouseenter.JOBAD.hoverText', trigger)
+		.on('mouseenter.JOBAD.hoverText', trigger)
+		.delegate("*", 'mouseleave.JOBAD.hoverText', untrigger)
+		.on('mouseleave.JOBAD.hoverText', untrigger);
 	}
 	/*
 		Disables hovering on the specefied element. 
@@ -486,7 +497,11 @@ JOBAD.config =
 	    'debug': true, //Debugging enabled? (Logs etc)
 	    'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
 	    'cleanModuleNamespace': false,//if set to true this.loadedModule instances will not allow additional functions
-	    'disable': [] //globally disable stuff
+	    'disabledEvents': ['leftclick']
+};
+
+JOBAD.isEventDisabled = function(evtname){
+	return (JOBAD.config.disabledEvents.indexOf(evtname) != -1);
 };
 
 /*
