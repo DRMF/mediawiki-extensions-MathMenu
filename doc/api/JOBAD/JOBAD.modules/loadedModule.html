@@ -458,12 +458,8 @@
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
 		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style>
-	</head>
-	<body>
-<p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.modules</a> &gt; <strong>JOBAD.modules.loadedModule</strong></p>
-
-<h1>JOBAD.modules.loadedModule</h1>
+		</style><p><a href="../../../index.html">Index</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.modules</a> &gt; <strong>JOBAD.modules.loadedModule</strong></p>
+<!-- Generated: Wed, 27 Mar 2013 13:49:06 +0100 --><h1>JOBAD.modules.loadedModule</h1>
 
 <ul>
 <li><strong>Function</strong> <code>JOBAD.modules.loadedModule(name, args, JOBADInstance)</code> Loads a module, assuming the dependencies are already available. 
@@ -495,14 +491,22 @@
 <li><strong>jQuery</strong> <code>target</code> The element to simulate a context menu request on. </li>
 <li><strong>returns</strong> a list of <code>[name, callback]</code> and <code>[name, submenu]</code> pairs or false if nothing should be done. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>.hoverText(target)</code></p>
-
+<li><strong>Function</strong> <code>.hoverText(target)</code>
 <ul>
 <li><strong>jQuery</strong> <code>target</code> The element to simulate hovering on. </li>
 <li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> or a boolean. 
-<h3>.localStore</h3></li>
+<h2>Further members</h2></li>
 </ul></li>
-<li><p><strong>Object</strong> <code>.localStore</code> Namespace to store variables bound to this instance of a module. </p></li>
+</ul>
+
+<p>A <code>JOBAD.modules.loadedModule</code> instance also contains all non-standard properties of the original Module object. Note
+that any JSON-style objects are referenced (and thus shared among all instances of this module) and everything else 
+is copied. </p>
+
+<h3>.localStore</h3>
+
+<ul>
+<li><strong>Object</strong> <code>.localStore</code> Namespace to store variables bound to this instance of a module. </li>
 <li><strong>Function</strong> <code>.localStore.get(key)</code> Gets a local variable. 
 <ul>
 <li><strong>String</strong> <code>key</code> Name of variable to get. </li>

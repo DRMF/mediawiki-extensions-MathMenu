@@ -2,8 +2,6 @@
 	JOBAD 3 Core Functions
 	requires JOBAD.ui.js at runtime to generate UI
 */
-
-
 var JOBAD = 
 (function(){
 
@@ -11,9 +9,11 @@ var JOBAD =
 	JOBAD 3 Main Function
 	Creates a new JOBAD instance on a specefied DOM element.  
 	@param element Element to link this element to. May be a DOM Element or a jQuery Object. 
+	@param config Configuration for this JOBAD Instance. 
+
 */
 
-var JOBAD = function(element){
+var JOBAD = function(element, config){
 
 	if(!(this instanceof JOBAD)){
 		return new JOBAD(element);	
@@ -483,10 +483,11 @@ JOBAD.version = "3.0.0";
 /* JOBAD Global config */
 JOBAD.config = 
 {
-	'debug': true, //Debugging enabled? (Logs etc)
-	'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
+	    'debug': true, //Debugging enabled? (Logs etc)
+	    'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
+	    'cleanModuleNamespace': false,//if set to true this.loadedModule instances will not allow additional functions
+	    'disable': [] //globally disable stuff
 };
-
 
 /*
 	JOBAD.console: Mimics  or wraps the native console object if available and debugging is enabled. 
@@ -544,7 +545,8 @@ JOBAD.modules.TEMPLATE =
 		'author':	'Tom Wiesing', //Author
 		'description':	'A template you may use as a starting point for writing other modules. ', //A human readable description of the module. 
 		'version':	'1.0', //string containing the version number. May be omitted. 
-		'dependencies':	[] //Array of module dependencies. If ommited, assumed to have no dependencies. 
+		'dependencies':	[], //Array of module dependencies. If ommited, assumed to have no dependencies. 
+		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},
     	globalinit: function(){
 	/* 
@@ -634,7 +636,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		"keyPressed": function(){},
 		"leftClick": function(){},
 		"contextMenuEntries": function(){},
-		"hoverText": function(){}
+		"hoverText": function(){},
 	};
 	
 	for(var key in properObject){
@@ -661,6 +663,16 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			properObject.info['version'] = info['version'];
 		}
 
+		if(info.hasOwnProperty('hasCleanNamespace')){
+			if(info['hasCleanNamespace'] == false){
+				properObject.info.hasCleanNamespace = false;
+			} else {
+				properObject.info.hasCleanNamespace = true;
+			}
+		} else {
+			properObject.info.hasCleanNamespace = true;			
+		}
+
 		if(info.hasOwnProperty('dependencies')){
 			var arr = info['dependencies'];
 			if(!_.isArray(arr)){
@@ -684,8 +696,35 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		} catch(e){
 			return false;		
 		}
+
+		//TODO: Check for cleanModuleNameSpace
+		/* properties which are allowed (clean) */		
+		var CleanProperties = 
+		[
+			'info',
+			'globalinit',
+			'init',
+			'keyPressed',
+			'leftClick',
+			'contextMenuEntries',
+			'hoverText'
+		];
+
+		properObject.namespace = {};
+
+		for(var key in ModuleObject){
+			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1){
+				if(properObject.info.hasCleanNamespace){
+					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
+				} else {
+					properObject.namespace[key] = ModuleObject[key];
+				}
+			}
+		}
+
 		
-		properObject.original = ModuleObject;
+		
+		
 		return properObject;
 
 	} else {
@@ -844,16 +883,22 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		params.push(args[i]);	
 	}
 
-	var orgClone = _.clone(ServiceObject.original);
 
-	for(var key in orgClone){
-		if(!this.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
-			this[key] = orgClone[key];
+	if(JOBAD.config.cleanModuleNamespace){
+		if(!ServiceObject.info.hasCleanNamespace){
+			JOBAD.console.warn("Warning: Module '"+name+"' may have unclean namespace, but JOBAD.config.cleanModuleNamespace is true. ");		
+		}
+	} else {
+		var orgClone = _.clone(ServiceObject.namespace);
+
+		for(var key in orgClone){
+			if(!this.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
+				this[key] = orgClone[key];
+			}
 		}
 	}
-	
-	ServiceObject.init.apply(this, params);
-	
+
+	ServiceObject.init.apply(this, params);		
 };
 
 /*

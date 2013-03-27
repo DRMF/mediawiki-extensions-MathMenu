@@ -4,6 +4,7 @@ JOBAD.modules.register({
 		'title':	'Test Module: Colors Click',
 		'author':	'Tom Wiesing',
 		'description':	'A Testing module, colors ps in the color given as first parameter. ',
+		'hasCleanNamespace': false
 	},
 	init: function(JOBADInstance, color){
 		this.localStore.set("color", color);
@@ -11,7 +12,10 @@ JOBAD.modules.register({
 	},
 	leftClick: function(target, JOBADInstance){
 		if(target.is("p")){
-			target.css("color", this.localStore.get("color"));
+			this.colorize(target);
 		}
+	},
+	colorize: function(target){
+		target.css("color", this.localStore.get("color"));
 	}
 });
