@@ -1,4 +1,11 @@
-/* JOBAD Core Events */
+/*
+	JOBAD 3 Event Functions
+	JOBAD.event.js
+	
+	requires:
+		JOBAD.core.js
+		JOBAD.ui.js
+*/
 
 /* left click */
 JOBAD.Events.leftClick = 
@@ -8,7 +15,6 @@ JOBAD.Events.leftClick =
 	},
 	'Setup': {
 		'enable': function(root){
-
 			var me = this;
 			root.delegate("*", 'click.JOBAD.leftClick', function(event){
 				var element = $(event.target); //The base element.  
@@ -24,7 +30,6 @@ JOBAD.Events.leftClick =
 			});
 		},
 		'disable': function(root){
-			//disable it
 			root.undelegate("*", 'click.JOBAD.leftClick');	
 		}
 	},
@@ -66,7 +71,7 @@ JOBAD.Events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return (_.isArray(entries))?entries:JOBAD.modules.generateMenuList(entries);
+				return (_.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
@@ -90,8 +95,11 @@ JOBAD.Events.hoverText =
 		return false;	
 	},
 	'Setup': {
-		'enable': function(root){
+		'init': function(){
 			this.Event.hoverText.activeHoverElement = undefined; //the currently active element. 
+		},
+		'enable': function(root){
+			
 			var me = this;
 			var trigger = function(event){
 				var res = me.Event.hoverText.trigger($(this));
@@ -212,3 +220,42 @@ JOBAD.Events.hoverText =
 		}
 	}
 }
+
+
+/* sidebar: onUpDate Event */
+JOBAD.Events.onUpdate = 
+{
+	'default': function(){
+	},
+	'Setup': {
+		'init': {
+			'Sidebar': {
+				'forceUpdate': function(){
+					
+				}			
+			}
+		},
+		'enable': function(root){
+			this.Event.onUpdate.enabled = true;
+		},
+		'disable': function(root){
+			this.Event.onUpdate.enabled = undefined;
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(){
+			if(this.Event.onUpdate.enabled){
+				this.modules.iterateAnd(function(module){
+					module.onUpdate.call(module, module.getJOBAD());
+					return true;
+				});
+			}
+		},
+		'trigger': function(){
+			this.Event.onUpdate.getResult();
+		}
+	}
+};
+

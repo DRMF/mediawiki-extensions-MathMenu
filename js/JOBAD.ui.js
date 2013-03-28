@@ -1,6 +1,9 @@
-/* 
+/*
 	JOBAD 3 UI Functions
-	requires JOBAD.core.js
+	JOBAD.ui.js
+	
+	requires: 
+		JOBAD.core.js
 */
 
 (function(JOBAD){
