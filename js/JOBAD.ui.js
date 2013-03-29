@@ -267,6 +267,8 @@
 
 		container.prepend(sideBarElement);
 
+
+		org.data("JOBAD.UI.Sidebar.active", true);
 		return org;
 	};
 
@@ -282,6 +284,8 @@
 		.parent()
 		.find("div")
 		.first().remove();
+
+		org.removeData("JOBAD.UI.Sidebar.active");
 
 		return org.unwrap();
 	};
@@ -332,6 +336,30 @@
 		notification.remove();
 	};
 
+
+	//highlighting
+	/*
+		highlights an element
+	*/
+	JOBAD.UI.highlight = function(element){
+		var element = $(element);
+		if(element.data("JOBAD.UI.highlight.orgColor")){
+			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
+		}
+		element
+		.stop().data("JOBAD.UI.highlight.orgColor", element.css("backgroundColor"))
+		.animate({ backgroundColor: "#FFFF9C"}, 1000);	
+	};
+	/*
+		unhighlights an element.	
+	*/		
+	JOBAD.UI.unhighlight = function(element){
+		var element = $(element);
+		element
+		.stop()
+		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
+		.removeData("JOBAD.UI.highlight.orgColor");	
+	}
 
 	/*
 	JOBAD Keypress UI - Removed temporarily

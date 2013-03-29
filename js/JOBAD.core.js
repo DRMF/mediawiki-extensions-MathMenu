@@ -652,30 +652,6 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 /* various utility functions */
 JOBAD.util = {};
 
-
-/*
-	Generates a list menu representation from an object representation. 
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.generateMenuList = function(menu){
-	if(typeof menu == 'undefined'){
-		return [];
-	}
-	var res = [];
-	for(var key in menu){
-		if(menu.hasOwnProperty(key)){
-			var val = menu[key];
-			if(typeof val == 'function'){
-				res.push([key, val]);		
-			} else {
-				res.push([key, JOBAD.util.generateMenuList(val)]);
-			}
-		}
-	}
-	return res;
-};
-
 /*
 	Binds every function within an object recursively. 
 	@param obj Object to bind. 

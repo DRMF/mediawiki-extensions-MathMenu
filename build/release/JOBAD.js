@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 28 Mar 2013 16:02:12 +0100
+	built: Fri, 29 Mar 2013 14:50:35 +0100
 */
 
 /*
@@ -658,30 +658,6 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 /* various utility functions */
 JOBAD.util = {};
 
-
-/*
-	Generates a list menu representation from an object representation. 
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.generateMenuList = function(menu){
-	if(typeof menu == 'undefined'){
-		return [];
-	}
-	var res = [];
-	for(var key in menu){
-		if(menu.hasOwnProperty(key)){
-			var val = menu[key];
-			if(typeof val == 'function'){
-				res.push([key, val]);		
-			} else {
-				res.push([key, JOBAD.util.generateMenuList(val)]);
-			}
-		}
-	}
-	return res;
-};
-
 /*
 	Binds every function within an object recursively. 
 	@param obj Object to bind. 
@@ -979,6 +955,8 @@ JOBAD.config.debug = false;
 
 		container.prepend(sideBarElement);
 
+
+		org.data("JOBAD.UI.Sidebar.active", true);
 		return org;
 	};
 
@@ -994,6 +972,8 @@ JOBAD.config.debug = false;
 		.parent()
 		.find("div")
 		.first().remove();
+
+		org.removeData("JOBAD.UI.Sidebar.active");
 
 		return org.unwrap();
 	};
@@ -1044,6 +1024,30 @@ JOBAD.config.debug = false;
 		notification.remove();
 	};
 
+
+	//highlighting
+	/*
+		highlights an element
+	*/
+	JOBAD.UI.highlight = function(element){
+		var element = $(element);
+		if(element.data("JOBAD.UI.highlight.orgColor")){
+			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
+		}
+		element
+		.stop().data("JOBAD.UI.highlight.orgColor", element.css("backgroundColor"))
+		.animate({ backgroundColor: "#FFFF9C"}, 1000);	
+	};
+	/*
+		unhighlights an element.	
+	*/		
+	JOBAD.UI.unhighlight = function(element){
+		var element = $(element);
+		element
+		.stop()
+		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
+		.removeData("JOBAD.UI.highlight.orgColor");	
+	}
 
 	/*
 	JOBAD Keypress UI - Removed temporarily
@@ -1199,6 +1203,30 @@ JOBAD.Events.contextMenuEntries =
 	}
 }
 
+
+/*
+	Generates a list menu representation from an object representation. 
+	@param menu Menu to generate. 
+	@returns the new representation. 
+*/
+JOBAD.util.generateMenuList = function(menu){
+	if(typeof menu == 'undefined'){
+		return [];
+	}
+	var res = [];
+	for(var key in menu){
+		if(menu.hasOwnProperty(key)){
+			var val = menu[key];
+			if(typeof val == 'function'){
+				res.push([key, val]);		
+			} else {
+				res.push([key, JOBAD.util.generateMenuList(val)]);
+			}
+		}
+	}
+	return res;
+};
+
 /* hover Text */
 JOBAD.Events.hoverText = 
 {
@@ -1333,39 +1361,120 @@ JOBAD.Events.hoverText =
 }
 
 
-/* sidebar: onUpDate Event */
-JOBAD.Events.onUpdate = 
+/* sidebar: onSideBarUpdate Event */
+JOBAD.Events.onSideBarUpdate = 
 {
 	'default': function(){
+		//Does nothing
 	},
 	'Setup': {
 		'init': {
+			/* Sidebar namespace */
 			'Sidebar': {
+				/*
+					Forces an update of the sidebar. 
+				*/
 				'forceUpdate': function(){
+					if(_.keys(this.Sidebar.Elements).length == 0){
+						if(this.element.data("JOBAD.UI.Sidebar.active")){
+							JOBAD.UI.Sidebar.unwrap(this.element);
+						}	
+					} else {
+						if(!this.element.data("JOBAD.UI.Sidebar.active")){
+							JOBAD.UI.Sidebar.wrap(this.element);
+						}
+						for(var id in this.Sidebar.Elements){
+							var element = this.Sidebar.Elements[id];
+							if(!element.data("JOBAD.Events.Sidebar.id")){
+								this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, this.Sidebar.Elements[id]);
+							}
+						}
+					}
+					JOBAD.UI.Sidebar.forceNotificationUpdate();
+					this.Event.onSideBarUpdate.trigger();
+				},
+				/*
+					Registers a new notification. 
+					@param element Element to register notification on. 
+					@param config
+							config.icon:		Icon to display [UNIMPLEMENTED]
+							config.text:		Text
+							config.trace:		Trace the original element on hover?
+							config.callback:	Callback on click
+					@return jQuery element used as identification. 
+							
+				*/
+				'registerNotification': function(element, config){
+					var element = $(element);
+					var id = (new Date()).getTime().toString();
+					this.Sidebar.Elements[id] = element;			
+					this.Sidebar.forceUpdate();
+					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
+
+					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
+	
+					var config = (typeof config == 'undefined')?{}:config;
 					
-				}			
+					if(config.hasOwnProperty("text")){
+						sidebar_element.text(config.text);
+					}
+					
+
+					if(config.trace){
+						//highlight the element
+						sidebar_element.hover(
+						function(){
+							JOBAD.UI.highlight(element);
+						},
+						function(){
+							JOBAD.UI.unhighlight(element);
+						});
+					}
+
+					if(typeof config.callback == "function"){
+						sidebar_element.click(config.callback);
+					}
+
+					return sidebar_element;
+				}, 
+				/*
+					removes a notification. 
+					@param	item	Notification to remove. 
+				*/
+				'removeNotification': function(item){
+					if(item instanceof jQuery){
+						var id = item.data("JOBAD.Events.Sidebar.id");
+						JOBAD.UI.Sidebar.removeNotification(item);
+						delete this.Sidebar.Elements[id];
+						this.Sidebar.forceUpdate();
+					} else {
+						JOBAD.error("JOABD Sidebar Error: Tried to remove invalid Element. ");
+					}
+				}	
 			}
 		},
 		'enable': function(root){
-			this.Event.onUpdate.enabled = true;
+			this.Sidebar.Elements = {};
+			this.Event.onSideBarUpdate.enabled = true;
+			
 		},
 		'disable': function(root){
-			this.Event.onUpdate.enabled = undefined;
+			this.Event.onSideBarUpdate.enabled = undefined;
 		}
 	},
 	'namespace': 
 	{
 		
 		'getResult': function(){
-			if(this.Event.onUpdate.enabled){
+			if(this.Event.onSideBarUpdate.enabled){
 				this.modules.iterateAnd(function(module){
-					module.onUpdate.call(module, module.getJOBAD());
+					module.onSideBarUpdate.call(module, module.getJOBAD());
 					return true;
 				});
 			}
 		},
 		'trigger': function(){
-			this.Event.onUpdate.getResult();
+			this.Event.onSideBarUpdate.getResult();
 		}
 	}
 };
