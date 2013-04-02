@@ -1,0 +1,3 @@
+[submodule "build/deps/closurecompilerpy"]
+	path = build/deps/closurecompilerpy
+	url = https://github.com/tkw1536/ClosureCompilerPy

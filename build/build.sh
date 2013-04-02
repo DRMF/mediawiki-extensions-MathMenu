@@ -22,17 +22,6 @@ else
 	exit 1
 fi
 
-printf "curl ... "
-
-if which curl >/dev/null; then
-	echo "OK"
-else
-	echo "FAIL"
-	echo "Abort: CURL not found. "
-	echo "You might want to apt-get install curl"
-	exit 1
-fi
-
 printf "Compiling development version ... "
 
 
@@ -59,10 +48,7 @@ echo "OK"
 
 printf "Preparing compilation with Closure Compiler ... "
 
-echo "// ==ClosureCompiler==" > $buildmin.tmp
-echo "// @compilation_level SIMPLE_OPTIMIZATIONS" >> $buildmin.tmp
-echo "// ==/ClosureCompiler==" >> $buildmin.tmp
-echo "" >> $buildmin.tmp
+echo "" > $buildmin.tmp
 
 echo "var JOBAD = (function(){" >> $buildmin.tmp
 cat $build >> $buildmin.tmp
@@ -79,7 +65,7 @@ echo "	built: $(date -R)" >> $buildmin
 echo "*/" >> $buildmin
 echo "" >> $buildmin
 
-./data/compressJS.sh $buildmin.tmp >> $buildmin
+python ./deps/closurecompilerpy/closureCompiler.py -s $buildmin.tmp >> $buildmin
 
 RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"
