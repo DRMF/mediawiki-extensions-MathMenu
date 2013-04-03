@@ -4,7 +4,7 @@
 */
 
 var JOBAD = 
-(function($){
+(function(){
 
 /* 
 	JOBAD 3 Main Function
@@ -24,10 +24,10 @@ var JOBAD = function(element){
 
 	//The element the current JOBAD instance works on. 
 	this.element = element;
-	if(_.isElement(this.element)){
-		this.element = $(this.element);
+	if(JOBAD.refs._.isElement(this.element)){
+		this.element = JOBAD.refs.$(this.element);
 	}
-	if(!(this.element instanceof jQuery)){
+	if(!(this.element instanceof JOBAD.refs.$)){
 		JOBAD.error("Can't create JOBADInstance: Not a DOM Element. ");
 	}
 
@@ -102,7 +102,7 @@ var JOBAD = function(element){
 			JOBAD.warn("Module '"+module+"' is already activated. ");
 			return;	
 		}
-		disabledModules = _.without(disabledModules, module);
+		disabledModules = JOBAD.refs._.without(disabledModules, module);
 	};
 	
 	/*
@@ -110,7 +110,7 @@ var JOBAD = function(element){
 		@param module Module to check. 
 	*/
 	this.modules.isActive = function(module){
-		return (_.indexOf(disabledModules, module)==-1); 
+		return (JOBAD.refs._.indexOf(disabledModules, module)==-1); 
 	};
 	
 	/*
@@ -405,7 +405,7 @@ JOBAD.modules.register = function(ModuleObject){
 	@returns proper Module Object (adding omitted properties etc. Otherwise false. 
 */
 JOBAD.modules.createProperModuleObject = function(ModuleObject){
-	if(!_.isObject(ModuleObject)){
+	if(!JOBAD.refs._.isObject(ModuleObject)){
 		return false;
 	}
 	var properObject = 
@@ -450,14 +450,14 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		if(info.hasOwnProperty('dependencies')){
 			var arr = info['dependencies'];
-			if(!_.isArray(arr)){
+			if(!JOBAD.refs._.isArray(arr)){
 				return false;			
 			}
 			properObject.info['dependencies'] = arr;
 		}
 
 		try{
-			_.map(['identifier', 'title', 'author', 'description'], function(key){
+			JOBAD.refs._.map(['identifier', 'title', 'author', 'description'], function(key){
 				if(info.hasOwnProperty(key)){
 					var infoAttr = info[key];
 					if(typeof infoAttr != 'string'){
@@ -544,7 +544,7 @@ JOBAD.modules.getDependencyList = function(name){
 	var deps = moduleList[name].info.dependencies;
 
         for(var i=deps.length-1;i>=0;i--){
-		depArray = _.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
+		depArray = JOBAD.refs._.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
 	return depArray;
 };
@@ -629,10 +629,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			JOBAD.console.warn("Warning: Module '"+name+"' may have unclean namespace, but JOBAD.config.cleanModuleNamespace is true. ");		
 		}
 	} else {
-		var orgClone = _.clone(ServiceObject.namespace);
+		var orgClone = JOBAD.refs._.clone(ServiceObject.namespace);
 
 		for(var key in orgClone){
-			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){//TODO: Read Event Names dynamically
+			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];
 			}
 		}
@@ -658,19 +658,53 @@ JOBAD.util = {};
 	@param thisObj 'this' inside functions. 
 */
 JOBAD.util.bindEverything = function(obj, thisObj){
-	if(_.isObject(obj) && typeof obj != 'function' ){
+	if(JOBAD.refs._.isObject(obj) && typeof obj != 'function' ){
 		var ret = {};
 		for(var key in obj){
 			ret[key] = JOBAD.util.bindEverything(obj[key], thisObj);
 		}
 		return ret;
 	} else if(typeof obj == 'function'){
-		return _.bind(obj, thisObj);
+		return JOBAD.refs._.bind(obj, thisObj);
 	} else {
-		return _.clone(obj);
+		return JOBAD.refs._.clone(obj);
 	}
 	
 }
 
+
+/*
+	JOBAD Dependencies namespace. 
+*/
+JOBAD.refs = {};
+JOBAD.refs.$ = jQuery;
+JOBAD.refs._ = _; 
+
+JOBAD.noConflict = function(){
+	return {
+		"_": JOBAD.noConflict._(),
+		"$": JOBAD.noConflict.$()	
+	}
+}; //No conflict mode
+
+/*
+	sets jQuery in noConflict mode. 
+	@returns jQuery.noConflict()
+*/
+JOBAD.noConflict.$ = function(){
+	
+	JOBAD.refs.$ = JOBAD.refs.$.noConflict();
+	return JOBAD.refs.$;
+}
+
+/*
+	sets Underscore in noConflict mode. 
+	@returns _.noConflict()
+*/
+JOBAD.noConflict._ = function(){
+	JOBAD.refs._ = JOBAD.refs._.noConflict();
+	return JOBAD.refs._;
+}
+
 return JOBAD;
-})(jQuery);
+})();

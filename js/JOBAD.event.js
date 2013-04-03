@@ -7,7 +7,7 @@
 		JOBAD.ui.js
 */
 
-(function($){
+(function(){
 
 /* left click */
 JOBAD.Events.leftClick = 
@@ -19,7 +19,7 @@ JOBAD.Events.leftClick =
 		'enable': function(root){
 			var me = this;
 			root.delegate("*", 'click.JOBAD.leftClick', function(event){
-				var element = $(event.target); //The base element.  
+				var element = JOBAD.refs.$(event.target); //The base element.  
 				switch (event.which) {
 					case 1:
 						/* left mouse button => left click */
@@ -73,7 +73,7 @@ JOBAD.Events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return (_.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
+				return (JOBAD.refs._.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
@@ -128,18 +128,18 @@ JOBAD.Events.hoverText =
 			
 			var me = this;
 			var trigger = function(event){
-				var res = me.Event.hoverText.trigger($(this));
+				var res = me.Event.hoverText.trigger(JOBAD.refs.$(this));
 				if(res){//something happened here: dont trigger on parent
 					event.stopPropagation();
-				} else if(!$(this).is(root)){ //I have nothing => trigger the parent
-					$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
+				} else if(!JOBAD.refs.$(this).is(root)){ //I have nothing => trigger the parent
+					JOBAD.refs.$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
 				}
 				return false;
 			};
 
 
 			var untrigger = function(event){
-				return me.Event.hoverText.untrigger($(this));	
+				return me.Event.hoverText.untrigger(JOBAD.refs.$(this));	
 			};
 
 			root
@@ -164,10 +164,10 @@ JOBAD.Events.hoverText =
 				var hoverText = module.hoverText.call(module, target, module.getJOBAD()); //call apply and stuff here
 				if(typeof hoverText != 'undefined' && typeof res == "boolean"){//trigger all hover handlers ; display only the first one. 
 					if(typeof hoverText == "string"){
-						res = $("<p>").text(hoverText)			
+						res = JOBAD.refs.$("<p>").text(hoverText)			
 					} else if(typeof hoverText != "boolean"){
 						try{
-							res = jQuery(hoverText);
+							res = JOBAD.refs.$(hoverText);
 						} catch(e){
 							JOBAD.error("Module '"+module.info().identifier+"' returned invalid HOVER result. ");
 						}
@@ -190,7 +190,7 @@ JOBAD.Events.hoverText =
 				return EventResult;		
 			}
 
-			if(this.Event.hoverText.activeHoverElement instanceof jQuery)//something already active
+			if(this.Event.hoverText.activeHoverElement instanceof JOBAD.refs.$)//something already active
 			{
 				if(this.Event.hoverText.activeHoverElement.is(source)){
 					return true; //done and die			
@@ -213,7 +213,7 @@ JOBAD.Events.hoverText =
 		},
 		'untrigger': function(source){
 			if(typeof source == 'undefined'){
-				if(this.Event.hoverText.activeHoverElement instanceof jQuery){
+				if(this.Event.hoverText.activeHoverElement instanceof JOBAD.refs.$){
 					source = this.Event.hoverText.activeHoverElement;
 				} else {
 					return false;			
@@ -262,7 +262,7 @@ JOBAD.Events.onSideBarUpdate =
 					Forces an update of the sidebar. 
 				*/
 				'forceUpdate': function(){
-					if(_.keys(this.Sidebar.Elements).length == 0){
+					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
 						if(this.element.data("JOBAD.UI.Sidebar.active")){
 							JOBAD.UI.Sidebar.unwrap(this.element);
 						}	
@@ -292,7 +292,7 @@ JOBAD.Events.onSideBarUpdate =
 							
 				*/
 				'registerNotification': function(element, config){
-					var element = $(element);
+					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
 					this.Sidebar.Elements[id] = element;			
 					this.Sidebar.forceUpdate();
@@ -329,7 +329,7 @@ JOBAD.Events.onSideBarUpdate =
 					@param	item	Notification to remove. 
 				*/
 				'removeNotification': function(item){
-					if(item instanceof jQuery){
+					if(item instanceof JOBAD.refs.$){
 						var id = item.data("JOBAD.Events.Sidebar.id");
 						JOBAD.UI.Sidebar.removeNotification(item);
 						delete this.Sidebar.Elements[id];
@@ -367,5 +367,5 @@ JOBAD.Events.onSideBarUpdate =
 };
 
 
-})(jQuery);
+})();
 

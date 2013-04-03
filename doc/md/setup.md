@@ -31,8 +31,6 @@ All 3 dependencies are bundled with JOBAD. You can include them in your HTML doc
 	<!-- More files to include -->
 </head>
 ```
-It is also possible to use jQuery in noConflict mode. So far underscore no Conflict mode is not supported. 
-
 	
 After this you have a choice. You can either include the development version with comments or minimized version. 
 It is also possible to include each file individually. 
@@ -68,6 +66,20 @@ $(function(){
 	JOBAD1.Setup.enable(); //Enable JOBAD
 });
 ```
+
+If jQuery's "$" or Underscore's "_", provide conflicts with other libraries, you can simply use
+
+```javascript
+var conflicts = JOBAD.noConflict();
+
+conflicts.$ //now contains a reference to jQuery. 
+$ //contains whatever it contained before jQuery was loaded
+
+conflicts._ //now contains a reference to Underscore
+_ //contains whatever it contained before Underscore was loaded
+```
+
+
 ## See also
 
 * [API Documentation](api/index.md)

@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 03 Apr 2013 16:50:20 +0200
+	built: Wed, 03 Apr 2013 22:19:49 +0200
 */
 
 /*
@@ -10,7 +10,7 @@
 */
 
 var JOBAD = 
-(function($){
+(function(){
 
 /* 
 	JOBAD 3 Main Function
@@ -30,10 +30,10 @@ var JOBAD = function(element){
 
 	//The element the current JOBAD instance works on. 
 	this.element = element;
-	if(_.isElement(this.element)){
-		this.element = $(this.element);
+	if(JOBAD.refs._.isElement(this.element)){
+		this.element = JOBAD.refs.$(this.element);
 	}
-	if(!(this.element instanceof jQuery)){
+	if(!(this.element instanceof JOBAD.refs.$)){
 		JOBAD.error("Can't create JOBADInstance: Not a DOM Element. ");
 	}
 
@@ -108,7 +108,7 @@ var JOBAD = function(element){
 			JOBAD.warn("Module '"+module+"' is already activated. ");
 			return;	
 		}
-		disabledModules = _.without(disabledModules, module);
+		disabledModules = JOBAD.refs._.without(disabledModules, module);
 	};
 	
 	/*
@@ -116,7 +116,7 @@ var JOBAD = function(element){
 		@param module Module to check. 
 	*/
 	this.modules.isActive = function(module){
-		return (_.indexOf(disabledModules, module)==-1); 
+		return (JOBAD.refs._.indexOf(disabledModules, module)==-1); 
 	};
 	
 	/*
@@ -411,7 +411,7 @@ JOBAD.modules.register = function(ModuleObject){
 	@returns proper Module Object (adding omitted properties etc. Otherwise false. 
 */
 JOBAD.modules.createProperModuleObject = function(ModuleObject){
-	if(!_.isObject(ModuleObject)){
+	if(!JOBAD.refs._.isObject(ModuleObject)){
 		return false;
 	}
 	var properObject = 
@@ -456,14 +456,14 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		if(info.hasOwnProperty('dependencies')){
 			var arr = info['dependencies'];
-			if(!_.isArray(arr)){
+			if(!JOBAD.refs._.isArray(arr)){
 				return false;			
 			}
 			properObject.info['dependencies'] = arr;
 		}
 
 		try{
-			_.map(['identifier', 'title', 'author', 'description'], function(key){
+			JOBAD.refs._.map(['identifier', 'title', 'author', 'description'], function(key){
 				if(info.hasOwnProperty(key)){
 					var infoAttr = info[key];
 					if(typeof infoAttr != 'string'){
@@ -550,7 +550,7 @@ JOBAD.modules.getDependencyList = function(name){
 	var deps = moduleList[name].info.dependencies;
 
         for(var i=deps.length-1;i>=0;i--){
-		depArray = _.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
+		depArray = JOBAD.refs._.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
 	return depArray;
 };
@@ -635,10 +635,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			JOBAD.console.warn("Warning: Module '"+name+"' may have unclean namespace, but JOBAD.config.cleanModuleNamespace is true. ");		
 		}
 	} else {
-		var orgClone = _.clone(ServiceObject.namespace);
+		var orgClone = JOBAD.refs._.clone(ServiceObject.namespace);
 
 		for(var key in orgClone){
-			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){//TODO: Read Event Names dynamically
+			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];
 			}
 		}
@@ -664,22 +664,56 @@ JOBAD.util = {};
 	@param thisObj 'this' inside functions. 
 */
 JOBAD.util.bindEverything = function(obj, thisObj){
-	if(_.isObject(obj) && typeof obj != 'function' ){
+	if(JOBAD.refs._.isObject(obj) && typeof obj != 'function' ){
 		var ret = {};
 		for(var key in obj){
 			ret[key] = JOBAD.util.bindEverything(obj[key], thisObj);
 		}
 		return ret;
 	} else if(typeof obj == 'function'){
-		return _.bind(obj, thisObj);
+		return JOBAD.refs._.bind(obj, thisObj);
 	} else {
-		return _.clone(obj);
+		return JOBAD.refs._.clone(obj);
 	}
 	
 }
 
+
+/*
+	JOBAD Dependencies namespace. 
+*/
+JOBAD.refs = {};
+JOBAD.refs.$ = jQuery;
+JOBAD.refs._ = _; 
+
+JOBAD.noConflict = function(){
+	return {
+		"_": JOBAD.noConflict._(),
+		"$": JOBAD.noConflict.$()	
+	}
+}; //No conflict mode
+
+/*
+	sets jQuery in noConflict mode. 
+	@returns jQuery.noConflict()
+*/
+JOBAD.noConflict.$ = function(){
+	
+	JOBAD.refs.$ = JOBAD.refs.$.noConflict();
+	return JOBAD.refs.$;
+}
+
+/*
+	sets Underscore in noConflict mode. 
+	@returns _.noConflict()
+*/
+JOBAD.noConflict._ = function(){
+	JOBAD.refs._ = JOBAD.refs._.noConflict();
+	return JOBAD.refs._;
+}
+
 return JOBAD;
-})(jQuery);
+})();
 
 /*
 	JOBAD Core build configuration
@@ -694,14 +728,14 @@ JOBAD.config.debug = false;
 		JOBAD.core.js
 */
 
-(function(JOBAD, $){
+(function(JOBAD){
 
 	//Mouse coordinates
 	var mouseCoords = [0, 0];
 
 
-	$(document).on("mousemove.JOBADListener", function(e){
-		mouseCoords = [e.pageX-$(window).scrollLeft(), e.pageY-$(window).scrollTop()];
+	JOBAD.refs.$(document).on("mousemove.JOBADListener", function(e){
+		mouseCoords = [e.pageX-JOBAD.refs.$(window).scrollLeft(), e.pageY-JOBAD.refs.$(window).scrollTop()];
 	});
 
 	//UI Namespace. 
@@ -725,7 +759,7 @@ JOBAD.config.debug = false;
 	*/
 	JOBAD.UI.hover.enable = function(html){
 		hoverActive = true;
-		hoverElement = $("<div class='JOBAD JOBADHover'>").html(html).css({
+		hoverElement = JOBAD.refs.$("<div class='JOBAD JOBADHover'>").html(html).css({
 			"position": "fixed",
 			"background-color": "grey",
 			"-webkit-border-radius": 5,
@@ -733,9 +767,9 @@ JOBAD.config.debug = false;
 			"border-radius": 5,
 			"border": "1px solid black"
 		});
-		hoverElement.appendTo($("body"));
+		hoverElement.appendTo(JOBAD.refs.$("body"));
 
-		$(document).on("mousemove.JOBAD.UI.hover", function(){
+		JOBAD.refs.$(document).on("mousemove.JOBAD.UI.hover", function(){
 			JOBAD.UI.hover.refresh();
 		});
 
@@ -755,7 +789,7 @@ JOBAD.config.debug = false;
 		}
 
 		hoverActive = false;
-		$(document).off("mousemove.JOBAD.UI.hover");
+		JOBAD.refs.$(document).off("mousemove.JOBAD.UI.hover");
 		hoverElement.remove();
 	}
 	/*
@@ -803,8 +837,8 @@ JOBAD.config.debug = false;
 			if(e.ctrlKey){
 				return true;
 			}
-			var targetElement = $(e.target);
-			var elementOrg = $(e.target);
+			var targetElement = JOBAD.refs.$(e.target);
+			var elementOrg = JOBAD.refs.$(e.target);
 			var result = false;
 			while(true){
 				result = demandFunction(targetElement, elementOrg);
@@ -818,7 +852,7 @@ JOBAD.config.debug = false;
 				return true; //Allow the browser to handle stuff			
 			}
 			
-			$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
+			JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
 
 			onEnable(element);
 
@@ -834,7 +868,7 @@ JOBAD.config.debug = false;
 			.on('mousedown', function(e){
 				e.stopPropagation();//prevent closemenu from triggering
 			})
-			.appendTo($("body"));
+			.appendTo(JOBAD.refs.$("body"));
 			
 			
 
@@ -847,13 +881,13 @@ JOBAD.config.debug = false;
 				onDisable(element);
 			};
 
-			$(document).on('JOBADContextMenuUnbind', function(){
+			JOBAD.refs.$(document).on('JOBADContextMenuUnbind', function(){
 					closeHandler();
-					$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBADContextMenuUnbind');
+					JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBADContextMenuUnbind');
 			});
 
-			$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
-				$(document).trigger('JOBADContextMenuUnbind');
+			JOBAD.refs.$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
+				JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
 			});
 	
 			
@@ -883,11 +917,11 @@ JOBAD.config.debug = false;
 		@returns the menu element. 
 	*/
 	JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
-		var $ul = $("<ul>");
+		var $ul = JOBAD.refs.$("<ul>");
 		for(var i=0;i<items.length;i++){
 			var item = items[i];
-			var $a = $("<a href='#'>");
-			$li = $("<li>")
+			var $a = JOBAD.refs.$("<a href='#'>");
+			$li = JOBAD.refs.$("<li>")
 			.appendTo($ul)
 			.append($a);
 			$a
@@ -900,7 +934,7 @@ JOBAD.config.debug = false;
 					var callback = item[1];
 
 					$a.on('click', function(e){
-						$(document).trigger('JOBADContextMenuUnbind');
+						JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
 						callback(element, elementOrg);
 					});		
 				} else {
@@ -930,16 +964,16 @@ JOBAD.config.debug = false;
 	JOBAD.UI.Sidebar.wrap = function(element){
 		var org = $(element);
 
-		var orgWrapper = $("<div>").css({"overflow": "hidden"});
+		var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
-		var sideBarElement = $("<div>").css({
+		var sideBarElement = JOBAD.refs.$("<div>").css({
 			"float": "right",
 			"width": JOBAD.UI.Sidebar.config.width,
 			"height": 1, //something >0
 			"position":"relative"
 		});
 
-		var container = $("<div>").css({
+		var container = JOBAD.refs.$("<div>").css({
 			"width": "100%",
 			"float":"left",
 			"overflow":"hidden"	
@@ -966,7 +1000,7 @@ JOBAD.config.debug = false;
 		@returns the original element unwrapped. 
 	*/
 	JOBAD.UI.Sidebar.unwrap = function(element){
-		var org = $(element);
+		var org = JOBAD.refs.$(element);
 		org
 		.unwrap()
 		.parent()
@@ -985,12 +1019,12 @@ JOBAD.config.debug = false;
 		@returns an empty new notification element. 
 	*/
 	JOBAD.UI.Sidebar.addNotification = function(sidebar, element){
-		var sbar = $(sidebar);
-		var child = $(element);
+		var sbar = JOBAD.refs.$(sidebar);
+		var child = JOBAD.refs.$(element);
 		var offset = child.offset().top - sbar.offset().top; //offset
 		sbar = sbar.parent().parent().find("div").first();
 	
-		var newGuy =  $("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
+		var newGuy =  JOBAD.refs.$("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
 
 
 		var callback = function(){
@@ -1000,7 +1034,7 @@ JOBAD.config.debug = false;
 		};
 	
 
-		$(window).on("resize.JOBAD.UI.Sidebar", callback);
+		JOBAD.refs.$(window).on("resize.JOBAD.UI.Sidebar", callback);
 
 		return newGuy.data("JOBAD.UI.Sidebar.ResizeHook", callback);
 	};
@@ -1010,7 +1044,7 @@ JOBAD.config.debug = false;
 		@returns nothing. 
 	*/
 	JOBAD.UI.Sidebar.forceNotificationUpdate = function(){
-		$(window).trigger("resize.JOBAD.UI.Sidebar");
+		JOBAD.refs.$(window).trigger("resize.JOBAD.UI.Sidebar");
 	};
 
 	/*
@@ -1020,7 +1054,7 @@ JOBAD.config.debug = false;
 	*/
 	JOBAD.UI.Sidebar.removeNotification = function(notification){
 		var callback = notification.data("JOBAD.UI.Sidebar.ResizeHook");
-		$(window).off("resize.JOBAD.UI.Sidebar", callback);
+		JOBAD.refs.$(window).off("resize.JOBAD.UI.Sidebar", callback);
 		notification.remove();
 	};
 
@@ -1030,7 +1064,7 @@ JOBAD.config.debug = false;
 		highlights an element
 	*/
 	JOBAD.UI.highlight = function(element){
-		var element = $(element);
+		var element = JOBAD.refs.$(element);
 		if(element.data("JOBAD.UI.highlight.orgColor")){
 			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
 		}
@@ -1042,76 +1076,14 @@ JOBAD.config.debug = false;
 		unhighlights an element.	
 	*/		
 	JOBAD.UI.unhighlight = function(element){
-		var element = $(element);
+		var element = JOBAD.refs.$(element);
 		element
 		.stop()
 		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
 		.removeData("JOBAD.UI.highlight.orgColor");	
-	}
-
-	/*
-	JOBAD Keypress UI - Removed temporarily
-	JOBAD.UI.keypress = {};
-	//adapted code from https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js
-	JOBAD.UI.keypress.keys = {
-		specialKeys: {
-			8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
-			20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
-			37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del", 
-			96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
-			104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/", 
-			112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8", 
-			120: "f9", 121: "f10", 122: "f11", 123: "f12", 144: "numlock", 145: "scroll", 191: "/", 224: "meta"
-		},
-
-		shiftNums: {
-			"`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", 
-			"8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<", 
-			".": ">",  "/": "?",  "\\": "|"
-		}
 	};
 
-	JOBAD.UI.keypress.matchesKey = function(event, comb) {
-			
-		var special = event.type !== "keypress" && JOBAD.UI.keypress.keys.specialKeys[ event.which ],
-			character = String.fromCharCode( event.which ).toLowerCase(),
-			key, modif = "", possible = {};
-
-		// check combinations (alt|ctrl|shift+anything)
-		if ( event.altKey && special !== "alt" ) {
-			modif += "alt+";
-		}
-
-		if ( event.ctrlKey && special !== "ctrl" ) {
-			modif += "ctrl+";
-		}
-
-		if ( event.metaKey && !event.ctrlKey && special !== "meta" ) {
-			modif += "meta+";
-		}
-
-		if ( event.shiftKey && special !== "shift" ) {
-			modif += "shift+";
-		}
-
-		if ( special ) {
-			possible[ modif + special ] = true;
-
-		} else {
-			possible[ modif + character ] = true;
-			possible[ modif + JOBAD.UI.keypress.keys.specialKeys[ character ] ] = true;
-
-			// "$" can be triggered as "Shift+4" or "Shift+$" or just "$"
-			if ( modif === "shift+" ) {
-				possible[ JOBAD.UI.keypress.keys.shiftNums[ character ] ] = true;
-			}
-		}
-
-		return possible.hasOwnProperty(comb.toLowerCase());
-	};
-
-	*/
-})(JOBAD, jQuery);
+})(JOBAD);
 
 /*
 	JOBAD 3 Event Functions
@@ -1122,7 +1094,7 @@ JOBAD.config.debug = false;
 		JOBAD.ui.js
 */
 
-(function($){
+(function(){
 
 /* left click */
 JOBAD.Events.leftClick = 
@@ -1134,7 +1106,7 @@ JOBAD.Events.leftClick =
 		'enable': function(root){
 			var me = this;
 			root.delegate("*", 'click.JOBAD.leftClick', function(event){
-				var element = $(event.target); //The base element.  
+				var element = JOBAD.refs.$(event.target); //The base element.  
 				switch (event.which) {
 					case 1:
 						/* left mouse button => left click */
@@ -1188,7 +1160,7 @@ JOBAD.Events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return (_.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
+				return (JOBAD.refs._.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
@@ -1243,18 +1215,18 @@ JOBAD.Events.hoverText =
 			
 			var me = this;
 			var trigger = function(event){
-				var res = me.Event.hoverText.trigger($(this));
+				var res = me.Event.hoverText.trigger(JOBAD.refs.$(this));
 				if(res){//something happened here: dont trigger on parent
 					event.stopPropagation();
-				} else if(!$(this).is(root)){ //I have nothing => trigger the parent
-					$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
+				} else if(!JOBAD.refs.$(this).is(root)){ //I have nothing => trigger the parent
+					JOBAD.refs.$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
 				}
 				return false;
 			};
 
 
 			var untrigger = function(event){
-				return me.Event.hoverText.untrigger($(this));	
+				return me.Event.hoverText.untrigger(JOBAD.refs.$(this));	
 			};
 
 			root
@@ -1279,10 +1251,10 @@ JOBAD.Events.hoverText =
 				var hoverText = module.hoverText.call(module, target, module.getJOBAD()); //call apply and stuff here
 				if(typeof hoverText != 'undefined' && typeof res == "boolean"){//trigger all hover handlers ; display only the first one. 
 					if(typeof hoverText == "string"){
-						res = $("<p>").text(hoverText)			
+						res = JOBAD.refs.$("<p>").text(hoverText)			
 					} else if(typeof hoverText != "boolean"){
 						try{
-							res = jQuery(hoverText);
+							res = JOBAD.refs.$(hoverText);
 						} catch(e){
 							JOBAD.error("Module '"+module.info().identifier+"' returned invalid HOVER result. ");
 						}
@@ -1305,7 +1277,7 @@ JOBAD.Events.hoverText =
 				return EventResult;		
 			}
 
-			if(this.Event.hoverText.activeHoverElement instanceof jQuery)//something already active
+			if(this.Event.hoverText.activeHoverElement instanceof JOBAD.refs.$)//something already active
 			{
 				if(this.Event.hoverText.activeHoverElement.is(source)){
 					return true; //done and die			
@@ -1328,7 +1300,7 @@ JOBAD.Events.hoverText =
 		},
 		'untrigger': function(source){
 			if(typeof source == 'undefined'){
-				if(this.Event.hoverText.activeHoverElement instanceof jQuery){
+				if(this.Event.hoverText.activeHoverElement instanceof JOBAD.refs.$){
 					source = this.Event.hoverText.activeHoverElement;
 				} else {
 					return false;			
@@ -1377,7 +1349,7 @@ JOBAD.Events.onSideBarUpdate =
 					Forces an update of the sidebar. 
 				*/
 				'forceUpdate': function(){
-					if(_.keys(this.Sidebar.Elements).length == 0){
+					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
 						if(this.element.data("JOBAD.UI.Sidebar.active")){
 							JOBAD.UI.Sidebar.unwrap(this.element);
 						}	
@@ -1407,7 +1379,7 @@ JOBAD.Events.onSideBarUpdate =
 							
 				*/
 				'registerNotification': function(element, config){
-					var element = $(element);
+					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
 					this.Sidebar.Elements[id] = element;			
 					this.Sidebar.forceUpdate();
@@ -1444,7 +1416,7 @@ JOBAD.Events.onSideBarUpdate =
 					@param	item	Notification to remove. 
 				*/
 				'removeNotification': function(item){
-					if(item instanceof jQuery){
+					if(item instanceof JOBAD.refs.$){
 						var id = item.data("JOBAD.Events.Sidebar.id");
 						JOBAD.UI.Sidebar.removeNotification(item);
 						delete this.Sidebar.Elements[id];
@@ -1482,5 +1454,5 @@ JOBAD.Events.onSideBarUpdate =
 };
 
 
-})(jQuery);
+})();
 

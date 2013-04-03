@@ -6,14 +6,14 @@
 		JOBAD.core.js
 */
 
-(function(JOBAD, $){
+(function(JOBAD){
 
 	//Mouse coordinates
 	var mouseCoords = [0, 0];
 
 
-	$(document).on("mousemove.JOBADListener", function(e){
-		mouseCoords = [e.pageX-$(window).scrollLeft(), e.pageY-$(window).scrollTop()];
+	JOBAD.refs.$(document).on("mousemove.JOBADListener", function(e){
+		mouseCoords = [e.pageX-JOBAD.refs.$(window).scrollLeft(), e.pageY-JOBAD.refs.$(window).scrollTop()];
 	});
 
 	//UI Namespace. 
@@ -37,7 +37,7 @@
 	*/
 	JOBAD.UI.hover.enable = function(html){
 		hoverActive = true;
-		hoverElement = $("<div class='JOBAD JOBADHover'>").html(html).css({
+		hoverElement = JOBAD.refs.$("<div class='JOBAD JOBADHover'>").html(html).css({
 			"position": "fixed",
 			"background-color": "grey",
 			"-webkit-border-radius": 5,
@@ -45,9 +45,9 @@
 			"border-radius": 5,
 			"border": "1px solid black"
 		});
-		hoverElement.appendTo($("body"));
+		hoverElement.appendTo(JOBAD.refs.$("body"));
 
-		$(document).on("mousemove.JOBAD.UI.hover", function(){
+		JOBAD.refs.$(document).on("mousemove.JOBAD.UI.hover", function(){
 			JOBAD.UI.hover.refresh();
 		});
 
@@ -67,7 +67,7 @@
 		}
 
 		hoverActive = false;
-		$(document).off("mousemove.JOBAD.UI.hover");
+		JOBAD.refs.$(document).off("mousemove.JOBAD.UI.hover");
 		hoverElement.remove();
 	}
 	/*
@@ -115,8 +115,8 @@
 			if(e.ctrlKey){
 				return true;
 			}
-			var targetElement = $(e.target);
-			var elementOrg = $(e.target);
+			var targetElement = JOBAD.refs.$(e.target);
+			var elementOrg = JOBAD.refs.$(e.target);
 			var result = false;
 			while(true){
 				result = demandFunction(targetElement, elementOrg);
@@ -130,7 +130,7 @@
 				return true; //Allow the browser to handle stuff			
 			}
 			
-			$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
+			JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
 
 			onEnable(element);
 
@@ -146,7 +146,7 @@
 			.on('mousedown', function(e){
 				e.stopPropagation();//prevent closemenu from triggering
 			})
-			.appendTo($("body"));
+			.appendTo(JOBAD.refs.$("body"));
 			
 			
 
@@ -159,13 +159,13 @@
 				onDisable(element);
 			};
 
-			$(document).on('JOBADContextMenuUnbind', function(){
+			JOBAD.refs.$(document).on('JOBADContextMenuUnbind', function(){
 					closeHandler();
-					$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBADContextMenuUnbind');
+					JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBADContextMenuUnbind');
 			});
 
-			$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
-				$(document).trigger('JOBADContextMenuUnbind');
+			JOBAD.refs.$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
+				JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
 			});
 	
 			
@@ -195,11 +195,11 @@
 		@returns the menu element. 
 	*/
 	JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
-		var $ul = $("<ul>");
+		var $ul = JOBAD.refs.$("<ul>");
 		for(var i=0;i<items.length;i++){
 			var item = items[i];
-			var $a = $("<a href='#'>");
-			$li = $("<li>")
+			var $a = JOBAD.refs.$("<a href='#'>");
+			$li = JOBAD.refs.$("<li>")
 			.appendTo($ul)
 			.append($a);
 			$a
@@ -212,7 +212,7 @@
 					var callback = item[1];
 
 					$a.on('click', function(e){
-						$(document).trigger('JOBADContextMenuUnbind');
+						JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
 						callback(element, elementOrg);
 					});		
 				} else {
@@ -242,16 +242,16 @@
 	JOBAD.UI.Sidebar.wrap = function(element){
 		var org = $(element);
 
-		var orgWrapper = $("<div>").css({"overflow": "hidden"});
+		var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
-		var sideBarElement = $("<div>").css({
+		var sideBarElement = JOBAD.refs.$("<div>").css({
 			"float": "right",
 			"width": JOBAD.UI.Sidebar.config.width,
 			"height": 1, //something >0
 			"position":"relative"
 		});
 
-		var container = $("<div>").css({
+		var container = JOBAD.refs.$("<div>").css({
 			"width": "100%",
 			"float":"left",
 			"overflow":"hidden"	
@@ -278,7 +278,7 @@
 		@returns the original element unwrapped. 
 	*/
 	JOBAD.UI.Sidebar.unwrap = function(element){
-		var org = $(element);
+		var org = JOBAD.refs.$(element);
 		org
 		.unwrap()
 		.parent()
@@ -297,12 +297,12 @@
 		@returns an empty new notification element. 
 	*/
 	JOBAD.UI.Sidebar.addNotification = function(sidebar, element){
-		var sbar = $(sidebar);
-		var child = $(element);
+		var sbar = JOBAD.refs.$(sidebar);
+		var child = JOBAD.refs.$(element);
 		var offset = child.offset().top - sbar.offset().top; //offset
 		sbar = sbar.parent().parent().find("div").first();
 	
-		var newGuy =  $("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
+		var newGuy =  JOBAD.refs.$("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
 
 
 		var callback = function(){
@@ -312,7 +312,7 @@
 		};
 	
 
-		$(window).on("resize.JOBAD.UI.Sidebar", callback);
+		JOBAD.refs.$(window).on("resize.JOBAD.UI.Sidebar", callback);
 
 		return newGuy.data("JOBAD.UI.Sidebar.ResizeHook", callback);
 	};
@@ -322,7 +322,7 @@
 		@returns nothing. 
 	*/
 	JOBAD.UI.Sidebar.forceNotificationUpdate = function(){
-		$(window).trigger("resize.JOBAD.UI.Sidebar");
+		JOBAD.refs.$(window).trigger("resize.JOBAD.UI.Sidebar");
 	};
 
 	/*
@@ -332,7 +332,7 @@
 	*/
 	JOBAD.UI.Sidebar.removeNotification = function(notification){
 		var callback = notification.data("JOBAD.UI.Sidebar.ResizeHook");
-		$(window).off("resize.JOBAD.UI.Sidebar", callback);
+		JOBAD.refs.$(window).off("resize.JOBAD.UI.Sidebar", callback);
 		notification.remove();
 	};
 
@@ -342,7 +342,7 @@
 		highlights an element
 	*/
 	JOBAD.UI.highlight = function(element){
-		var element = $(element);
+		var element = JOBAD.refs.$(element);
 		if(element.data("JOBAD.UI.highlight.orgColor")){
 			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
 		}
@@ -354,73 +354,11 @@
 		unhighlights an element.	
 	*/		
 	JOBAD.UI.unhighlight = function(element){
-		var element = $(element);
+		var element = JOBAD.refs.$(element);
 		element
 		.stop()
 		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
 		.removeData("JOBAD.UI.highlight.orgColor");	
-	}
-
-	/*
-	JOBAD Keypress UI - Removed temporarily
-	JOBAD.UI.keypress = {};
-	//adapted code from https://raw.github.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js
-	JOBAD.UI.keypress.keys = {
-		specialKeys: {
-			8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
-			20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
-			37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del", 
-			96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
-			104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/", 
-			112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8", 
-			120: "f9", 121: "f10", 122: "f11", 123: "f12", 144: "numlock", 145: "scroll", 191: "/", 224: "meta"
-		},
-
-		shiftNums: {
-			"`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", 
-			"8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<", 
-			".": ">",  "/": "?",  "\\": "|"
-		}
 	};
 
-	JOBAD.UI.keypress.matchesKey = function(event, comb) {
-			
-		var special = event.type !== "keypress" && JOBAD.UI.keypress.keys.specialKeys[ event.which ],
-			character = String.fromCharCode( event.which ).toLowerCase(),
-			key, modif = "", possible = {};
-
-		// check combinations (alt|ctrl|shift+anything)
-		if ( event.altKey && special !== "alt" ) {
-			modif += "alt+";
-		}
-
-		if ( event.ctrlKey && special !== "ctrl" ) {
-			modif += "ctrl+";
-		}
-
-		if ( event.metaKey && !event.ctrlKey && special !== "meta" ) {
-			modif += "meta+";
-		}
-
-		if ( event.shiftKey && special !== "shift" ) {
-			modif += "shift+";
-		}
-
-		if ( special ) {
-			possible[ modif + special ] = true;
-
-		} else {
-			possible[ modif + character ] = true;
-			possible[ modif + JOBAD.UI.keypress.keys.specialKeys[ character ] ] = true;
-
-			// "$" can be triggered as "Shift+4" or "Shift+$" or just "$"
-			if ( modif === "shift+" ) {
-				possible[ JOBAD.UI.keypress.keys.shiftNums[ character ] ] = true;
-			}
-		}
-
-		return possible.hasOwnProperty(comb.toLowerCase());
-	};
-
-	*/
-})(JOBAD, jQuery);
+})(JOBAD);

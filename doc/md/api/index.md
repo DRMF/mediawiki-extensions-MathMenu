@@ -1,12 +1,6 @@
 # API Documentation
 
 * [JOBAD](JOBAD/index.md) - Main JOBAD Namespace
-	* [JOBADInstance](JOBAD/JOBADInstance/index.md) - JOBAD Instance functions
-	* [JOBAD.config](JOBAD/JOBAD.config/index.md) - Global Configuration namespace
-	* [JOBAD.console](JOBAD/JOBAD.console.md) - Wraps the native console object if available. 
-	* [JOBAD.UI](JOBAD/JOBAD.UI/index.md) - Global UI Namespace
-	* [JOBAD.modules](JOBAD/JOBAD.modules/index.md) - Modules API
-	
 
 ## Documentation Convention
 An Object is documented like this:

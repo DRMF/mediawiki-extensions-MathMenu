@@ -16,6 +16,3 @@
 * **Function** `JOBAD.modules.getDependencyList(name)` checks the complete dependency tree of a module. Warning: Does not check for circular dependencies. May hang up it in a loop in that case. 
 	* **String** `name` Name of the module to check. 
 	* **returns** an array of dependencies of name including name in such an order, thet they can all be loaded without unresolved dependencies. 
-* **Function** `JOBAD.modules.generateMenuList(menu)` Generates a list menu representation from an object representation. 
-	* **Object** `menu` an object representation of the menu. 
-	* **returns** the new representation. 

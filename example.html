@@ -21,9 +21,12 @@
 
 		<script type="text/javascript">
 			var JOBAD1, JOBAD2;
-			$(function(){	
-				JOBAD1 = new JOBAD($("#1"));
-				JOBAD2 = new JOBAD($("#2"));
+
+			JOBAD.noConflict._(); //prevent underscore conflicts
+
+			jQuery(function(){	
+				JOBAD1 = new JOBAD(jQuery("#1"));
+				JOBAD2 = new JOBAD(jQuery("#2"));
 
 				JOBAD1.modules.load('test.color.click', ['green']);
 				JOBAD1.modules.load('test.color.hover', []);

@@ -458,49 +458,22 @@
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
 		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style><p><a href="index.html">Index</a> &gt; <strong>Known Issues &amp; TODO</strong></p>
+		</style><p><a href="index.html">Start</a> &gt; <strong>Known Issues &amp; TODO</strong></p>
 <h1>Known Issues &amp; TODO</h1>
 
-<h2>TODO / API Drafts</h2>
+<h2>TODO</h2>
 
 <ul>
-<li>Implement Sidebar Event API
-<ul>
-<li>register on certain elements. Possible API: 
-<ul>
-<li><code>ModuleObject.onUpdate(JOBADInstance)</code> - Called when any update on the element occurs (jQuery mutation events / or just after every call?)</li>
-<li><code>JOBADInstance.sidebar.forceupdate()</code> - force an update on the sidebar
-<ul>
-<li><code>loadedModule.reportChange()</code> - calls the mathod above. (report when an element changed)</li>
-</ul></li>
-<li><code>JOBADInstance.sidebar.register(target, options, callback, UUID_PREFIX)</code> - register on an element - returns UUID
-<ul>
-<li><code>loadedModule.registerSidebarElement(target, options, callback)</code> - calls above with prefix</li>
-</ul></li>
-<li><code>JOBADInstance.sidebar.unregister(UUID)</code> - unregister by UUID
-<ul>
-<li><code>loadedModule.unregisterSidebarElement(target, options, callback)</code></li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li>Add options for <code>JOBADInstance</code> (allow for local disabling of certain events). Possible API: 
-<ul>
-<li><code>JOBADInstance(element, [modules2Load | options])</code></li>
-<li><code>JOBADInstance.Events.enable(eventName)</code></li>
-<li><code>JOBADInstance.Events.disable(eventName)</code></li>
-<li><code>JOBADInstance.Events.isEnabled(eventName)</code></li>
-</ul></li>
-<li>Implement keyPress Event</li>
+<li>Make Sidebar UI fancier. </li>
+<li>Implement keyPress Event. </li>
+<li>Update Doc. </li>
 </ul>
 
 <h2>Known Issues</h2>
 
 <ul>
 <li>Hover / Context Menu UI sometimes overlap</li>
-<li>Hover behaves strangely with children</li>
-<li>ContextMenu submenu sometimes not wide enough (jQuery UI bug?)</li>
 <li>Example modules undocumented</li>
-<li>Debug enabled by default</li>
 </ul>
 
 	</body>
