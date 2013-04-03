@@ -7,6 +7,8 @@
 		JOBAD.ui.js
 */
 
+(function($){
+
 /* left click */
 JOBAD.Events.leftClick = 
 {
@@ -363,4 +365,7 @@ JOBAD.Events.onSideBarUpdate =
 		}
 	}
 };
+
+
+})(jQuery);
 

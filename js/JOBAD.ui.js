@@ -6,7 +6,7 @@
 		JOBAD.core.js
 */
 
-(function(JOBAD){
+(function(JOBAD, $){
 
 	//Mouse coordinates
 	var mouseCoords = [0, 0];
@@ -423,4 +423,4 @@
 	};
 
 	*/
-})(JOBAD)
+})(JOBAD, jQuery);

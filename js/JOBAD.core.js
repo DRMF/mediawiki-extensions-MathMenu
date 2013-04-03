@@ -4,7 +4,7 @@
 */
 
 var JOBAD = 
-(function(){
+(function($){
 
 /* 
 	JOBAD 3 Main Function
@@ -673,4 +673,4 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 }
 
 return JOBAD;
-})();
+})(jQuery);

@@ -50,9 +50,9 @@ printf "Preparing compilation with Closure Compiler ... "
 
 echo "" > $buildmin.tmp
 
-echo "var JOBAD = (function(){" >> $buildmin.tmp
+echo "var JOBAD = (function(jQuery){" >> $buildmin.tmp
 cat $build >> $buildmin.tmp
-echo "; return JOBAD; })();" >> $buildmin.tmp
+echo "; return JOBAD; })(jQuery);" >> $buildmin.tmp
 
 echo "OK"
 

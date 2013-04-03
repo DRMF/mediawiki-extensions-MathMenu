@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 29 Mar 2013 14:50:35 +0100
+	built: Wed, 03 Apr 2013 15:06:04 +0200
 */
 
 /*
@@ -10,7 +10,7 @@
 */
 
 var JOBAD = 
-(function(){
+(function($){
 
 /* 
 	JOBAD 3 Main Function
@@ -679,7 +679,7 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 }
 
 return JOBAD;
-})();
+})(jQuery);
 
 /*
 	JOBAD Core build configuration
@@ -694,7 +694,7 @@ JOBAD.config.debug = false;
 		JOBAD.core.js
 */
 
-(function(JOBAD){
+(function(JOBAD, $){
 
 	//Mouse coordinates
 	var mouseCoords = [0, 0];
@@ -1111,7 +1111,7 @@ JOBAD.config.debug = false;
 	};
 
 	*/
-})(JOBAD)
+})(JOBAD, jQuery);
 
 /*
 	JOBAD 3 Event Functions
@@ -1121,6 +1121,8 @@ JOBAD.config.debug = false;
 		JOBAD.core.js
 		JOBAD.ui.js
 */
+
+(function($){
 
 /* left click */
 JOBAD.Events.leftClick = 
@@ -1478,4 +1480,7 @@ JOBAD.Events.onSideBarUpdate =
 		}
 	}
 };
+
+
+})(jQuery);
 
