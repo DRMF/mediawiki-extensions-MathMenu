@@ -1,0 +1,62 @@
+# Setting up JOBAD
+This page will give instructions on how to include JOBAD into your website. 
+## Including JOBAD in a website
+To include JOBAD in your website, you will have to include several files in your HTML document. 
+JOBAD itself depends on: 
+
+* [jQuery](http://jquery.com) - tested with version 1.9.0
+* [jQuery UI](http://jqueryui.com/) - tested with version 1.10.1
+* [UNDERSCORE.JS](http://underscorejs.org/) - tested with version 1.4.4
+
+All 3 dependencies are bundled with JOBAD. You can include them in your HTML document header like so:
+ 
+```html
+<head>
+	<!-- other header tags -->
+	<script src="./js/deps/jquery/jquery-1.9.1.min.js"></script>
+	<script src="./js/deps/jquery/jquery-ui-1.10.1.js"></script>
+	<script src="./js/deps/underscore/underscore-min.js"></script>
+	<link href="./css/jquery-ui-1.10.1.min.css" rel="stylesheet">
+	<!-- More files to include -->
+</head>
+```
+	
+After this you have a choice. You can either include the development version with comments or minimized version. 
+It is also possible to include each file individually. 
+
+As a developer who wants to work on the JOBAD core you can load the *JOBAD.core.js*, *JOBAD.event.js* and *JOBAD.ui.js*: 
+
+```html
+	<script src="./js/JOBAD.core.js"></script>
+	<script src="./js/JOBAD.event.js"></script>
+	<script src="./js/JOBAD.ui.js"></script>
+	<script src="./js/JOBAD.template.js"></script>
+```
+
+As a developer who develops JOBAD modules, you can include the built development version: 
+
+```html
+	<script src="./build/release/JOBAD.js"></script>
+```
+
+If you want to minimize bandwith and just want to embed JOABD onto your webpage, you can include the minified version: 
+
+```html
+	<script src="./build/release/JOBAD.min.js"></script>
+```
+
+That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 
+Then you can start JOBAD: 
+
+```javascript
+$(function(){
+	var JOBAD1 = new JOBAD($("#my_JOBAD_area")); //bind JOBAD to an element on the page. 
+	JOBAD1.modules.load('some.awesome.module', ['with', 'options']); //Load a module
+	JOBAD1.Setup.enable(); //Enable JOBAD
+});
+```
+
+## See also
+
+* [API Documentation](api/index.md)
+* [Module Index](modules/index.md) - A list of all available modules. 

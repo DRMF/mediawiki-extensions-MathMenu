@@ -5,8 +5,6 @@ build="release/JOBAD.js"
 buildmin="release/JOBAD.min.js"
 sourcedir=../js
 
-# uses Clousre compiler bash script from https://github.com/dfsq/compressJS.sh
-
 echo "JOBAD build script "
 
 echo "Checking build requirements ..."

@@ -14,5 +14,5 @@ If you want to build jobad, please use
 in order to check out the build dependencies. 
 
 ## Documentation
-Please refer to /doc/index.html
+Please refer to [the Documentation](doc/md/index.md) 
 
