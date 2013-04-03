@@ -12,4 +12,4 @@ Welcome to the JOBAD v3 Documentation.
 	* [Modules](dev/modules.md) - Information about how to write modules
 * [TODO / Known Issues](todo.md)
 * Demos: 
-	* [Demo #1](../example.html) - A JOBAD example page. 
+	* [Demo #1](../../example.html) - A JOBAD example page. 
