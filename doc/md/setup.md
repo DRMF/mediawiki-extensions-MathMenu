@@ -1,7 +1,7 @@
 # Setting up JOBAD
 This page will give instructions on how to include JOBAD into your website. 
 ## Getting the JOBAD code
-The source code for github can be found at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
+The source code for JOBAD can be found at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
 To get the code use 
 
     git clone https://github.com/KWARC/jobad

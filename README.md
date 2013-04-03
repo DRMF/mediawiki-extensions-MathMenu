@@ -2,6 +2,12 @@
 
 JOBAD is a javascript framework which makes it easy to create interactive web pages. 
 
+[Simplistic Demo](http://kwarc.github.com/jobad/example.html)
+
+
+[Documentation](http://kwarc.github.com/jobad/)
+
+
 ## Getting JOBAD
 To get the code use 
 
@@ -15,3 +21,4 @@ in order to check out the build dependencies.
 
 ## Documentation
 Please refer to [the Documentation](doc/md/index.md) or to the html version in doc/html/index.html. 
+
