@@ -67,7 +67,7 @@ $(function(){
 });
 ```
 
-If jQuery's "$" or Underscore's "_", provide conflicts with other libraries, you can simply use
+If jQuery's "$" or Underscore's "_", cause conflicts with other libraries, you can simply use
 
 ```javascript
 var conflicts = JOBAD.noConflict();

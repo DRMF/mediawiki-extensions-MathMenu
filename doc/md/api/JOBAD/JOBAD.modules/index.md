@@ -1,10 +1,9 @@
 # JOBAD.modules
 
-* **Object** [`JOBAD.modules.TEMPLATE`](template.md) A module template. 
 * **Function** [`JOBAD.modules.loadedModule(name, args, JOBADInstance)`](loadedModule.md) Represents a loaded module. 
 
 * **Function** `JOBAD.modules.register(moduleObject)` Registers a new JOBAD module with JOBAD. 
-	* **Object** `moduleObject` The object representing the module to register with JOBAD. See [`JOBAD.modules.TEMPLATE`](template.md). 
+	* **Object** `moduleObject` The object representing the module to register with JOBAD. See [`template`](../../template.md). 
 	* **returns** `true` if successfull, otherwise `false`
 * **Function** `JOBAD.modules.createProperModuleObject(moduleObject)` Creates a proper Module Object. 
 	* **Object** `moduleObject` The object representing the module to register with JOBAD. 

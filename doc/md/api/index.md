@@ -1,6 +1,7 @@
 # API Documentation
 
 * [JOBAD](JOBAD/index.md) - Main JOBAD Namespace
+* [template](template.md) - A Module template
 
 ## Documentation Convention
 An Object is documented like this:

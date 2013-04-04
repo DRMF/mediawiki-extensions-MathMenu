@@ -1,11 +1,3 @@
-# Modules
-
-The documentation for this topic is incomplete. 
-So far, please refer to Module Template API. 
-
-## Module Template
-
-```js
 /*
 	A template module. 
 */
@@ -80,8 +72,3 @@ var template = {
 };
 
 JOBAD.modules.register(template); //rigister the module. 
-```
-
-## See also
-* [Module Template API](../api/template.md) - API for module. Contains the API documentation for the template. 
-* [Module Index](../modules/index.md) - A list of available modules. 
