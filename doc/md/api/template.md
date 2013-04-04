@@ -41,7 +41,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 	* **returns** a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. 
 
 ## See also
-* [Gettings started with modules](../dev/modules.md)
+* [Getting started with modules](../dev/modules.md)
 
 ## Footnotes
 [^1]: A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector. 

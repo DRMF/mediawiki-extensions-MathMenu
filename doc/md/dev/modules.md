@@ -79,7 +79,7 @@ var template = {
 	}
 };
 
-JOBAD.modules.register(template); //rigister the module. 
+JOBAD.modules.register(template); //register the module. 
 ```
 
 ## See also

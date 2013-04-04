@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[template] - JOBAD Documentation</title>
+		<title>[Sitemap] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -458,83 +458,40 @@
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
 		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style><p><a href="../index.html">Start</a> &gt; <a href="index.html">API Documentation</a> &gt; <strong>template</strong></p>
-<h1>template</h1>
-
-<p>This object can be used as a termplate for module objects. <strong>Note:</strong> The code for this is not containted within the JOBAD Core files, but is located in the file <code>modules/template.js</code>. </p>
+		</style><p><a href="index.html">Start</a> &gt; <strong>Sitemap</strong></p>
+<h1>Sitemap</h1>
 
 <ul>
-<li><strong>Object</strong> <code>template.info</code> Module information namespace. </li>
-<li><strong>String</strong> <code>template.info.identifier</code> A unique identifier for the module. </li>
-<li><strong>String</strong> <code>template.info.author</code> The module author. </li>
-<li><strong>String</strong> <code>template.info.description</code> A human readable description of the module. </li>
-<li><strong>String</strong> <code>template.info.version</code> String containing the version number. May be omitted. </li>
-<li><strong>String</strong> <code>template.info.hasCleanNamespace</code> Booelan indicating if the namespace of this moudle contains other, custom, properties which should be copied over. If so, they will be copied to any module instance and <code>this</code> inside of any of the functions can refer to it. Note that this may be shared among different instances of the module since javascript creates references to JSON-style objects. Can also be disabled globally by configuration in which case non-clean modules will not load. Property may be omitted in which case it is assumed to be true. </li>
-<li><p><strong>Array[String]</strong> <code>template.info.dependencies</code> Array of module dependencies. If ommited, assumed to have no dependencies. </p></li>
-<li><p><strong>Function</strong> <code>template.globalinit()</code> Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </p>
-
-<ul>
-<li><strong>Undefined</strong> <code>this</code></li>
-</ul></li>
-<li><strong>Function</strong> <code>template.init(JOBADInstance, param1, param2, param3 /*, ... */)</code> Called to intialise a new instance of this module. 
-<ul>
-<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>Mixed</strong> <code>*param</code> Initial parameters passed to <a href="JOBAD/JOBADInstance/modules.html"><code>JOBADInstance.modules.load</code></a>. </li>
-</ul></li>
-<li><strong>Function</strong> <code>template.keyPressed(checkFunc, JOBADInstance)</code> Called when a module is updated. 
-<ul>
-<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> Nothing. </li>
-</ul></li>
-<li><strong>Function</strong> <code>template.leftClick(target, JOBADInstance)</code> Called when a left click is performed.  Every left click action is performed. May be ommitted. 
-<ul>
-<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>jQuery</strong> <code>target</code> The element that was left clicked on. </li>
-<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
-</ul></li>
-<li><strong>Function</strong> <code>template.contextMenuEntries(target, JOBADInstance)</code> Called when a context menu is requested. Context Menu entries will be merged. May be ommitted. 
-<ul>
-<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>jQuery</strong> <code>target</code> The element that was right clicked on. </li>
-<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> context menu entries as array [[entry_1, function_1], ..., [entry_n, function_1]] or as a map {entry_1: function_1, entry_2: function_2, ...} All entry names must be non-empty. (Empty ones will be ignored). For the first notation, a function may also be a sub menu. If no context menu is available, it should return false. 
-<ul>
-<li><strong>Function</strong> <code>callback(element, originElement)</code> Callback on menu entries. 
-<ul>
-<li><strong>Undefined</strong> <code>this</code></li>
-<li><strong>jQuery</strong> <code>element</code> The element the context menu was request on. </li>
-<li><strong>jQuery</strong> <code>originElement</code> The lowest level element the menu was requested on. </li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><strong>Function</strong> <code>template.hoverText(target, JOBADInstance)</code> Called when a hover text is requested. May be ommitted. 
-<ul>
-<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
-<li><strong>jQuery</strong> <code>target</code> The element that was left clicked on. </li>
-<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> a text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="template.html#fn-1">1</a></sup> or a boolean indicating either the text or if something was done. </li>
-</ul></li>
+<li><a href="about.html">About</a> (about.html)</li>
+<li><a href="api/JOBAD/JOBAD.Events/index.html">JOBAD.Events</a> (api/JOBAD/JOBAD.Events/index.html)</li>
+<li><a href="api/JOBAD/JOBAD.UI/contextmenu.html">JOBAD.UI.ContextMenu</a> (api/JOBAD/JOBAD.UI/contextmenu.html)</li>
+<li><a href="api/JOBAD/JOBAD.UI/hover.html">JOBAD.UI.hover</a> (api/JOBAD/JOBAD.UI/hover.html)</li>
+<li><a href="api/JOBAD/JOBAD.UI/index.html">JOBAD.UI</a> (api/JOBAD/JOBAD.UI/index.html)</li>
+<li><a href="api/JOBAD/JOBAD.UI/sidebar.html">JOBAD.UI.Sidebar</a> (api/JOBAD/JOBAD.UI/sidebar.html)</li>
+<li><a href="api/JOBAD/JOBAD.config/index.html">JOBAD.config</a> (api/JOBAD/JOBAD.config/index.html)</li>
+<li><a href="api/JOBAD/JOBAD.console.html">JOBAD.console</a> (api/JOBAD/JOBAD.console.html)</li>
+<li><a href="api/JOBAD/JOBAD.modules/index.html">JOBAD.modules</a> (api/JOBAD/JOBAD.modules/index.html)</li>
+<li><a href="api/JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> (api/JOBAD/JOBAD.modules/loadedModule.html)</li>
+<li><a href="api/JOBAD/JOBAD.noConflict.html">JOBAD.noConflict</a> (api/JOBAD/JOBAD.noConflict.html)</li>
+<li><a href="api/JOBAD/JOBAD.refs.html">JOBAD.refs</a> (api/JOBAD/JOBAD.refs.html)</li>
+<li><a href="api/JOBAD/JOBAD.util.html">JOBAD.util</a> (api/JOBAD/JOBAD.util.html)</li>
+<li><a href="api/JOBAD/JOBADInstance/events.html">JOBADInstance.Events</a> (api/JOBAD/JOBADInstance/events.html)</li>
+<li><a href="api/JOBAD/JOBADInstance/index.html">JOBADInstance</a> (api/JOBAD/JOBADInstance/index.html)</li>
+<li><a href="api/JOBAD/JOBADInstance/modules.html">JOBADInstance.Modules</a> (api/JOBAD/JOBADInstance/modules.html)</li>
+<li><a href="api/JOBAD/JOBADInstance/setup.html">JOBADInstance.Setup</a> (api/JOBAD/JOBADInstance/setup.html)</li>
+<li><a href="api/JOBAD/index.html">JOBAD</a> (api/JOBAD/index.html)</li>
+<li><a href="api/index.html">API Documentation</a> (api/index.html)</li>
+<li><a href="api/template.html">template</a> (api/template.html)</li>
+<li><a href="build.html">Building JOBAD</a> (build.html)</li>
+<li><a href="dev/events.html">Event Handling</a> (dev/events.html)</li>
+<li><a href="dev/index.html">For Developers</a> (dev/index.html)</li>
+<li><a href="dev/modules.html">Modules</a> (dev/modules.html)</li>
+<li><a href="index.html">Start</a> (index.html)</li>
+<li><a href="modules/index.html">Module Index</a> (modules/index.html)</li>
+<li><a href="setup.html">Setting up JOBAD</a> (setup.html)</li>
+<li><a href="sitemap.html">Sitemap</a> (sitemap.html)</li>
+<li><a href="todo.html">Known Issues &amp; TODO</a> (todo.html)</li>
 </ul>
-
-<h2>See also</h2>
-
-<ul>
-<li><a href="../dev/modules.html">Getting started with modules</a></li>
-</ul>
-
-<h2>Footnotes</h2>
-
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="template.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
-</li>
-</ol>
-</div>
 
 	</body>
 </html>
