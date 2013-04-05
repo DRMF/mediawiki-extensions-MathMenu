@@ -1,0 +1,31 @@
+var edit = {
+	info: {
+		'identifier' : 'kwarc.latin.editing',
+		'title' : 'LATIN Editing Service',
+		'author': 'Kwarc',
+		'description' : 'The editing service for LATIN-MMT content',
+		'version' : '1.0',
+		'dependencies' : [],
+		'hasCleanNamespace': false
+	},
+	
+
+	contextMenuEntries: function(target, JOBADInstance) {
+		this.focus = target;
+		this.focusIsMath = ($(this.focus).closest('math').length !== 0);
+		var res = this.visibMenu();
+		
+		if (this.isSelected(target)) {
+			//setCurrentPosition(target);		
+			res["infer type"] = this.inferType();
+	  		return res;
+		} else if ($(target).hasClass('folder') || this.focusIsMath) {
+			return res;
+		} else {
+			return false;
+		}
+	},
+
+
+
+}
