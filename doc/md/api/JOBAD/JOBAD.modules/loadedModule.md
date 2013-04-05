@@ -10,17 +10,28 @@
 
 * **Function** `.info()` Returns the info object of this module. 
 * **Function** `.getJOBAD()` Gets the `JOBADInstance` this module is bound to. 
-* **Function** `.keyPressed(key)` Simulate a key press event to pass to the module. 
+
+## Event functions
+
+These functions represent event handlers. If an event is globally disabled (via  [`JOBAD.config.disabledEvents`](../JOBAD.config/index.md)) it will not show up in the JOBAD.modules.loadedModule Instance. 
+
+* **Function** `.keyPressed(key, JOBADInstance)` Simulate a key press event to pass to the module. 
 	* **String** `key` The key to simulate pressing. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 	* **returns** `true` if it performed some action, `false` otherwise. 
-* **Function** `.leftClick(target)` Simulate a left click event to pass to the Module. 
+* **Function** `.leftClick(target, JOBADInstance)` Simulate a left click event to pass to the Module. 
 	* **jQuery** `target` The element to simulate clicking on. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 	* **returns** `true` if it performed some action, `false` otherwise. 
-* **Function** `.contextMenuEntries(target)` Simulate a context menu request to the module. 
+* **Function** `.contextMenuEntries(target, JOBADInstance)` Simulate a context menu request to the module. 
 	* **jQuery** `target` The element to simulate a context menu request on. 
 	* **returns** a list of `[name, callback]` and `[name, submenu]` pairs or false if nothing should be done. 
-* **Function** `.hoverText(target)`
+* **Function** `.hoverText(target, JOBADInstance)` Simulate hovering over an element. 
 	* **jQuery** `target` The element to simulate hovering on. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
+	* **returns** a text to use as hover text, a jQuery-ish object[^1] or a boolean. 
+* **Function** `.onSideBarUpdate(JOBADInstance)` Simulate a sidebar update. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 	* **returns** a text to use as hover text, a jQuery-ish object[^1] or a boolean. 
 ## Further members
 A `JOBAD.modules.loadedModule` instance also contains all non-standard properties of the original Module object. Note

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBADInstance.Events] - JOBAD Documentation</title>
+		<title>[JOBAD.Events.onSideBarUpdate] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -458,11 +458,61 @@
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
 		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style><p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBADInstance</a> &gt; <strong>JOBADInstance.Events</strong></p>
-<h1>JOBADInstance.Events</h1>
+		</style><p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.Events</a> &gt; <strong>JOBAD.Events.onSideBarUpdate</strong></p>
+<h1>JOBAD.Events.onSideBarUpdate</h1>
+
+<p>The onSideBarUpdate event is triggered every time the sidebar is updated. </p>
 
 <ul>
-<li><strong>Function</strong> <code>.Event</code> Namespace for events. </li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.default()</code> The default Event Handler for onSideBarUpdate Events. Just returns false. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.enable(root)</code> Enables the onSideBarUpdate event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable onSideBarUpdate on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.disable(root)</code> Disables the onSideBarUpdate event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable onSideBarUpdate on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.namespace.getResult()</code> Get the Result of the onSideBarUpdate event handlers. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.namespace.trigger()</code> Trigger the onSideBarUpdate event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Object</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar</code> - Namespace for <a href="../JOBADInstance/index.html">JOBADInstance</a> related sidebar functions. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.forceUpdate()</code> Forces an update of the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)</code> Registers a new notification on the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>element</code> An element to register the notification on. </li>
+<li><strong>Object</strong> <code>config</code> A map which may contain any of the following members: 
+<ul>
+<li><strong>String</strong> <code>config.icon</code> An icon to use for the notification. Unimplemented. </li>
+<li><strong>String</strong> <code>config.text</code> A text to use for the notification. </li>
+<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification ? </li>
+<li><strong>Function</strong> <code>config.click</code> On click callback. </li>
+</ul></li>
+<li><strong>returns</strong> a jQuery element representing the added notification. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.removeNotification(notification)</code> Removes a notification from the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
+</ul></li>
 </ul>
 
 	</body>

@@ -11,6 +11,6 @@ Welcome to the JOBAD v3 Documentation.
 	* [Events](dev/events.md) - Information about Event Processing works in JOBAD
 	* [Modules](dev/modules.md) - Information about how to write modules
 * [TODO / Known Issues](todo.md)
-* [Sitemap](sitemap.md)
+* [Index](sitemap.md)
 * Demos: 
 	* [Demo #1](../../example.html) - A JOBAD example page. 

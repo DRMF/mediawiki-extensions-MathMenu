@@ -16,10 +16,10 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **Mixed** `*param` Initial parameters passed to [`JOBADInstance.modules.load`](JOBAD/JOBADInstance/modules.md). 
-* **Function** `template.keyPressed(checkFunc, JOBADInstance)` Called when a module is updated. 
+* **Function** `template.onSideBarUpdate(target, JOBADInstance)` Called every time the sidebar is updated. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
-	* **returns** Nothing. 
+	* **returns** a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. 
 * **Function** `template.leftClick(target, JOBADInstance)` Called when a left click is performed.  Every left click action is performed. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **jQuery** `target` The element that was left clicked on. 
@@ -36,7 +36,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 			* **jQuery** `originElement` The lowest level element the menu was requested on. 
 * **Function** `template.hoverText(target, JOBADInstance)` Called when a hover text is requested. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
-	* **jQuery** `target` The element that was left clicked on. 
+	* **jQuery** `target` The element that was hovered clicked on. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **returns** a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. 
 

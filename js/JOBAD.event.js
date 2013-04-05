@@ -335,7 +335,7 @@ JOBAD.Events.onSideBarUpdate =
 						delete this.Sidebar.Elements[id];
 						this.Sidebar.forceUpdate();
 					} else {
-						JOBAD.error("JOABD Sidebar Error: Tried to remove invalid Element. ");
+						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
 					}
 				}	
 			}

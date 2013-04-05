@@ -476,25 +476,40 @@
 <ul>
 <li><strong>Function</strong> <code>.info()</code> Returns the info object of this module. </li>
 <li><strong>Function</strong> <code>.getJOBAD()</code> Gets the <code>JOBADInstance</code> this module is bound to. </li>
-<li><strong>Function</strong> <code>.keyPressed(key)</code> Simulate a key press event to pass to the module. 
+</ul>
+
+<h2>Event functions</h2>
+
+<p>These functions represent event handlers. If an event is globally disabled (via  <a href="../JOBAD.config/index.html"><code>JOBAD.config.disabledEvents</code></a>) it will not show up in the JOBAD.modules.loadedModule Instance. </p>
+
+<ul>
+<li><strong>Function</strong> <code>.keyPressed(key, JOBADInstance)</code> Simulate a key press event to pass to the module. 
 <ul>
 <li><strong>String</strong> <code>key</code> The key to simulate pressing. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
 <li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
 </ul></li>
-<li><strong>Function</strong> <code>.leftClick(target)</code> Simulate a left click event to pass to the Module. 
+<li><strong>Function</strong> <code>.leftClick(target, JOBADInstance)</code> Simulate a left click event to pass to the Module. 
 <ul>
 <li><strong>jQuery</strong> <code>target</code> The element to simulate clicking on. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
 <li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
 </ul></li>
-<li><strong>Function</strong> <code>.contextMenuEntries(target)</code> Simulate a context menu request to the module. 
+<li><strong>Function</strong> <code>.contextMenuEntries(target, JOBADInstance)</code> Simulate a context menu request to the module. 
 <ul>
 <li><strong>jQuery</strong> <code>target</code> The element to simulate a context menu request on. </li>
 <li><strong>returns</strong> a list of <code>[name, callback]</code> and <code>[name, submenu]</code> pairs or false if nothing should be done. </li>
 </ul></li>
-<li><strong>Function</strong> <code>.hoverText(target)</code>
+<li><strong>Function</strong> <code>.hoverText(target, JOBADInstance)</code> Simulate hovering over an element. 
 <ul>
 <li><strong>jQuery</strong> <code>target</code> The element to simulate hovering on. </li>
-<li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="loadedModule.html#fn-1">1</a></sup> or a boolean. 
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
+<li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="loadedModule.html#fn-1">1</a></sup> or a boolean. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.onSideBarUpdate(JOBADInstance)</code> Simulate a sidebar update. 
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
+<li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="loadedModule.html#fn-1">2</a></sup> or a boolean. 
 <h2>Further members</h2></li>
 </ul></li>
 </ul>
@@ -547,6 +562,10 @@ is copied. </p>
 <ol>
 <li id="fn-1">
 <p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="loadedModule.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
+</li>
+
+<li id="fn-1">
+<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="loadedModule.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 2 in the text.">&#8617;</a></p>
 </li>
 </ol>
 </div>
