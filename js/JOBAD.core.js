@@ -245,7 +245,6 @@ JOBAD.version = "3.0.0";
 JOBAD.config = 
 {
 	    'debug': true, //Debugging enabled? (Logs etc)
-	    'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
 	    'cleanModuleNamespace': false,//if set to true this.loadedModule instances will not allow additional functions
 	    'disabledEvents': [] //globally disabled Events
 };

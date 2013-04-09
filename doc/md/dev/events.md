@@ -4,8 +4,8 @@ Every module can register listeners to events. Whenever an event occurs JOBAD wi
 ## Available events
 
 * `leftClick`: When an element is left clicked on. 
-* `contextMenu`: When an element is right clicked on, a context menu may appear. Is not triggered when the control key is pressed to allow override. 
-* `hoverText`: A text which will appear in a tooltip hovering over the hovered element. 
+* `contextMenu`: When an element is right clicked on, a context menu may appear. Is not triggered when the control key is pressed to allow access to the native context menu. 
+* `hoverText`: A text which will appear in a tooltip hovering over the hovered element. Warning: If there are `title` attributes on the element, they might interfere with this event. 
 * `onSideBarUpdate`: Called when the sidebar is upated. 
 
 ## Event handling and DOM nodes

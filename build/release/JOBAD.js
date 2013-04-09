@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 04 Apr 2013 22:43:16 +0200
+	built: Tue, 09 Apr 2013 10:52:36 +0200
 */
 
 /*
@@ -251,7 +251,6 @@ JOBAD.version = "3.0.0";
 JOBAD.config = 
 {
 	    'debug': true, //Debugging enabled? (Logs etc)
-	    'hoverdelay': 1000, //Delay for showing tooltip after hovering. (in milliseconds)
 	    'cleanModuleNamespace': false,//if set to true this.loadedModule instances will not allow additional functions
 	    'disabledEvents': [] //globally disabled Events
 };
@@ -677,7 +676,8 @@ JOBAD.config.debug = false;
 
 	JOBAD.UI.hover.config = {
 		"offsetX": 10, //offset from the mouse in X and Y
-		"offsetY": 10	
+		"offsetY": 10,
+		"hoverDelay": 1000 //Delay for showing tooltip after hovering. (in milliseconds)	
 	}
 	
 	var hoverActive = false;
@@ -1163,6 +1163,7 @@ JOBAD.Events.hoverText =
 			root
 			.delegate("*", 'mouseenter.JOBAD.hoverText', trigger)
 			.delegate("*", 'mouseleave.JOBAD.hoverText', untrigger);
+
 		},
 		'disable': function(root){
 			if(typeof this.Event.hoverText.activeHoverElement != 'undefined')
@@ -1218,12 +1219,11 @@ JOBAD.Events.hoverText =
 
 			this.Event.hoverText.activeHoverElement = source;
 
-			source.data('JOBAD.hover.Active', true);		
-		
+			source.data('JOBAD.hover.Active', true);
 			var tid = window.setTimeout(function(){
 				source.removeData('JOBAD.hover.timerId');
 				JOBAD.UI.hover.enable(EventResult.html());
-			}, JOBAD.config.hoverdelay)
+			}, JOBAD.UI.hover.config.hoverdelay)
 
 			source.data('JOBAD.hover.timerId', tid);//save timeout id
 			return true;
@@ -1353,7 +1353,7 @@ JOBAD.Events.onSideBarUpdate =
 						delete this.Sidebar.Elements[id];
 						this.Sidebar.forceUpdate();
 					} else {
-						JOBAD.error("JOABD Sidebar Error: Tried to remove invalid Element. ");
+						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
 					}
 				}	
 			}

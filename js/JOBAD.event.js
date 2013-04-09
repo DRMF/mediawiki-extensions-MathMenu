@@ -145,6 +145,7 @@ JOBAD.Events.hoverText =
 			root
 			.delegate("*", 'mouseenter.JOBAD.hoverText', trigger)
 			.delegate("*", 'mouseleave.JOBAD.hoverText', untrigger);
+
 		},
 		'disable': function(root){
 			if(typeof this.Event.hoverText.activeHoverElement != 'undefined')
@@ -200,12 +201,11 @@ JOBAD.Events.hoverText =
 
 			this.Event.hoverText.activeHoverElement = source;
 
-			source.data('JOBAD.hover.Active', true);		
-		
+			source.data('JOBAD.hover.Active', true);
 			var tid = window.setTimeout(function(){
 				source.removeData('JOBAD.hover.timerId');
 				JOBAD.UI.hover.enable(EventResult.html());
-			}, JOBAD.config.hoverdelay)
+			}, JOBAD.UI.hover.config.hoverdelay)
 
 			source.data('JOBAD.hover.timerId', tid);//save timeout id
 			return true;
