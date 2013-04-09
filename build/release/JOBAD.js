@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 09 Apr 2013 10:52:36 +0200
+	built: Tue, 09 Apr 2013 15:59:30 +0200
 */
 
 /*
@@ -1223,7 +1223,7 @@ JOBAD.Events.hoverText =
 			var tid = window.setTimeout(function(){
 				source.removeData('JOBAD.hover.timerId');
 				JOBAD.UI.hover.enable(EventResult.html());
-			}, JOBAD.UI.hover.config.hoverdelay)
+			}, JOBAD.UI.hover.config.hoverDelay);
 
 			source.data('JOBAD.hover.timerId', tid);//save timeout id
 			return true;

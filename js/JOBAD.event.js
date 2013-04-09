@@ -205,7 +205,7 @@ JOBAD.Events.hoverText =
 			var tid = window.setTimeout(function(){
 				source.removeData('JOBAD.hover.timerId');
 				JOBAD.UI.hover.enable(EventResult.html());
-			}, JOBAD.UI.hover.config.hoverdelay)
+			}, JOBAD.UI.hover.config.hoverDelay);
 
 			source.data('JOBAD.hover.timerId', tid);//save timeout id
 			return true;
