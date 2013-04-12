@@ -1,3 +1,8 @@
+/*
+	example4.js - An example module for JOBAD. 
+	Counts the words in a paragraph and shows a tooltip. 
+*/
+
 JOBAD.modules.register({
 	info:{
 		'identifier':	'test.color.hover',

@@ -250,7 +250,7 @@
 			"width": JOBAD.UI.Sidebar.config.width,
 			"height": 1, //something >0
 			"position":"relative"
-		});
+		}).addClass("JOBAD_sidebar");
 
 		var container = JOBAD.refs.$("<div>").css({
 			"width": "100%",

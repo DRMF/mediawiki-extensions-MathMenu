@@ -82,6 +82,17 @@ var template = {
 JOBAD.modules.register(template); //register the module. 
 ```
 
+When you write a module and you wish to use jQuery, do not use the "$" reference to jQuery. This might not be available if jQuery is in noConflict mode. Always use the JOBAD.refs.$ reference to jQuery. 
+If you want to use the '$' inside your code you can use: 
+
+```js
+(function($){
+	/* your code with $'s here */
+	/* JOBAD.modules.register(template); */
+})(JOBAD.refs.$);
+```
+
 ## See also
+* [Example Module](example_module.md) - Example Modules. 
 * [Module Template API](../api/template.md) - API for module. Contains the API documentation for the template. 
 * [Module Index](../modules/index.md) - A list of available modules. 

@@ -1,3 +1,4 @@
+(function($){
 var folding = {
 	info: {
 		'identifier' : 'kwarc.latin.editing',
@@ -139,4 +140,4 @@ var folding = {
 };
 
 JOBAD.modules.register(folding);
-
+})(JOBAD.refs.$);

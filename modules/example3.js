@@ -1,9 +1,14 @@
+/*
+	example3.js - An example module for JOBAD. 
+	Test the menu and adds several items. 
+*/
+
 JOBAD.modules.register({
 	info:{
 		'identifier':	'test.color.menu',
 		'title':	'Test Module: Colors',
 		'author':	'Tom Wiesing',
-		'description':	'A Testing module, test the menu. ',
+		'description':	'Test the menu and adds several items. ',
 	},
 	contextMenuEntries: function(target){
 		if(target.is('#nomenu,#nomenu *')){

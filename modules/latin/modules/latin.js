@@ -1,3 +1,4 @@
+(function($){
 /** Global Utils */
 $.fn.hasAttribute = function(name) {  
 	return (typeof this.attr(name) !== 'undefined' && this.attr(name) !== false);
@@ -256,5 +257,5 @@ var latin = {
 };
 
 JOBAD.modules.register(latin);
-
+})(JOBAD.refs.$);
 

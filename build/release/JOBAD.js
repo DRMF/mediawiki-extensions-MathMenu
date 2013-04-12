@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 09 Apr 2013 15:59:30 +0200
+	built: Fri, 12 Apr 2013 12:28:12 +0200
 */
 
 /*
@@ -902,7 +902,7 @@ JOBAD.config.debug = false;
 			"width": JOBAD.UI.Sidebar.config.width,
 			"height": 1, //something >0
 			"position":"relative"
-		});
+		}).addClass("JOBAD_sidebar");
 
 		var container = JOBAD.refs.$("<div>").css({
 			"width": "100%",
