@@ -23,23 +23,15 @@ fi
 printf "Compiling development version ... "
 
 
-echo "/*" > $build
-echo "	JOBAD v3" >> $build
-echo "	Development version" >> $build
-echo "	built: $(date -R)" >> $build
-echo "*/" >> $build
-echo "" >> $build
+cat config/dev_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $build
 
 cat $sourcedir/JOBAD.core.js >> $build
-echo "" >> $build
-echo "/*" >> $build
-echo "	JOBAD Core build configuration" >> $build
-echo "*/" >> $build
-echo "JOBAD.config.debug = false;" >> $build
 echo "" >> $build
 cat $sourcedir/JOBAD.ui.js >> $build
 echo "" >> $build
 cat $sourcedir/JOBAD.event.js >> $build
+
+cat config/dev_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $build
 
 echo "OK"
 
@@ -47,23 +39,17 @@ echo "OK"
 printf "Preparing compilation with Closure Compiler ... "
 
 echo "" > $buildmin.tmp
-
-echo "var JOBAD = (function(jQuery){" >> $buildmin.tmp
 cat $build >> $buildmin.tmp
-echo "; return JOBAD; })(jQuery);" >> $buildmin.tmp
 
 echo "OK"
 
 printf "Compiling minimized version ... "
 
-echo "/*" > $buildmin
-echo "	JOBAD v3" >> $buildmin
-echo "	Minimized version" >> $buildmin
-echo "	built: $(date -R)" >> $buildmin
-echo "*/" >> $buildmin
-echo "" >> $buildmin
+cat config/min_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildmin
 
 python ./deps/closurecompilerpy/closureCompiler.py -s $buildmin.tmp >> $buildmin
+
+cat config/min_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $buildmin
 
 RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"

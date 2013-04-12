@@ -1,9 +1,10 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 12 Apr 2013 12:28:12 +0200
+	built: Fri, 12 Apr 2013 12:46:26 +0200
 */
 
+var JOBAD = (function(){
 /*
 	JOBAD 3 Core Functions
 	JOBAD.core.js
@@ -644,11 +645,6 @@ JOBAD.noConflict._ = function(){
 
 return JOBAD;
 })();
-
-/*
-	JOBAD Core build configuration
-*/
-JOBAD.config.debug = false;
 
 /*
 	JOBAD 3 UI Functions
@@ -1387,3 +1383,10 @@ JOBAD.Events.onSideBarUpdate =
 
 })();
 
+/*
+	JOBAD Core build configuration
+*/
+JOBAD.config.debug = false;
+
+return JOBAD;
+})();
