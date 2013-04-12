@@ -5,7 +5,7 @@ JOBAD is a javascript framework which makes it easy to create interactive web pa
 [Simplistic Demo](http://kwarc.github.com/jobad/examples/release.html)
 
 
-[Documentation](http://kwarc.github.com/jobad/)
+[Online Documentation](http://kwarc.github.com/jobad/)
 
 
 ## Getting JOBAD
