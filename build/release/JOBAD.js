@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 12 Apr 2013 12:46:26 +0200
+	built: Wed, 17 Apr 2013 13:57:50 +0200
 */
 
 var JOBAD = (function(){
@@ -992,11 +992,15 @@ return JOBAD;
 	*/
 	JOBAD.UI.highlight = function(element){
 		var element = JOBAD.refs.$(element);
-		if(element.data("JOBAD.UI.highlight.orgColor")){
-			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
+		var col;
+		if(typeof element.data("JOBAD.UI.highlight.orgColor") == 'string'){
+			col = element.data("JOBAD.UI.highlight.orgColor");
+		} else {
+			col = element.css("backgroundColor");
 		}
+		
 		element
-		.stop().data("JOBAD.UI.highlight.orgColor", element.css("backgroundColor"))
+		.stop().data("JOBAD.UI.highlight.orgColor", col)
 		.animate({ backgroundColor: "#FFFF9C"}, 1000);	
 	};
 	/*
@@ -1276,6 +1280,9 @@ JOBAD.Events.onSideBarUpdate =
 					Forces an update of the sidebar. 
 				*/
 				'forceUpdate': function(){
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
 					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
 						if(this.element.data("JOBAD.UI.Sidebar.active")){
 							JOBAD.UI.Sidebar.unwrap(this.element);
@@ -1301,11 +1308,14 @@ JOBAD.Events.onSideBarUpdate =
 							config.icon:		Icon to display [UNIMPLEMENTED]
 							config.text:		Text
 							config.trace:		Trace the original element on hover?
-							config.callback:	Callback on click
+							config.click:	Callback on click
 					@return jQuery element used as identification. 
 							
 				*/
 				'registerNotification': function(element, config){
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
 					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
 					this.Sidebar.Elements[id] = element;			
@@ -1332,8 +1342,8 @@ JOBAD.Events.onSideBarUpdate =
 						});
 					}
 
-					if(typeof config.callback == "function"){
-						sidebar_element.click(config.callback);
+					if(typeof config.click == "function"){
+						sidebar_element.click(config.click);
 					}
 
 					return sidebar_element;
