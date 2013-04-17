@@ -262,6 +262,9 @@ JOBAD.Events.onSideBarUpdate =
 					Forces an update of the sidebar. 
 				*/
 				'forceUpdate': function(){
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
 					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
 						if(this.element.data("JOBAD.UI.Sidebar.active")){
 							JOBAD.UI.Sidebar.unwrap(this.element);
@@ -287,11 +290,14 @@ JOBAD.Events.onSideBarUpdate =
 							config.icon:		Icon to display [UNIMPLEMENTED]
 							config.text:		Text
 							config.trace:		Trace the original element on hover?
-							config.callback:	Callback on click
+							config.click:	Callback on click
 					@return jQuery element used as identification. 
 							
 				*/
 				'registerNotification': function(element, config){
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
 					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
 					this.Sidebar.Elements[id] = element;			
@@ -318,8 +324,8 @@ JOBAD.Events.onSideBarUpdate =
 						});
 					}
 
-					if(typeof config.callback == "function"){
-						sidebar_element.click(config.callback);
+					if(typeof config.click == "function"){
+						sidebar_element.click(config.click);
 					}
 
 					return sidebar_element;

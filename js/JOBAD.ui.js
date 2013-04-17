@@ -344,11 +344,15 @@
 	*/
 	JOBAD.UI.highlight = function(element){
 		var element = JOBAD.refs.$(element);
-		if(element.data("JOBAD.UI.highlight.orgColor")){
-			element.css("backgroundColor", element.data("JOBAD.UI.highlight.orgColor"));
+		var col;
+		if(typeof element.data("JOBAD.UI.highlight.orgColor") == 'string'){
+			col = element.data("JOBAD.UI.highlight.orgColor");
+		} else {
+			col = element.css("backgroundColor");
 		}
+		
 		element
-		.stop().data("JOBAD.UI.highlight.orgColor", element.css("backgroundColor"))
+		.stop().data("JOBAD.UI.highlight.orgColor", col)
 		.animate({ backgroundColor: "#FFFF9C"}, 1000);	
 	};
 	/*

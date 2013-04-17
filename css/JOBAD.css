@@ -1,5 +1,14 @@
 /* JOBAD.css file */
 
-JOBAD_sidebar {
-	background-color:yellow;
+.JOBAD_sidebar div{
+	/* TDB */
+}
+
+.JOBADHover {
+	position: fixed,
+	background-color: grey,
+	-webkit-border-radius: 5,
+	-moz-border-radius: 5,
+	border-radius: 5,
+	border: 1px solid black
 }
