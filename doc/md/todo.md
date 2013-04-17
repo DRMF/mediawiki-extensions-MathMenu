@@ -1,6 +1,8 @@
 # Known Issues & TODO
 
 ## TODO
-
-* Make Sidebar UI fancier. 
+* Work on the Sidebar
+	* Make Sidebar UI fancier. 
+	* Implement Sidebar Icons. 
+	* `config.class`
 * Implement keyPress Event. 

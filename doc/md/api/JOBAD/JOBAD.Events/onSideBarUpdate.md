@@ -19,7 +19,7 @@ The onSideBarUpdate event is triggered every time the sidebar is updated.
 
 * **Object** `JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar` - Namespace for [JOBADInstance](../JOBADInstance/index.md) related sidebar functions. 
 
-* **Function** `JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.forceUpdate()` Forces an update of the sidebar. 
+* **Function** `JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.redraw()` Redraws the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 
 * **Function** `JOBAD.Events.onSideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 

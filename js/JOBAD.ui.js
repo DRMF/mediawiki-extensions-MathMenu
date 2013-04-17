@@ -362,8 +362,13 @@
 		var element = JOBAD.refs.$(element);
 		element
 		.stop()
-		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
-		.removeData("JOBAD.UI.highlight.orgColor");	
+		.animate({
+			backgroundColor: element.data("JOBAD.UI.highlight.orgColor"),
+			finish: function(){
+				element.removeData("JOBAD.UI.highlight.orgColor");
+			}
+		}, 1000);
+			
 	};
 
 })(JOBAD);

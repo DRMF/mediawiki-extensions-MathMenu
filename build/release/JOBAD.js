@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 17 Apr 2013 13:57:50 +0200
+	built: Wed, 17 Apr 2013 15:35:10 +0200
 */
 
 var JOBAD = (function(){
@@ -1010,8 +1010,13 @@ return JOBAD;
 		var element = JOBAD.refs.$(element);
 		element
 		.stop()
-		.animate({ backgroundColor: element.data("JOBAD.UI.highlight.orgColor")}, 1000)
-		.removeData("JOBAD.UI.highlight.orgColor");	
+		.animate({
+			backgroundColor: element.data("JOBAD.UI.highlight.orgColor"),
+			finish: function(){
+				element.removeData("JOBAD.UI.highlight.orgColor");
+			}
+		}, 1000);
+			
 	};
 
 })(JOBAD);
@@ -1277,9 +1282,9 @@ JOBAD.Events.onSideBarUpdate =
 			/* Sidebar namespace */
 			'Sidebar': {
 				/*
-					Forces an update of the sidebar. 
+					Redraws the sidebar. 
 				*/
-				'forceUpdate': function(){
+				'redraw': function(){
 					if(typeof this.Sidebar.Elements == 'undefined'){
 						this.Sidebar.Elements = {};
 					}
@@ -1319,7 +1324,7 @@ JOBAD.Events.onSideBarUpdate =
 					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
 					this.Sidebar.Elements[id] = element;			
-					this.Sidebar.forceUpdate();
+					this.Sidebar.redraw();
 					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
 
 					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
@@ -1357,7 +1362,7 @@ JOBAD.Events.onSideBarUpdate =
 						var id = item.data("JOBAD.Events.Sidebar.id");
 						JOBAD.UI.Sidebar.removeNotification(item);
 						delete this.Sidebar.Elements[id];
-						this.Sidebar.forceUpdate();
+						this.Sidebar.redraw();
 					} else {
 						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
 					}
