@@ -30,6 +30,7 @@
 * [API Documentation](api/index.md) (api/index.md)
 * [template](api/template.md) (api/template.md)
 * [Building JOBAD](build.md) (build.md)
+* [CSS Classes](css.md) (css.md)
 * [Demos](demos.md) (demos.md)
 * [Event Handling](dev/events.md) (dev/events.md)
 * [Example Modules](dev/example_module.md) (dev/example_module.md)

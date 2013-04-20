@@ -38,14 +38,7 @@
 	*/
 	JOBAD.UI.hover.enable = function(html){
 		hoverActive = true;
-		hoverElement = JOBAD.refs.$("<div class='JOBAD JOBADHover'>").html(html).css({
-			"position": "fixed",
-			"background-color": "grey",
-			"-webkit-border-radius": 5,
-			"-moz-border-radius": 5,
-			"border-radius": 5,
-			"border": "1px solid black"
-		});
+		hoverElement = JOBAD.refs.$("<div class='JOBAD JOBAD_Hover'>").html(html);
 		hoverElement.appendTo(JOBAD.refs.$("body"));
 
 		JOBAD.refs.$(document).on("mousemove.JOBAD.UI.hover", function(){
@@ -196,7 +189,7 @@
 		@returns the menu element. 
 	*/
 	JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
-		var $ul = JOBAD.refs.$("<ul>");
+		var $ul = JOBAD.refs.$("<ul class='JOBAD JOBAD_Contextmenu'>");
 		for(var i=0;i<items.length;i++){
 			var item = items[i];
 			var $a = JOBAD.refs.$("<a href='#'>");
@@ -245,18 +238,11 @@
 
 		var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
-		var sideBarElement = JOBAD.refs.$("<div>").css({
-			"float": "right",
-			"width": JOBAD.UI.Sidebar.config.width,
-			"height": 1, //something >0
-			"position":"relative"
-		}).addClass("JOBAD_sidebar");
-
-		var container = JOBAD.refs.$("<div>").css({
-			"width": "100%",
-			"float":"left",
-			"overflow":"hidden"	
+		var sideBarElement = JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Container'>").css({
+			"width": JOBAD.UI.Sidebar.config.width
 		});
+
+		var container = JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Wrapper'>");
 	
 		org.wrap(orgWrapper);
 
@@ -303,7 +289,7 @@
 		var offset = child.offset().top - sbar.offset().top; //offset
 		sbar = sbar.parent().parent().find("div").first();
 	
-		var newGuy =  JOBAD.refs.$("<div>").css({"position": "absolute", "top": offset}).appendTo(sbar);
+		var newGuy =  JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar);
 
 
 		var callback = function(){
