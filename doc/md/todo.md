@@ -5,4 +5,5 @@
 	* Make Sidebar UI fancier. 
 	* Implement Sidebar Icons. 
 	* `config.class`
+* add support for Internet Explorer
 * Implement keyPress Event. 

@@ -204,7 +204,7 @@ JOBAD.Events.hoverText =
 			source.data('JOBAD.hover.Active', true);
 			var tid = window.setTimeout(function(){
 				source.removeData('JOBAD.hover.timerId');
-				JOBAD.UI.hover.enable(EventResult.html());
+				JOBAD.UI.hover.enable(EventResult.html(), "JOBAD_Hover");
 			}, JOBAD.UI.hover.config.hoverDelay);
 
 			source.data('JOBAD.hover.timerId', tid);//save timeout id
@@ -247,7 +247,6 @@ JOBAD.Events.hoverText =
 	}
 }
 
-
 /* sidebar: onSideBarUpdate Event */
 JOBAD.Events.onSideBarUpdate = 
 {
@@ -287,9 +286,10 @@ JOBAD.Events.onSideBarUpdate =
 					Registers a new notification. 
 					@param element Element to register notification on. 
 					@param config
-							config.icon:		Icon to display [UNIMPLEMENTED]
-							config.text:		Text
-							config.trace:		Trace the original element on hover?
+							config.class:	Notificaton class. Default: none. 
+							config.icon:	Icon (Default: Based on notification class. 
+							config.text:	Text
+							config.trace:	Trace the original element on hover?
 							config.click:	Callback on click
 					@return jQuery element used as identification. 
 							
@@ -300,8 +300,11 @@ JOBAD.Events.onSideBarUpdate =
 					}
 					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
-					this.Sidebar.Elements[id] = element;			
+					this.Sidebar.Elements[id] = element;	
 					this.Sidebar.redraw();
+					
+					
+					
 					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
 
 					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
@@ -327,6 +330,30 @@ JOBAD.Events.onSideBarUpdate =
 					if(typeof config.click == "function"){
 						sidebar_element.click(config.click);
 					}
+
+					var icon = false;
+					if(typeof config["class"] == 'string'){
+						var notClass = config["class"];
+						
+						if(JOBAD.UI.Sidebar.config.icons.hasOwnProperty(notClass)){
+							icon = JOBAD.UI.Sidebar.config.icons[notClass];
+						}						
+					}
+					
+					if(typeof config.icon == 'string'){
+						icon = config.icon;
+					}
+					if(typeof icon == 'string'){
+						sidebar_element.html("<img src='"+icon+"' width='16px' height='16px'>");
+						sidebar_element.hover(function(){
+							JOBAD.UI.hover.enable(JOBAD.refs.$("<div>").text(config.text).html(), "JOBAD_Sidebar_Hover JOBAD_Sidebar "+((typeof config["class"] == 'string')?" JOBAD_Notification_"+config["class"]:""));
+						}, function(){
+							JOBAD.UI.hover.disable();
+						});
+					} else {
+						sidebar_element.addClass("JOBAD_Notification_"+notClass);
+					}
+					
 
 					return sidebar_element;
 				}, 

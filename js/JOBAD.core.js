@@ -636,5 +636,9 @@ JOBAD.noConflict._ = function(){
 	return JOBAD.refs._;
 }
 
+JOBAD.toString = function(){
+	return "function(/* JOBAD v3 */){ [non-native non-trivial code] }";
+};
+
 return JOBAD;
 })();

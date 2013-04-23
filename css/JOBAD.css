@@ -1,6 +1,6 @@
 /*
-	JOABD.css
-	Contains JOABD UI CSS Data
+	JOBAD.css
+	Contains JOBAD UI CSS Data
 */
 
 /* general */
@@ -46,14 +46,31 @@
 .JOBAD.JOBAD_Sidebar.JOBAD_Sidebar_Notification {
 	/* Sidebar Notifications */
 	position: absolute;
+	-webkit-border-radius: 5;
+	-moz-border-radius: 5;
+	border-radius: 5;
+	right: 0px; 
 }
 
-.JOBAD.JOBAD_Sidebar.JOBAD_Sidebar_Notification.JOBAD_Notification_info {
+.JOBAD_Sidebar_Hover {
+	position: fixed;
+	-webkit-border-radius: 5;
+	-moz-border-radius: 5;
+	border-radius: 5;
+}
+
+.JOBAD.JOBAD_Sidebar.JOBAD_Notification_info {
 	/* Information */
+	background-color: #0033FF;
+	border: 1px solid #0000FF;
 }
-.JOBAD.JOBAD_Sidebar.JOBAD_Sidebar_Notification.JOBAD_Notification_warn {
+.JOBAD.JOBAD_Sidebar.JOBAD_Notification_warning {
 	/* Warning */
+	background-color: #FFFF00;
+	border: 1px solid #FFAA00;
 }
-.JOBAD.JOBAD_Sidebar.JOBAD_Sidebar_Notification.JOBAD_Notification_error {
+.JOBAD.JOBAD_Sidebar.JOBAD_Notification_error {
 	/* Error */	
+	background-color: red;
+	border: 1px solid red;
 }

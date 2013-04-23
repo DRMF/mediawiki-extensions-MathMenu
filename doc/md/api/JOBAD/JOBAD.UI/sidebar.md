@@ -2,6 +2,7 @@
 
 * **Object** `JOBAD.UI.Sidebar.config` - JOBAD Sidebar UI Configuration namespace
 * **Number** `JOBAD.UI.Sidebar.config.width` Width of the sidebar. Default: 100. 
+* **Object** `JOBAD.UI.Sidebar.config.icons` Contains urls for default icons. (Depending on the class)
 
 * **Function** `JOBAD.UI.Sidebar.wrap(element)` - Wraps an element to create a sidebar UI. 
 	* `element` a jQuery-ish object[^1] to create a sidebar for. 

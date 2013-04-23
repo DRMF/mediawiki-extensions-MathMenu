@@ -9,7 +9,7 @@ This is a list of all of the JOBAD CSS classes.
 		* `JOBAD_Sidebar_Container` - Contains the Notifications in the sidebar. 
 		* `JOBAD_Sidebar_Notification` - A Notification in the sidebar
 			* `JOBAD_Notification_info` - An info. 
-			* `JOBAD_Notification_warn` - A warning. 
+			* `JOBAD_Notification_warning` - A warning. 
 			* `JOBAD_Notification_error` - An error. 
 
 
