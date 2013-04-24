@@ -39,6 +39,11 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 	* **jQuery** `target` The element that was hovered clicked on. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **returns** a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. 
+* **Function** `template.onEvent(event, element, JOBADInstance)` Called when an onEvent handler is requested. May be ommitted. 
+	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
+	* **string** `event` The event that was triggered. 
+	* **jQuery** `element` The element the event was triggered on. 
+	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 
 ## See also
 * [Getting started with modules](../dev/modules.md)

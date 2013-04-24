@@ -8,7 +8,7 @@ JOBAD.modules.register({
 		'identifier':	'test.color.menu',
 		'title':	'Test Module: Colors',
 		'author':	'Tom Wiesing',
-		'description':	'Test the menu and adds several items. ',
+		'description':	'Test the menu and adds several items. '
 	},
 	contextMenuEntries: function(target){
 		if(target.is('#nomenu,#nomenu *')){

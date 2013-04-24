@@ -22,7 +22,7 @@ var template = {
 		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},
 	/* Init handlers */
-    	globalinit: function(){
+    globalinit: function(){
 	/* 
 		Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
 		@this undefined. 
@@ -68,6 +68,15 @@ var template = {
 				
 		*/
 	},
+	onEvent: function(event, element, JOBADInstance){
+		/*
+			called whenever another event is raised. Does not trigger for onEvent events and onSideBarUpdate events. 
+			@this An instance of JOBAD.modules.loadedModule
+			@param event The event that was raised. 
+			@param element The element the event was triggered on. 
+			@param JOBADInstance The instance of JOBAD the module is initiated on. 				
+		*/
+	},
 	onSideBarUpdate: function(JOBADInstance){
 		/*
 			called every time the sidebar is updated. May be ommitted. 
@@ -78,18 +87,16 @@ var template = {
 		*/
 	}
 };
-
-JOBAD.modules.register(template); //register the module. 
 ```
 
 When you write a module and you wish to use jQuery, do not use the "$" reference to jQuery. This might not be available if jQuery is in noConflict mode. Always use the JOBAD.refs.$ reference to jQuery. 
-If you want to use the '$' inside your code you can use: 
+If you want to use the '$' inside your code you can use the following code. YOu can also use it if you want to use underscore. 
 
 ```js
-(function($){
-	/* your code with $'s here */
+(function($, _){
+	/* your code with $'s and _'s here */
 	/* JOBAD.modules.register(template); */
-})(JOBAD.refs.$);
+})(JOBAD.refs.$, JOBAD.refs._);
 ```
 
 ## See also

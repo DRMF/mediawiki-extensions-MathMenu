@@ -8,7 +8,7 @@ JOBAD.modules.register({
 		'identifier':	'test.p',
 		'title':	'Test Module: Paragraphs',
 		'author':	'Tom Wiesing',
-		'description':	'Provides a context menu entry which checks if the clicked element is a <p>. ',
+		'description':	'Provides a context menu entry which checks if the clicked element is a <p>. '
 	},
 	contextMenuEntries: function(target){
 		

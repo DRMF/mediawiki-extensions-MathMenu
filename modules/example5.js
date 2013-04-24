@@ -1,6 +1,6 @@
 /*
-	example5.js - An example module for JOBAD. 
-	Counts the words in a paragraph and shows a tooltip. 
+	example6.js - An example module for JOBAD. 
+	Counts the words in a paragraph and shows a tooltip in the sidebar. Also logs any other event. 
 */
 
 JOBAD.modules.register({
@@ -8,7 +8,7 @@ JOBAD.modules.register({
 		'identifier':	'test.sidebar',
 		'title':	'Test Module: Sidebar',
 		'author':	'Tom Wiesing',
-		'description':	'Displays the number of characters next to every p and clicking it trigger the original p. ',
+		'description':	'Displays the number of characters next to every p and clicking it trigger the original p. '
 	},
 	init: function(JOBADInstance){
 		var classes = ["info", "warning", "error"];
@@ -24,5 +24,8 @@ JOBAD.modules.register({
 				}
 			})
 		})
+	},
+	onEvent: function(event, handler, JOBADInstance){
+		console.log("Event '"+event+"' was raised! ");
 	}
 });

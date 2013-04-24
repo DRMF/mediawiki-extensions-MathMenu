@@ -29,6 +29,7 @@ JOBAD.Events.leftClick =
 					default:
 						/* nothing */
 				}
+				root.trigger('JOBAD.Event', ['leftClick', element]);
 			});
 		},
 		'disable': function(root){
@@ -45,7 +46,38 @@ JOBAD.Events.leftClick =
 			});
 		},
 		'trigger': function(target){
-			return this.Event.leftClick.getResult(target);
+			var evt = this.Event.leftClick.getResult(target);
+			return evt;
+		}
+	}
+};
+
+/* onEvent */
+JOBAD.Events.onEvent = 
+{
+	'default': function(){},
+	'Setup': {
+		'enable': function(root){
+			var me = this;
+			root.on('JOBAD.Event', function(jqe, event, args){
+				me.Event.onEvent.trigger(event, args);
+			});
+		},
+		'disable': function(root){
+			root.off('JOBAD.Event');
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(event, element){
+			return this.modules.iterateAnd(function(module){
+				module.onEvent.call(module, event, element, module.getJOBAD());
+				return true;
+			});
+		},
+		'trigger': function(event, element){
+			return this.Event.onEvent.getResult(event, element);
 		}
 	}
 };
@@ -60,7 +92,9 @@ JOBAD.Events.contextMenuEntries =
 		'enable': function(root){
 			var me = this;
 			JOBAD.UI.ContextMenu.enable(root, function(target){
-				return me.Event.contextMenuEntries.getResult(target);
+				var res = me.Event.contextMenuEntries.getResult(target);
+				root.trigger('JOBAD.Event', ['contextMenuEntries', target]);
+				return res;
 			});
 		},
 		'disable': function(root){
@@ -128,12 +162,14 @@ JOBAD.Events.hoverText =
 			
 			var me = this;
 			var trigger = function(event){
-				var res = me.Event.hoverText.trigger(JOBAD.refs.$(this));
+				var $element = JOBAD.refs.$(this);
+				var res = me.Event.hoverText.trigger($element);
 				if(res){//something happened here: dont trigger on parent
 					event.stopPropagation();
-				} else if(!JOBAD.refs.$(this).is(root)){ //I have nothing => trigger the parent
+				} else if(!$element.is(root)){ //I have nothing => trigger the parent
 					JOBAD.refs.$(this).parent().trigger('mouseenter.JOBAD.hoverText', event); //Trigger parent if i'm not root. 	
 				}
+				root.trigger('JOBAD.Event', ['hoverText', $element]);
 				return false;
 			};
 

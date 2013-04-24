@@ -14,7 +14,7 @@ var template = {
 		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},
 	/* Init handlers */
-    	globalinit: function(){
+    globalinit: function(){
 	/* 
 		Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
 		@this undefined. 
@@ -58,6 +58,15 @@ var template = {
 			@param JOBADInstance The instance of JOBAD the module is initiated on. 
 			@returns a text, a jqueryish ($(...), Domnode, etc) object to use as hover or a boolean indicating either the text or if something was done. 
 				
+		*/
+	},
+	onEvent: function(event, element, JOBADInstance){
+		/*
+			called whenever another event is raised. Does not trigger for onEvent events and onSideBarUpdate events. 
+			@this An instance of JOBAD.modules.loadedModule
+			@param event The event that was raised. 
+			@param element The element the event was triggered on. 
+			@param JOBADInstance The instance of JOBAD the module is initiated on. 				
 		*/
 	},
 	onSideBarUpdate: function(JOBADInstance){

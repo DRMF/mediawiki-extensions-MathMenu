@@ -4,6 +4,8 @@
 * **Object** [`.Event.contextMenuEntries`](contextMenuEntries.md) Namespace for contextMenuEntries Events. 
 * **Object** [`.Event.hoverText`](hoverText.md) Namespace for contextMenuEntries Events. 
 * **Object** [`.Event.onSideBarUpdate`](onSideBarUpdate.md) Namespace for contextMenuEntries Events. 
+* **Object** [`.Event.onEvent`](onEvent.md) Namespace for onEvent Events. 
+
 
 ## See also
 
