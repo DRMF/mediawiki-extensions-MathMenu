@@ -139,13 +139,16 @@ JOBAD.modules.register({
 		JOBADInstance.element.find("p")
 		.each(function(i, target){
 			var $target = JOBAD.refs.$(target);
-			JOBADInstance.Sidebar.registerNotification($target, {
+			window.note = JOBADInstance.Sidebar.registerNotification($target, {
 				"text": $target.text().length.toString()+" Characters of text",
 				"trace": true, 
 				"class": classes[i % 3],
 				"click": function(){
 						JOBADInstance.Event.leftClick.trigger($target);
-				}
+				},
+				"menu": [["Remove this notification", function(element, JOBADInstance){
+					JOBADInstance.Sidebar.removeNotification($(this));
+				}]]
 			})
 		})
 	},

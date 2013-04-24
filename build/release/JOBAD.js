@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 24 Apr 2013 17:56:53 +0200
+	built: Wed, 24 Apr 2013 23:13:30 +0200
 */
 
 var JOBAD = (function(){
@@ -1204,6 +1204,29 @@ JOBAD.util.generateMenuList = function(menu){
 	}
 	return res;
 };
+/*
+	Wraps a menu function
+	@param menu Menu to generate. 
+	@returns the new representation. 
+*/
+JOBAD.util.fullWrap = function(menu, wrapper){
+	var menu = (JOBAD.refs._.isArray(menu))?menu:JOBAD.util.generateMenuList(menu);
+	var menu2 = [];
+	for(var i=0;i<menu.length;i++){
+		if(typeof menu[i][1] == 'function'){
+			(function(){
+				var org = menu[i][1];
+				menu2.push([menu[i][0], function(){
+					return wrapper(org, arguments)
+				}]);
+			})();
+		} else {
+			menu2.push([menu[i][0], JOBAD.util.fullWrap(menu[i][1])]);
+		}
+		
+	}
+	return menu2;
+};
 
 /* hover Text */
 JOBAD.Events.hoverText = 
@@ -1382,12 +1405,14 @@ JOBAD.Events.onSideBarUpdate =
 							config.class:	Notificaton class. Default: none. 
 							config.icon:	Icon (Default: Based on notification class. 
 							config.text:	Text
+							config.menu:	Context Menu
 							config.trace:	Trace the original element on hover?
 							config.click:	Callback on click
 					@return jQuery element used as identification. 
 							
 				*/
 				'registerNotification': function(element, config){
+					var me = this;
 					if(typeof this.Sidebar.Elements == 'undefined'){
 						this.Sidebar.Elements = {};
 					}
@@ -1447,6 +1472,13 @@ JOBAD.Events.onSideBarUpdate =
 						sidebar_element.addClass("JOBAD_Notification_"+notClass);
 					}
 					
+					if(typeof config.menu != 'undefined'){
+						var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
+							return org.apply(sidebar_element, [element, me]);
+						});
+						JOBAD.UI.ContextMenu.enable(sidebar_element, function(){return entries;});
+					}
+					
 
 					return sidebar_element;
 				}, 
@@ -1467,7 +1499,6 @@ JOBAD.Events.onSideBarUpdate =
 			}
 		},
 		'enable': function(root){
-			this.Sidebar.Elements = {};
 			this.Event.onSideBarUpdate.enabled = true;
 			
 		},

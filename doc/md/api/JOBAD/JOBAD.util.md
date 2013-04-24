@@ -6,4 +6,8 @@
 * **Function** `JOBAD.util.generateMenuList(menu)` Generates a list menu representation from an object representation. 
 	* **Object** `menu` an object representation of the menu. 
 	* **returns** the new representation. 
+* **Function** `JOBAD.util.fullWrap(menu, callback)` Wraps a menu callback with the spacefied wrapper
+	* **Object** `menu` The menu to wrap. 
+	* **Function** `wrapper(org, arguments)` The wrapper function. 
+	* **returns** the new representation. 
 

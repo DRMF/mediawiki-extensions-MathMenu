@@ -7,6 +7,7 @@
 	* **Object** `config` A map which may contain any of the following members: 
 		* **String** `config.class` Notification class. If provided should be one of "info", "warning" or "error". 
 		* **String** `config.icon` An icon to use for the notification. Default depends on `config.class`. 
+		* **String** `config.menu` A context menu for the notification. 
 		* **String** `config.text` A text to use for the notification. 
 		* **Boolean** `config.trace` Highlight the original element when hovering the notification ? 
 		* **Function** `config.click` On click callback. 
