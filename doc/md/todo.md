@@ -1,9 +1,9 @@
 # Known Issues & TODO
-
-## TODO
-* Work on the Sidebar
+* add more complex examples
+* enable module development workflow
+	* seperate repo?
+* Sidebar
 	* Make Sidebar UI fancier. 
-	* Implement Sidebar Icons. 
-	* `config.class`
-* add support for Internet Explorer
-* Implement keyPress Event. 
+	* Sidebar notifications may overlap
+		* update `JOBAD.Events.onSideBarUpdate.init.Sidebar.redraw`
+* Module manager

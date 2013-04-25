@@ -470,27 +470,28 @@
 <span class="cm">    example1.js - An example module for JOBAD. </span>
 <span class="cm">    A Testing module, colors &lt;p&gt;s in the color given as first parameter. </span>
 <span class="cm">*/</span>
-
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.click&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors Click&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;A Testing module, colors &lt;p&gt;s in the color given as first parameter. &#39;</span><span class="p">,</span>
-        <span class="s1">&#39;hasCleanNamespace&#39;</span><span class="o">:</span> <span class="kc">false</span>
-    <span class="p">},</span>
-    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">color</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="p">);</span> <span class="c1">//Store the color setting</span>
-    <span class="p">},</span>
-    <span class="nx">leftClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">colorize</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span> <span class="c1">//Color the target</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+        <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+            <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.click&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors Click&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;A Testing module, colors &lt;p&gt;s in the color given as first parameter. &#39;</span><span class="p">,</span>
+            <span class="s1">&#39;hasCleanNamespace&#39;</span><span class="o">:</span> <span class="kc">false</span>
+        <span class="p">},</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">color</span><span class="p">){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="nx">color</span><span class="p">);</span> <span class="c1">//Store the color setting</span>
+        <span class="p">},</span>
+        <span class="nx">leftClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">colorize</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span> <span class="c1">//Color the target</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">colorize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
+            <span class="nx">target</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">));</span> <span class="c1">//get the color setting and apply it. </span>
         <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="nx">colorize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
-        <span class="nx">target</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">));</span> <span class="c1">//get the color setting and apply it. </span>
-    <span class="p">}</span>
-<span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
 <h2>test.p</h2>
@@ -499,29 +500,30 @@
 <span class="cm">    example2.js - An example module for JOBAD. </span>
 <span class="cm">    Provides a context menu entry which checks if the clicked element is a &lt;p&gt;. </span>
 <span class="cm">*/</span>
-
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.p&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Paragraphs&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Provides a context menu entry which checks if the clicked element is a &lt;p&gt;. &#39;</span>
-    <span class="p">},</span>
-    <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;#nomenu,#nomenu *&#39;</span><span class="p">)){</span> <span class="c1">//no menu for these elements</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+        <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+            <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.p&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Paragraphs&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Provides a context menu entry which checks if the clicked element is a &lt;p&gt;. &#39;</span>
+        <span class="p">},</span>
+        <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;#nomenu,#nomenu *&#39;</span><span class="p">)){</span> <span class="c1">//no menu for these elements</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;Am I a &lt;p&gt; ?&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
+                        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;I am a &lt;p&gt; element. &quot;</span><span class="p">);</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;No I&#39;m not. &quot;</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}]</span>
+            <span class="p">];</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="p">[</span><span class="s2">&quot;Am I a &lt;p&gt; ?&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
-                    <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;I am a &lt;p&gt; element. &quot;</span><span class="p">);</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;No I&#39;m not. &quot;</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}]</span>
-        <span class="p">];</span>
-    <span class="p">}</span>
-<span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
 <h2>test.color.menu</h2>
@@ -530,31 +532,32 @@
 <span class="cm">    example3.js - An example module for JOBAD. </span>
 <span class="cm">    Test the menu and adds several items. </span>
 <span class="cm">*/</span>
-
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.menu&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Test the menu and adds several items. &#39;</span>
-    <span class="p">},</span>
-    <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;#nomenu,#nomenu *&#39;</span><span class="p">)){</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+        <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+            <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.menu&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Test the menu and adds several items. &#39;</span>
+        <span class="p">},</span>
+        <span class="nx">contextMenuEntries</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;#nomenu,#nomenu *&#39;</span><span class="p">)){</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Colors&quot;</span><span class="o">:</span> 
+                    <span class="p">{</span>
+                        <span class="s2">&quot;Make me orange&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span><span class="nx">element</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">);},</span> 
+                        <span class="s2">&quot;Highlight my background&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
+                            <span class="nx">element</span>
+                            <span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFFF9C&quot;</span><span class="p">)</span>
+                            <span class="p">.</span><span class="nx">animate</span><span class="p">({</span> <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s2">&quot;#FFFFFF&quot;</span><span class="p">},</span> <span class="mi">1500</span><span class="p">);</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;Revert&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span><span class="nx">element</span><span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);}</span>
+                    <span class="p">}</span>
+                <span class="p">};</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Colors&quot;</span><span class="o">:</span> 
-                <span class="p">{</span>
-                    <span class="s2">&quot;Make me orange&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span><span class="nx">element</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">);},</span> 
-                    <span class="s2">&quot;Highlight my background&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span>
-                        <span class="nx">element</span>
-                        <span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFFF9C&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="nx">animate</span><span class="p">({</span> <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s2">&quot;#FFFFFF&quot;</span><span class="p">},</span> <span class="mi">1500</span><span class="p">);</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;Revert&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">){</span><span class="nx">element</span><span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);}</span>
-                <span class="p">}</span>
-            <span class="p">};</span>
-    <span class="p">}</span>
-<span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
 <h2>test.color.hover</h2>
@@ -563,21 +566,22 @@
 <span class="cm">    example4.js - An example module for JOBAD. </span>
 <span class="cm">    Counts the words in a paragraph and shows a tooltip. </span>
 <span class="cm">*/</span>
-
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.hover&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors Hover&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Counts the words in a p element. &#39;</span>
-    <span class="p">},</span>
-    <span class="nx">hoverText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
-            <span class="kd">var</span> <span class="nx">wordCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">).</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span>
-            <span class="k">return</span> <span class="s2">&quot;I am a p element which contains &quot;</span><span class="o">+</span><span class="nx">wordCount</span><span class="o">+</span><span class="s2">&quot; words. &quot;</span><span class="p">;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+        <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+            <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.color.hover&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Colors Hover&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Counts the words in a p element. &#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="nx">hoverText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)){</span>
+                <span class="kd">var</span> <span class="nx">wordCount</span> <span class="o">=</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">).</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span>
+                <span class="k">return</span> <span class="s2">&quot;I am a p element which contains &quot;</span><span class="o">+</span><span class="nx">wordCount</span><span class="o">+</span><span class="s2">&quot; words. &quot;</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
 <h2>test.sidebar</h2>
@@ -586,36 +590,37 @@
 <span class="cm">    example6.js - An example module for JOBAD. </span>
 <span class="cm">    Counts the words in a paragraph and shows a tooltip in the sidebar. Also logs any other event. </span>
 <span class="cm">*/</span>
-
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
-    <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
-        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.sidebar&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Sidebar&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Displays the number of characters next to every p and clicking it trigger the original p. &#39;</span>
-    <span class="p">},</span>
-    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="kd">var</span> <span class="nx">classes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">];</span>
-        <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">target</span><span class="p">){</span>
-            <span class="kd">var</span> <span class="nx">$target</span> <span class="o">=</span> <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
-            <span class="nb">window</span><span class="p">.</span><span class="nx">note</span> <span class="o">=</span> <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">$target</span><span class="p">,</span> <span class="p">{</span>
-                <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="nx">$target</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">length</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot; Characters of text&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;trace&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> 
-                <span class="s2">&quot;class&quot;</span><span class="o">:</span> <span class="nx">classes</span><span class="p">[</span><span class="nx">i</span> <span class="o">%</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="s2">&quot;click&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-                        <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">leftClick</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">$target</span><span class="p">);</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;menu&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;Remove this notification&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-                    <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">removeNotification</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-                <span class="p">}]]</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+    <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">({</span>
+        <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
+            <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;test.sidebar&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Test Module: Sidebar&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author&#39;</span><span class="o">:</span>   <span class="s1">&#39;Tom Wiesing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="o">:</span>  <span class="s1">&#39;Displays the number of characters next to every p and clicking it trigger the original p. &#39;</span>
+        <span class="p">},</span>
+        <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">classes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">];</span>
+            <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">target</span><span class="p">){</span>
+                <span class="kd">var</span> <span class="nx">$target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
+                <span class="nb">window</span><span class="p">.</span><span class="nx">note</span> <span class="o">=</span> <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">$target</span><span class="p">,</span> <span class="p">{</span>
+                    <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="nx">$target</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">length</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot; Characters of text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;trace&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> 
+                    <span class="s2">&quot;class&quot;</span><span class="o">:</span> <span class="nx">classes</span><span class="p">[</span><span class="nx">i</span> <span class="o">%</span> <span class="mi">3</span><span class="p">],</span>
+                    <span class="s2">&quot;click&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+                            <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">leftClick</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">$target</span><span class="p">);</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;menu&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;Remove this notification&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+                        <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">removeNotification</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="p">}]]</span>
+                <span class="p">})</span>
             <span class="p">})</span>
-        <span class="p">})</span>
-    <span class="p">},</span>
-    <span class="nx">onEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Event &#39;&quot;</span><span class="o">+</span><span class="nx">event</span><span class="o">+</span><span class="s2">&quot;&#39; was raised! &quot;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">});</span>
+        <span class="p">},</span>
+        <span class="nx">onEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Event &#39;&quot;</span><span class="o">+</span><span class="nx">event</span><span class="o">+</span><span class="s2">&quot;&#39; was raised! &quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
 	</body>
