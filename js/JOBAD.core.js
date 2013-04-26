@@ -21,6 +21,12 @@ var JOBAD = function(element){
 	}
 
 	var me = this; //Kept in functions
+	
+	//Add init arguments
+	me.arguments = [];
+	for(var i=0;i<arguments.length;i++){
+		me.arguments.push(arguments[i]);
+	}
 
 	//The element the current JOBAD instance works on. 
 	this.element = element;
@@ -212,6 +218,14 @@ var JOBAD = function(element){
 		return true;
 	}
 
+	
+	//Init JOBAD core extensions
+	for(var key in JOBAD.extensions){
+		var mod = JOBAD.extensions[key];
+		if(typeof mod["onJOBADinit"] == 'function'){
+			mod.onJOBADinit.apply(this, this.arguments);
+		}
+	}
 
 	//Setup the events
 	for(var key in JOBAD.Events){
@@ -305,6 +319,7 @@ JOBAD.error = function(msg){
 	Module Registration
 */
 JOBAD.modules = {};
+JOBAD.extensions = {};
 
 var moduleList = {};
 var moduleStorage = {};
@@ -414,7 +429,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		properObject.namespace = {};
 
 		for(var key in ModuleObject){
-			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1 && !JOBAD.Events.hasOwnProperty(key)){
+			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1 && !JOBAD.Events.hasOwnProperty(key) && !JOBAD.extensions.hasOwnProperty(key)){
 				if(properObject.info.hasCleanNamespace){
 					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
 				} else {
@@ -429,7 +444,22 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 		}
 		
-		
+		for(var key in JOBAD.extensions){
+			var mod = JOBAD.extensions[key];
+			var av = ModuleObject.hasOwnProperty(key);
+			var prop = ModuleObject[key];
+			if(mod.required && !av){
+				JOBAD.error("Error: Cannot load module '"+properObject.info.identifier+"'. Missing required core extension '"+key+"'. ");
+			}
+
+			if(av){
+				if(!mod.validate(prop)){
+					JOBAD.error("Error: Cannot load module '"+properObject.info.identifier+"'. Core Extension '"+key+"' failed to validate. ");
+				}
+			}
+			
+			properObject[key] = mod.init(av, prop, ModuleObject, properObject);
+		}
 		
 		return properObject;
 
@@ -504,6 +534,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		},
 		"delete": function(prop){
 			delete moduleStorage[name][prop+"_"];
+		},
+		"keys": function(){
+			var keys = [];
+			for(var key in moduleStorage[name]){
+				if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
+					keys.push(key.substr(0, key.length-1));
+				}
+			}
+			return keys;
 		}
 	}
 	
@@ -521,6 +560,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		},
 		"delete": function(prop){
 			delete storage[name];
+		},
+		"keys": function(){
+			var keys = [];
+			for(var key in storage){
+				if(storage.hasOwnProperty(key)){
+					keys.push(key);
+				}
+			}
+			return keys;
 		}
 	}
 
@@ -545,6 +593,13 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	if(!moduleStorage[name]["init"]){
 		moduleStorage[name]["init"] = true;
 		ServiceObject.globalinit.apply(undefined, []);
+		for(var key in JOBAD.extensions){
+			var mod = JOBAD.extensions[key];
+			var val = ServiceObject[key];
+			if(typeof mod["onFirstLoad"] == 'function'){
+				mod.onFirstLoad(val, this.globalStore);
+			}
+		}
 	}
 
 	var params = [JOBADInstance];
@@ -565,6 +620,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];
 			}
+		}
+	}
+	
+	//Init Core extensions
+	for(var key in JOBAD.extensions){
+		var mod = JOBAD.extensions[key];
+		var val = ServiceObject[key];
+		if(typeof mod["onLoad"] == 'function'){
+			mod.onLoad(val, ServiceObject, this);
 		}
 	}
 

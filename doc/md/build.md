@@ -1,12 +1,18 @@
 # Building JOBAD
+**Building is not neccessary for the end user.**
 
 Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
 A minimized version is also created by running it through the [Google Closure Compiler](https://developers.google.com/closure/compiler/). 
 
 The documentation of JOBAD can also be build. It needs to be compiled from markdown files into html files. 
 
-Both the current release versions and the Documentation are always found in the repository. **Building is not neccessary for the end user. **
+The examples of JOBAD are also auto-generated from templates. 
 
+Both the current release versions and the Documentation are always found in the repository.
+
+Building is currently only supported on linux. 
+
+**Building is not neccessary for the end user.**
 ## Building preparations
 
 To build JOBAD, you need to have `python` installed. To compile the minimized version, an active internet connection is required. 
@@ -29,6 +35,12 @@ If you wish to build the Documentation, use
 ```bash
 cd build
 ./build-doc.sh
+```
+
+If you wish to build the Examples, use 
+```bash
+cd build
+./build-templates.sh
 ```
 
 To build everything use 

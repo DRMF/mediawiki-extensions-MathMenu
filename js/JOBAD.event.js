@@ -364,8 +364,6 @@ JOBAD.Events.onSideBarUpdate =
 					this.Sidebar.Elements[id] = element;	
 					this.Sidebar.redraw();
 					
-					
-					
 					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
 
 					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					

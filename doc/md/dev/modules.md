@@ -1,15 +1,8 @@
 # Modules
 
-The documentation for this topic is incomplete. 
-So far, please refer to Module Template API. 
-
 ## Module Template
 
 ```js
-/*
-	A template module. 
-*/
-
 var template = {
 	/* Module Info / Meta Data */
 	info:{
@@ -87,10 +80,12 @@ var template = {
 		*/
 	}
 };
+
+JOBAD.modules.register(template); //register the module. 
 ```
 
 When you write a module and you wish to use jQuery, do not use the "$" reference to jQuery. This might not be available if jQuery is in noConflict mode. Always use the JOBAD.refs.$ reference to jQuery. 
-If you want to use the '$' inside your code you can use the following code. YOu can also use it if you want to use underscore. 
+If you want to use the '$' inside your code you can use the following code. You can also use it if you want to use underscore. 
 
 ```js
 (function($, _){

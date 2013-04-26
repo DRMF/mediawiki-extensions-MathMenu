@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Building JOBAD] - JOBAD Documentation</title>
+		<title>[JOBAD.extensions] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,46 +461,10 @@
 		</style>
 	</head>
 	<body>
-<p><a href="index.html">Start</a> &gt; <strong>Building JOBAD</strong></p>
-<h1>Building JOBAD</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <strong>JOBAD.extensions</strong></p>
+<h1>JOBAD.extensions</h1>
 
-<p>Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
-A minimized version is also created by running it through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </p>
-
-<p>The documentation of JOBAD can also be build. It needs to be compiled from markdown files into html files. </p>
-
-<p>The templates are also auto-generated</p>
-
-<p>Both the current release versions and the Documentation are always found in the repository. __ Building is not neccessary for the end user.__</p>
-
-<h2>Building preparations</h2>
-
-<p>To build JOBAD, you need to have <code>python</code> installed. To compile the minimized version, an active internet connection is required. </p>
-
-<p>To build the JOBAD documentation, the python modules <a href="https://github.com/trentm/python-markdown2">markdown2</a>, <a href="http://pygments.org/">pygments</a> and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup 4</a> are required. </p>
-
-<p>Before you build make sure that all the git submodules of the repository have been pulled. If you cloned with <code>--recursive</code> you should be fine, otherwise 
-you might want to run <code>git submodule update --init --recursive</code>. </p>
-
-<h2>Building</h2>
-
-<p>To build the the JOBAD developments versions, run </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-release.sh
-</code></pre></div>
-
-<p>If you wish to build the Documentation, use </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-doc.sh
-</code></pre></div>
-
-<p>To build everything use </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-all.sh
-</code></pre></div>
+<p>JOBAD extensions namespace. Undocumentaed so far. </p>
 
 	</body>
 </html>

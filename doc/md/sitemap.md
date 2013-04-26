@@ -13,6 +13,7 @@
 * [JOBAD.UI.Sidebar](api/JOBAD/JOBAD.UI/sidebar.md) (api/JOBAD/JOBAD.UI/sidebar.md)
 * [JOBAD.config](api/JOBAD/JOBAD.config/index.md) (api/JOBAD/JOBAD.config/index.md)
 * [JOBAD.console](api/JOBAD/JOBAD.console.md) (api/JOBAD/JOBAD.console.md)
+* [JOBAD.extensions](api/JOBAD/JOBAD.extensions/index.md) (api/JOBAD/JOBAD.extensions/index.md)
 * [JOBAD.modules](api/JOBAD/JOBAD.modules/index.md) (api/JOBAD/JOBAD.modules/index.md)
 * [JOBAD.modules.loadedModule](api/JOBAD/JOBAD.modules/loadedModule.md) (api/JOBAD/JOBAD.modules/loadedModule.md)
 * [JOBAD.noConflict](api/JOBAD/JOBAD.noConflict.md) (api/JOBAD/JOBAD.noConflict.md)

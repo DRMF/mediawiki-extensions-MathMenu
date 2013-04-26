@@ -8,6 +8,9 @@ This object is the main JOBAD Namespace.
 * **String** `JOBAD.version` - The current JOBAD Version ('3.0.0')
 * **Object** [`JOBAD.config`](JOBAD.config/index.md) - Global Configuration namespace. 
 
+* **Object** [`JOBAD.extentions`](JOBAD.extentions/index.md) - JOBAD extenions
+
+
 * **Object** [`JOBAD.modules`](JOBAD.modules/index.md) - Namespace for global module registering. 
 
 * **Object** [`JOBAD.Events`](JOBAD.Events/index.md) - JOBAD Event Namespace. 

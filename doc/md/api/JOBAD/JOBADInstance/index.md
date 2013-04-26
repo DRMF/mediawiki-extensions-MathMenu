@@ -7,3 +7,4 @@ An instance of `JOBAD` has the following properties:
 * **Object** [`.modules`](modules.md) Namespace for module related functions. 
 * **Object** [`.Event`](event/index.md) Namespace for event related functions. 
 * **Object** [`.Sidebar`](sidebar.md) Namespace for Sidebar Functions. 
+* **Array** `.arguments` An array containing the parameters originally parsed to the module constructor. 

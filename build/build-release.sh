@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 mkdir -p "release"
 build="release/JOBAD.js"
@@ -25,11 +25,12 @@ printf "Compiling development version ... "
 
 cat config/dev_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $build
 
-cat $sourcedir/JOBAD.core.js >> $build
-echo "" >> $build
-cat $sourcedir/JOBAD.ui.js >> $build
-echo "" >> $build
-cat $sourcedir/JOBAD.event.js >> $build
+while read filename
+do
+	echo "/* start <$filename> */" >> $build
+	cat $sourcedir/$filename >> $build
+	echo "/* end   <$filename> */" >> $build
+done < "./config/files.txt"
 
 cat config/dev_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $build
 

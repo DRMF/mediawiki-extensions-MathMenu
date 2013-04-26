@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "JOBAD Doc build script"
 

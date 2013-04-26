@@ -1,7 +1,7 @@
 # Demos
 
-All these Demos have the same content. They can be used to test the Builds and the uncompiled versions. 
+Here you can find simple demos of JOBAD. 
 
-* [Release Version](../../examples/release.html) - Compressed Version
-* [Development Version](../../examples/dev.html) - Built, but not compressed version
-* [Unbuilt Version](../../examples/unbuilt.html) - Unbuilt version
+* [Release Version](../../examples/build/simple/release.html) - Compressed Version
+* [Development Version](../../examples/build/simple/dev.html) - Built, but not compressed version
+* [Unbuilt Version](../../examples/build/simple/unbuilt.html) - Unbuilt version

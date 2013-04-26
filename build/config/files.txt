@@ -1,0 +1,4 @@
+JOBAD.core.js
+JOBAD.ui.js
+JOBAD.event.js
+JOBAD.config.js

@@ -1,10 +1,11 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 24 Apr 2013 23:13:30 +0200
+	built: Fri, 26 Apr 2013 19:08:28 +0200
 */
 
 var JOBAD = (function(){
+/* start <JOBAD.core.js> */
 /*
 	JOBAD 3 Core Functions
 	JOBAD.core.js
@@ -28,6 +29,12 @@ var JOBAD = function(element){
 	}
 
 	var me = this; //Kept in functions
+	
+	//Add init arguments
+	me.arguments = [];
+	for(var i=0;i<arguments.length;i++){
+		me.arguments.push(arguments[i]);
+	}
 
 	//The element the current JOBAD instance works on. 
 	this.element = element;
@@ -219,6 +226,14 @@ var JOBAD = function(element){
 		return true;
 	}
 
+	
+	//Init JOBAD core extensions
+	for(var key in JOBAD.extensions){
+		var mod = JOBAD.extensions[key];
+		if(typeof mod["onJOBADinit"] == 'function'){
+			mod.onJOBADinit.apply(this, this.arguments);
+		}
+	}
 
 	//Setup the events
 	for(var key in JOBAD.Events){
@@ -312,6 +327,7 @@ JOBAD.error = function(msg){
 	Module Registration
 */
 JOBAD.modules = {};
+JOBAD.extensions = {};
 
 var moduleList = {};
 var moduleStorage = {};
@@ -421,7 +437,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		properObject.namespace = {};
 
 		for(var key in ModuleObject){
-			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1 && !JOBAD.Events.hasOwnProperty(key)){
+			if(ModuleObject.hasOwnProperty(key) && CleanProperties.indexOf(key) == -1 && !JOBAD.Events.hasOwnProperty(key) && !JOBAD.extensions.hasOwnProperty(key)){
 				if(properObject.info.hasCleanNamespace){
 					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
 				} else {
@@ -436,7 +452,22 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 		}
 		
-		
+		for(var key in JOBAD.extensions){
+			var mod = JOBAD.extensions[key];
+			var av = ModuleObject.hasOwnProperty(key);
+			var prop = ModuleObject[key];
+			if(mod.required && !av){
+				JOBAD.error("Error: Cannot load module '"+properObject.info.identifier+"'. Missing required core extension '"+key+"'. ");
+			}
+
+			if(av){
+				if(!mod.validate(prop)){
+					JOBAD.error("Error: Cannot load module '"+properObject.info.identifier+"'. Core Extension '"+key+"' failed to validate. ");
+				}
+			}
+			
+			properObject[key] = mod.init(av, prop, ModuleObject, properObject);
+		}
 		
 		return properObject;
 
@@ -511,6 +542,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		},
 		"delete": function(prop){
 			delete moduleStorage[name][prop+"_"];
+		},
+		"keys": function(){
+			var keys = [];
+			for(var key in moduleStorage[name]){
+				if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
+					keys.push(key.substr(0, key.length-1));
+				}
+			}
+			return keys;
 		}
 	}
 	
@@ -528,6 +568,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		},
 		"delete": function(prop){
 			delete storage[name];
+		},
+		"keys": function(){
+			var keys = [];
+			for(var key in storage){
+				if(storage.hasOwnProperty(key)){
+					keys.push(key);
+				}
+			}
+			return keys;
 		}
 	}
 
@@ -552,6 +601,13 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	if(!moduleStorage[name]["init"]){
 		moduleStorage[name]["init"] = true;
 		ServiceObject.globalinit.apply(undefined, []);
+		for(var key in JOBAD.extensions){
+			var mod = JOBAD.extensions[key];
+			var val = ServiceObject[key];
+			if(typeof mod["onFirstLoad"] == 'function'){
+				mod.onFirstLoad(val, this.globalStore);
+			}
+		}
 	}
 
 	var params = [JOBADInstance];
@@ -572,6 +628,15 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];
 			}
+		}
+	}
+	
+	//Init Core extensions
+	for(var key in JOBAD.extensions){
+		var mod = JOBAD.extensions[key];
+		var val = ServiceObject[key];
+		if(typeof mod["onLoad"] == 'function'){
+			mod.onLoad(val, ServiceObject, this);
 		}
 	}
 
@@ -686,7 +751,8 @@ JOBAD.toString = function(){
 
 return JOBAD;
 })();
-
+/* end   <JOBAD.core.js> */
+/* start <JOBAD.ui.js> */
 /*
 	JOBAD 3 UI Functions
 	JOBAD.ui.js
@@ -1054,7 +1120,8 @@ return JOBAD;
 	};
 
 })(JOBAD);
-
+/* end   <JOBAD.ui.js> */
+/* start <JOBAD.event.js> */
 /*
 	JOBAD 3 Event Functions
 	JOBAD.event.js
@@ -1421,8 +1488,6 @@ JOBAD.Events.onSideBarUpdate =
 					this.Sidebar.Elements[id] = element;	
 					this.Sidebar.redraw();
 					
-					
-					
 					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
 
 					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
@@ -1526,6 +1591,33 @@ JOBAD.Events.onSideBarUpdate =
 
 })();
 
+/* end   <JOBAD.event.js> */
+/* start <JOBAD.config.js> */
+/*
+	JOBAD Modules config
+	Core Extension
+*/
+
+JOBAD.extensions.config = {
+	"required": false, //not required
+	
+	"validate": function(prop){return true; }, //anything is ok
+	
+	"init": function(available, value, originalObject, properObject){
+		return available ? value : {};
+	},
+	
+	"onJOBADinit": function(element, config){
+		//JOBAD module init
+	},
+	
+	"onFirstLoad": function(value, globalStore){},
+	
+	"onLoad": function(value, properObject, loadedModule){
+		
+	}
+}
+/* end   <JOBAD.config.js> */
 /*
 	JOBAD Core build configuration
 */
