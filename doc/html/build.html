@@ -464,14 +464,20 @@
 <p><a href="index.html">Start</a> &gt; <strong>Building JOBAD</strong></p>
 <h1>Building JOBAD</h1>
 
+<p><strong>Building is not neccessary for the end user.</strong></p>
+
 <p>Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
 A minimized version is also created by running it through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </p>
 
 <p>The documentation of JOBAD can also be build. It needs to be compiled from markdown files into html files. </p>
 
-<p>The templates are also auto-generated</p>
+<p>The examples of JOBAD are also auto-generated from templates. </p>
 
-<p>Both the current release versions and the Documentation are always found in the repository. __ Building is not neccessary for the end user.__</p>
+<p>Both the current release versions and the Documentation are always found in the repository.</p>
+
+<p>Building is currently only supported on linux. </p>
+
+<p><strong>Building is not neccessary for the end user.</strong></p>
 
 <h2>Building preparations</h2>
 
@@ -495,6 +501,12 @@ you might want to run <code>git submodule update --init --recursive</code>. </p>
 <div class="codehilite"><pre><code><span class="nb">cd </span>build
 ./build-doc.sh
 </code></pre></div>
+
+<p>If you wish to build the Examples, use 
+<code>bash
+cd build
+./build-templates.sh
+</code></p>
 
 <p>To build everything use </p>
 
