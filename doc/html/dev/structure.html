@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Setting up JOBAD] - JOBAD Documentation</title>
+		<title>[The JOBAD Structure] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -461,104 +461,10 @@
 		</style>
 	</head>
 	<body>
-<p><a href="index.html">Start</a> &gt; <strong>Setting up JOBAD</strong></p>
-<h1>Setting up JOBAD</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>The JOBAD Structure</strong></p>
+<h1>The JOBAD Structure</h1>
 
-<p>This page will give instructions on how to include JOBAD into your website. </p>
-
-<h2>Getting the JOBAD code</h2>
-
-<p>The source code for JOBAD can be found at <a href="https://github.com/KWARC/jobad">https://github.com/KWARC/jobad</a>. 
-To get the code use </p>
-
-<pre><code>git clone https://github.com/KWARC/jobad
-</code></pre>
-
-<p>If you want to build jobad, please use</p>
-
-<pre><code>git clone --recursive  https://github.com/KWARC/jobad
-</code></pre>
-
-<p>in order to check out the build dependencies. </p>
-
-<h2>Including JOBAD in a website</h2>
-
-<p>To include JOBAD in your website, you will have to include several files in your HTML document. 
-JOBAD itself depends on: </p>
-
-<ul>
-<li><a href="http://jquery.com">jQuery</a> - tested with version 1.9.0</li>
-<li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.1</li>
-<li><a href="http://underscorejs.org/">UNDERSCORE.JS</a> - tested with version 1.4.4</li>
-</ul>
-
-<p>All 3 dependencies are bundled with JOBAD. You can include them in your HTML document header like so:</p>
-
-<div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
-    <span class="c">&lt;!-- other header tags --&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-ui-1.10.1.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/underscore/underscore-min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./css/jquery-ui-1.10.1.min.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- More files to include --&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-</code></pre></div>
-
-<p>After this you have a choice. You can either include the development version with comments or minimized version. 
-It is also possible to include each file individually. </p>
-
-<p>As a developer who wants to work on the JOBAD core you can load the JOBAD Core files: </p>
-
-<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.core.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.utils.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.core.modules.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.core.events.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.ui.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;./js/JOBAD.events.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div>
-
-<p>As a developer who develops JOBAD modules, you can include the built development version: </p>
-
-<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./build/release/JOBAD.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div>
-
-<p>If you want to minimize bandwith and just want to embed JOBAD onto your webpage, you can include the minified version: </p>
-
-<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./build/release/JOBAD.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div>
-
-<p>Finally, you should include the JOBAD CSS file in your website: </p>
-
-<div class="codehilite"><pre><code>    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./css/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
-</code></pre></div>
-
-<p>That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 
-Then you can start JOBAD: </p>
-
-<div class="codehilite"><pre><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">JOBAD1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#my_JOBAD_area&quot;</span><span class="p">));</span> <span class="c1">//bind JOBAD to an element on the page. </span>
-    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">]);</span> <span class="c1">//Load a module</span>
-    <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">Setup</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span> <span class="c1">//Enable JOBAD</span>
-<span class="p">});</span>
-</code></pre></div>
-
-<p>If jQuery's "$" or Underscore's "_", cause conflicts with other libraries, you can simply use</p>
-
-<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">conflicts</span> <span class="o">=</span> <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">noConflict</span><span class="p">();</span>
-
-<span class="nx">conflicts</span><span class="p">.</span><span class="nx">$</span> <span class="c1">//now contains a reference to jQuery. </span>
-<span class="nx">$</span> <span class="c1">//contains whatever it contained before jQuery was loaded</span>
-
-<span class="nx">conflicts</span><span class="p">.</span><span class="nx">_</span> <span class="c1">//now contains a reference to Underscore</span>
-<span class="nx">_</span> <span class="c1">//contains whatever it contained before Underscore was loaded</span>
-</code></pre></div>
-
-<h2>See also</h2>
-
-<ul>
-<li><a href="api/index.html">API Documentation</a></li>
-<li><a href="modules/index.html">Module Index</a> - A list of all available modules. </li>
-</ul>
+<p>Documentation TBD</p>
 
 	</body>
 </html>

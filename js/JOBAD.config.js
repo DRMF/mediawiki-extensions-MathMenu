@@ -1,24 +1,26 @@
 /*
 	JOBAD Modules config
-	Core Extension
+	Provides JOBAD configuration
 */
 
-JOBAD.extensions.config = {
-	"required": false, //not required
-	
+JOBAD.modules.ifaces.config = {
 	"validate": function(prop){return true; }, //anything is ok
 	
 	"init": function(available, value, originalObject, properObject){
 		return available ? value : {};
 	},
 	
-	"onJOBADinit": function(element, config){
-		//JOBAD module init
+	"required": false, //not required
+	
+	"onFirstLoad": function(value, globalStore){
+		//on First module load
 	},
 	
-	"onFirstLoad": function(value, globalStore){},
-	
 	"onLoad": function(value, properObject, loadedModule){
-		
+	
 	}
+}
+
+for(var key in JOBAD.modules.ifaces){
+	JOBAD.modules.cleanProperties.push(key);
 }

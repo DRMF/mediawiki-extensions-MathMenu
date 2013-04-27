@@ -35,14 +35,15 @@ All 3 dependencies are bundled with JOBAD. You can include them in your HTML doc
 After this you have a choice. You can either include the development version with comments or minimized version. 
 It is also possible to include each file individually. 
 
-As a developer who wants to work on the JOBAD core you can load the *JOBAD.core.js*, *JOBAD.event.js*, *JOBAD.config.js* and *JOBAD.ui.js*: 
+As a developer who wants to work on the JOBAD core you can load the JOBAD Core files: 
 
 ```html
-	<script src="./js/JOBAD.core.js"></script>
-	<script src="./js/JOBAD.event.js"></script>
-	<script src="./js/JOBAD.ui.js"></script>
-	<script src="./js/JOBAD.config.js"></script>
-	<script src="./js/JOBAD.template.js"></script>
+	<script src='./js/JOBAD.core.js'></script>
+	<script src='./js/JOBAD.utils.js'></script>
+	<script src='./js/JOBAD.core.modules.js'></script>
+	<script src='./js/JOBAD.core.events.js'></script>
+	<script src='./js/JOBAD.ui.js'></script>
+	<script src='./js/JOBAD.events.js'></script>
 ```
 
 As a developer who develops JOBAD modules, you can include the built development version: 

@@ -1,13 +1,10 @@
 /*
-	JOBAD 3 Event Functions
-	JOBAD.event.js
-	
-	requires:
-		JOBAD.core.js
-		JOBAD.ui.js
+	JOBAD 3 Events
+	depends:
+		JOBAD.core.modules.js
+		JOBAD.core.events.js
+		JOABD.core.js
 */
-
-(function(){
 
 /* left click */
 JOBAD.Events.leftClick = 
@@ -464,6 +461,6 @@ JOBAD.Events.onSideBarUpdate =
 	}
 };
 
-
-})();
-
+for(var key in JOBAD.Events){
+	JOBAD.modules.cleanProperties.push(key);
+}
