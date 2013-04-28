@@ -404,7 +404,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			var mod = JOBAD.modules.extensions[key];
 			var val = ServiceObject[key];
 			if(typeof mod["onFirstLoad"] == 'function'){
-				mod.onFirstLoad(val, this.globalStore);
+				mod.onFirstLoad(this.globalStore);
 			}
 		}
 	}
@@ -422,11 +422,11 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		}
 	} else {
 		var orgClone = JOBAD.refs._.clone(ServiceObject.namespace);
-		
-		for(var i=0;i<JOBAD.modules.ifaces.length;i++){
-			var mod = JOBAD.modules.ifaces[i];
-			mod[1].call(this, orgClone);
-		}
+		for(var key in orgClone){
+			if(!JOBAD.modules.JOBAD.modules.cleanProperties.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
+				this[key] = orgClone[key];
+			}
+		};
 	}
 	
 	//Init module extensions
@@ -440,8 +440,8 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	
 	//Init module ifaces
 	for(var i=0;i<JOBAD.modules.ifaces.length;i++){
-		var mod = JOBAD.modules.ifaces[i];
-		mod[2].call(this, ServiceObject);
+		var mod = JOBAD.modules.ifaces[1];
+		mod[1].call(this, ServiceObject);
 	}
 	
 	ServiceObject.init.apply(this, params);		

@@ -99,13 +99,6 @@ JOBAD.modules.ifaces.push([
 			}
 		}
 		return properObject;
-	}, 
-	function(orgClone){
-		for(var key in orgClone){
-			if(!JOBAD.Events.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
-				this[key] = orgClone[key];
-			}
-		}
 	},
 	function(ServiceObject){
 		for(var key in JOBAD.Events){

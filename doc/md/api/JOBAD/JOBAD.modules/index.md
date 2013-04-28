@@ -3,6 +3,7 @@
 * **Function** [`JOBAD.modules.loadedModule(name, args, JOBADInstance)`](loadedModule.md) Represents a loaded module. 
 * **Array** `JOBAD.modules.ifaces` An array containing extensions to JOBAD modules. 
 * **Object** `JOBAD.modules.extensions` A map containing module extensions. 
+* **Array** `JOBAD.modules.cleanProperties` A list of clean module properties. 
 * **Function** `JOBAD.modules.register(moduleObject)` Registers a new JOBAD module with JOBAD. 
 	* **Object** `moduleObject` The object representing the module to register with JOBAD. See [`template`](../../template.md). 
 	* **returns** `true` if successfull, otherwise `false`

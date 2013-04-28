@@ -4,20 +4,21 @@
 */
 
 JOBAD.modules.ifaces.config = {
+	"required": false, //not required
+	
+	
 	"validate": function(prop){return true; }, //anything is ok
 	
 	"init": function(available, value, originalObject, properObject){
 		return available ? value : {};
 	},
 	
-	"required": false, //not required
 	
-	"onFirstLoad": function(value, globalStore){
+	"onFirstLoad": function(globalStore){
 		//on First module load
 	},
 	
 	"onLoad": function(value, properObject, loadedModule){
-	
 	}
 }
 

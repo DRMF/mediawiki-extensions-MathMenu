@@ -8,7 +8,7 @@ This object is the main JOBAD Namespace.
 * **String** `JOBAD.version` - The current JOBAD Version ('3.0.0')
 * **Object** [`JOBAD.config`](JOBAD.config/index.md) - Global Configuration namespace. 
 
-* **Array** [`JOBAD.ifaces'](JOBAD.ifaces/index.md) - JOBAD ifaces
+* **Array** [`JOBAD.ifaces`](JOBAD.ifaces/index.md) - JOBAD ifaces
 
 
 * **Object** [`JOBAD.modules`](JOBAD.modules/index.md) - Namespace for global module registering. 

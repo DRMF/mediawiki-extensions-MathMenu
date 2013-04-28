@@ -464,7 +464,87 @@
 <p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>The JOBAD Structure</strong></p>
 <h1>The JOBAD Structure</h1>
 
-<p>Documentation TBD</p>
+<p>JOBAD is structured into several different areas. </p>
+
+<p>The <code>JOBAD</code> variable holds everything related to JOBAD. It is also a constructor for JOBAD Instances. The JOBAD Core uses this as a namespace. </p>
+
+<p><code>JOBAD.modules</code> is a namespace which hold module related functions. These are functions which handle module loading, module dependencies etc. </p>
+
+<p><code>JOBAD.Events</code> contains all JOBAD Events code. </p>
+
+<p><code>JOBAD.UI</code> contains all UI related functions. </p>
+
+<h2>Extendability</h2>
+
+<p>The JOBAD Core is written in such a way that it can be modified very easily without having to change the existing functions. 
+ <strong>This API should not be used by module developers but only by developers who wish to extend the core.</strong></p>
+
+<h3>JOBAD.ifaces</h3>
+
+<p><code>JOBAD.ifaces</code> is an array of functions. They are called every time the JOBAD constructor is called in order to allow extending JOBAD instances. </p>
+
+<h3>JOBAD.modules.ifaces</h3>
+
+<p><code>JOBAD.modules.ifaces</code> is an array of function pairs: </p>
+
+<p><code>[onCreateProperObject(properObject, ModuleObject), onModuleLoad(ServiceObject)]</code></p>
+
+<ul>
+<li><strong>function</strong> <code>onCreateProperObject(properObject, ModuleObject)</code> called every time a proper module object is created. 
+<ul>
+<li><strong>Object</strong> <code>properObject</code> The proper Object to be created. May already contain previous registrations. </li>
+<li><strong>Object</strong> <code>moduleObject</code> The module Object that was registered with JOBAD. #</li>
+<li><strong>returns</strong> <code>properObject</code></li>
+</ul></li>
+<li><strong>function</strong> <code>onModuleLoad(ServiceObject)</code> called every time a module is loaded. 
+<ul>
+<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>this</code> The current loaded module. </li>
+<li><strong>Object</strong> <code>ServiceObject</code> A fully parsed Service Object which reprsensts the Service / Module currently being loaded. </li>
+</ul></li>
+</ul>
+
+<h3>JOBAD.modules.extensions</h3>
+
+<p><code>JOBAD.modules.extensions</code> provides a similar interface but allows to actually extend the module Objects. </p>
+
+<ul>
+<li><strong>Object</strong> <code>JOBAD.modules.extensions.[name]</code>
+<ul>
+<li><strong>string</strong> <code>name</code> The name of the property to be added to the Module object. </li>
+</ul></li>
+<li><strong>Boolean</strong> <code>JOBAD.modules.extensions.[name].required</code> States if the property is required. </li>
+<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].validate(prop)</code> Validates a property. </p>
+
+<ul>
+<li><strong>Object</strong> <code>prop</code> The value of the property to validate. </li>
+<li><strong>returns</strong> a boolean indicating success. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].init(available, value, ModuleObject, properObject)</code> Initialises the module and adds it to the properModule Object </p>
+
+<ul>
+<li><strong>Boolean</strong> <code>available</code> States if the property is available. </li>
+<li><strong>Object</strong> <code>value</code> The value of the property, if available. </li>
+<li><strong>Object</strong> <code>ModuleObject</code> The original module object which was registered with JOBAD. </li>
+<li><strong>Object</strong> <code>properObject</code> The proper ModuleObject. </li>
+<li><strong>returns</strong> the new value of the property. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].onFirstLoad(globalStore)</code> Called when the module is loaded for the first time. </p>
+
+<ul>
+<li><strong>Object</strong> <code>globalStore</code> Module globalStore. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].onLoad(value, properObject, moduleObject)</code> Called when the module is loaded. </p>
+
+<ul>
+<li><strong>Object</strong> <code>value</code> Value of the property to be added. </li>
+<li><strong>Object</strong> <code>properObject</code> The proper Module Object. </li>
+<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>this</code>, <code>moduleObject</code> The currently loaded module object</li>
+</ul></li>
+</ul>
+
+<h3>JOBAD.Events</h3>
+
+<p><code>JOBAD.Events</code> provides an easy way to add events to JOBAD modules. DOC TBD. </p>
 
 	</body>
 </html>
