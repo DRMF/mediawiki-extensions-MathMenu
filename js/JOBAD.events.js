@@ -331,7 +331,7 @@ JOBAD.Events.onSideBarUpdate =
 						for(var id in this.Sidebar.Elements){
 							var element = this.Sidebar.Elements[id];
 							if(!element.data("JOBAD.Events.Sidebar.id")){
-								this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, this.Sidebar.Elements[id]);
+								this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, this.Sidebar.Elements[id], element.data("JOBAD.Events.Sidebar.config"));
 							}
 						}
 					}
@@ -358,66 +358,16 @@ JOBAD.Events.onSideBarUpdate =
 					}
 					var element = JOBAD.refs.$(element);
 					var id = (new Date()).getTime().toString();
-					this.Sidebar.Elements[id] = element;	
+					var config = (typeof config == 'undefined')?{}:config;
+					config.menuThis = me;
+					this.Sidebar.Elements[id] = element.data("JOBAD.Events.Sidebar.config", config);
+					
 					this.Sidebar.redraw();
 					
 					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
 
 					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
-	
-					var config = (typeof config == 'undefined')?{}:config;
 					
-					if(config.hasOwnProperty("text")){
-						sidebar_element.text(config.text);
-					}
-					
-
-					if(config.trace){
-						//highlight the element
-						sidebar_element.hover(
-						function(){
-							JOBAD.UI.highlight(element);
-						},
-						function(){
-							JOBAD.UI.unhighlight(element);
-						});
-					}
-
-					if(typeof config.click == "function"){
-						sidebar_element.click(config.click);
-					}
-
-					var icon = false;
-					if(typeof config["class"] == 'string'){
-						var notClass = config["class"];
-						
-						if(JOBAD.UI.Sidebar.config.icons.hasOwnProperty(notClass)){
-							icon = JOBAD.UI.Sidebar.config.icons[notClass];
-						}						
-					}
-					
-					if(typeof config.icon == 'string'){
-						icon = config.icon;
-					}
-					if(typeof icon == 'string'){
-						sidebar_element.html("<img src='"+icon+"' width='16px' height='16px'>");
-						sidebar_element.hover(function(){
-							JOBAD.UI.hover.enable(JOBAD.refs.$("<div>").text(config.text).html(), "JOBAD_Sidebar_Hover JOBAD_Sidebar "+((typeof config["class"] == 'string')?" JOBAD_Notification_"+config["class"]:""));
-						}, function(){
-							JOBAD.UI.hover.disable();
-						});
-					} else {
-						sidebar_element.addClass("JOBAD_Notification_"+notClass);
-					}
-					
-					if(typeof config.menu != 'undefined'){
-						var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
-							return org.apply(sidebar_element, [element, me]);
-						});
-						JOBAD.UI.ContextMenu.enable(sidebar_element, function(){return entries;});
-					}
-					
-
 					return sidebar_element;
 				}, 
 				/*

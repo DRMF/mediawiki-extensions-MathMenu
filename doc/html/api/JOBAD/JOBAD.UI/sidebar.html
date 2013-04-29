@@ -467,6 +467,7 @@
 <ul>
 <li><strong>Object</strong> <code>JOBAD.UI.Sidebar.config</code> - JOBAD Sidebar UI Configuration namespace</li>
 <li><strong>Number</strong> <code>JOBAD.UI.Sidebar.config.width</code> Width of the sidebar. Default: 100. </li>
+<li><strong>Object</strong> <code>JOBAD.UI.Sidebar.config.iconDistance</code> Minimal icon distance (in pixels) before grouping. Default: 15. </li>
 <li><p><strong>Object</strong> <code>JOBAD.UI.Sidebar.config.icons</code> Contains urls for default icons. (Depending on the class)</p></li>
 <li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.wrap(element)</code> - Wraps an element to create a sidebar UI. </p>
 
@@ -480,14 +481,24 @@
 <li><code>element</code> a jQuery-ish object to remove the sidebar from. </li>
 <li><strong>returns</strong> the original element, now unwrapped. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(sidebar, element)</code> - Adds a new notification to the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(sidebar, element, config)</code> - Adds a new notification to the sidebar. </p>
 
 <ul>
 <li><code>sidebar</code> Sidebar to bind notification to. </li>
 <li><code>element</code> Element to bind notification to. </li>
+<li><strong>Object</strong> <code>config</code> A map which may contain any of the following members: 
+<ul>
+<li><strong>String</strong> <code>config.class</code> Notification class. If provided should be one of "info", "warning" or "error". </li>
+<li><strong>String</strong> <code>config.icon</code> An icon to use for the notification. Default depends on <code>config.class</code>. </li>
+<li><strong>String</strong> <code>config.menu</code> A context menu for the notification. </li>
+<li><strong>Object</strong> <code>config.menuThis</code> value of <code>this</code> for menu callbacks. </li>
+<li><strong>String</strong> <code>config.text</code> A text to use for the notification. </li>
+<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification ? </li>
+<li><strong>Function</strong> <code>config.click</code> On click callback. </li>
+</ul></li>
 <li><strong>returns</strong> a new empty jQuery sidebar notification element. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(notification)</code> - Removes a notification from the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.removeNotification(notification)</code> - Removes a notification from the sidebar. </p>
 
 <ul>
 <li><code>notification</code> Notification to remove. </li>

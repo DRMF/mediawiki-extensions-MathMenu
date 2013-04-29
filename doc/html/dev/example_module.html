@@ -587,7 +587,7 @@
 <h2>test.sidebar</h2>
 
 <div class="codehilite"><pre><code><span class="cm">/*</span>
-<span class="cm">    example6.js - An example module for JOBAD. </span>
+<span class="cm">    example5.js - An example module for JOBAD. </span>
 <span class="cm">    Counts the words in a paragraph and shows a tooltip in the sidebar. Also logs any other event. </span>
 <span class="cm">*/</span>
 <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
@@ -603,7 +603,7 @@
             <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">element</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">target</span><span class="p">){</span>
                 <span class="kd">var</span> <span class="nx">$target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
-                <span class="nb">window</span><span class="p">.</span><span class="nx">note</span> <span class="o">=</span> <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">$target</span><span class="p">,</span> <span class="p">{</span>
+                <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">$target</span><span class="p">,</span> <span class="p">{</span>
                     <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="nx">$target</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">length</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot; Characters of text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;trace&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> 
                     <span class="s2">&quot;class&quot;</span><span class="o">:</span> <span class="nx">classes</span><span class="p">[</span><span class="nx">i</span> <span class="o">%</span> <span class="mi">3</span><span class="p">],</span>
@@ -613,11 +613,19 @@
                     <span class="s2">&quot;menu&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;Remove this notification&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
                         <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">removeNotification</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
                     <span class="p">}]]</span>
-                <span class="p">})</span>
+                <span class="p">});</span>
+                <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">$target</span><span class="p">,</span> <span class="p">{</span>
+                    <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="s2">&quot;A second something. &quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;trace&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> 
+                    <span class="s2">&quot;class&quot;</span><span class="o">:</span> <span class="nx">classes</span><span class="p">[(</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span><span class="p">],</span>
+                    <span class="s2">&quot;click&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+                            <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">leftClick</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="nx">$target</span><span class="p">);</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;menu&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;Remove this notification&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+                        <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">removeNotification</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                    <span class="p">}]]</span>
+                <span class="p">});</span>
             <span class="p">})</span>
-        <span class="p">},</span>
-        <span class="nx">onEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Event &#39;&quot;</span><span class="o">+</span><span class="nx">event</span><span class="o">+</span><span class="s2">&quot;&#39; was raised! &quot;</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">});</span>
 <span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>

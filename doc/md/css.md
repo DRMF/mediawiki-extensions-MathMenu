@@ -11,5 +11,8 @@ This is a list of all of the JOBAD CSS classes.
 			* `JOBAD_Notification_info` - An info. 
 			* `JOBAD_Notification_warning` - A warning. 
 			* `JOBAD_Notification_error` - An error. 
+		* `JOBAD_Sidebar_group` - A Notification group. 
+		* `JOBAD_Sidebar_Single` - A single notification. 
+		* `JOBAD_Sidebar_group_element` - A single notification which is a member of a group. 
 
 
