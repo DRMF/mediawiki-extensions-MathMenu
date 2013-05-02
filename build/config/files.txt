@@ -5,3 +5,4 @@ JOBAD.core.events.js
 JOBAD.ui.js
 JOBAD.events.js
 JOBAD.config.js
+JOBAD.wrap.js

@@ -473,14 +473,12 @@
 <li><strong>Array[Mixed]</strong> <code>options</code> Array of options to pass to the module. </li>
 <li><strong>Boolean</strong> <code>ignoredeps</code> Set to <code>true</code> to load the module without checking if its dependencies are satisfied. Defaults to <code>false</code>. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>.modules.loaded(module)</code> Checks if a module is loaded. </p>
-
+<li><strong>Function</strong> <code>.modules.loaded(module)</code> Checks if a module is loaded. 
 <ul>
 <li><strong>String</strong> Name of the module to check. </li>
 <li><strong>returns</strong> boolean indicating if the module is loaded. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>.modules.activate(module)</code> Activates a module. </p>
-
+<li><strong>Function</strong> <code>.modules.activate(module)</code> Activates a module. 
 <ul>
 <li><strong>String</strong> <code>module</code> The module to activate. </li>
 </ul></li>
@@ -493,6 +491,7 @@
 <li><strong>String</strong> <code>module</code> The module to check for.</li>
 <li><strong>returns</strong> boolean indicating if the module is loaded and active. </li>
 </ul></li>
+<li><strong>Function</strong> <code>.modules.getIdentifiers()</code> Gets the identifiers of all loaded modules. </li>
 <li><strong>Function</strong> <code>.modules.iterate(callback)</code> Iterate over all active modules with callback. 
 <ul>
 <li><strong>Function</strong> <code>callback(module)</code>

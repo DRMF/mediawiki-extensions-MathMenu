@@ -31,6 +31,7 @@ JOBAD.ifaces.push(function(me, args){
 				JOBAD.error('Error loading module '+module);			
 			}
 			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
+			InstanceModules[module].onActivate(me);
 			return true;
 		} else {
 			var deps = JOBAD.modules.getDependencyList(module);
@@ -61,11 +62,12 @@ JOBAD.ifaces.push(function(me, args){
 		@param module Module to be deactivated. 
 	*/
 	this.modules.deactivate = function(module){
-		if(me.modules.isActive(module)){
-			JOBAD.warn("Module '"+module+"' is already deactivated. ");
+		if(!me.modules.isActive(module)){
+			JOBAD.console.warn("Module '"+module+"' is already deactivated. ");
 			return;
 		}
 		disabledModules.push(module);
+		InstanceModules[module].onDeactivate(me);
 	}
 
 	/*
@@ -74,10 +76,11 @@ JOBAD.ifaces.push(function(me, args){
 	*/
 	this.modules.activate = function(module){
 		if(me.modules.isActive(module)){
-			JOBAD.warn("Module '"+module+"' is already activated. ");
+			JOBAD.console.warn("Module '"+module+"' is already activated. ");
 			return;	
 		}
 		disabledModules = JOBAD.refs._.without(disabledModules, module);
+		InstanceModules[module].onActivate(me);
 	};
 	
 	/*
@@ -86,6 +89,30 @@ JOBAD.ifaces.push(function(me, args){
 	*/
 	this.modules.isActive = function(module){
 		return (JOBAD.refs._.indexOf(disabledModules, module)==-1); 
+	};
+	
+	/*
+		Gets the identifiers of all loaded modules. 
+	*/	
+	this.modules.getIdentifiers = function(){
+		var keys = [];
+		for(var key in InstanceModules){
+			if(InstanceModules.hasOwnProperty(key)){
+				keys.push(key);
+			}	
+		}
+		return keys;
+	};
+	
+	/*
+		Gets the loaded module with the specefied identifier. 
+	*/	
+	this.modules.getLoadedModule = function(id){
+		if(!InstanceModules.hasOwnProperty(id)){
+			JOBAD.console.warn("Can't find JOBAD.modules.loadedModule instance of '"+id+"'");
+			return;
+		}
+		return InstanceModules[id];
 	};
 	
 	/*
@@ -134,7 +161,7 @@ JOBAD.ifaces.push(function(me, args){
 JOBAD.modules = {};
 JOBAD.modules.extensions = {}; //EXtensions for modules
 JOBAD.modules.ifaces = []; //JOABd Module ifaces
-JOBAD.modules.cleanProperties = ["init", "globalinit", "info"];
+JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit", "info"];
 
 var moduleList = {};
 var moduleStorage = {};
@@ -171,7 +198,9 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 	var properObject = 
 	{
 		"globalinit": function(){},
-		"init": function(){}
+		"init": function(){},
+		"activate": function(){},
+		"deactivate": function(){}
 	};
 	
 	for(var key in properObject){
@@ -434,7 +463,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		var mod = JOBAD.modules.extensions[key];
 		var val = ServiceObject[key];
 		if(typeof mod["onLoad"] == 'function'){
-			mod.onLoad(val, ServiceObject, this);
+			mod.onLoad.call(this, val, ServiceObject, this);
 		}
 	}
 	
@@ -442,6 +471,18 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	for(var i=0;i<JOBAD.modules.ifaces.length;i++){
 		var mod = JOBAD.modules.ifaces[i];
 		mod[1].call(this, ServiceObject);
+	}
+	
+	//Core events: activate, deactivate
+	this.onActivate = ServiceObject.activate;
+	this.onDeactivate = ServiceObject.deactivate;
+	
+	this.activate = function(){
+		return JOBADInstance.modules.activate(this.info().identifier);
+	};
+	
+	this.deactivate = function(){
+		return JOBADInstance.modules.deactivate(this.info().identifier);
 	}
 	
 	ServiceObject.init.apply(this, params);		

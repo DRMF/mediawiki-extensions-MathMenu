@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 29 Apr 2013 23:58:45 +0200
+	built: Thu, 02 May 2013 14:47:09 +0200
 */
 
 var JOBAD = (function(){
@@ -236,6 +236,7 @@ JOBAD.ifaces.push(function(me, args){
 				JOBAD.error('Error loading module '+module);			
 			}
 			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
+			InstanceModules[module].onActivate(me);
 			return true;
 		} else {
 			var deps = JOBAD.modules.getDependencyList(module);
@@ -266,11 +267,12 @@ JOBAD.ifaces.push(function(me, args){
 		@param module Module to be deactivated. 
 	*/
 	this.modules.deactivate = function(module){
-		if(me.modules.isActive(module)){
-			JOBAD.warn("Module '"+module+"' is already deactivated. ");
+		if(!me.modules.isActive(module)){
+			JOBAD.console.warn("Module '"+module+"' is already deactivated. ");
 			return;
 		}
 		disabledModules.push(module);
+		InstanceModules[module].onDeactivate(me);
 	}
 
 	/*
@@ -279,10 +281,11 @@ JOBAD.ifaces.push(function(me, args){
 	*/
 	this.modules.activate = function(module){
 		if(me.modules.isActive(module)){
-			JOBAD.warn("Module '"+module+"' is already activated. ");
+			JOBAD.console.warn("Module '"+module+"' is already activated. ");
 			return;	
 		}
 		disabledModules = JOBAD.refs._.without(disabledModules, module);
+		InstanceModules[module].onActivate(me);
 	};
 	
 	/*
@@ -291,6 +294,30 @@ JOBAD.ifaces.push(function(me, args){
 	*/
 	this.modules.isActive = function(module){
 		return (JOBAD.refs._.indexOf(disabledModules, module)==-1); 
+	};
+	
+	/*
+		Gets the identifiers of all loaded modules. 
+	*/	
+	this.modules.getIdentifiers = function(){
+		var keys = [];
+		for(var key in InstanceModules){
+			if(InstanceModules.hasOwnProperty(key)){
+				keys.push(key);
+			}	
+		}
+		return keys;
+	};
+	
+	/*
+		Gets the loaded module with the specefied identifier. 
+	*/	
+	this.modules.getLoadedModule = function(id){
+		if(!InstanceModules.hasOwnProperty(id)){
+			JOBAD.console.warn("Can't find JOBAD.modules.loadedModule instance of '"+id+"'");
+			return;
+		}
+		return InstanceModules[id];
 	};
 	
 	/*
@@ -339,7 +366,7 @@ JOBAD.ifaces.push(function(me, args){
 JOBAD.modules = {};
 JOBAD.modules.extensions = {}; //EXtensions for modules
 JOBAD.modules.ifaces = []; //JOABd Module ifaces
-JOBAD.modules.cleanProperties = ["init", "globalinit", "info"];
+JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit", "info"];
 
 var moduleList = {};
 var moduleStorage = {};
@@ -376,7 +403,9 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 	var properObject = 
 	{
 		"globalinit": function(){},
-		"init": function(){}
+		"init": function(){},
+		"activate": function(){},
+		"deactivate": function(){}
 	};
 	
 	for(var key in properObject){
@@ -639,7 +668,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		var mod = JOBAD.modules.extensions[key];
 		var val = ServiceObject[key];
 		if(typeof mod["onLoad"] == 'function'){
-			mod.onLoad(val, ServiceObject, this);
+			mod.onLoad.call(this, val, ServiceObject, this);
 		}
 	}
 	
@@ -647,6 +676,18 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	for(var i=0;i<JOBAD.modules.ifaces.length;i++){
 		var mod = JOBAD.modules.ifaces[i];
 		mod[1].call(this, ServiceObject);
+	}
+	
+	//Core events: activate, deactivate
+	this.onActivate = ServiceObject.activate;
+	this.onDeactivate = ServiceObject.deactivate;
+	
+	this.activate = function(){
+		return JOBADInstance.modules.activate(this.info().identifier);
+	};
+	
+	this.deactivate = function(){
+		return JOBADInstance.modules.deactivate(this.info().identifier);
 	}
 	
 	ServiceObject.init.apply(this, params);		
@@ -1701,10 +1742,158 @@ for(var key in JOBAD.Events){
 	JOBAD.modules.cleanProperties.push(key);
 }
 /* end   <JOBAD.events.js> */
+/* start <JOBAD.config.js> */
 /*
-	JOBAD Core build configuration
+	JOBAD Configuration
 */
-JOBAD.config.debug = false;
+JOBAD.storageBackend = {
+	"getKey": function(key, def){
+		var res = JOBAD.storageBackend.engines[JOBAD.config.storageBackend][0](key);
+		if(typeof res == "string"){
+			return JSON.parse(res);
+		} else {
+			return def;
+		}
+	}, 
+	"setKey": function(key, value){return JOBAD.storageBackend.engines[JOBAD.config.storageBackend][1](key, JSON.stringify(value));}
+}
 
+JOBAD.storageBackend.engines = {
+	"none": [function(key){}, function(key, value){}]
+}
+
+var configCache = {};
+
+JOBAD.config.storageBackend = "none";
+
+JOBAD.util.validateConfigSetting = function(obj, key, val){
+	if(!obj.hasOwnProperty(key)){
+		JOBAD.console.warn("Undefined user setting: "+key);
+		return false;
+	}
+	var type = obj[key][0];
+	var validator = obj[key][1];
+	switch(type){
+		case "string":
+			if(typeof val != "string"){
+				return false;
+			}
+			if(JOBAD.refs._.isRegExp(validator)){
+				return validator.test(val);
+			} else if(typeof validator == 'function') {
+				return validator(val);
+			} else {
+				return true;
+			}
+			break;
+		case "bool":
+			return (typeof val == "boolean");
+			break;
+		case "integer":
+			if(typeof val != "number" || val % 1 != 0){
+				return false;
+			}
+			if (typeof validator == "function"){
+				return validator(val);
+			} else if(JOBAD.refs._.isArray(validator)){
+				return (val >= validator[0] && val <= validator[1]);
+			} else {
+				return true;
+			}
+			break;
+		case "number":
+			if(typeof val != "number"){
+				return false;
+			}
+			if (typeof validator == "function"){
+				return validator(val);
+			} else if(JOBAD.refs._.isArray(validator)){
+				return (val >= validator[0] && val <= validator[1]);
+			} else {
+				return true;
+			}
+			break;
+		case "list":
+			return validator.indexOf(val) != -1;
+			break;
+		default:
+			JOBAD.console.warn("Unknown configuration type '"+type+"' for user setting '"+key+"'");
+			break;
+	}
+};
+
+JOBAD.util.getDefaultConfigSetting = function(obj, key){
+	if(!obj.hasOwnProperty(key)){
+		JOBAD.console.warn("Undefined user setting: "+key);
+		return;
+	}
+	var val = obj[key][2];
+	if(JOBAD.util.validateConfigSetting(obj, key, val)){
+		return val;
+	} else {
+		JOBAD.console.warn("Undefined user setting: "+obj);
+	}
+};
+
+JOBAD.modules.extensions.config = {
+	"required": false, //not required
+	
+	"validate": function(prop){return true; }, //anything is ok
+	
+	"init": function(available, value, originalObject, properObject){
+		return available ? value : {};
+	},
+	
+	"onLoad": function(value, properObject, loadedModule){
+		var id = properObject.info.identifier;
+		
+		this.UserConfig = {};
+		
+		this.UserConfig.set = function(prop, val){
+			if(this.UserConfig.canSet(prop, val)){
+				configCache[id][prop] = val;
+			} else {
+				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
+			}
+			JOBAD.storageBackend.setKey(id, configCache[id]);
+		};
+		
+		this.UserConfig.canSet = function(prop, val){
+			return JOBAD.util.validateConfigSetting(value, prop, val);
+		};
+		
+		this.UserConfig.get = function(prop){
+			var res = configCache[id][prop];
+			if(JOBAD.util.validateConfigSetting(value, prop, res)){
+				return res;
+			} else{
+				JOBAD.console.log("Failed to access user setting '"+prop+"'");
+			}
+		};
+		
+		this.UserConfig.reset = function(prop){
+			configCache[id] = JOBAD.storageBackend.getKey(id);
+			if(typeof configCache[id] == "undefined"){
+				configCache[id] = {};
+				for(var key in value){
+					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
+				}
+			}
+		};
+		
+		if(!configCache.hasOwnProperty(id)){//not yet loaded by some other JOBAD
+			this.UserConfig.reset();
+		}
+	}
+}/* end   <JOBAD.config.js> */
+/* start <JOBAD.wrap.js> */
+/*
+	JOBAD.wrap.js
+	
+	Included at the end of the build to register all ifaces..
+*/
+for(var key in JOBAD.modules.extensions){
+	JOBAD.modules.cleanProperties.push(key);
+}/* end   <JOBAD.wrap.js> */
 return JOBAD;
 })();

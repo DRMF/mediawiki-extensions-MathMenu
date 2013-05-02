@@ -10,6 +10,9 @@
 			'author':	'Tom Wiesing',
 			'description':	'Displays the number of characters next to every p and clicking it trigger the original p. '
 		},
+		config: {
+			"test": ["integer", [0, 10], 0, "Test"]
+		},
 		init: function(JOBADInstance){
 			var classes = ["info", "warning", "error"];
 			JOBADInstance.element.find("p")

@@ -9,7 +9,6 @@
 * **Function** `.modules.loaded(module)` Checks if a module is loaded. 
 	* **String** Name of the module to check. 
 	* **returns** boolean indicating if the module is loaded. 
-
 * **Function** `.modules.activate(module)` Activates a module. 
 	* **String** `module` The module to activate. 
 * **Function** `.modules.deactivate(module)` Deactivates a module. 
@@ -17,6 +16,7 @@
 * **Function** `.modules.isActive(module)` Checks if a module is loaded and active. 
 	* **String** `module` The module to check for.
 	* **returns** boolean indicating if the module is loaded and active. 
+* **Function** `.modules.getIdentifiers()` Gets the identifiers of all loaded modules. 
 * **Function** `.modules.iterate(callback)` Iterate over all active modules with callback. 
 	* **Function** `callback(module)`
 		* **Undefined** `this`
