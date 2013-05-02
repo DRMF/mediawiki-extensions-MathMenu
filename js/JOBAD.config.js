@@ -17,10 +17,15 @@ JOBAD.storageBackend.engines = {
 	"none": [function(key){}, function(key, value){}]
 }
 
-var configCache = {};
-
 JOBAD.config.storageBackend = "none";
 
+/*
+	Validates if specefied object of a configuration object can be set. 
+	@param	obj Configuration Object
+	@param	key	Key to validate. 
+	@param	val	Value to vaildate. 
+	@returns boolean
+*/
 JOBAD.util.validateConfigSetting = function(obj, key, val){
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
@@ -77,6 +82,12 @@ JOBAD.util.validateConfigSetting = function(obj, key, val){
 	}
 };
 
+/*
+	Gets the default of a configuration object
+	@param	obj Configuration Object
+	@param	key	Key to get. 
+	@returns object
+*/
 JOBAD.util.getDefaultConfigSetting = function(obj, key){
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
@@ -89,6 +100,8 @@ JOBAD.util.getDefaultConfigSetting = function(obj, key){
 		JOBAD.console.warn("Undefined user setting: "+obj);
 	}
 };
+
+var configCache = {};
 
 JOBAD.modules.extensions.config = {
 	"required": false, //not required
@@ -125,6 +138,10 @@ JOBAD.modules.extensions.config = {
 				JOBAD.console.log("Failed to access user setting '"+prop+"'");
 			}
 		};
+		
+		this.UserConfig.getTypes = function(){
+			return JOBAd.refs._.clone(value);
+		}
 		
 		this.UserConfig.reset = function(prop){
 			configCache[id] = JOBAD.storageBackend.getKey(id);

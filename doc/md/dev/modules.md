@@ -3,6 +3,10 @@
 ## Module Template
 
 ```js
+/*
+	A template module. 
+*/
+
 var template = {
 	/* Module Info / Meta Data */
 	info:{
@@ -16,11 +20,11 @@ var template = {
 	},
 	/* Init handlers */
     globalinit: function(){
-	/* 
-		Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
-		@this undefined. 
-		@returns nothing
-	*/
+		/* 
+			Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
+			@this undefined. 
+			@returns nothing
+		*/
 	},
 	init: function(JOBADInstance, param1, param2, param3 /*, ... */){
 		/* 	
@@ -29,6 +33,20 @@ var template = {
 			@param JOBADInstance The instance of JOBAD the module is initiated on. 
 			@param *param Initial parameters passed to this.modules.load
 			@return nothing. 
+		*/
+	},
+	activate: function(JOBADInstance){
+		/*
+			Called every time this module is activated. 
+			@this An instance of JOBAD.modules.loadedModule
+			@param JOBADInstance The instance of JOBAD the module is activated on. 
+		*/
+	},
+	deactivate: function(JOBADInstance){
+		/*
+			Called every time this module is deactivated. 
+			@this An instance of JOBAD.modules.loadedModule
+			@param JOBADInstance The instance of JOBAD the module is deactivated on. 
 		*/
 	},
 	/* Event Handlers */
@@ -58,7 +76,6 @@ var template = {
 			@param target The element the hover has been requested on. 
 			@param JOBADInstance The instance of JOBAD the module is initiated on. 
 			@returns a text, a jqueryish ($(...), Domnode, etc) object to use as hover or a boolean indicating either the text or if something was done. 
-				
 		*/
 	},
 	onEvent: function(event, element, JOBADInstance){
@@ -76,7 +93,6 @@ var template = {
 			@this An instance of JOBAD.modules.loadedModule
 			@param JOBADInstance The instance of JOBAD the module is initiated on. 
 			@returns nothing. 
-				
 		*/
 	}
 };

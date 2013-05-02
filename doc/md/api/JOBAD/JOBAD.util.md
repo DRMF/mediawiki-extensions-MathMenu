@@ -10,4 +10,13 @@
 	* **Object** `menu` The menu to wrap. 
 	* **Function** `wrapper(org, arguments)` The wrapper function. 
 	* **returns** the new representation. 
+* **Function** `JOBAD.util.validateConfigSetting(obj, key, val)` Validates if the specefied object of a configuration object can be set. 
+	* **Object** `obj` Configuration Object
+	* **String** `key` Key to validate. 
+	* **Object** `value` Value to vaildate. 
+	* **returns** boolean. 
+* **Function** `JOBAD.util.getDefaultConfigSetting` Gets the default of a configuration object. 
+	* **Object** `obj` Configuration Object
+	* **String** `key` Key to get. 
+	* **returns** object
 

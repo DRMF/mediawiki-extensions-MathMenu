@@ -466,7 +466,11 @@
 
 <h2>Module Template</h2>
 
-<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
+<div class="codehilite"><pre><code><span class="cm">/*</span>
+<span class="cm">    A template module. </span>
+<span class="cm">*/</span>
+
+<span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
     <span class="cm">/* Module Info / Meta Data */</span>
     <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
         <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;template&#39;</span><span class="p">,</span>  <span class="c1">//(Unique) identifier for this module, preferably human readable. </span>
@@ -479,11 +483,11 @@
     <span class="p">},</span>
     <span class="cm">/* Init handlers */</span>
     <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="cm">/* </span>
-<span class="cm">        Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </span>
-<span class="cm">        @this undefined. </span>
-<span class="cm">        @returns nothing</span>
-<span class="cm">    */</span>
+        <span class="cm">/* </span>
+<span class="cm">            Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </span>
+<span class="cm">            @this undefined. </span>
+<span class="cm">            @returns nothing</span>
+<span class="cm">        */</span>
     <span class="p">},</span>
     <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">,</span> <span class="nx">param3</span> <span class="cm">/*, ... */</span><span class="p">){</span>
         <span class="cm">/*  </span>
@@ -492,6 +496,20 @@
 <span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on. </span>
 <span class="cm">            @param *param Initial parameters passed to this.modules.load</span>
 <span class="cm">            @return nothing. </span>
+<span class="cm">        */</span>
+    <span class="p">},</span>
+    <span class="nx">activate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">){</span>
+        <span class="cm">/*</span>
+<span class="cm">            Called every time this module is activated. </span>
+<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
+<span class="cm">            @param JOBADInstance The instance of JOBAD the module is activated on. </span>
+<span class="cm">        */</span>
+    <span class="p">},</span>
+    <span class="nx">deactivate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">){</span>
+        <span class="cm">/*</span>
+<span class="cm">            Called every time this module is deactivated. </span>
+<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
+<span class="cm">            @param JOBADInstance The instance of JOBAD the module is deactivated on. </span>
 <span class="cm">        */</span>
     <span class="p">},</span>
     <span class="cm">/* Event Handlers */</span>
@@ -521,7 +539,6 @@
 <span class="cm">            @param target The element the hover has been requested on. </span>
 <span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on. </span>
 <span class="cm">            @returns a text, a jqueryish ($(...), Domnode, etc) object to use as hover or a boolean indicating either the text or if something was done. </span>
-
 <span class="cm">        */</span>
     <span class="p">},</span>
     <span class="nx">onEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
@@ -539,7 +556,6 @@
 <span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
 <span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on. </span>
 <span class="cm">            @returns nothing. </span>
-
 <span class="cm">        */</span>
     <span class="p">}</span>
 <span class="p">};</span>

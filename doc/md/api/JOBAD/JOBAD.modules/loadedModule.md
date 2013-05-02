@@ -15,10 +15,10 @@
 
 These functions represent event handlers. If an event is globally disabled (via  [`JOBAD.config.disabledEvents`](../JOBAD.config/index.md)) it will not show up in the JOBAD.modules.loadedModule Instance. 
 
-* **Function** `.keyPressed(key, JOBADInstance)` Simulate a key press event to pass to the module. 
-	* **String** `key` The key to simulate pressing. 
+* **Function** `.onActivate(JOBADInstance)` Called on module activation. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
-	* **returns** `true` if it performed some action, `false` otherwise. 
+* **Function** `.onDeactivate(JOBADInstance)` Called on module deactivation. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 * **Function** `.leftClick(target, JOBADInstance)` Simulate a left click event to pass to the Module. 
 	* **jQuery** `target` The element to simulate clicking on. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
@@ -33,10 +33,25 @@ These functions represent event handlers. If an event is globally disabled (via 
 * **Function** `.onSideBarUpdate(JOBADInstance)` Simulate a sidebar update. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 	* **returns** a text to use as hover text, a jQuery-ish object[^1] or a boolean. 
+	
 ## Further members
 A `JOBAD.modules.loadedModule` instance also contains all non-standard properties of the original Module object. Note
 that any JSON-style objects are referenced (and thus shared among all instances of this module) and everything else 
 is copied. 
+
+* **Function** `.activate()` Activates this module. 
+* **Function** `.deactivate()` Deactivates this module
+
+### .UserConfig
+* **Object** `.UserConfig` User configuration namespace. 
+* **Function** `.UserConfig.reset()` Resets the user configuration to the default. 
+* **Function** `.UserConfig.get(key)` Gets a user value setting. 
+	* **String** `key` Key to retrieve. 
+	* **returns** Object
+* **Function** `.UserConfig.set(key, value)` Sets a user value setting. 
+	* **String** `key` Key to set. 
+	* **Object** `value` Value to store. 
+* **Function** `.UserConfig.getTypes()` Gets the available user configurations and its types. 
 
 ### .localStore
 * **Object** `.localStore` Namespace to store variables bound to this instance of a module. 

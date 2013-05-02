@@ -486,11 +486,13 @@
 <p>These functions represent event handlers. If an event is globally disabled (via  <a href="../JOBAD.config/index.html"><code>JOBAD.config.disabledEvents</code></a>) it will not show up in the JOBAD.modules.loadedModule Instance. </p>
 
 <ul>
-<li><strong>Function</strong> <code>.keyPressed(key, JOBADInstance)</code> Simulate a key press event to pass to the module. 
+<li><strong>Function</strong> <code>.onActivate(JOBADInstance)</code> Called on module activation. 
 <ul>
-<li><strong>String</strong> <code>key</code> The key to simulate pressing. </li>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
-<li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.onDeactivate(JOBADInstance)</code> Called on module deactivation. 
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
 </ul></li>
 <li><strong>Function</strong> <code>.leftClick(target, JOBADInstance)</code> Simulate a left click event to pass to the Module. 
 <ul>
@@ -512,14 +514,38 @@
 <li><strong>Function</strong> <code>.onSideBarUpdate(JOBADInstance)</code> Simulate a sidebar update. 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> A reference to <code>.getJOBAD()</code>. </li>
-<li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="loadedModule.html#fn-1">2</a></sup> or a boolean. 
-<h2>Further members</h2></li>
+<li><strong>returns</strong> a text to use as hover text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="loadedModule.html#fn-1">2</a></sup> or a boolean. </li>
 </ul></li>
 </ul>
+
+<h2>Further members</h2>
 
 <p>A <code>JOBAD.modules.loadedModule</code> instance also contains all non-standard properties of the original Module object. Note
 that any JSON-style objects are referenced (and thus shared among all instances of this module) and everything else 
 is copied. </p>
+
+<ul>
+<li><strong>Function</strong> <code>.activate()</code> Activates this module. </li>
+<li><strong>Function</strong> <code>.deactivate()</code> Deactivates this module</li>
+</ul>
+
+<h3>.UserConfig</h3>
+
+<ul>
+<li><strong>Object</strong> <code>.UserConfig</code> User configuration namespace. </li>
+<li><strong>Function</strong> <code>.UserConfig.reset()</code> Resets the user configuration to the default. </li>
+<li><strong>Function</strong> <code>.UserConfig.get(key)</code> Gets a user value setting. 
+<ul>
+<li><strong>String</strong> <code>key</code> Key to retrieve. </li>
+<li><strong>returns</strong> Object</li>
+</ul></li>
+<li><strong>Function</strong> <code>.UserConfig.set(key, value)</code> Sets a user value setting. 
+<ul>
+<li><strong>String</strong> <code>key</code> Key to set. </li>
+<li><strong>Object</strong> <code>value</code> Value to store. </li>
+</ul></li>
+<li><strong>Function</strong> <code>.UserConfig.getTypes()</code> Gets the available user configurations and its types. </li>
+</ul>
 
 <h3>.localStore</h3>
 
