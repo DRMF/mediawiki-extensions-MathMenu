@@ -53,6 +53,8 @@ JOBAD.toString = function(){
 	return "function(/* JOBAD "+JOBAD.version+" */){ [non-native non-trivial code] }";
 };
 
+JOBAD.toString.toString = JOBAD.toString; //self-reference!
+
 /* JOBAD Global config */
 JOBAD.config = 
 {

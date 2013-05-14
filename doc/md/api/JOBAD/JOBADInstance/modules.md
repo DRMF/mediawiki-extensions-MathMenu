@@ -17,6 +17,8 @@
 	* **String** `module` The module to check for.
 	* **returns** boolean indicating if the module is loaded and active. 
 * **Function** `.modules.getIdentifiers()` Gets the identifiers of all loaded modules. 
+* **Function** `.modules.getLoadedModule(id)` Gets the specefied loaded module. 
+	* **String** `id` Identifier of the module to get. 
 * **Function** `.modules.iterate(callback)` Iterate over all active modules with callback. 
 	* **Function** `callback(module)`
 		* **Undefined** `this`

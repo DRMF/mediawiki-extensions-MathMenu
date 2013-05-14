@@ -14,5 +14,8 @@ This is a list of all of the JOBAD CSS classes.
 		* `JOBAD_Sidebar_group` - A Notification group. 
 		* `JOBAD_Sidebar_Single` - A single notification. 
 		* `JOBAD_Sidebar_group_element` - A single notification which is a member of a group. 
+	* `JOBAD_ConfigUI` - Applied to the JOBAD Configuration UI Elements. 
+		* `JOBAD_ConfigUI_tablemain` - The main table
+		* `JOBAD_ConfigUI_infobox` - The infobox containing information about the modules
 
 

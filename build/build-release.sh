@@ -1,9 +1,12 @@
 #!/bin/bash
 
 mkdir -p "release"
-build="release/JOBAD.js"
-buildmin="release/JOBAD.min.js"
-sourcedir=../js
+basedir=../
+destdir=release/
+
+build="$destdir"JOBAD.js
+buildmin="$destdir"JOBAD.min.js
+sourcedir="$basedir"js
 
 echo "JOBAD build script "
 
@@ -55,6 +58,19 @@ cat config/min_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $buildmin
 RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"
 [ $RETVAL -ne 0 ] && echo "FAIL" && rm $buildmin
+
+echo "Done. Copying additional files ..."
+while IFS=$'\t' read -r -a readData
+do
+	source="$basedir""${readData[0]}"
+	dest="$destdir""${readData[1]}"
+	
+	echo $source " => " $dest
+	cp $source $dest
+
+done < "./config/copies.txt"
+
+printf "Done. "
 
 printf "Cleaning up ... "
 

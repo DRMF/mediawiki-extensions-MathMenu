@@ -59,3 +59,13 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 	}
 	
 }
+
+/*
+	Create a unique Id
+*/
+JOBAD.util.UID = function(){
+	var time = (new Date()).getTime();
+	var id1 = Math.floor(Math.random()*1000);
+	var id2 = Math.floor(Math.random()*1000);
+	return ""+time+"_"+id1+"_"+id2;
+};

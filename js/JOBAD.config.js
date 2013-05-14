@@ -1,6 +1,7 @@
 /*
 	JOBAD Configuration
 */
+
 JOBAD.storageBackend = {
 	"getKey": function(key, def){
 		var res = JOBAD.storageBackend.engines[JOBAD.config.storageBackend][0](key);
@@ -140,7 +141,7 @@ JOBAD.modules.extensions.config = {
 		};
 		
 		this.UserConfig.getTypes = function(){
-			return JOBAd.refs._.clone(value);
+			return JOBAD.refs._.clone(value);
 		}
 		
 		this.UserConfig.reset = function(prop){
@@ -158,3 +159,91 @@ JOBAD.modules.extensions.config = {
 		}
 	}
 }
+
+/*
+	Config Manager UI
+*/
+
+JOBAD.ifaces.push(function(){
+	this.showConfigUI = function(){
+	
+		var $Div = JOBAD.refs.$("<div>");
+		
+		$Div.attr("title", "JOBAD Configuration Utility");
+
+		var mods = this.modules.getIdentifiers();
+
+		//create the table
+		
+		var $table = JOBAD.refs.$("<table>")
+		.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_tablemain")
+		.append(
+			JOBAD.refs.$("<colgroup>").append(
+				JOBAD.refs.$("<col>").css("width", "10%"), 
+				JOBAD.refs.$("<col>").css("width", "90%")
+			)
+		);
+		
+		var len = mods.length;		
+
+		var $displayer = JOBAD.refs.$("<td>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_infobox").attr("rowspan", len+1);
+
+		var showMain = function(){
+			$displayer
+			.trigger("JOBAD.modInfoClose")
+			.html("")		
+			.text("JOBAD Core Info will go here")
+			.one('JOBAD.modInfoClose', function(){
+				//Closing Main
+				//in the future we might save stuff here
+				JOBAD.console.log("ModCloseSafe: <main>");
+			});
+			return;
+		};
+
+		var showInfoAbout = function(mod){
+			//show info about id
+			$displayer
+			.trigger("JOBAD.modInfoClose")
+			.html("")		
+			.text(mod.info().description)
+			.one('JOBAD.modInfoClose', function(){
+				//Closing mod
+				//in the future we will save settings here
+				JOBAD.console.log("ModCloseSafe: "+mod.info().identifier);
+			});
+			return;
+		};
+
+
+		$("<tr>").append(
+			$("<td>").text("JOBAD Core").click(showMain),
+			$displayer
+		).appendTo($table);
+
+		for(var i=0;i<len;i++){
+			var mod = this.modules.getLoadedModule(mods[i]);
+			JOBAD.refs.$("<tr>").append(
+				$("<td>").text(mod.info().identifier)
+				.data("JOBAD.module", mod)
+				.click(function(){
+					showInfoAbout(JOBAD.refs.$(this).data("JOBAD.module"));
+				})
+			).appendTo($table);					
+		}
+		
+		$Div.append($table);
+		
+		$Div.dialog({
+			modal: true,
+			width: 600,
+			height: 450,
+			open: showMain,
+			close: function(){
+				$displayer
+				.trigger("JOBAD.modInfoClose")
+			}
+		});	
+	}
+});
+
