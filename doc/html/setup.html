@@ -504,8 +504,8 @@ To get the code use </p>
 JOBAD itself depends on: </p>
 
 <ul>
-<li><a href="http://jquery.com">jQuery</a> - tested with version 1.9.0</li>
-<li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.1</li>
+<li><a href="http://jquery.com">jQuery</a> - tested with version 2.0.0</li>
+<li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.3</li>
 <li><a href="http://underscorejs.org/">UNDERSCORE.JS</a> - tested with version 1.4.4</li>
 </ul>
 
@@ -513,10 +513,11 @@ JOBAD itself depends on: </p>
 
 <div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
     <span class="c">&lt;!-- other header tags --&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-1.9.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/jquery/jquery-ui-1.10.1.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./js/deps/underscore/underscore-min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./css/jquery-ui-1.10.1.min.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-ui-1.10.3.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/underscore/underscore-min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/jquery-ui.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/jquery.ui.theme.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
     <span class="c">&lt;!-- More files to include --&gt;</span>
 <span class="nt">&lt;/head&gt;</span>
 </code></pre></div>
@@ -527,6 +528,7 @@ It is also possible to include each file individually. </p>
 <p>As a developer who wants to work on the JOBAD core you can load the JOBAD Core files: </p>
 
 <div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.core.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.config.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.utils.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.core.modules.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.core.events.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
@@ -548,7 +550,7 @@ It is also possible to include each file individually. </p>
 
 <p>Finally, you should include the JOBAD CSS file in your website: </p>
 
-<div class="codehilite"><pre><code>    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./css/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+<div class="codehilite"><pre><code>    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;./build/release/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 
 <p>That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 
