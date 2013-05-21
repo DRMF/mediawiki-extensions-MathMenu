@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 16 May 2013 20:30:13 +0200
+	built: Tue, 21 May 2013 13:34:58 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -549,8 +549,6 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		properObject.namespace = {};
 
-
-		//TODO: make this an iface or an extension
 		for(var key in ModuleObject){
 			if(ModuleObject.hasOwnProperty(key) && JOBAD.modules.cleanProperties.indexOf(key) == -1){
 				if(properObject.info.hasCleanNamespace){
@@ -709,6 +707,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		return JOBADInstance;	
 	};
 
+
+	this.isActive = function(){
+		return JOBADInstance.modules.isActive(this.info().identifier);
+	}
 
 	//Initilisation
 
@@ -2084,28 +2086,111 @@ JOBAD.ifaces.push(function(){
 
 		var showMain = function(){
 			$displayer
-			.trigger("JOBAD.modInfoClose")
-			.html("")		
-			.text("JOBAD Core Info will go here")
+			.trigger("JOBAD.modInfoClose")	
+			.html("")	
+			.append(
+				$("<span>").text("JOBAD Core Version "+JOBAD.version),
+				"<br />",
+				$("<pre>").text("Copyright (C) 2013 KWARC Group <kwarc.info>")
+			)
 			.one('JOBAD.modInfoClose', function(){
 				//Closing Main
 				//in the future we might save stuff here
-				JOBAD.console.log("ModCloseSafe: <main>");
 			});
 			return;
 		};
 
 		var showInfoAbout = function(mod){
-			//show info about id
+		
+			var info = mod.info();
+			
+			var div = JOBAD.refs.$("<div class='JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs'>")
+			
+			var ul = JOBAD.refs.$("<ul>").appendTo(div);
+			
+			var info_id = JOBAD.util.UID();
+			var $info = JOBAD.refs.$("<div>").attr("id", info_id).appendTo(div);
+			
+			
+			var config_id = JOBAD.util.UID();
+			var $config = JOBAD.refs.$("<div>").attr("id", config_id).appendTo(div);
+			
+			$info.append(
+				JOBAD.refs.$("<span>").text(info.title).css("font-weight", "bold"),
+				" [",
+				JOBAD.refs.$("<span>").text(info.identifier),
+				"] <br />"
+			);
+			if(typeof info.version == 'string' && info.version != ""){
+				$info.append(
+					"Version ",
+					JOBAD.refs.$("<span>").css("text-decoration", "italic").text(info.version)
+				);
+			}
+			
+			var id1 = JOBAD.util.UID();
+			var id2 = JOBAD.util.UID();
+			var id3 = JOBAD.util.UID();
+			
+			var r_on = JOBAD.refs.$("<input type='radio' name='"+id1+"' id='"+id2+"'>");
+			var r_off = JOBAD.refs.$("<input type='radio' name='"+id1+"' id='"+id3+"'>");
+			
+			var OnOff = JOBAD.refs.$('<span>')
+			.append(
+				r_on, "<label for='"+id2+"'>On</label>",
+				r_off, "<label for='"+id3+"'>Off</label>"
+			);
+			
+			if(mod.isActive()){
+				r_on[0].checked = true;
+			} else {
+				r_off[0].checked = true;
+			}
+			OnOff.buttonset();
+			
+			var onChange = function(){
+				if(r_on.is(":checked")){
+					if(!mod.isActive()){
+						mod.activate();
+					}
+				} else {
+					if(mod.isActive()){
+						mod.deactivate();
+					}
+				}
+			};
+			
+			r_on.change(onChange);
+			
+			r_off.change(onChange);
+			
+			
+			$info.append(
+				"by ",
+				JOBAD.refs.$("<span>").css("text-decoration", "italic").text(info.author),
+				"<br />",
+				OnOff,
+				"<br />",
+				JOBAD.refs.$("<span>").text(info.description)
+			);
+			
+			
+			ul.append(
+				"<li><a href='#"+info_id+"'>About</li>",
+				"<li><a href='#"+config_id+"'>Config</li>"
+			)
+			
 			$displayer
 			.trigger("JOBAD.modInfoClose")
 			.html("")		
-			.text(mod.info().description)
+			.append(div)
 			.one('JOBAD.modInfoClose', function(){
 				//Closing mod
 				//in the future we will save settings here
-				JOBAD.console.log("ModCloseSafe: "+mod.info().identifier);
 			});
+			
+			div.tabs();
+			
 			return;
 		};
 
@@ -2118,7 +2203,7 @@ JOBAD.ifaces.push(function(){
 		for(var i=0;i<len;i++){
 			var mod = this.modules.getLoadedModule(mods[i]);
 			JOBAD.refs.$("<tr>").append(
-				$("<td>").text(mod.info().identifier)
+				$("<td>").text(mod.info().title)
 				.data("JOBAD.module", mod)
 				.click(function(){
 					showInfoAbout(JOBAD.refs.$(this).data("JOBAD.module"));

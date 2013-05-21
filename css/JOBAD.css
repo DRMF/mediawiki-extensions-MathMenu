@@ -115,9 +115,14 @@
 	vertical-align: top; 
 }
 
+/* Infobox */
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_subtabs {
+	font-size: 70%;
+}
+
 /*
 	JOBAD jQuery UI CSS compatibility fixes
 */
 
 /* fix for bad size */
-.ui-widget { font-size: 62.5%; }
+.ui-widget { font-size: 70%; }

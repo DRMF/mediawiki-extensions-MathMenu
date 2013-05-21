@@ -28,7 +28,6 @@ All 3 dependencies are bundled with JOBAD. You can include them in your HTML doc
 	<script src="js/deps/jquery/jquery-ui-1.10.3.js"></script>
 	<script src="js/deps/underscore/underscore-min.js"></script>
 	<link href="css/jquery-ui.css" rel="stylesheet">
-	<link href="css/jquery.ui.theme.css" rel="stylesheet">
 	<!-- More files to include -->
 </head>
 ```
@@ -95,4 +94,3 @@ _ //contains whatever it contained before Underscore was loaded
 ## See also
 
 * [API Documentation](api/index.md)
-* [Module Index](modules/index.md) - A list of all available modules. 

@@ -280,8 +280,6 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		properObject.namespace = {};
 
-
-		//TODO: make this an iface or an extension
 		for(var key in ModuleObject){
 			if(ModuleObject.hasOwnProperty(key) && JOBAD.modules.cleanProperties.indexOf(key) == -1){
 				if(properObject.info.hasCleanNamespace){
@@ -440,6 +438,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		return JOBADInstance;	
 	};
 
+
+	this.isActive = function(){
+		return JOBADInstance.modules.isActive(this.info().identifier);
+	}
 
 	//Initilisation
 

@@ -2,6 +2,7 @@
 * Module manager
 	* add Module Manager UI
 	* add UserConfig documentation
+	* add storageBackend Documentation
 	* add:
 		* about Info
 		* User Config Settings
@@ -11,5 +12,4 @@
 	* add a branch stable??
 	* seperate repo?
 * add more complex examples
-* make `JOBAD.config.debug` work after manual change
 * split CSS files?
