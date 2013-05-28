@@ -17,5 +17,9 @@ This is a list of all of the JOBAD CSS classes.
 	* `JOBAD_ConfigUI` - Applied to the JOBAD Configuration UI Elements. 
 		* `JOBAD_ConfigUI_tablemain` - The main table
 		* `JOBAD_ConfigUI_infobox` - The infobox containing information about the modules
+		* `JOBAD_ConfigUI_MetaConfigTitle` - Title of configuration settings
+		* `JOBAD_ConfigUI_MetaConfigDesc` - Description of configuration settings
+		* `JOBAD_ConfigUI_validateFail` - Config settings which failed validation
+		* `JOBAD_ConfigUI_validateOK` - Config settings which validated
 
 

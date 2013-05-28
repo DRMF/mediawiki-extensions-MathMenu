@@ -1,6 +1,8 @@
 /*
 	example5.js - An example module for JOBAD. 
-	Counts the words in a paragraph and shows a tooltip in the sidebar. Also logs any other event. 
+	
+	Counts the words in a paragraph and shows a tooltip in the sidebar. 
+	Currently also serves as an example for UserConfig. 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -28,7 +30,11 @@
 			'description':	'Displays the number of characters next to every p and clicking it trigger the original p. '
 		},
 		config: {
-			"test": ["integer", [0, 10], 0, "Test"]
+			"test": ["string", function(x){return x[0] == "d";}, "default-value-goes-here", ["String", "Has to start with d"]],
+			"bool": ["bool", false, ["Boolean", "Another awesome setting. "]],
+			"num": ["number", [-10, 10], 0, ["Number", "An awesome number between -10 and 10. "]],
+			"int": ["integer", [-10, 10], 0, ["Integer", "An awesome integer between -10 and 10. "]],
+			"alist": ["list", [1, 2, 3, 4], 1, ["Select an option", "Auto", "Yes", "No", "Perhaps"]]
 		},
 		init: function(JOBADInstance){
 			var classes = ["info", "warning", "error"];
@@ -46,7 +52,6 @@
 						JOBADInstance.Sidebar.removeNotification($(this));
 					}]]
 				});
-
 				JOBADInstance.Sidebar.registerNotification($target, {
 					"text": "A second something. ",
 					"trace": true, 
@@ -58,7 +63,6 @@
 						JOBADInstance.Sidebar.removeNotification($(this));
 					}]]
 				});
-				
 			})
 		}
 	});

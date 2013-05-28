@@ -1,11 +1,8 @@
 # Known Issues & TODO
 * Module manager
-	* add Module Manager UI
 	* add UserConfig documentation
 	* add storageBackend Documentation
-	* add:
-		* about Info
-		* User Config Settings
+	* add to Config Manager:
 		* localStore /globalStore access in Debug Mode
 	* remove debug code
 * some kind of module development workflow

@@ -23,15 +23,16 @@
 	JOBAD.modules.register({
 		info:{
 			'identifier':	'test.color.menu',
-			'title':	'Test Module: Colors',
+			'title':	'Test Module: Menu',
 			'author':	'Tom Wiesing',
 			'description':	'Test the menu and adds several items. '
 		},
-		contextMenuEntries: function(target){
+		contextMenuEntries: function(target, JOBADInstance){
 			if(target.is('#nomenu,#nomenu *')){
 				return false;
 			}
-			return {"Colors": 
+			return {
+				"Colors": 
 					{
 						"Make me orange": function(element){element.css("color", "orange");}, 
 						"Highlight my background": function(element){
@@ -40,7 +41,10 @@
 							.animate({ backgroundColor: "#FFFFFF"}, 1500);
 						},
 						"Revert": function(element){element.stop().css('color', '');}
-					}
+					},
+				"Show Config Menu": function(){
+					JOBADInstance.showConfigUI();
+				}
 				};
 		}
 	});

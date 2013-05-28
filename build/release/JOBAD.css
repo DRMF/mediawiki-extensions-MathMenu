@@ -120,6 +120,25 @@
 	font-size: 70%;
 }
 
+/* Config Title */
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_MetaConfigTitle {
+	font-weight: bold; 
+}
+
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_MetaConfigDesc {
+	font-style: italic;
+	margin-left: 20px; 
+}
+
+/* Validation */
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_validateFail {
+	background-color: red; 
+}
+
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_validateOK {
+	background-color: #FFFFD0;
+}
+
 /*
 	JOBAD jQuery UI CSS compatibility fixes
 */

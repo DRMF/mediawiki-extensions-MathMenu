@@ -84,6 +84,7 @@ JOBAD.ifaces.push(function(me, args){
 			return;
 		}
 		disabledModules.push(module);
+		this.element.trigger('JOBAD.Event', ['deactivate', element]);
 		InstanceModules[module].onDeactivate(me);
 	}
 
@@ -97,6 +98,7 @@ JOBAD.ifaces.push(function(me, args){
 			return;	
 		}
 		disabledModules = JOBAD.refs._.without(disabledModules, module);
+		this.element.trigger('JOBAD.Event', ['activate', element]);
 		InstanceModules[module].onActivate(me);
 	};
 	

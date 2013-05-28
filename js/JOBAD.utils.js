@@ -74,15 +74,14 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 	} else {
 		return JOBAD.refs._.clone(obj);
 	}
-	
 }
 
 /*
-	Create a unique Id
+	Creates a unique ID
 */
 JOBAD.util.UID = function(){
 	var time = (new Date()).getTime();
 	var id1 = Math.floor(Math.random()*1000);
 	var id2 = Math.floor(Math.random()*1000);
-	return ""+time+"_"+id1+"_"+id2;
+	return "JOBAD_"+time+"_"+id1+"_"+id2;
 };

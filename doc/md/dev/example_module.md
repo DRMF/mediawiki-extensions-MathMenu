@@ -74,15 +74,16 @@
 	JOBAD.modules.register({
 		info:{
 			'identifier':	'test.color.menu',
-			'title':	'Test Module: Colors',
+			'title':	'Test Module: Menu',
 			'author':	'Tom Wiesing',
 			'description':	'Test the menu and adds several items. '
 		},
-		contextMenuEntries: function(target){
+		contextMenuEntries: function(target, JOBADInstance){
 			if(target.is('#nomenu,#nomenu *')){
 				return false;
 			}
-			return {"Colors": 
+			return {
+				"Colors": 
 					{
 						"Make me orange": function(element){element.css("color", "orange");}, 
 						"Highlight my background": function(element){
@@ -91,7 +92,10 @@
 							.animate({ backgroundColor: "#FFFFFF"}, 1500);
 						},
 						"Revert": function(element){element.stop().css('color', '');}
-					}
+					},
+				"Show Config Menu": function(){
+					JOBADInstance.showConfigUI();
+				}
 				};
 		}
 	});
@@ -128,7 +132,8 @@
 ```js
 /*
 	example5.js - An example module for JOBAD. 
-	Counts the words in a paragraph and shows a tooltip in the sidebar. Also logs any other event. 
+	Counts the words in a paragraph and shows a tooltip in the sidebar. 
+	Currently also serves as an example for UserConfig. 
 */
 (function($){
 	JOBAD.modules.register({
@@ -137,6 +142,13 @@
 			'title':	'Test Module: Sidebar',
 			'author':	'Tom Wiesing',
 			'description':	'Displays the number of characters next to every p and clicking it trigger the original p. '
+		},
+		config: {
+			"test": ["string", function(x){return x[0] == "d";}, "default-value-goes-here", ["String", "Has to start with d"]],
+			"bool": ["bool", false, ["Boolean", "Another awesome setting. "]],
+			"num": ["number", [-10, 10], 0, ["Number", "An awesome number between -10 and 10. "]],
+			"int": ["integer", [-10, 10], 0, ["Integer", "An awesome integer between -10 and 10. "]],
+			"alist": ["list", [1, 2, 3, 4], 1, ["Select an option", "Auto", "Yes", "No", "Perhaps"]]
 		},
 		init: function(JOBADInstance){
 			var classes = ["info", "warning", "error"];

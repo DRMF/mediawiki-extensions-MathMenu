@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 21 May 2013 13:34:58 +0200
+	built: Tue, 28 May 2013 11:09:46 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -254,17 +254,16 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 	} else {
 		return JOBAD.refs._.clone(obj);
 	}
-	
 }
 
 /*
-	Create a unique Id
+	Creates a unique ID
 */
 JOBAD.util.UID = function(){
 	var time = (new Date()).getTime();
 	var id1 = Math.floor(Math.random()*1000);
 	var id2 = Math.floor(Math.random()*1000);
-	return ""+time+"_"+id1+"_"+id2;
+	return "JOBAD_"+time+"_"+id1+"_"+id2;
 };/* end   <JOBAD.utils.js> */
 /* start <JOBAD.core.modules.js> */
 /*
@@ -353,6 +352,7 @@ JOBAD.ifaces.push(function(me, args){
 			return;
 		}
 		disabledModules.push(module);
+		this.element.trigger('JOBAD.Event', ['deactivate', element]);
 		InstanceModules[module].onDeactivate(me);
 	}
 
@@ -366,6 +366,7 @@ JOBAD.ifaces.push(function(me, args){
 			return;	
 		}
 		disabledModules = JOBAD.refs._.without(disabledModules, module);
+		this.element.trigger('JOBAD.Event', ['activate', element]);
 		InstanceModules[module].onActivate(me);
 	};
 	
@@ -1898,6 +1899,9 @@ for(var key in JOBAD.Events){
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//TODO: Update Doc
+
 JOBAD.storageBackend = {
 	"getKey": function(key, def){
 		var res = JOBAD.storageBackend.engines[JOBAD.config.storageBackend][0](key);
@@ -1920,10 +1924,11 @@ JOBAD.config.storageBackend = "none";
 	Validates if specefied object of a configuration object can be set. 
 	@param	obj Configuration Object
 	@param	key	Key to validate. 
-	@param	val	Value to vaildate. 
+	@param	val	Value to validate. 
 	@returns boolean
 */
 JOBAD.util.validateConfigSetting = function(obj, key, val){
+	//TODO: Use update this
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return false;
@@ -1932,51 +1937,313 @@ JOBAD.util.validateConfigSetting = function(obj, key, val){
 	var validator = obj[key][1];
 	switch(type){
 		case "string":
-			if(typeof val != "string"){
-				return false;
-			}
-			if(JOBAD.refs._.isRegExp(validator)){
-				return validator.test(val);
-			} else if(typeof validator == 'function') {
-				return validator(val);
-			} else {
-				return true;
-			}
+			return (validator(val) && typeof val == "string");
 			break;
 		case "bool":
 			return (typeof val == "boolean");
 			break;
 		case "integer":
-			if(typeof val != "number" || val % 1 != 0){
-				return false;
-			}
-			if (typeof validator == "function"){
-				return validator(val);
-			} else if(JOBAD.refs._.isArray(validator)){
-				return (val >= validator[0] && val <= validator[1]);
-			} else {
-				return true;
-			}
+			return (typeof val == "number" && val % 1 == 0 && validator(val));
 			break;
 		case "number":
-			if(typeof val != "number"){
-				return false;
-			}
-			if (typeof validator == "function"){
-				return validator(val);
-			} else if(JOBAD.refs._.isArray(validator)){
-				return (val >= validator[0] && val <= validator[1]);
-			} else {
-				return true;
-			}
+			return (typeof val == "number" && validator(val));
 			break;
 		case "list":
-			return validator.indexOf(val) != -1;
-			break;
-		default:
-			JOBAD.console.warn("Unknown configuration type '"+type+"' for user setting '"+key+"'");
+			return validator(val);
 			break;
 	}
+};
+
+/*
+	Creates a proper User Settings Object
+	@param	obj Configuration Object
+	@param modName	Name of the module
+	@returns object
+*/
+JOBAD.util.createProperUserSettingsObject = function(obj, modName){
+
+	var newObj = {};
+	for(var key in obj){
+		
+		var WRONG_FORMAT_MSG = "Ignoring UserConfig '"+key+"' in module '"+modName+"': Wrong description format";
+		
+		if(obj.hasOwnProperty(key)){
+			(function(){
+			var spec = obj[key];
+			var newSpec = [];
+			
+			if(!JOBAD.refs._.isArray(spec)){
+				JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array required). ");
+				return;
+			}
+			
+			if(spec.length == 0){
+				JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array may not have length zero). ");
+				return;
+			}
+			
+			if(typeof spec[0] == 'string'){
+				var type = spec[0];
+			} else {
+				JOBAD.console.warn(WRONG_FORMAT_MSG+" (type must be a string). ");
+				return; 
+			}
+			
+			if(spec.length == 4){
+				var validator = spec[1];
+				var def = spec[2];
+				var meta = spec[3];
+			} else if(spec.length == 3) {
+				var validator = function(){return true;};
+				var def = spec[1];
+				var meta = spec[2];
+			} else {
+				JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array length 3 or 4 required). ");
+				return; 
+			}
+			
+			switch(type){
+				case "string":
+					newSpec.push("string");
+					
+					//validator
+					if(JOBAD.refs._.isRegExp(validator)){
+						newSpec.push(function(val){return validator.test(val)});
+					} else if(typeof validator == 'function') {
+						newSpec.push(validator);
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown restriction type for 'string'. ). ");
+						return;
+					}
+					
+					//default
+					try{
+						if(newSpec[newSpec.length-1](def) && typeof def == 'string'){
+							newSpec.push(def);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function failed for default value. ). ");
+							return;
+						}
+					} catch(e){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function caused exception for default value. ). ");
+						return;
+					}
+					
+					//meta
+					if(typeof meta == 'string'){
+						newSpec.push([meta, ""]);
+					} else if(JOBAD.refs._.isArray(meta)) {
+						if(meta.length == 1){
+							meta.push("");
+						}
+						if(meta.length == 2){
+							newSpec.push(meta);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data not allowed for length > 2). ");
+							return;
+						}
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data needs to be a string or an array). ");
+						return;
+					}
+					
+					break;
+				case "bool":
+					newSpec.push("bool");
+					
+					//Validator
+					if(spec.length == 4){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Type 'boolean' may not have restrictions. )");
+						return;
+					}					
+					newSpec.push(validator);
+					
+					//default
+					try{
+						if(newSpec[newSpec.length-1](def) && typeof def == 'boolean'){
+							newSpec.push(def);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function failed for default value. ). ");
+							return;
+						}
+					} catch(e){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function caused exception for default value. ). ");
+						return;
+					}
+					
+					//meta
+					if(typeof meta == 'string'){
+						newSpec.push([meta, ""]);
+					} else if(JOBAD.refs._.isArray(meta)) {
+						if(meta.length == 1){
+							meta.push("");
+						}
+						if(meta.length == 2){
+							newSpec.push(meta);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data not allowed for length > 2). ");
+							return;
+						}
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data needs to be a string or an array). ");
+						return;
+					}
+					
+					break;
+				case "integer":
+					newSpec.push("integer");
+					
+					//validator
+					if(JOBAD.refs._.isArray(validator)){
+						if(validator.length == 2){
+							newSpec.push(function(val){return (val >= validator[0])&&(val <= validator[1]);});
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Restriction Array must be of length 2). ");
+						}
+					} else if(typeof validator == 'function') {
+						newSpec.push(validator);
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown restriction type for 'integer'. ). ");
+						return;
+					}
+					
+					//default
+					try{
+						if(newSpec[newSpec.length-1](def) && (def % 1 == 0)){
+							newSpec.push(def);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function failed for default value. ). ");
+							return;
+						}
+					} catch(e){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function caused exception for default value. ). ");
+						return;
+					}
+					
+					//meta
+					if(typeof meta == 'string'){
+						newSpec.push([meta, ""]);
+					} else if(JOBAD.refs._.isArray(meta)) {
+						if(meta.length == 1){
+							meta.push("");
+						}
+						if(meta.length == 2){
+							newSpec.push(meta);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data not allowed for length > 2). ");
+							return;
+						}
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data needs to be a string or an array). ");
+						return;
+					}
+					
+					break;
+				case "number":
+					newSpec.push("number");
+					
+					//validator
+					if(JOBAD.refs._.isArray(validator)){
+						if(validator.length == 2){
+							newSpec.push(function(val){return (val >= validator[0])&&(val <= validator[1]);});
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Restriction Array must be of length 2). ");
+						}
+					} else if(typeof validator == 'function') {
+						newSpec.push(validator);
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown restriction type for 'number'. ). ");
+						return; 
+					}
+					
+					//default
+					try{
+						if(newSpec[newSpec.length-1](def) && typeof def == 'number'){
+							newSpec.push(def);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function failed for default value. ). ");
+							return;
+						}
+					} catch(e){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function caused exception for default value. ). ");
+						return;
+					}
+					
+					//meta
+					if(typeof meta == 'string'){
+						newSpec.push([meta, ""]);
+					} else if(JOBAD.refs._.isArray(meta)) {
+						if(meta.length == 1){
+							meta.push("");
+						}
+						if(meta.length == 2){
+							newSpec.push(meta);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data not allowed for length > 2). ");
+							return;
+						}
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data needs to be a string or an array). ");
+						return;
+					}
+					
+					break;
+				case "list":
+					newSpec.push("list");
+					
+					
+					//validator
+					if(JOBAD.refs._.isArray(validator) && spec.length == 4){
+							if(validator.length == 0){
+								JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array restriction must be non-empty). ");
+								return;
+							}
+							newSpec.push(function(val){return (validator.indexOf(val) != -1);});
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Type 'list' needs array restriction. ). ");
+						return;
+					}
+					
+					//default
+					try{
+						if(newSpec[newSpec.length-1](def)){
+							newSpec.push(def);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function failed for default value. ). ");
+							return;
+						}
+					} catch(e){
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Validation function caused exception for default value. ). ");
+						return;
+					}
+					
+					//meta
+					if(JOBAD.refs._.isArray(meta)) {
+						if(meta.length == validator.length+1){
+							newSpec.push(meta);
+						} else {
+							JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data has wrong length). ");
+							return;
+						}
+					} else {
+						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Meta data for type 'list' an array). ");
+						return;
+					}
+					
+					//construction-data
+					newSpec.push(validator); 
+					
+					break;
+				default:
+					JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown type '"+type+"'. ). ");
+					return;
+					break;
+			}
+			newObj[key] = newSpec;
+			})();
+		}
+	}
+	return newObj;
 };
 
 /*
@@ -1990,12 +2257,35 @@ JOBAD.util.getDefaultConfigSetting = function(obj, key){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return;
 	}
-	var val = obj[key][2];
-	if(JOBAD.util.validateConfigSetting(obj, key, val)){
-		return val;
-	} else {
-		JOBAD.console.warn("Undefined user setting: "+obj);
+	return obj[key][2];
+};
+
+/*
+	Creates a radio button for use with jQuery UI. 
+	@param texts	Texts to use. 
+	@param start	Initial selection
+*/
+JOBAD.util.createRadio = function(texts, start){
+	var id = JOBAD.util.UID();
+	
+	if(typeof start !== 'number'){
+		start = 0;
 	}
+	
+	var Labeller = JOBAD.refs.$('<span>');
+	
+					
+	for(var i=0;i<texts.length;i++){
+		var nid = JOBAD.util.UID();
+		Labeller.append(
+			JOBAD.refs.$("<input type='radio' name='"+id+"' id='"+nid+"'>"),
+			JOBAD.refs.$("<label>").attr("for", nid).text(texts[i])
+		)
+	}
+	
+	Labeller.find("input").eq(start)[0].checked = true;
+	
+	return Labeller.buttonset();
 };
 
 var configCache = {};
@@ -2003,17 +2293,24 @@ var configCache = {};
 JOBAD.modules.extensions.config = {
 	"required": false, //not required
 	
-	"validate": function(prop){return true; }, //anything is ok
+	"validate": function(prop){return true; }, 
 	
 	"init": function(available, value, originalObject, properObject){
-		return available ? value : {};
+		return JOBAD.util.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
 	},
 	
 	"onLoad": function(value, properObject, loadedModule){
 		var id = properObject.info.identifier;
 		
+		//User Configuration Namespace
 		this.UserConfig = {};
 		
+		
+		/*
+			Sets a user configuration. 
+			@param prop	Property to set
+			@param val	Value to set. 
+		*/
 		this.UserConfig.set = function(prop, val){
 			if(this.UserConfig.canSet(prop, val)){
 				configCache[id][prop] = val;
@@ -2023,23 +2320,40 @@ JOBAD.modules.extensions.config = {
 			JOBAD.storageBackend.setKey(id, configCache[id]);
 		};
 		
+		/*
+			Checks if a user configuration can be set. 
+			@param prop	Property to set
+			@param val	Value to set. 
+		*/
 		this.UserConfig.canSet = function(prop, val){
 			return JOBAD.util.validateConfigSetting(value, prop, val);
 		};
 		
+		/*
+			Retrieves a user configuration setting. 
+			@param prop	Property to get
+			@param val	Value to get. 
+		*/
 		this.UserConfig.get = function(prop){
 			var res = configCache[id][prop];
 			if(JOBAD.util.validateConfigSetting(value, prop, res)){
 				return res;
-			} else{
+			} else {
 				JOBAD.console.log("Failed to access user setting '"+prop+"'");
+				
 			}
 		};
 		
+		/*
+			Gets the user configuration types. 
+		*/
 		this.UserConfig.getTypes = function(){
-			return JOBAD.refs._.clone(value);
+			return JOBAD.refs._.clone(value); 
 		}
 		
+		/*
+			Resets the user configuration. 
+		*/
 		this.UserConfig.reset = function(prop){
 			configCache[id] = JOBAD.storageBackend.getKey(id);
 			if(typeof configCache[id] == "undefined"){
@@ -2049,6 +2363,8 @@ JOBAD.modules.extensions.config = {
 				}
 			}
 		};
+		
+		this.UserConfig = JOBAD.util.bindEverything(this.UserConfig, this);
 		
 		if(!configCache.hasOwnProperty(id)){//not yet loaded by some other JOBAD
 			this.UserConfig.reset();
@@ -2089,38 +2405,37 @@ JOBAD.ifaces.push(function(){
 			.trigger("JOBAD.modInfoClose")	
 			.html("")	
 			.append(
-				$("<span>").text("JOBAD Core Version "+JOBAD.version),
+				JOBAD.refs.$("<span>").text("JOBAD Core Version "+JOBAD.version),
 				"<br />",
-				$("<pre>").text("Copyright (C) 2013 KWARC Group <kwarc.info>")
+				JOBAD.refs.$("<pre>").text("Copyright (C) 2013 KWARC Group <kwarc.info>")
 			)
 			.one('JOBAD.modInfoClose', function(){
-				//Closing Main
-				//in the future we might save stuff here
+				//We are closing the main mod info. We will have to do stuff here. 
 			});
 			return;
 		};
 
 		var showInfoAbout = function(mod){
-		
+			//grab mod info
 			var info = mod.info();
 			
 			var div = JOBAD.refs.$("<div class='JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs'>")
-			
 			var ul = JOBAD.refs.$("<ul>").appendTo(div);
 			
+			
+			//Generate Info Tab
 			var info_id = JOBAD.util.UID();
 			var $info = JOBAD.refs.$("<div>").attr("id", info_id).appendTo(div);
 			
-			
-			var config_id = JOBAD.util.UID();
-			var $config = JOBAD.refs.$("<div>").attr("id", config_id).appendTo(div);
-			
+			//Title and Identifier
 			$info.append(
 				JOBAD.refs.$("<span>").text(info.title).css("font-weight", "bold"),
 				" [",
 				JOBAD.refs.$("<span>").text(info.identifier),
 				"] <br />"
 			);
+			
+			//Version
 			if(typeof info.version == 'string' && info.version != ""){
 				$info.append(
 					"Version ",
@@ -2128,28 +2443,11 @@ JOBAD.ifaces.push(function(){
 				);
 			}
 			
-			var id1 = JOBAD.util.UID();
-			var id2 = JOBAD.util.UID();
-			var id3 = JOBAD.util.UID();
+			//On / Off Switch			
+			var OnOff = JOBAD.util.createRadio(["Off", "On"], mod.isActive()?1:0);
 			
-			var r_on = JOBAD.refs.$("<input type='radio' name='"+id1+"' id='"+id2+"'>");
-			var r_off = JOBAD.refs.$("<input type='radio' name='"+id1+"' id='"+id3+"'>");
-			
-			var OnOff = JOBAD.refs.$('<span>')
-			.append(
-				r_on, "<label for='"+id2+"'>On</label>",
-				r_off, "<label for='"+id3+"'>Off</label>"
-			);
-			
-			if(mod.isActive()){
-				r_on[0].checked = true;
-			} else {
-				r_off[0].checked = true;
-			}
-			OnOff.buttonset();
-			
-			var onChange = function(){
-				if(r_on.is(":checked")){
+			OnOff.find("input").change(function(){
+				if(OnOff.find("input").eq(1).is(":checked")){
 					if(!mod.isActive()){
 						mod.activate();
 					}
@@ -2158,12 +2456,7 @@ JOBAD.ifaces.push(function(){
 						mod.deactivate();
 					}
 				}
-			};
-			
-			r_on.change(onChange);
-			
-			r_off.change(onChange);
-			
+			});
 			
 			$info.append(
 				"by ",
@@ -2174,7 +2467,170 @@ JOBAD.ifaces.push(function(){
 				JOBAD.refs.$("<span>").text(info.description)
 			);
 			
+			//Config
+			var config_id = JOBAD.util.UID();
+			var $config = JOBAD.refs.$("<div>").attr("id", config_id).appendTo(div);
 			
+			//Build Config Stuff	
+			var UserConfig = window.debug = mod.UserConfig.getTypes(); //TODO: Remove Debug code here
+			
+			//TODO: Update design a little bit
+			for(var key in UserConfig){
+				(function(){
+				var setting = UserConfig[key];
+				var val = mod.UserConfig.get(key); // Get current value
+				
+				var item = JOBAD.refs.$("<div class='JOBAD_CONFIG_SETTTING'>")
+				.data({
+						"JOBAD.config.setting.key": key,
+						"JOBAD.config.setting.val": val
+				}).appendTo($config);
+				
+				var type = setting[0];
+				var validator = setting[1];
+				var meta = setting[3];
+				switch(type){
+					case "string":
+							item.append(
+								JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+								JOBAD.refs.$("<input type='text'>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK").val(val).keyup(function(){
+									var val = JOBAD.refs.$(this).val();
+									if(validator(val)){
+										item.data("JOBAD.config.setting.val", val);
+										JOBAD.refs.$(this).removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+									} else {
+										JOBAD.refs.$(this).addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+									}
+									
+								}),
+								"<br>", 
+								JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
+							);
+						break;
+					case "bool":
+		
+						var radio = JOBAD.util.createRadio(["True", "False"], val?0:1);	
+		
+						item.append(
+							JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+							radio,
+							"<br>", 
+							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
+						);
+						
+						radio.find("input").change(function(){
+							item.data("JOBAD.config.setting.val", radio.find("input").eq(0).is(":checked"));
+						});
+						
+						break;
+					case "integer":
+					
+						var update = function(val){
+							if(validator(val) && val % 1 == 0){
+								item.data("JOBAD.config.setting.val", val);
+								spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+								return true;
+							} else {
+								spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+								return false;
+							}
+						}
+					
+						var id = JOBAD.util.UID();
+						
+						var spinner = JOBAD.refs.$("<input>")
+						.attr("id", id)
+						.val(val)
+						.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
+						.keyup(function(){
+							var val = JOBAD.refs.$(this).val();
+							if(val != ""){
+								update(parseFloat(val));
+							}
+							
+						})
+						.spinner({
+							spin: function(ev, ui){
+								update(ui.value);
+							}
+						});
+						
+						item.append(
+							JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+							spinner,
+							"<br>", 
+							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
+						);
+
+						break;
+					case "number":
+						var update = function(val){
+							if(validator(val)){
+								item.data("JOBAD.config.setting.val", val);
+								spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+								return true;
+							} else {
+								spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+								return false;
+							}
+						}
+					
+						var id = JOBAD.util.UID();
+						
+						var spinner = JOBAD.refs.$("<input>")
+						.attr("id", id)
+						.val(val)
+						.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
+						.keyup(function(){
+							var val = JOBAD.refs.$(this).val();
+							if(val != ""){
+								update(parseFloat(val));
+							}
+						});
+						
+						item.append(
+							JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+							spinner,
+							"<br>", 
+							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
+						);
+
+						break;
+					case "list":
+						var values = setting[4]; 
+						var meta_data = meta.slice(1)
+						
+						var $select = JOBAD.refs.$("<select>");
+						
+						for(var i=0;i<values.length;i++){
+							$select.append(
+								JOBAD.refs.$("<option>").attr("value", JSON.stringify(values[i])).text(meta_data[i])
+							)
+						}
+						
+						$select
+						.val(JSON.stringify(val))
+						.change(function(){
+							item.data("JOBAD.config.setting.val", JSON.parse(JOBAD.refs.$(this).val()));
+						});
+						
+						item.append(
+							JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+							$select,
+							"<br>"
+						);
+						
+						break;
+					default:
+						JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
+						break;
+				}
+				
+				})();
+				
+			}
+			
+			//Create tabs
 			ul.append(
 				"<li><a href='#"+info_id+"'>About</li>",
 				"<li><a href='#"+config_id+"'>Config</li>"
@@ -2185,8 +2641,11 @@ JOBAD.ifaces.push(function(){
 			.html("")		
 			.append(div)
 			.one('JOBAD.modInfoClose', function(){
-				//Closing mod
-				//in the future we will save settings here
+				//Store all the settings
+				$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
+					var e = JOBAD.refs.$(e);
+					mod.UserConfig.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
+				});
 			});
 			
 			div.tabs();
@@ -2195,15 +2654,15 @@ JOBAD.ifaces.push(function(){
 		};
 
 
-		$("<tr>").append(
-			$("<td>").text("JOBAD Core").click(showMain),
+		JOBAD.refs.$("<tr>").append(
+			JOBAD.refs.$("<td>").text("JOBAD Core").click(showMain),
 			$displayer
 		).appendTo($table);
 
 		for(var i=0;i<len;i++){
 			var mod = this.modules.getLoadedModule(mods[i]);
 			JOBAD.refs.$("<tr>").append(
-				$("<td>").text(mod.info().title)
+				JOBAD.refs.$("<td>").text(mod.info().title)
 				.data("JOBAD.module", mod)
 				.click(function(){
 					showInfoAbout(JOBAD.refs.$(this).data("JOBAD.module"));
