@@ -1,8 +1,8 @@
 # JOBADInstance.Sidebar
 
-* **Function** `JOBADInstance.Sidebar.forceUpdate()` Forces an update of the sidebar. 
+* **Function** `.Sidebar.forceUpdate()` Forces an update of the sidebar. 
 
-* **Function** `JOBADInstance.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 
+* **Function** `.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 
 	* **jQuery** `element` An element to register the notification on. 
 	* **Object** `config` A map which may contain any of the following members: 
 		* **String** `config.class` Notification class. If provided should be one of "info", "warning" or "error". 
@@ -13,7 +13,7 @@
 		* **Function** `config.click` On click callback. 
 	* **returns** a jQuery element representing the added notification. 
 
-* **Function** `JOBADInstance.Sidebar.removeNotification(notification)` Removes a notification from the sidebar. 
+* **Function** `.Sidebar.removeNotification(notification)` Removes a notification from the sidebar. 
 	* **jQuery** `notification` A jQuery element represnting the notification. 
 
 ## See also

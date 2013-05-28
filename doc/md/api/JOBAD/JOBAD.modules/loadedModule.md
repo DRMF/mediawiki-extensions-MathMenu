@@ -13,7 +13,7 @@
 
 ## Event functions
 
-These functions represent event handlers. If an event is globally disabled (via  [`JOBAD.config.disabledEvents`](../JOBAD.config/index.md)) it will not show up in the JOBAD.modules.loadedModule Instance. 
+These functions represent event handlers. If an event is globally disabled (via  [`JOBAD.config.disabledEvents`](../JOBAD.config.md)) it will not show up in the JOBAD.modules.loadedModule Instance. 
 
 * **Function** `.onActivate(JOBADInstance)` Called on module activation. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 

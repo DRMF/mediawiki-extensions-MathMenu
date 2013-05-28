@@ -6,7 +6,7 @@ This object is the main JOBAD Namespace.
 	* **returns** a new [`JOBAD`](JOBADInstance/index.md) instance. 
 
 * **String** `JOBAD.version` - The current JOBAD Version ('3.0.0')
-* **Object** [`JOBAD.config`](JOBAD.config/index.md) - Global Configuration namespace. 
+* **Object** [`JOBAD.config`](JOBAD.config.md) - Global Configuration namespace. 
 
 * **Array** [`JOBAD.ifaces`](JOBAD.ifaces/index.md) - JOBAD ifaces
 
@@ -21,9 +21,13 @@ This object is the main JOBAD Namespace.
 * **Object** [`JOBAD.UI`](JOBAD.UI/index.md) - Global UI Namespace. 
 
 * **Object** [`JOBAD.refs`](JOBAD.refs.md) - Contains internal references to  JOBADs dependencies. 
+
 * **Function** [`JOBAD.noConflict`](JOBAD.noConflict.md) - Provides a way to free the variables used by JOBADs dependencies. 
 
+* **Object** [`JOBAD.storageBackend`](JOBAD.storageBackend.md) - Storage Backend namespace. 
+
 * **Object** [`JOBAD.util`](JOBAD.util.md) - Contains Utility functions. 
+* **Object** [`JOBAD.Resources`](JOBAD.resources.md) - JOBAD Text Resources
 
 * **Object** [`JOBAD.console`](JOBAD.console.md) - Wraps the native console object if available. 
 * **Function** `JOBAD.error(msg)` Produces an error message. 

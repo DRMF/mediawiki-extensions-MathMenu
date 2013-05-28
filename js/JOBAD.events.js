@@ -185,6 +185,37 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 	return menu2;
 };
 
+/* onConfigUpdate */
+JOBAD.Events.onConfigUpdate = 
+{
+	'default': function(setting, JOBADInstance){},
+	'Setup': {
+		'enable': function(root){
+			var me = this;
+			root.on('JOBAD.ConfigUpdateEvent', function(jqe, setting){
+				me.Event.onConfigUpdate.trigger(event, setting);
+			});
+		},
+		'disable': function(root){
+			root.off('JOBAD.ConfigUpdateEvent');
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(setting){
+			return this.modules.iterateAnd(function(module){
+				module.onConfigUpdate.call(module, setting, module.getJOBAD());
+				return true;
+			});
+		},
+		'trigger': function(setting){
+			this.element.trigger("JOBAD.Event", ["onConfigUpdate", setting]);
+			return this.Event.onConfigUpdate.getResult(setting);
+		}
+	}
+};
+
 /* hover Text */
 JOBAD.Events.hoverText = 
 {

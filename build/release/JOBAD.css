@@ -120,6 +120,11 @@
 	font-size: 70%;
 }
 
+/* Module */
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_ModEntry {
+	vertical-align: top; 
+}
+
 /* Config Title */
 .JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_MetaConfigTitle {
 	font-weight: bold; 

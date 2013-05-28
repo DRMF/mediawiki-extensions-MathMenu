@@ -11,6 +11,19 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 * **String** `template.info.hasCleanNamespace` Booelan indicating if the namespace of this moudle contains other, custom, properties which should be copied over. If so, they will be copied to any module instance and `this` inside of any of the functions can refer to it. Note that this may be shared among different instances of the module since javascript creates references to JSON-style objects. Can also be disabled globally by configuration in which case non-clean modules will not load. Property may be omitted in which case it is assumed to be true. 
 * **Array[String]** `template.info.dependencies` Array of module dependencies. If ommited, assumed to have no dependencies. 
 
+* **Object** `template.config` Specification of user configurable objects. A map containing (`name`, `spec`) values. The `spec` object looks like the following:
+	* **Array[3|4]** `spec` Contains the specification. 
+		* **String** `spec[0] = type` The type of the setting: `string` (a string), `bool` (a boolean), `number` (a number), `integer` (an integer) or `list` (a list of different values to select from). 
+		* **Mixed** `spec[1] = restrictions` Restrictions to apply for setting. Optional if type if not `list`. 
+			* for `string`: a regular expression or a function `check(value)` which returns a boolean. 
+			* for `bool`: N/A
+			* for `number` and `integer`: an array `[min, max]` or a function `check(value)` which returns a boolean. 
+			* for `list`: an array of possible values. The values may not be of type function. 
+		* **Mixed** `spec[2|1] = default` Default value for the setting. Must match the restrictions (if applicable). 
+		* **Mixed** `spec[3|2] = meta` Meta information. If type is not `list`, may either be a string (with name of setting) 
+		or an array containg the name of the setting and optionally a longer description of this setting. For `list`, this must be an array containg the setting name 
+		and the name of each option.  
+		
 * **Function** `template.globalinit()` Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
 	* **Undefined** `this`
 * **Function** `template.init(JOBADInstance, param1, param2, param3 /*, ... */)` Called to intialise a new instance of this module. 

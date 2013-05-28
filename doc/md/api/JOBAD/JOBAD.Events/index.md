@@ -6,6 +6,7 @@ This namespace represents Events.
 * **Object** [`JOBAD.Events.contextMenuEntries`](contextMenuEntries.md) Namespace for contextMenuEntries Events. 
 * **Object** [`JOBAD.Events.hoverText`](hoverText.md) Namespace for hoverText Events. 
 * **Object** [`JOBAD.Events.onEvent`](onEvent.md) Namespace for onEvent Events. 
+* **Object** [`JOBAD.Events.onConfigUpdate`](onConfigUpdate.md) Namespace for onConfigUpdate Events. 
 * **Object** [`JOBAD.Events.onSideBarUpdate`](onSideBarUpdate.md) Namespace for onSideBarUpdate Events. 
 
 

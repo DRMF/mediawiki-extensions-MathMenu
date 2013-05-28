@@ -85,3 +85,61 @@ JOBAD.util.UID = function(){
 	var id2 = Math.floor(Math.random()*1000);
 	return "JOBAD_"+time+"_"+id1+"_"+id2;
 };
+
+/*
+	Creates a radio button for use with jQuery UI. 
+	@param texts	Texts to use. 
+	@param start	Initial selection
+*/
+JOBAD.util.createRadio = function(texts, start){
+	var id = JOBAD.util.UID();
+	
+	if(typeof start !== 'number'){
+		start = 0;
+	}
+	
+	var Labeller = JOBAD.refs.$('<span>');
+	
+					
+	for(var i=0;i<texts.length;i++){
+		var nid = JOBAD.util.UID();
+		Labeller.append(
+			JOBAD.refs.$("<input type='radio' name='"+id+"' id='"+nid+"'>"),
+			JOBAD.refs.$("<label>").attr("for", nid).text(texts[i])
+		)
+	}
+	
+	Labeller.find("input").eq(start)[0].checked = true;
+	
+	return Labeller.buttonset();
+};
+
+/*
+	Creates tab data compatible with jQuery UI. 
+	@param names	Texts to use. 
+	@param divs	Divs to use as content
+	@üaram height Maximum tab height
+	@param options Options for tabs. 
+*/
+JOBAD.util.createTabs = function(names, divs, options, height){
+	var div = JOBAD.refs.$("<div>");
+	var ul = JOBAD.refs.$("<ul>").appendTo(div);
+	for(var i=0;i<names.length;i++){
+		var id = JOBAD.util.UID();
+		ul.append(
+			JOBAD.refs.$("<li>").append(JOBAD.refs.$("<a>").attr("href", "#"+id).text(names[i]))
+		);
+		
+		var ndiv = JOBAD.refs.$("<div>").append(divs[i]).attr("id", id);
+		
+		if(typeof height == 'number'){
+			ndiv.css({
+				"height": height, 
+				"overflow": "auto"
+			});
+		}
+		
+		div.append(ndiv);
+	}
+	return div.tabs(options);
+}

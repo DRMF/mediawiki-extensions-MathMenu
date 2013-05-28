@@ -19,9 +19,6 @@
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-//TODO: Update Doc
-
 JOBAD.storageBackend = {
 	"getKey": function(key, def){
 		var res = JOBAD.storageBackend.engines[JOBAD.config.storageBackend][0](key);
@@ -380,34 +377,6 @@ JOBAD.util.getDefaultConfigSetting = function(obj, key){
 	return obj[key][2];
 };
 
-/*
-	Creates a radio button for use with jQuery UI. 
-	@param texts	Texts to use. 
-	@param start	Initial selection
-*/
-JOBAD.util.createRadio = function(texts, start){
-	var id = JOBAD.util.UID();
-	
-	if(typeof start !== 'number'){
-		start = 0;
-	}
-	
-	var Labeller = JOBAD.refs.$('<span>');
-	
-					
-	for(var i=0;i<texts.length;i++){
-		var nid = JOBAD.util.UID();
-		Labeller.append(
-			JOBAD.refs.$("<input type='radio' name='"+id+"' id='"+nid+"'>"),
-			JOBAD.refs.$("<label>").attr("for", nid).text(texts[i])
-		)
-	}
-	
-	Labeller.find("input").eq(start)[0].checked = true;
-	
-	return Labeller.buttonset();
-};
-
 var configCache = {};
 
 JOBAD.modules.extensions.config = {
@@ -438,6 +407,7 @@ JOBAD.modules.extensions.config = {
 				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
 			}
 			JOBAD.storageBackend.setKey(id, configCache[id]);
+			this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [prop]);
 		};
 		
 		/*
@@ -480,6 +450,7 @@ JOBAD.modules.extensions.config = {
 				configCache[id] = {};
 				for(var key in value){
 					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
+					this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [key]);
 				}
 			}
 		};
@@ -523,14 +494,34 @@ JOBAD.ifaces.push(function(){
 		var showMain = function(){
 			$displayer
 			.trigger("JOBAD.modInfoClose")	
-			.html("")	
+			.html("")
 			.append(
-				JOBAD.refs.$("<span>").text("JOBAD Core Version "+JOBAD.version),
-				"<br />",
-				JOBAD.refs.$("<pre>").text("Copyright (C) 2013 KWARC Group <kwarc.info>")
+				JOBAD.util.createTabs(
+					["About JOBAD", "GPL License", "jQuery", "jQuery UI", "Underscore"], 
+					[
+						JOBAD.refs.$("<div>").append(
+							JOBAD.refs.$("<span>").text("JOBAD Core Version "+JOBAD.version),
+							JOBAD.refs.$("<pre>").text(JOBAD.Resources.jobad_license)
+						),
+						JOBAD.refs.$("<pre>").text(JOBAD.Resources.gpl_v3_text),
+						JOBAD.refs.$("<div>").append(
+							JOBAD.refs.$("<span>").text("jQuery Version "+JOBAD.refs.$.fn.jquery),
+							JOBAD.refs.$("<pre>").text(JOBAD.Resources.jquery_license)
+						),
+						JOBAD.refs.$("<div>").append(
+							JOBAD.refs.$("<span>").text("jQuery UI Version "+JOBAD.refs.$.ui.version),
+							JOBAD.refs.$("<pre>").text(JOBAD.Resources.jqueryui_license)
+						),
+						JOBAD.refs.$("<div>").append(
+							JOBAD.refs.$("<span>").text("Underscore Version "+JOBAD.refs._.VERSION),
+							JOBAD.refs.$("<pre>").text(JOBAD.Resources.underscore_license)
+						)
+					], {}, 400
+				).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
 			)
 			.one('JOBAD.modInfoClose', function(){
-				//We are closing the main mod info. We will have to do stuff here. 
+				//We are closing the main mod info. 
+				//We may want to save things
 			});
 			return;
 		};
@@ -538,14 +529,9 @@ JOBAD.ifaces.push(function(){
 		var showInfoAbout = function(mod){
 			//grab mod info
 			var info = mod.info();
-			
-			var div = JOBAD.refs.$("<div class='JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs'>")
-			var ul = JOBAD.refs.$("<ul>").appendTo(div);
-			
-			
+		
 			//Generate Info Tab
-			var info_id = JOBAD.util.UID();
-			var $info = JOBAD.refs.$("<div>").attr("id", info_id).appendTo(div);
+			var $info = JOBAD.refs.$("<div>");
 			
 			//Title and Identifier
 			$info.append(
@@ -588,11 +574,10 @@ JOBAD.ifaces.push(function(){
 			);
 			
 			//Config
-			var config_id = JOBAD.util.UID();
-			var $config = JOBAD.refs.$("<div>").attr("id", config_id).appendTo(div);
+			var $config = JOBAD.refs.$("<div>");
 			
 			//Build Config Stuff	
-			var UserConfig = window.debug = mod.UserConfig.getTypes(); //TODO: Remove Debug code here
+			var UserConfig = mod.UserConfig.getTypes();
 			
 			//TODO: Update design a little bit
 			for(var key in UserConfig){
@@ -750,16 +735,12 @@ JOBAD.ifaces.push(function(){
 				
 			}
 			
-			//Create tabs
-			ul.append(
-				"<li><a href='#"+info_id+"'>About</li>",
-				"<li><a href='#"+config_id+"'>Config</li>"
-			)
-			
 			$displayer
 			.trigger("JOBAD.modInfoClose")
 			.html("")		
-			.append(div)
+			.append(
+				JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+			)
 			.one('JOBAD.modInfoClose', function(){
 				//Store all the settings
 				$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
@@ -767,8 +748,6 @@ JOBAD.ifaces.push(function(){
 					mod.UserConfig.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
 				});
 			});
-			
-			div.tabs();
 			
 			return;
 		};
@@ -787,15 +766,17 @@ JOBAD.ifaces.push(function(){
 				.click(function(){
 					showInfoAbout(JOBAD.refs.$(this).data("JOBAD.module"));
 				})
-			).appendTo($table);					
+			)
+			.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_ModEntry")
+			.appendTo($table);					
 		}
 		
 		$Div.append($table);
 		
 		$Div.dialog({
 			modal: true,
-			width: 600,
-			height: 450,
+			width: 700,
+			height: 600,
 			open: showMain,
 			close: function(){
 				$displayer

@@ -39,7 +39,7 @@ As a developer who wants to work on the JOBAD core you can load the JOBAD Core f
 
 ```html
 	<script src='js/JOBAD.core.js'></script>
-	<script src='js/JOBAD.config.js'></script>
+	<script src='js/resources.js'></script>
 	<script src='js/JOBAD.utils.js'></script>
 	<script src='js/JOBAD.core.modules.js'></script>
 	<script src='js/JOBAD.core.events.js'></script>

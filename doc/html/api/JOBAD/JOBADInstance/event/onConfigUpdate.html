@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.config] - JOBAD Documentation</title>
+		<title>[JOBADInstance.Event.onConfigUpdate] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,15 +478,20 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <strong>JOBAD.config</strong></p>
-<h1>JOBAD.config</h1>
-
-<p>This object contains the configuration settings for JOBAD. </p>
+<p><a href="../../../../index.html">Start</a> &gt; <a href="../../../index.html">API Documentation</a> &gt; <a href="../../index.html">JOBAD</a> &gt; <a href="../index.html">JOBADInstance</a> &gt; <a href="index.html">JOBADInstance.Event</a> &gt; <strong>JOBADInstance.Event.onConfigUpdate</strong></p>
+<h1>JOBADInstance.Event.onConfigUpdate</h1>
 
 <ul>
-<li><p><strong>Boolean</strong> <code>JOBAD.config.debug</code> <code>true</code> if debugging is enabled, otherwise <code>false</code>. Determines if errors are automatically logged to the console. Default: <code>false</code> for relase versions, <code>true</code> for development versions. </p></li>
-<li><p><strong>Boolean</strong> <code>JOBAD.config.cleanModuleNamespace</code> Force modules to have a clean namespace. May cause errors when set to <code>true</code> with some modules. Default: <code>false</code>. </p></li>
-<li><p><strong>Array[String]</strong> <code>JOBAD.config.disabledEvents</code> List of disabled events. Default: <code>[]</code>. </p></li>
+<li><p><strong>Function</strong> <code>.Event.onConfigUpdate.getResult(setting)</code> Get the Result of the onConfigUpdate event handlers. </p>
+
+<ul>
+<li><strong>string</strong> <code>setting</code> The setting that was changed. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>.Event.onConfigUpdate.trigger(setting)</code> Trigger the onConfigUpdate event. </p>
+
+<ul>
+<li><strong>string</strong> <code>setting</code> The setting that was changed.  </li>
+</ul></li>
 </ul>
 
 	</body>

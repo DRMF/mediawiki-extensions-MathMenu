@@ -3,10 +3,6 @@
 ## Module Template
 
 ```js
-/*
-	A template module. 
-*/
-
 var template = {
 	/* Module Info / Meta Data */
 	info:{
@@ -18,6 +14,14 @@ var template = {
 		'dependencies':	[], //Array of module dependencies. If ommited, assumed to have no dependencies. 
 		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},
+	// Contains configuration which can be set by the user. May be omitted. 
+	config: {
+		"a_string": ["string", "default-value-goes-here", ["String", "With a default value. "]],
+		"a_bool": ["bool", false, ["Boolean", "Either true or false. "]],
+		"a_num": ["number", [-10, 10], 0, ["Number", "An awesome number between -10 and 10 "]],
+		"an_int": ["integer", [-10, 10], 0, ["Integer", "An awesome integer between -10 and 10. "]],
+		"a_list": ["list", [1, 2, 3, 4], 1, ["Select an option", "A", "B", "C", "D"]]
+	}
 	/* Init handlers */
     globalinit: function(){
 		/* 

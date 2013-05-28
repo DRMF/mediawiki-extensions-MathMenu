@@ -490,6 +490,7 @@
 <li><code>contextMenu</code>: When an element is right clicked on, a context menu may appear. Is not triggered when the control key is pressed to allow access to the native context menu. </li>
 <li><code>hoverText</code>: A text which will appear in a tooltip hovering over the hovered element. Warning: If there are <code>title</code> attributes on the element, they might interfere with this event. </li>
 <li><code>onSideBarUpdate</code>: Called when the sidebar is upated. </li>
+<li><code>onConfigUpdate</code>: Called whenever the config is updated. </li>
 <li><code>onEvent</code>: Called whenever another event is raised.  (The event itself is excluded to prevent infinite loops)
 <h2>Event handling and DOM nodes</h2></li>
 </ul>
@@ -519,12 +520,11 @@ the &lt;div&gt; element. </p>
 <p>If there are multiple event handlers for one event, JOBAD might only execute only one. </p>
 
 <ul>
-<li><code>leftClick</code>: Every handler is executed. </li>
 <li><code>contextMenu</code>: Context Menu entries will be merged. </li>
 <li><code>hoverText</code>: Only the first handler is called. </li>
-<li><code>onSideBarUpdate</code>: Every handler is called. </li>
-<li><code>onEvent</code>: Every event is called. </li>
 </ul>
+
+<p>For any other event, every handler will be called. </p>
 
 <h2>See also</h2>
 

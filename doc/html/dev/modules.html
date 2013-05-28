@@ -483,11 +483,7 @@
 
 <h2>Module Template</h2>
 
-<div class="codehilite"><pre><code><span class="cm">/*</span>
-<span class="cm">    A template module. </span>
-<span class="cm">*/</span>
-
-<span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
     <span class="cm">/* Module Info / Meta Data */</span>
     <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
         <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;template&#39;</span><span class="p">,</span>  <span class="c1">//(Unique) identifier for this module, preferably human readable. </span>
@@ -498,6 +494,14 @@
         <span class="s1">&#39;dependencies&#39;</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">//Array of module dependencies. If ommited, assumed to have no dependencies. </span>
         <span class="s1">&#39;hasCleanNamespace&#39;</span><span class="o">:</span> <span class="kc">true</span> <span class="c1">// Does this module contain only standard functions?</span>
     <span class="p">},</span>
+    <span class="c1">// Contains configuration which can be set by the user. May be omitted. </span>
+    <span class="nx">config</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;a_string&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;default-value-goes-here&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;String&quot;</span><span class="p">,</span> <span class="s2">&quot;With a default value. &quot;</span><span class="p">]],</span>
+        <span class="s2">&quot;a_bool&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Boolean&quot;</span><span class="p">,</span> <span class="s2">&quot;Either true or false. &quot;</span><span class="p">]],</span>
+        <span class="s2">&quot;a_num&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Number&quot;</span><span class="p">,</span> <span class="s2">&quot;An awesome number between -10 and 10 &quot;</span><span class="p">]],</span>
+        <span class="s2">&quot;an_int&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Integer&quot;</span><span class="p">,</span> <span class="s2">&quot;An awesome integer between -10 and 10. &quot;</span><span class="p">]],</span>
+        <span class="s2">&quot;a_list&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Select an option&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]]</span>
+    <span class="p">}</span>
     <span class="cm">/* Init handlers */</span>
     <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="cm">/* </span>

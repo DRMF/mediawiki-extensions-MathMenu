@@ -1,4 +1,5 @@
 JOBAD.core.js
+resources.js
 JOBAD.utils.js
 JOBAD.core.modules.js
 JOBAD.core.events.js
