@@ -175,6 +175,8 @@ JOBAD.ifaces.push(function(me, args){
 		}
 		return true;
 	};
+	
+	this.modules = JOBAD.util.bindEverything(this.modules, this);
 });
 
 JOBAD.modules = {};

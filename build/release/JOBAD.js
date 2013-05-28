@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 28 May 2013 16:09:17 +0200
+	built: Tue, 28 May 2013 16:28:44 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -532,6 +532,8 @@ JOBAD.ifaces.push(function(me, args){
 		}
 		return true;
 	};
+	
+	this.modules = JOBAD.util.bindEverything(this.modules, this);
 });
 
 JOBAD.modules = {};
@@ -2407,7 +2409,7 @@ JOBAD.modules.extensions.config = {
 				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
 			}
 			JOBAD.storageBackend.setKey(id, configCache[id]);
-			this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [prop]);
+			this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [prop]);
 		};
 		
 		/*
@@ -2450,7 +2452,7 @@ JOBAD.modules.extensions.config = {
 				configCache[id] = {};
 				for(var key in value){
 					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
-					this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [key]);
+					this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [key]);
 				}
 			}
 		};

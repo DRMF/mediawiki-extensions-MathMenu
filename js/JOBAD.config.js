@@ -407,7 +407,7 @@ JOBAD.modules.extensions.config = {
 				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
 			}
 			JOBAD.storageBackend.setKey(id, configCache[id]);
-			this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [prop]);
+			this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [prop]);
 		};
 		
 		/*
@@ -450,7 +450,7 @@ JOBAD.modules.extensions.config = {
 				configCache[id] = {};
 				for(var key in value){
 					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
-					this.getJOBAD().element.trigger("JOBAD.onConfigUpdate", [key]);
+					this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [key]);
 				}
 			}
 		};
