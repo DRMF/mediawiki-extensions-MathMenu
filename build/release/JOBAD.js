@@ -1,7 +1,8 @@
+"use strict";
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 28 May 2013 16:28:44 +0200
+	built: Tue, 28 May 2013 21:16:16 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -61,9 +62,9 @@ var JOBAD = function(element){
 	var me = this; //Kept in functions
 	
 	//Add init arguments
-	me.arguments = [];
+	me.args = [];
 	for(var i=0;i<arguments.length;i++){
-		me.arguments.push(arguments[i]);
+		me.args.push(arguments[i]);
 	}
 
 	//The element the current JOBAD instance works on. 
@@ -79,7 +80,7 @@ var JOBAD = function(element){
 	for(var i=0; i < JOBAD.ifaces.length; i++){
 		var mod = JOBAD.ifaces[i];
 		if(typeof mod == 'function'){
-			mod.call(this, this, this.arguments); 
+			mod.call(this, this, this.args); 
 		}
 	}
 };

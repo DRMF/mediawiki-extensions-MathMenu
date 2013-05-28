@@ -8,5 +8,5 @@ An instance of `JOBAD` has the following properties:
 * **Object** [`.Event`](event/index.md) Namespace for event related functions. 
 * **Object** [`.Sidebar`](sidebar.md) Namespace for Sidebar Functions. 
 * **Object** [`.UserConfig`](UserConfig.md) Namespace for User Configuration. 
-* **Array** `.arguments` An array containing the parameters originally parsed to the module constructor. 
+* **Array** `.args` An array containing the parameters originally parsed to the module constructor. 
 * **Function** `.showConfigUI()` Displays the configuration UI. 

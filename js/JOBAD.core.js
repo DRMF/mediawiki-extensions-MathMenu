@@ -35,9 +35,9 @@ var JOBAD = function(element){
 	var me = this; //Kept in functions
 	
 	//Add init arguments
-	me.arguments = [];
+	me.args = [];
 	for(var i=0;i<arguments.length;i++){
-		me.arguments.push(arguments[i]);
+		me.args.push(arguments[i]);
 	}
 
 	//The element the current JOBAD instance works on. 
@@ -53,7 +53,7 @@ var JOBAD = function(element){
 	for(var i=0; i < JOBAD.ifaces.length; i++){
 		var mod = JOBAD.ifaces[i];
 		if(typeof mod == 'function'){
-			mod.call(this, this, this.arguments); 
+			mod.call(this, this, this.args); 
 		}
 	}
 };
