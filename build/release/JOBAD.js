@@ -1,8 +1,7 @@
-"use strict";
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 28 May 2013 21:16:16 +0200
+	built: Fri, 31 May 2013 10:56:58 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -231,41 +230,6 @@ JOBAD.Resources =
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* IE fixes: Array.indexOf */
-//from https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
-        "use strict";
-        if (this == null) {
-            throw new TypeError();
-        }
-        var t = Object(this);
-        var len = t.length >>> 0;
-        if (len === 0) {
-            return -1;
-        }
-        var n = 0;
-        if (arguments.length > 1) {
-            n = Number(arguments[1]);
-            if (n != n) { // shortcut for verifying if it's NaN
-                n = 0;
-            } else if (n != 0 && n != Infinity && n != -Infinity) {
-                n = (n > 0 || -1) * Math.floor(Math.abs(n));
-            }
-        }
-        if (n >= len) {
-            return -1;
-        }
-        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-        for (; k < len; k++) {
-            if (k in t && t[k] === searchElement) {
-                return k;
-            }
-        }
-        return -1;
-    }
-}
-
 /* various utility functions */
 JOBAD.util = {};
 
@@ -380,7 +344,7 @@ JOBAD.util.createTabs = function(names, divs, options, height){
 */
 
 
-//JOBAD module iface for JOBADInstances
+
 JOBAD.ifaces.push(function(me, args){
 	var InstanceModules = {};
 	var disabledModules = [];
@@ -643,7 +607,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		properObject.namespace = {};
 
 		for(var key in ModuleObject){
-			if(ModuleObject.hasOwnProperty(key) && JOBAD.modules.cleanProperties.indexOf(key) == -1){
+			if(ModuleObject.hasOwnProperty(key) && JOBAD.refs._.indexOf(JOBAD.modules.cleanProperties, key) == -1){
 				if(properObject.info.hasCleanNamespace){
 					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
 				} else {
@@ -1004,7 +968,7 @@ JOBAD.modules.ifaces.push([
 	@param evtname Name of the event that is disabled. 
 */
 JOBAD.isEventDisabled = function(evtname){
-	return (JOBAD.config.disabledEvents.indexOf(evtname) != -1);
+	return (JOBAD.refs._.indexOf(JOBAD.config.disabledEvents, evtname) != -1);
 };
 
 JOBAD.Events = {};
@@ -2048,7 +2012,6 @@ JOBAD.config.storageBackend = "none";
 	@returns boolean
 */
 JOBAD.util.validateConfigSetting = function(obj, key, val){
-	//TODO: Use update this
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return false;
@@ -2318,7 +2281,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 								JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array restriction must be non-empty). ");
 								return;
 							}
-							newSpec.push(function(val){return (validator.indexOf(val) != -1);});
+							newSpec.push(function(val){return (JOBAD.refs._.indexOf(validator, val) != -1);});
 					} else {
 						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Type 'list' needs array restriction. ). ");
 						return;

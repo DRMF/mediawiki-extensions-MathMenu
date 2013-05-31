@@ -132,7 +132,7 @@ JOBAD.modules.ifaces.push([
 	@param evtname Name of the event that is disabled. 
 */
 JOBAD.isEventDisabled = function(evtname){
-	return (JOBAD.config.disabledEvents.indexOf(evtname) != -1);
+	return (JOBAD.refs._.indexOf(JOBAD.config.disabledEvents, evtname) != -1);
 };
 
 JOBAD.Events = {};

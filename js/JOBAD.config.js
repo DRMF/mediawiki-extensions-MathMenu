@@ -45,7 +45,6 @@ JOBAD.config.storageBackend = "none";
 	@returns boolean
 */
 JOBAD.util.validateConfigSetting = function(obj, key, val){
-	//TODO: Use update this
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return false;
@@ -315,7 +314,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 								JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array restriction must be non-empty). ");
 								return;
 							}
-							newSpec.push(function(val){return (validator.indexOf(val) != -1);});
+							newSpec.push(function(val){return (JOBAD.refs._.indexOf(validator, val) != -1);});
 					} else {
 						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Type 'list' needs array restriction. ). ");
 						return;
