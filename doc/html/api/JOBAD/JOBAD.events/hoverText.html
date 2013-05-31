@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.Events.leftClick] - JOBAD Documentation</title>
+		<title>[JOBAD.events.hoverText] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,37 +478,49 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.Events</a> &gt; <strong>JOBAD.Events.leftClick</strong></p>
-<h1>JOBAD.Events.leftClick</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.hoverText</strong></p>
+<h1>JOBAD.events.hoverText</h1>
 
-<p>The leftClick event is triggered every time an element is left clicked. </p>
+<p>The hoverText event is triggered every time an element is hovered. The event can provide a text to display in a tooltip. </p>
 
 <ul>
-<li><p><strong>Function</strong> <code>JOBAD.Events.leftClick.default()</code> The default Event Handler for leftClick Events. Just returns false. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.leftClick.Setup.enable(root)</code> Enables the leftClick event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.default()</code> The default Event Handler for hoverText Events. Just returns false. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.Setup.init()</code> Init for <code>JOBAD.events.hoverText.Setup.enable</code>. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to enable leftClick on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.Events.leftClick.Setup.disable(root)</code> Disables the leftClick event. 
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to disable leftClick on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.leftClick.namespace.getResult(target)</code> Get the Result of the leftClick event handlers. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.Setup.enable(root)</code> Enables the hoverText event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>target</code> The element that is being clicked. </li>
-<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable hoverText on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.leftClick.namespace.trigger(target)</code> Trigger the leftClick event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.Setup.disable(root)</code> Disables the hoverText event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>target</code> The element that is being clicked. </li>
-<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable hoverText on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.namespace.getResult(target)</code> Get the Result of the hoverText event handlers. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being hovered. </li>
+<li><strong>returns</strong> a jquery element representing the hover, a text to display on it or a boolean indicating if something should be done. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.hoverText.namespace.trigger(target)</code> Trigger the hoverText event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being hovered. </li>
+<li><strong>returns</strong> a boolean indicating if the hover has been added.  </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.events.hoverText.namespace.untrigger(target)</code> Untrigger the hoverText event. 
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being hovered. </li>
+<li><strong>returns</strong> a boolean indicating if the hover has been removed. </li>
 </ul></li>
 </ul>
 

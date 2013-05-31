@@ -24,7 +24,7 @@
 */
 
 /* left click */
-JOBAD.Events.leftClick = 
+JOBAD.events.leftClick = 
 {
 	'default': function(){
 		return false;
@@ -67,7 +67,7 @@ JOBAD.Events.leftClick =
 };
 
 /* onEvent */
-JOBAD.Events.onEvent = 
+JOBAD.events.onEvent = 
 {
 	'default': function(){},
 	'Setup': {
@@ -97,7 +97,7 @@ JOBAD.Events.onEvent =
 };
 
 /* context menu entries */
-JOBAD.Events.contextMenuEntries = 
+JOBAD.events.contextMenuEntries = 
 {
 	'default': function(){
 		return [];
@@ -138,55 +138,8 @@ JOBAD.Events.contextMenuEntries =
 	}
 }
 
-
-/*
-	Generates a list menu representation from an object representation. 
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.generateMenuList = function(menu){
-	if(typeof menu == 'undefined'){
-		return [];
-	}
-	var res = [];
-	for(var key in menu){
-		if(menu.hasOwnProperty(key)){
-			var val = menu[key];
-			if(typeof val == 'function'){
-				res.push([key, val]);		
-			} else {
-				res.push([key, JOBAD.util.generateMenuList(val)]);
-			}
-		}
-	}
-	return res;
-};
-/*
-	Wraps a menu function
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.fullWrap = function(menu, wrapper){
-	var menu = (JOBAD.refs._.isArray(menu))?menu:JOBAD.util.generateMenuList(menu);
-	var menu2 = [];
-	for(var i=0;i<menu.length;i++){
-		if(typeof menu[i][1] == 'function'){
-			(function(){
-				var org = menu[i][1];
-				menu2.push([menu[i][0], function(){
-					return wrapper(org, arguments)
-				}]);
-			})();
-		} else {
-			menu2.push([menu[i][0], JOBAD.util.fullWrap(menu[i][1])]);
-		}
-		
-	}
-	return menu2;
-};
-
 /* onConfigUpdate */
-JOBAD.Events.onConfigUpdate = 
+JOBAD.events.onConfigUpdate = 
 {
 	'default': function(setting, JOBADInstance){},
 	'Setup': {
@@ -217,7 +170,7 @@ JOBAD.Events.onConfigUpdate =
 };
 
 /* hover Text */
-JOBAD.Events.hoverText = 
+JOBAD.events.hoverText = 
 {
 	'default': function(){
 		return false;	
@@ -352,7 +305,7 @@ JOBAD.Events.hoverText =
 }
 
 /* sidebar: onSideBarUpdate Event */
-JOBAD.Events.onSideBarUpdate = 
+JOBAD.events.onSideBarUpdate = 
 {
 	'default': function(){
 		//Does nothing
@@ -459,6 +412,6 @@ JOBAD.Events.onSideBarUpdate =
 	}
 };
 
-for(var key in JOBAD.Events){
+for(var key in JOBAD.events){
 	JOBAD.modules.cleanProperties.push(key);
 }

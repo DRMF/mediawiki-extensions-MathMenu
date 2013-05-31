@@ -34,5 +34,5 @@ If there are multiple event handlers for one event, JOBAD might only execute onl
 For any other event, every handler will be called. 
 
 ## See also
-* [API Documentation for JOBAD.Events](../api/JOBAD/JOBAD.Events/index.md)
+* [API Documentation for JOBAD.events](../api/JOBAD/JOBAD.events/index.md)
 * [Modules](modules.md)

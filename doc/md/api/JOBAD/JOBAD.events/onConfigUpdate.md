@@ -1,8 +1,8 @@
-# JOBAD.Events.onConfigUpdate
+# JOBAD.events.onConfigUpdate
 
 The onConfigUpdate event is triggered every time a setting is updated. 
 
-* **Function** `JOBAD.Events.onConfigUpdate.default()` The default Event Handler for onConfigUpdate Events. Does nothing. 
+* **Function** `JOBAD.events.onConfigUpdate.default()` The default Event Handler for onConfigUpdate Events. Does nothing. 
 
 * **Function** `JOBAD.Events.onConfigUpdate.Setup.enable(root)` Enables the onConfigUpdate event. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.Events.contextMenuEntries] - JOBAD Documentation</title>
+		<title>[JOBAD.events.leftClick] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,29 +478,37 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.Events</a> &gt; <strong>JOBAD.Events.contextMenuEntries</strong></p>
-<h1>JOBAD.Events.contextMenuEntries</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.leftClick</strong></p>
+<h1>JOBAD.events.leftClick</h1>
 
-<p>The contextMenuEntries event is triggered every time an element is right clicked and a context menu is requested. Does not trigger when the CTRL key is pressed to allow access to the default browser menu. This event provides context menu entries. </p>
+<p>The leftClick event is triggered every time an element is left clicked. </p>
 
 <ul>
-<li><p><strong>Function</strong> <code>JOBAD.Events.contextMenuEntries.default()</code> The default Event Handler for contextMenuEntries Events. Just returns false. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.contextMenuEntries.Setup.enable(root)</code> Enables the contextMenuEntries event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.leftClick.default()</code> The default Event Handler for leftClick Events. Just returns false. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.leftClick.Setup.enable(root)</code> Enables the leftClick event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to enable contextMenuEntries on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable leftClick on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.Events.contextMenuEntries.Setup.disable(root)</code> Disables the contextMenuEntries event. 
+<li><strong>Function</strong> <code>JOBAD.events.leftClick.Setup.disable(root)</code> Disables the leftClick event. 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to disable contextMenuEntries on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable leftClick on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.Events.contextMenuEntries.namespace.getResult(target)</code> Get the Result of the contextMenuEntries event handlers. 
+<li><p><strong>Function</strong> <code>JOBAD.events.leftClick.namespace.getResult(target)</code> Get the Result of the leftClick event handlers. </p>
+
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>target</code> Element to request context menu on. </li>
-<li><strong>returns</strong> a list of context menu entries for this element. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being clicked. </li>
+<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.leftClick.namespace.trigger(target)</code> Trigger the leftClick event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being clicked. </li>
+<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
 </ul></li>
 </ul>
 

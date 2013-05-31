@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.Events] - JOBAD Documentation</title>
+		<title>[JOBAD.events.onEvent] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,25 +478,38 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <strong>JOBAD.Events</strong></p>
-<h1>JOBAD.Events</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.onEvent</strong></p>
+<h1>JOBAD.events.onEvent</h1>
 
-<p>This namespace represents Events. </p>
-
-<ul>
-<li><strong>Object</strong> <a href="leftClick.html"><code>JOBAD.Events.leftClick</code></a> Namespace for leftClick Events. </li>
-<li><strong>Object</strong> <a href="contextMenuEntries.html"><code>JOBAD.Events.contextMenuEntries</code></a> Namespace for contextMenuEntries Events. </li>
-<li><strong>Object</strong> <a href="hoverText.html"><code>JOBAD.Events.hoverText</code></a> Namespace for hoverText Events. </li>
-<li><strong>Object</strong> <a href="onEvent.html"><code>JOBAD.Events.onEvent</code></a> Namespace for onEvent Events. </li>
-<li><strong>Object</strong> <a href="onConfigUpdate.html"><code>JOBAD.Events.onConfigUpdate</code></a> Namespace for onConfigUpdate Events. </li>
-<li><strong>Object</strong> <a href="onSideBarUpdate.html"><code>JOBAD.Events.onSideBarUpdate</code></a> Namespace for onSideBarUpdate Events. </li>
-</ul>
-
-<h2>See also</h2>
+<p>The onEvent event is triggered every time another event handler is called. Does not trigger for the <code>onEvent</code> event and the <code>onSideBarUpdate</code> event</p>
 
 <ul>
-<li><a href="../JOBADInstance/event/index.html"><code>JOBADInstance.Event</code></a></li>
-<li><a href="../../../dev/events.html">Event Handling</a></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.onEvent.default()</code> The default Event Handler for onEvent Events. Does nothing. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.onEvent.Setup.enable(root)</code> Enables the onEvent event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable onEvent on. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.events.onEvent.Setup.disable(root)</code> Disables the onEvent event. 
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable onEvent on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.onEvent.namespace.getResult(eventName, element)</code> Get the Result of the onEvent event handlers. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>string</strong> <code>eventName</code> The event that was triggered. </li>
+<li><strong>jQuery</strong> <code>element</code> The element the event was triggered on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.onEvent.namespace.trigger(eventName, element)</code> Trigger the onEvent event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>string</strong> <code>eventName</code> The event that was triggered. </li>
+<li><strong>jQuery</strong> <code>element</code> The element the event was triggered on. </li>
+</ul></li>
 </ul>
 
 	</body>

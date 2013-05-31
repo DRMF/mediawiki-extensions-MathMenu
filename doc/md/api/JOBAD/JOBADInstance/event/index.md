@@ -10,4 +10,4 @@
 
 ## See also
 
-* [`JOBAD.Events`](../../JOBAD.Events/index.md)
+* [`JOBAD.events`](../../JOBAD.events/index.md)

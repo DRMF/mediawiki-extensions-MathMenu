@@ -4,6 +4,7 @@
 		* localStore /globalStore access in Debug Mode
 * clean up JOBAD.util namespace
 	* JOBAD.util.UI ? 
+	* hide context tab if empty
 * some kind of module development workflow
 	* add a branch stable??
 	* seperate repo?
