@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 31 May 2013 19:43:19 +0200
+	built: Mon, 03 Jun 2013 11:12:48 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -364,6 +364,16 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 		
 	}
 	return menu2;
+};
+
+/*
+	Checks if 2 objects are equal. Does not accept functions. 
+	@param a Object A
+	@param b Object B
+	@returns boolean
+*/
+JOBAD.util.objectEquals = function(a, b){
+	return JSON.stringify(a) == JSON.stringify(b);
 };/* end   <JOBAD.utils.js> */
 /* start <JOBAD.core.modules.js> */
 /*
@@ -1685,33 +1695,35 @@ JOBAD.events.contextMenuEntries =
 	}
 }
 
-/* onConfigUpdate */
-JOBAD.events.onConfigUpdate = 
+/* configUpdate */
+JOBAD.events.configUpdate = 
 {
 	'default': function(setting, JOBADInstance){},
 	'Setup': {
 		'enable': function(root){
 			var me = this;
-			root.on('JOBAD.ConfigUpdateEvent', function(jqe, setting){
-				me.Event.onConfigUpdate.trigger(event, setting);
+			JOBAD.refs.$("body").on('JOBAD.ConfigUpdateEvent', function(jqe, setting, moduleId){
+				me.Event.configUpdate.trigger(setting, moduleId);
 			});
 		},
 		'disable': function(root){
-			root.off('JOBAD.ConfigUpdateEvent');
+			JOBAD.refs.$("body").off('JOBAD.ConfigUpdateEvent');
 		}
 	},
 	'namespace': 
 	{
 		
-		'getResult': function(setting){
+		'getResult': function(setting, moduleId){
 			return this.modules.iterateAnd(function(module){
-				module.onConfigUpdate.call(module, setting, module.getJOBAD());
+				if(module.info().identifier == moduleId){ //only call events for own module. 
+					module.configUpdate.call(module, setting, module.getJOBAD());
+				}
 				return true;
 			});
 		},
-		'trigger': function(setting){
-			this.element.trigger("JOBAD.Event", ["onConfigUpdate", setting]);
-			return this.Event.onConfigUpdate.getResult(setting);
+		'trigger': function(setting, moduleId){
+			this.element.trigger("JOBAD.Event", ["configUpdate", setting, moduleId]);
+			return this.Event.configUpdate.getResult(setting, moduleId);
 		}
 	}
 };
@@ -1851,8 +1863,8 @@ JOBAD.events.hoverText =
 	}
 }
 
-/* sidebar: onSideBarUpdate Event */
-JOBAD.events.onSideBarUpdate = 
+/* sidebar: SideBarUpdate Event */
+JOBAD.events.SideBarUpdate = 
 {
 	'default': function(){
 		//Does nothing
@@ -1884,7 +1896,7 @@ JOBAD.events.onSideBarUpdate =
 						}
 					}
 					JOBAD.UI.Sidebar.forceNotificationUpdate();
-					this.Event.onSideBarUpdate.trigger();
+					this.Event.SideBarUpdate.trigger();
 				},
 				/*
 					Registers a new notification. 
@@ -1935,26 +1947,26 @@ JOBAD.events.onSideBarUpdate =
 			}
 		},
 		'enable': function(root){
-			this.Event.onSideBarUpdate.enabled = true;
+			this.Event.SideBarUpdate.enabled = true;
 			
 		},
 		'disable': function(root){
-			this.Event.onSideBarUpdate.enabled = undefined;
+			this.Event.SideBarUpdate.enabled = undefined;
 		}
 	},
 	'namespace': 
 	{
 		
 		'getResult': function(){
-			if(this.Event.onSideBarUpdate.enabled){
+			if(this.Event.SideBarUpdate.enabled){
 				this.modules.iterateAnd(function(module){
-					module.onSideBarUpdate.call(module, module.getJOBAD());
+					module.SideBarUpdate.call(module, module.getJOBAD());
 					return true;
 				});
 			}
 		},
 		'trigger': function(){
-			this.Event.onSideBarUpdate.getResult();
+			this.Event.SideBarUpdate.getResult();
 		}
 	}
 };
@@ -2367,12 +2379,17 @@ JOBAD.modules.extensions.config = {
 		*/
 		this.UserConfig.set = function(prop, val){
 			if(this.UserConfig.canSet(prop, val)){
+				if(JOBAD.util.objectEquals(val, this.UserConfig.get(prop))){
+					return; //we have it already; no change neccessary. 
+				}
 				configCache[id][prop] = val;
+				
 			} else {
 				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
+				return; 
 			}
 			JOBAD.storageBackend.setKey(id, configCache[id]);
-			this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [prop]);
+			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, this.info().identifier]);
 		};
 		
 		/*
@@ -2395,7 +2412,6 @@ JOBAD.modules.extensions.config = {
 				return res;
 			} else {
 				JOBAD.console.log("Failed to access user setting '"+prop+"'");
-				
 			}
 		};
 		
@@ -2415,7 +2431,7 @@ JOBAD.modules.extensions.config = {
 				configCache[id] = {};
 				for(var key in value){
 					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
-					this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [key]);
+					JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, this.info().identifier]);
 				}
 			}
 		};
@@ -2544,7 +2560,6 @@ JOBAD.ifaces.push(function(){
 			//Build Config Stuff	
 			var UserConfig = mod.UserConfig.getTypes();
 			
-			//TODO: Update design a little bit
 			for(var key in UserConfig){
 				(function(){
 				var setting = UserConfig[key];
@@ -2693,6 +2708,7 @@ JOBAD.ifaces.push(function(){
 						break;
 					default:
 						JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
+						item.remove();
 						break;
 				}
 				
@@ -2703,8 +2719,13 @@ JOBAD.ifaces.push(function(){
 			$displayer
 			.trigger("JOBAD.modInfoClose")
 			.html("")		
+			
+			
 			.append(
-				JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+				($config.children().length > 0)?
+					JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+				:
+					JOBAD.util.createTabs(["About"], [$info], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
 			)
 			.one('JOBAD.modInfoClose', function(){
 				//Store all the settings

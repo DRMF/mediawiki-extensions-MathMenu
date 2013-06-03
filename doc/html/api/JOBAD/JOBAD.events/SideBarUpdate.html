@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBADInstance.Event.onConfigUpdate] - JOBAD Documentation</title>
+		<title>[JOBAD.events.SideBarUpdate] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,19 +478,62 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../../index.html">Start</a> &gt; <a href="../../../index.html">API Documentation</a> &gt; <a href="../../index.html">JOBAD</a> &gt; <a href="../index.html">JOBADInstance</a> &gt; <a href="index.html">JOBADInstance.Event</a> &gt; <strong>JOBADInstance.Event.onConfigUpdate</strong></p>
-<h1>JOBADInstance.Event.onConfigUpdate</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.SideBarUpdate</strong></p>
+<h1>JOBAD.events.SideBarUpdate</h1>
+
+<p>The SideBarUpdate event is triggered every time the sidebar is updated. </p>
 
 <ul>
-<li><p><strong>Function</strong> <code>.Event.onConfigUpdate.getResult(setting)</code> Get the Result of the onConfigUpdate event handlers. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.default()</code> The default Event Handler for SideBarUpdate Events. Just returns false. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.enable(root)</code> Enables the SideBarUpdate event. </p>
 
 <ul>
-<li><strong>string</strong> <code>setting</code> The setting that was changed. </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable SideBarUpdate on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>.Event.onConfigUpdate.trigger(setting)</code> Trigger the onConfigUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.disable(root)</code> Disables the SideBarUpdate event. </p>
 
 <ul>
-<li><strong>string</strong> <code>setting</code> The setting that was changed.  </li>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable SideBarUpdate on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.getResult()</code> Get the Result of the SideBarUpdate event handlers. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.trigger()</code> Trigger the SideBarUpdate event. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Object</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar</code> - Namespace for <a href="../JOBADInstance/index.html">JOBADInstance</a> related sidebar functions. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()</code> Redraws the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)</code> Registers a new notification on the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>element</code> An element to register the notification on. </li>
+<li><strong>Object</strong> <code>config</code> A map which may contain any of the following members: 
+<ul>
+<li><strong>String</strong> <code>config.class</code> Notification class. If provided should be one of "info", "warning" or "error". </li>
+<li><strong>String</strong> <code>config.icon</code> An icon to use for the notification. Default depends on <code>config.class</code>. </li>
+<li><strong>String</strong> <code>config.menu</code> A context menu for the notification. </li>
+<li><strong>String</strong> <code>config.text</code> A text to use for the notification. </li>
+<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification ? </li>
+<li><strong>Function</strong> <code>config.click</code> On click callback. </li>
+</ul></li>
+<li><strong>returns</strong> a jQuery element representing the added notification. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification)</code> Removes a notification from the sidebar. </p>
+
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
 </ul></li>
 </ul>
 

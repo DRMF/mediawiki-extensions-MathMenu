@@ -1,28 +1,28 @@
-# JOBAD.events.onSideBarUpdate
+# JOBAD.events.SideBarUpdate
 
-The onSideBarUpdate event is triggered every time the sidebar is updated. 
+The SideBarUpdate event is triggered every time the sidebar is updated. 
 
-* **Function** `JOBAD.events.onSideBarUpdate.default()` The default Event Handler for onSideBarUpdate Events. Just returns false. 
+* **Function** `JOBAD.events.SideBarUpdate.default()` The default Event Handler for SideBarUpdate Events. Just returns false. 
 
-* **Function** `JOBAD.events.onSideBarUpdate.Setup.enable(root)` Enables the onSideBarUpdate event. 
+* **Function** `JOBAD.events.SideBarUpdate.Setup.enable(root)` Enables the SideBarUpdate event. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-	* **jQuery** `root` The root element to enable onSideBarUpdate on. 
-* **Function** `JOBAD.events.onSideBarUpdate.Setup.disable(root)` Disables the onSideBarUpdate event. 
+	* **jQuery** `root` The root element to enable SideBarUpdate on. 
+* **Function** `JOBAD.events.SideBarUpdate.Setup.disable(root)` Disables the SideBarUpdate event. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-	* **jQuery** `root` The root element to disable onSideBarUpdate on. 
+	* **jQuery** `root` The root element to disable SideBarUpdate on. 
 
-* **Function** `JOBAD.events.onSideBarUpdate.namespace.getResult()` Get the Result of the onSideBarUpdate event handlers. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-
-* **Function** `JOBAD.events.onSideBarUpdate.namespace.trigger()` Trigger the onSideBarUpdate event. 
+* **Function** `JOBAD.events.SideBarUpdate.namespace.getResult()` Get the Result of the SideBarUpdate event handlers. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 
-* **Object** `JOBAD.events.onSideBarUpdate.Setup.init.Sidebar` - Namespace for [JOBADInstance](../JOBADInstance/index.md) related sidebar functions. 
-
-* **Function** `JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.redraw()` Redraws the sidebar. 
+* **Function** `JOBAD.events.SideBarUpdate.namespace.trigger()` Trigger the SideBarUpdate event. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 
-* **Function** `JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 
+* **Object** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar` - Namespace for [JOBADInstance](../JOBADInstance/index.md) related sidebar functions. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()` Redraws the sidebar. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 	* **jQuery** `element` An element to register the notification on. 
 	* **Object** `config` A map which may contain any of the following members: 
@@ -34,6 +34,6 @@ The onSideBarUpdate event is triggered every time the sidebar is updated.
 		* **Function** `config.click` On click callback. 
 	* **returns** a jQuery element representing the added notification. 
 
-* **Function** `JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.removeNotification(notification)` Removes a notification from the sidebar. 
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification)` Removes a notification from the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 	* **jQuery** `notification` A jQuery element represnting the notification. 

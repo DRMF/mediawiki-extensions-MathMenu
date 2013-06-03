@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.events.onSideBarUpdate] - JOBAD Documentation</title>
+		<title>[JOBAD.events.configUpdate] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,62 +478,37 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.onSideBarUpdate</strong></p>
-<h1>JOBAD.events.onSideBarUpdate</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.configUpdate</strong></p>
+<h1>JOBAD.events.configUpdate</h1>
 
-<p>The onSideBarUpdate event is triggered every time the sidebar is updated. </p>
-
-<ul>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.default()</code> The default Event Handler for onSideBarUpdate Events. Just returns false. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.Setup.enable(root)</code> Enables the onSideBarUpdate event. </p>
+<p>The onConfigUpdate event is triggered every time a setting is updated. </p>
 
 <ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to enable onSideBarUpdate on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.Setup.disable(root)</code> Disables the onSideBarUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.configUpdate.default()</code> The default Event Handler for configUpdate Events. Does nothing. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.configUpdate.Setup.enable(root)</code> Enables the configUpdate event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to disable onSideBarUpdate on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to enable onConfigUpdate on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.namespace.getResult()</code> Get the Result of the onSideBarUpdate event handlers. </p>
+<li><strong>Function</strong> <code>JOBAD.Events.configUpdate.Setup.disable(root)</code> Disables the configUpdate event. 
+<ul>
+<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>jQuery</strong> <code>root</code> The root element to disable onConfigUpdate on. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.Events.configUpdate.namespace.getResult(setting, moduleId)</code> Get the Result of the configUpdate event handlers. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
+<li><strong>string</strong> <code>setting</code> The setting that has been changed. </li>
+<li><strong>string</strong> <code>moduleId</code> Id of the module from which the setting was changed. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.namespace.trigger()</code> Trigger the onSideBarUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.Events.configUpdate.namespace.trigger(setting, moduleId)</code> Trigger the configUpdate event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-</ul></li>
-<li><p><strong>Object</strong> <code>JOBAD.events.onSideBarUpdate.Setup.init.Sidebar</code> - Namespace for <a href="../JOBADInstance/index.html">JOBADInstance</a> related sidebar functions. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.redraw()</code> Redraws the sidebar. </p>
-
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)</code> Registers a new notification on the sidebar. </p>
-
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>element</code> An element to register the notification on. </li>
-<li><strong>Object</strong> <code>config</code> A map which may contain any of the following members: 
-<ul>
-<li><strong>String</strong> <code>config.class</code> Notification class. If provided should be one of "info", "warning" or "error". </li>
-<li><strong>String</strong> <code>config.icon</code> An icon to use for the notification. Default depends on <code>config.class</code>. </li>
-<li><strong>String</strong> <code>config.menu</code> A context menu for the notification. </li>
-<li><strong>String</strong> <code>config.text</code> A text to use for the notification. </li>
-<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification ? </li>
-<li><strong>Function</strong> <code>config.click</code> On click callback. </li>
-</ul></li>
-<li><strong>returns</strong> a jQuery element representing the added notification. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.onSideBarUpdate.Setup.init.Sidebar.removeNotification(notification)</code> Removes a notification from the sidebar. </p>
-
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
+<li><strong>string</strong> <code>setting</code> The setting that has been changed. </li>
+<li><strong>string</strong> <code>moduleId</code> Id of the module from which the setting was changed. </li>
 </ul></li>
 </ul>
 

@@ -154,3 +154,13 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 	}
 	return menu2;
 };
+
+/*
+	Checks if 2 objects are equal. Does not accept functions. 
+	@param a Object A
+	@param b Object B
+	@returns boolean
+*/
+JOBAD.util.objectEquals = function(a, b){
+	return JSON.stringify(a) == JSON.stringify(b);
+};

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.events.onConfigUpdate] - JOBAD Documentation</title>
+		<title>[JOBADInstance.Event.configUpdate] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,35 +478,21 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.events</a> &gt; <strong>JOBAD.events.onConfigUpdate</strong></p>
-<h1>JOBAD.events.onConfigUpdate</h1>
-
-<p>The onConfigUpdate event is triggered every time a setting is updated. </p>
+<p><a href="../../../../index.html">Start</a> &gt; <a href="../../../index.html">API Documentation</a> &gt; <a href="../../index.html">JOBAD</a> &gt; <a href="../index.html">JOBADInstance</a> &gt; <a href="index.html">JOBADInstance.Event</a> &gt; <strong>JOBADInstance.Event.configUpdate</strong></p>
+<h1>JOBADInstance.Event.configUpdate</h1>
 
 <ul>
-<li><p><strong>Function</strong> <code>JOBAD.events.onConfigUpdate.default()</code> The default Event Handler for onConfigUpdate Events. Does nothing. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.onConfigUpdate.Setup.enable(root)</code> Enables the onConfigUpdate event. </p>
+<li><p><strong>Function</strong> <code>.Event.configUpdate.getResult(setting, moduleId)</code> Get the Result of the configUpdate event handlers. </p>
 
 <ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to enable onConfigUpdate on. </li>
+<li><strong>string</strong> <code>setting</code> The setting that was changed. </li>
+<li><strong>string</strong> <code>moduleId</code> Id of the module from which the setting was changed. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.Events.onConfigUpdate.Setup.disable(root)</code> Disables the onConfigUpdate event. 
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>jQuery</strong> <code>root</code> The root element to disable onConfigUpdate on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.onConfigUpdate.namespace.getResult(setting)</code> Get the Result of the onConfigUpdate event handlers. </p>
+<li><p><strong>Function</strong> <code>.Event.configUpdate.trigger(setting, moduleId)</code> Trigger the configUpdate event. </p>
 
 <ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>string</strong> <code>setting</code> The setting that has been changed. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.Events.onConfigUpdate.namespace.trigger(setting)</code> Trigger the onConfigUpdate event. </p>
-
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-<li><strong>string</strong> <code>setting</code> The setting that has been changed. </li>
+<li><strong>string</strong> <code>setting</code> The setting that was changed.  </li>
+<li><strong>string</strong> <code>moduleId</code> Id of the module from which the setting was changed. </li>
 </ul></li>
 </ul>
 

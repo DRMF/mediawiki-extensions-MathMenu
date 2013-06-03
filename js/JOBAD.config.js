@@ -401,12 +401,17 @@ JOBAD.modules.extensions.config = {
 		*/
 		this.UserConfig.set = function(prop, val){
 			if(this.UserConfig.canSet(prop, val)){
+				if(JOBAD.util.objectEquals(val, this.UserConfig.get(prop))){
+					return; //we have it already; no change neccessary. 
+				}
 				configCache[id][prop] = val;
+				
 			} else {
 				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
+				return; 
 			}
 			JOBAD.storageBackend.setKey(id, configCache[id]);
-			this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [prop]);
+			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, this.info().identifier]);
 		};
 		
 		/*
@@ -429,7 +434,6 @@ JOBAD.modules.extensions.config = {
 				return res;
 			} else {
 				JOBAD.console.log("Failed to access user setting '"+prop+"'");
-				
 			}
 		};
 		
@@ -449,7 +453,7 @@ JOBAD.modules.extensions.config = {
 				configCache[id] = {};
 				for(var key in value){
 					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
-					this.getJOBAD().element.trigger("JOBAD.ConfigUpdateEvent", [key]);
+					JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, this.info().identifier]);
 				}
 			}
 		};
@@ -578,7 +582,6 @@ JOBAD.ifaces.push(function(){
 			//Build Config Stuff	
 			var UserConfig = mod.UserConfig.getTypes();
 			
-			//TODO: Update design a little bit
 			for(var key in UserConfig){
 				(function(){
 				var setting = UserConfig[key];
@@ -727,6 +730,7 @@ JOBAD.ifaces.push(function(){
 						break;
 					default:
 						JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
+						item.remove();
 						break;
 				}
 				
@@ -737,8 +741,13 @@ JOBAD.ifaces.push(function(){
 			$displayer
 			.trigger("JOBAD.modInfoClose")
 			.html("")		
+			
+			
 			.append(
-				JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+				($config.children().length > 0)?
+					JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+				:
+					JOBAD.util.createTabs(["About"], [$info], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
 			)
 			.one('JOBAD.modInfoClose', function(){
 				//Store all the settings
