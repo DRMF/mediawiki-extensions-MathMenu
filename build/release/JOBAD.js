@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 03 Jun 2013 11:12:48 +0200
+	built: Mon, 03 Jun 2013 12:24:10 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1244,7 +1244,7 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 	for(var i=0;i<items.length;i++){
 		var item = items[i];
 		var $a = JOBAD.refs.$("<a href='#'>");
-		$li = JOBAD.refs.$("<li>")
+		var $li = JOBAD.refs.$("<li>")
 		.appendTo($ul)
 		.append($a);
 		$a

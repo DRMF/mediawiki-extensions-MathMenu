@@ -209,7 +209,7 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 	for(var i=0;i<items.length;i++){
 		var item = items[i];
 		var $a = JOBAD.refs.$("<a href='#'>");
-		$li = JOBAD.refs.$("<li>")
+		var $li = JOBAD.refs.$("<li>")
 		.appendTo($ul)
 		.append($a);
 		$a
