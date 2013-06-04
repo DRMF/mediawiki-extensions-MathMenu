@@ -170,7 +170,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 					item_diameter: 25,
 					circle_radius: 60,
 					step_in: 80, 
-					step_out: 80,
+					step_out: 80
 					
 				})
 				.circleMenu('open')

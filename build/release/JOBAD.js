@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 04 Jun 2013 13:39:46 +0200
+	built: Tue, 04 Jun 2013 14:09:33 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1230,7 +1230,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 					item_diameter: 25,
 					circle_radius: 60,
 					step_in: 80, 
-					step_out: 80,
+					step_out: 80
 					
 				})
 				.circleMenu('open')
