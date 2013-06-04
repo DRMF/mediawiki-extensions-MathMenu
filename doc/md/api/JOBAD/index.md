@@ -1,8 +1,9 @@
 # JOBAD
 This object is the main JOBAD Namespace. 
 
-* **Function** `JOBAD(JOBADRootElement)` Creates a new instance of `JOBAD` bound to `JOBADRootElement`. 
+* **Function** `JOBAD(JOBADRootElement, config)` Creates a new instance of `JOBAD` bound to `JOBADRootElement`. 
 	* `JOBADRootElement` a jQuery-ish object[^1] to bind a new JOBAD instance to. 
+	* **Object** `config` JOBAD Configuration. *Unimplemented*
 	* **returns** a new [`JOBAD`](JOBADInstance/index.md) instance. 
 
 * **String** `JOBAD.version` - The current JOBAD Version ('3.0.0')

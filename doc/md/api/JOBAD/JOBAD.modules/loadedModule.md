@@ -11,6 +11,30 @@
 * **Function** `.info()` Returns the info object of this module. 
 * **Function** `.getJOBAD()` Gets the `JOBADInstance` this module is bound to. 
 
+* **Function** `.isActive()` Checks if this module is active. 
+* **Function** `.activate()` Activates this module. 
+* **Function** `.deactivate()` Deactivates this module
+
+## UserConfiguration
+
+* **Function** `.UserConfig.set(prop, value)` Updates user configuration. 
+	* **String** `prop` Property to set. 
+	* **Mixed** `value` Value to set. 
+
+* **Function** `.UserConfig.canSet(prop, value)` Checks if a user configuration can be set with the specefied value. 
+	* **String** `prop` Property to set. 
+	* **Mixed** `value` Value to set. 
+	* **returns** boolean. 
+
+* **Function** `.UserConfig.get(prop)` Reads user configuration. 
+	* **String** `prop` Property to get. 
+	* **returns** value. 
+
+* **Function** `.UserConfig.reset()` Resets the user configuration. 
+* **Function** `.UserConfig.getTypes()` Gets the user configuration types. 
+
+
+
 ## Event functions
 
 These functions represent event handlers. If an event is globally disabled (via  [`JOBAD.config.disabledEvents`](../JOBAD.config.md)) it will not show up in the JOBAD.modules.loadedModule Instance. 
@@ -34,27 +58,10 @@ These functions represent event handlers. If an event is globally disabled (via 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` A reference to `.getJOBAD()`. 
 	* **returns** a text to use as hover text, a jQuery-ish object[^1] or a boolean. 
 	
-## Further members
-A `JOBAD.modules.loadedModule` instance also contains all non-standard properties of the original Module object. Note
-that any JSON-style objects are referenced (and thus shared among all instances of this module) and everything else 
-is copied. 
 
-* **Function** `.isActive()` Checks if this module is active. 
-* **Function** `.activate()` Activates this module. 
-* **Function** `.deactivate()` Deactivates this module
 
-### .UserConfig
-* **Object** `.UserConfig` User configuration namespace. 
-* **Function** `.UserConfig.reset()` Resets the user configuration to the default. 
-* **Function** `.UserConfig.get(key)` Gets a user value setting. 
-	* **String** `key` Key to retrieve. 
-	* **returns** Object
-* **Function** `.UserConfig.set(key, value)` Sets a user value setting. 
-	* **String** `key` Key to set. 
-	* **Object** `value` Value to store. 
-* **Function** `.UserConfig.getTypes()` Gets the available user configurations and its types. 
+## .localStore
 
-### .localStore
 * **Object** `.localStore` Namespace to store variables bound to this instance of a module. 
 * **Function** `.localStore.get(key)` Gets a local variable. 
 	* **String** `key` Name of variable to get. 
@@ -64,7 +71,8 @@ is copied.
 	* **Mixed** `value` Value to set the variable to. 
 * **Function** `.localStore.delete(key)` Deletes a local variable. 
 	* **String** `key` Key to delete. 
-### .globalStore
+	
+## .globalStore
 * **Object** `.globalStore` Namespace to store variables shared among instances of this variable. 
 * **Function** `.globalStore.get(key)` Gets a global variable. 
 	* **String** `key` Name of variable to get. 
@@ -75,6 +83,10 @@ is copied.
 * **Function** `.globalStore.delete(key)` Deletes a global variable. 
 	* **String** `key` Key to delete. 
 
+## Further members
+A `JOBAD.modules.loadedModule` instance also contains all non-standard properties of the original Module object. Note
+that any JSON-style objects are referenced (and thus shared among all instances of this module) and everything else 
+is copied. 
 
 
 ## Footnotes

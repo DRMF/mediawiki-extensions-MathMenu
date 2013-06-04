@@ -32,6 +32,9 @@
 				var wordCount = (target.text().split(" ").length+1).toString()
 				return "I am a p element which contains "+wordCount+" words. ";
 			}
+		},
+		dblClick: function(){
+			alert("Double Click");
 		}
 	});
 })(JOBAD.refs.$);

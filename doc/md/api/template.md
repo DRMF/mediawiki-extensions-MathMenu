@@ -23,28 +23,46 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 		* **Mixed** `spec[3|2] = meta` Meta information. If type is not `list`, may either be a string (with name of setting) 
 		or an array containg the name of the setting and optionally a longer description of this setting. For `list`, this must be an array containg the setting name 
 		and the name of each option.  
-		
+
+* **Function** `template.configUpdate(key, JOBADInstance)` Called every time a user configuration is updated.  
+	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
+	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
+	* **Mixed** `key` The configuration setting that was updated. 
+
 * **Function** `template.globalinit()` Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
 	* **Undefined** `this`
+
 * **Function** `template.init(JOBADInstance, param1, param2, param3 /*, ... */)` Called to intialise a new instance of this module. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **Mixed** `*param` Initial parameters passed to [`JOBADInstance.modules.load`](JOBAD/JOBADInstance/modules.md). 
+
 * **Function** `template.activate(JOBADInstance)` Called whenever the module is activated. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
+
 * **Function** `template.deactivate(JOBADInstance)` Called whenever the module is deactivated. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
-* **Function** `template.onSideBarUpdate(target, JOBADInstance)` Called every time the sidebar is updated. May be ommitted. 
+
+* **Function** `template.SideBarUpdate(target, JOBADInstance)` Called every time the sidebar is updated. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **returns** a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. 
-* **Function** `template.leftClick(target, JOBADInstance)` Called when a left click is performed.  Every left click action is performed. May be ommitted. 
+
+* **Function** `template.leftClick(target, JOBADInstance)` Called when a left click is performed. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **jQuery** `target` The element that was left clicked on. 
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **returns** `true` if it performed some action, `false` otherwise. 
+	
+* **Function** `template.dblClick(target, JOBADInstance)` Called when a double click is performed. May be ommitted. 
+	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
+	* **jQuery** `target` The element that was double clicked on. 
+	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
+	* **returns** `true` if it performed some action, `false` otherwise. 
+
+
 * **Function** `template.contextMenuEntries(target, JOBADInstance)` Called when a context menu is requested. Context Menu entries will be merged. May be ommitted. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 
 	* **jQuery** `target` The element that was right clicked on. 

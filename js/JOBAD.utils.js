@@ -115,17 +115,42 @@ JOBAD.util.createTabs = function(names, divs, options, height){
 	@returns the new representation. 
 */
 JOBAD.util.generateMenuList = function(menu){
+	var DEFAULT_ICON = "none";
 	if(typeof menu == 'undefined'){
 		return [];
 	}
 	var res = [];
-	for(var key in menu){
-		if(menu.hasOwnProperty(key)){
-			var val = menu[key];
+	if(JOBAD.refs._.isArray(menu)){
+		for(var i=0;i<menu.length;i++){
+			var key = menu[i][0];
+			var val = menu[i][1];
+			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
 			if(typeof val == 'function'){
-				res.push([key, val]);		
+				res.push([key, val, icon]);		
 			} else {
-				res.push([key, JOBAD.util.generateMenuList(val)]);
+				res.push([key, JOBAD.util.generateMenuList(val), icon]);
+			}
+		}
+	} else {
+		for(var key in menu){
+			if(menu.hasOwnProperty(key)){
+				var val = menu[key];
+				if(typeof val == 'function'){
+					res.push([key, val, DEFAULT_ICON]);	
+				} else if(JOBAD.refs._.isArray(val)){
+					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
+						if(typeof val[0] == 'function'){
+							res.push([key, val[0], val[1]]);
+						} else {
+							res.push([key, JOBAD.util.generateMenuList(val[0]), val[1]]);
+						}
+					} else {
+						res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
+					}
+					
+				} else {
+					res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
+				}
 			}
 		}
 	}

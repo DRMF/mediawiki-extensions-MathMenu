@@ -483,7 +483,8 @@
 
 <h2>Module Template</h2>
 
-<div class="codehilite"><pre><code><span class="cm">/* Module Info / Meta Data */</span>
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="cm">/* Module Info / Meta Data */</span>
     <span class="nx">info</span><span class="o">:</span><span class="p">{</span>
         <span class="s1">&#39;identifier&#39;</span><span class="o">:</span>   <span class="s1">&#39;template&#39;</span><span class="p">,</span>  <span class="c1">//(Unique) identifier for this module, preferably human readable. </span>
         <span class="s1">&#39;title&#39;</span><span class="o">:</span>    <span class="s1">&#39;Template Module&#39;</span><span class="p">,</span> <span class="c1">//Human Readable title of the module. </span>
@@ -538,6 +539,15 @@
 <span class="cm">            called when a left click is performed.  Every left click action is performed. May be ommitted. </span>
 <span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
 <span class="cm">            @param target The element that has been left clicked on. </span>
+<span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on.  </span>
+<span class="cm">            @returns Returns true iff it performed some action. </span>
+<span class="cm">        */</span>
+    <span class="p">},</span>
+    <span class="nx">dblClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+        <span class="cm">/*</span>
+<span class="cm">            called when a double click is performed.  </span>
+<span class="cm">            @this An instance of JOBAD.modules.loadedModule</span>
+<span class="cm">            @param target The element that has been double clicked on. </span>
 <span class="cm">            @param JOBADInstance The instance of JOBAD the module is initiated on.  </span>
 <span class="cm">            @returns Returns true iff it performed some action. </span>
 <span class="cm">        */</span>

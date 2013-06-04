@@ -66,6 +66,42 @@ JOBAD.events.leftClick =
 	}
 };
 
+/* double Click */
+JOBAD.events.dblClick = 
+{
+	'default': function(){
+		return false;
+	},
+	'Setup': {
+		'enable': function(root){
+			var me = this;
+			root.delegate("*", 'dblclick.JOBAD.dblClick', function(event){
+				var element = JOBAD.refs.$(event.target); //The base element.  
+				var res = me.Event.dblClick.trigger(element);
+				root.trigger('JOBAD.Event', ['dblClick', element]);
+				event.stopPropagation(); //Not for the parent. 
+			});
+		},
+		'disable': function(root){
+			root.undelegate("*", 'dblclick.JOBAD.dblClick');	
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(target){
+			return this.modules.iterateAnd(function(module){
+				module.dblClick.call(module, target, module.getJOBAD());
+				return true;
+			});
+		},
+		'trigger': function(target){
+			var evt = this.Event.dblClick.getResult(target);
+			return evt;
+		}
+	}
+};
+
 /* onEvent */
 JOBAD.events.onEvent = 
 {
@@ -109,6 +145,8 @@ JOBAD.events.contextMenuEntries =
 				var res = me.Event.contextMenuEntries.getResult(target);
 				root.trigger('JOBAD.Event', ['contextMenuEntries', target]);
 				return res;
+			}, function(target){
+				return me.Config.get("cmenu_type");
 			});
 		},
 		'disable': function(root){
@@ -121,7 +159,7 @@ JOBAD.events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return (JOBAD.refs._.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
+				return JOBAD.util.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];

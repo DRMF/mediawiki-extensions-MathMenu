@@ -3,7 +3,8 @@
 ## Module Template
 
 ```js
-/* Module Info / Meta Data */
+var template = {
+	/* Module Info / Meta Data */
 	info:{
 		'identifier':	'template',  //(Unique) identifier for this module, preferably human readable. 
 		'title':	'Template Module', //Human Readable title of the module. 
@@ -58,6 +59,15 @@
 			called when a left click is performed.  Every left click action is performed. May be ommitted. 
 			@this An instance of JOBAD.modules.loadedModule
 			@param target The element that has been left clicked on. 
+			@param JOBADInstance The instance of JOBAD the module is initiated on.  
+			@returns Returns true iff it performed some action. 
+		*/
+	},
+	dblClick: function(target, JOBADInstance){
+		/*
+			called when a double click is performed.  
+			@this An instance of JOBAD.modules.loadedModule
+			@param target The element that has been double clicked on. 
 			@param JOBADInstance The instance of JOBAD the module is initiated on.  
 			@returns Returns true iff it performed some action. 
 		*/

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.util] - JOBAD Documentation</title>
+		<title>[JOBADInstance.Event.dblClick] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,67 +478,21 @@
 -->
 	</head>
 	<body>
-<p><a href="../../index.html">Start</a> &gt; <a href="../index.html">API Documentation</a> &gt; <a href="index.html">JOBAD</a> &gt; <strong>JOBAD.util</strong></p>
-<h1>JOBAD.util</h1>
+<p><a href="../../../../index.html">Start</a> &gt; <a href="../../../index.html">API Documentation</a> &gt; <a href="../../index.html">JOBAD</a> &gt; <a href="../index.html">JOBADInstance</a> &gt; <a href="index.html">JOBADInstance.Event</a> &gt; <strong>JOBADInstance.Event.dblClick</strong></p>
+<h1>JOBADInstance.Event.dblClick</h1>
 
 <ul>
-<li><strong>Function</strong> <code>JOBAD.util.UID()</code> Gets a unique id which can be used as identifier. </li>
-<li><strong>Function</strong> <code>JOBAD.util.objectEquals(a, b)</code> Checks if two objects are equal. </li>
-<li><strong>Function</strong> <code>JOBAD.util.bindEverything(object, thisObject)</code> Binds every function in <code>object</code> to <code>thisObject</code>. Also includes nested namespaces. 
-<ul>
-<li><strong>object</strong> <code>object</code> Object to bind functions in. </li>
-<li><strong>object</strong> <code>thisObject</code> Object to bind functions to. </li>
-<li><strong>returns</strong> a new object containing the bound functions. </li>
-</ul></li>
-<li><strong>Function</strong> <code>JOBAD.util.generateMenuList(menu)</code> Generates a list menu representation from an object representation. 
-<ul>
-<li><strong>Object</strong> <code>menu</code> an object representation of the menu. </li>
-<li><strong>returns</strong> the new representation. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.fullWrap(menu, callback)</code> Wraps a menu callback with the spacefied wrapper</p>
+<li><p><strong>Function</strong> <code>.Event.dblClick.getResult(target)</code> Get the Result of the dblClick event handlers. </p>
 
 <ul>
-<li><strong>Object</strong> <code>menu</code> The menu to wrap. </li>
-<li><strong>Function</strong> <code>wrapper(org, arguments)</code> The wrapper function. </li>
-<li><strong>returns</strong> the new representation. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being double clicked. </li>
+<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.createRadio(texts, start)</code> Creates a jQuery UI radio button. </p>
+<li><p><strong>Function</strong> <code>.Event.dblClick.trigger(target)</code> Trigger the dblClick event. </p>
 
 <ul>
-<li><strong>Array</strong> <code>texts</code> Texts to use as names. </li>
-<li><strong>number</strong> <code>start</code> Identifier of the initial value.  </li>
-<li><strong>returns</strong> jQuery object. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.createTabs(names, tabs, options, height)</code> Creates a jQuery UI tabs. </p>
-
-<ul>
-<li><strong>Array</strong> <code>names</code> Texts to use as names for tab titles. </li>
-<li><strong>Array</strong> <code>tabs</code> Elements to use as tabs. </li>
-<li><strong>Array</strong> <code>options</code> Options to pass to jQuery UI Tabs. </li>
-<li><strong>number</strong> <code>height</code> Optional. Height of the tabs. </li>
-<li><strong>returns</strong> jQuery object. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.createProperUserSettingsObject(obj, modName)</code> Creates a proper User Settings Object. </p>
-
-<ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>modName</code> Identifier of the module. </li>
-<li><strong>returns</strong> object</li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.getDefaultConfigSetting</code> Gets the default of a configuration object. </p>
-
-<ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>key</code> Key to get. </li>
-<li><strong>returns</strong> object</li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.validateConfigSetting(obj, key, val)</code> Validates if the specefied object of a configuration object can be set. </p>
-
-<ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>key</code> Key to validate. </li>
-<li><strong>Object</strong> <code>value</code> Value to vaildate. </li>
-<li><strong>returns</strong> boolean. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that is being double clicked. </li>
+<li><strong>returns</strong> a boolean indicating if some action was taken. </li>
 </ul></li>
 </ul>
 

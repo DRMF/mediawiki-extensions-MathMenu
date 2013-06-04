@@ -1,6 +1,7 @@
 # JOBAD.util
 
 * **Function** `JOBAD.util.UID()` Gets a unique id which can be used as identifier. 
+* **Function** `JOBAD.util.objectEquals(a, b)` Checks if two objects are equal. 
 * **Function** `JOBAD.util.bindEverything(object, thisObject)` Binds every function in `object` to `thisObject`. Also includes nested namespaces. 
 	* **object** `object` Object to bind functions in. 
 	* **object** `thisObject` Object to bind functions to. 

@@ -511,41 +511,62 @@ or an array containg the name of the setting and optionally a longer description
 and the name of each option.  </li>
 </ul></li>
 </ul></li>
+<li><p><strong>Function</strong> <code>template.configUpdate(key, JOBADInstance)</code> Called every time a user configuration is updated.  </p>
+
+<ul>
+<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>Mixed</strong> <code>key</code> The configuration setting that was updated. </li>
+</ul></li>
 <li><p><strong>Function</strong> <code>template.globalinit()</code> Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </p>
 
 <ul>
 <li><strong>Undefined</strong> <code>this</code></li>
 </ul></li>
-<li><strong>Function</strong> <code>template.init(JOBADInstance, param1, param2, param3 /*, ... */)</code> Called to intialise a new instance of this module. 
+<li><p><strong>Function</strong> <code>template.init(JOBADInstance, param1, param2, param3 /*, ... */)</code> Called to intialise a new instance of this module. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 <li><strong>Mixed</strong> <code>*param</code> Initial parameters passed to <a href="JOBAD/JOBADInstance/modules.html"><code>JOBADInstance.modules.load</code></a>. </li>
 </ul></li>
-<li><strong>Function</strong> <code>template.activate(JOBADInstance)</code> Called whenever the module is activated. 
+<li><p><strong>Function</strong> <code>template.activate(JOBADInstance)</code> Called whenever the module is activated. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>template.deactivate(JOBADInstance)</code> Called whenever the module is deactivated. 
+<li><p><strong>Function</strong> <code>template.deactivate(JOBADInstance)</code> Called whenever the module is deactivated. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>template.onSideBarUpdate(target, JOBADInstance)</code> Called every time the sidebar is updated. May be ommitted. 
+<li><p><strong>Function</strong> <code>template.SideBarUpdate(target, JOBADInstance)</code> Called every time the sidebar is updated. May be ommitted. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 <li><strong>returns</strong> a text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="template.html#fn-1">1</a></sup> or a boolean indicating either the text or if something was done. </li>
 </ul></li>
-<li><strong>Function</strong> <code>template.leftClick(target, JOBADInstance)</code> Called when a left click is performed.  Every left click action is performed. May be ommitted. 
+<li><p><strong>Function</strong> <code>template.leftClick(target, JOBADInstance)</code> Called when a left click is performed. May be ommitted. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>jQuery</strong> <code>target</code> The element that was left clicked on. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
 <li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
 </ul></li>
-<li><strong>Function</strong> <code>template.contextMenuEntries(target, JOBADInstance)</code> Called when a context menu is requested. Context Menu entries will be merged. May be ommitted. 
+<li><p><strong>Function</strong> <code>template.dblClick(target, JOBADInstance)</code> Called when a double click is performed. May be ommitted. </p>
+
+<ul>
+<li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
+<li><strong>jQuery</strong> <code>target</code> The element that was double clicked on. </li>
+<li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>returns</strong> <code>true</code> if it performed some action, <code>false</code> otherwise. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>template.contextMenuEntries(target, JOBADInstance)</code> Called when a context menu is requested. Context Menu entries will be merged. May be ommitted. </p>
+
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>jQuery</strong> <code>target</code> The element that was right clicked on. </li>

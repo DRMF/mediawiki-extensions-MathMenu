@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 03 Jun 2013 12:46:47 +0200
+	built: Tue, 04 Jun 2013 13:39:46 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -326,17 +326,42 @@ JOBAD.util.createTabs = function(names, divs, options, height){
 	@returns the new representation. 
 */
 JOBAD.util.generateMenuList = function(menu){
+	var DEFAULT_ICON = "none";
 	if(typeof menu == 'undefined'){
 		return [];
 	}
 	var res = [];
-	for(var key in menu){
-		if(menu.hasOwnProperty(key)){
-			var val = menu[key];
+	if(JOBAD.refs._.isArray(menu)){
+		for(var i=0;i<menu.length;i++){
+			var key = menu[i][0];
+			var val = menu[i][1];
+			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
 			if(typeof val == 'function'){
-				res.push([key, val]);		
+				res.push([key, val, icon]);		
 			} else {
-				res.push([key, JOBAD.util.generateMenuList(val)]);
+				res.push([key, JOBAD.util.generateMenuList(val), icon]);
+			}
+		}
+	} else {
+		for(var key in menu){
+			if(menu.hasOwnProperty(key)){
+				var val = menu[key];
+				if(typeof val == 'function'){
+					res.push([key, val, DEFAULT_ICON]);	
+				} else if(JOBAD.refs._.isArray(val)){
+					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
+						if(typeof val[0] == 'function'){
+							res.push([key, val[0], val[1]]);
+						} else {
+							res.push([key, JOBAD.util.generateMenuList(val[0]), val[1]]);
+						}
+					} else {
+						res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
+					}
+					
+				} else {
+					res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
+				}
 			}
 		}
 	}
@@ -1139,14 +1164,21 @@ JOBAD.UI.ContextMenu.config = {
 	Registers a context menu on an element. 
 	@param element jQuery element to register on. 
 	@param demandFunction Function to call to get menu. 
+	@param menuType Optional. Type of menu to use. 0 => jQuery UI menu, 1 => Pie menu (unimplemented). 
 	@param onEnable Optional. Will be called before the context menu is enabled. 
 	@param onDisable Optional. Will be called after the context menu has been disabled. 
 	@return the jquery element. 
 */
-JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisable){
+JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, onEnable, onDisable){
+
+
 	if(typeof demandFunction != 'function'){
 		JOBAD.error('JOBAD.UI.ContextMenu.enable: demandFunction is not a function'); //die
-		return element;
+		return element
+	}
+	
+	if(typeof typeFunction != 'function'){
+		typeFunction = function(element){return 0;}; //Default
 	}
 	
 	if(typeof onEnable != 'function'){
@@ -1179,8 +1211,34 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisa
 
 		onEnable(element);
 
-		var menuBuild = JOBAD.UI.ContextMenu.buildMenuList(result, targetElement, elementOrg)
-		.menu()
+		var menuBuild = JOBAD.refs.$("<div>");
+		
+		var menuType = typeFunction(targetElement, elementOrg);
+		
+		if(menuType == 0){
+			menuBuild
+			.append(
+				JOBAD.UI.ContextMenu.buildContextMenuList(result, targetElement, elementOrg)
+				.menu()
+			);
+		} else if(menuType == 1){
+			menuBuild
+			.append(
+				JOBAD.UI.ContextMenu.buildPieMenuList(result, targetElement, elementOrg)
+				.circleMenu({
+					direction:'right-half', 
+					item_diameter: 25,
+					circle_radius: 60,
+					step_in: 80, 
+					step_out: 80,
+					
+				})
+				.circleMenu('open')
+			)
+		}
+		
+
+		menuBuild
 		.css({
 			'width': JOBAD.UI.ContextMenu.config.width,
 			'position': 'fixed'
@@ -1191,11 +1249,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisa
 		.on('mousedown', function(e){
 			e.stopPropagation();//prevent closemenu from triggering
 		})
-		.appendTo(JOBAD.refs.$("body"));
-		
-		
-
-		menuBuild
+		.appendTo(JOBAD.refs.$("body"))
 		.css("top", Math.min(mouseCoords[1], window.innerHeight-menuBuild.outerHeight(true)-JOBAD.UI.ContextMenu.config.margin))
 		.css("left", Math.min(mouseCoords[0], window.innerWidth-menuBuild.outerWidth(true)-JOBAD.UI.ContextMenu.config.margin))
 		var closeHandler = function(e){
@@ -1233,14 +1287,60 @@ JOBAD.UI.ContextMenu.disable = function(element){
 };
 
 /*
-	Builds the menu html element
+	Builds the menu html element for a standard context menu. 
 	@param items The menu to build. 
 	@param element The element the context menu has been requested on. 
 	@param elementOrg The element the context menu call originates from. 
 	@returns the menu element. 
 */
-JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
+JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, elementOrg){
 	var $ul = JOBAD.refs.$("<ul class='JOBAD JOBAD_Contextmenu'>");
+	for(var i=0;i<items.length;i++){
+		var item = items[i];
+		
+		var $a = JOBAD.refs.$("<a href='#'>");
+		
+		var $li = JOBAD.refs.$("<li>").appendTo($ul);
+		
+		$li.append($a);
+		
+		$a
+		.text(item[0])
+		.on('click', function(e){
+			return false; //Don't follow link. 
+		});
+		
+		if(item[2] != "none"){
+			$a.prepend(JOBAD.refs.$("<span>").addClass("ui-icon ui-icon-"+item[2]));
+		}
+		
+		(function(){
+			if(typeof item[1] == 'function'){
+				var callback = item[1];
+
+				$a.on('click', function(e){
+					JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
+					callback(element, elementOrg);
+				});		
+			} else {
+				$li.append(JOBAD.UI.ContextMenu.buildContextMenuList(item[1], element, elementOrg));
+			}
+		})()
+				
+	}
+	return $ul;
+};
+
+/*
+	Builds the menu html element for the pie menu. 
+	@param items The menu to build. 
+	@param element The element the context menu has been requested on. 
+	@param elementOrg The element the context menu call originates from. 
+	@returns the menu element. 
+*/
+JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, elementOrg){
+	var $ul = JOBAD.refs.$("<ul class='JOBAD JOBAD_Contextmenu menu'>")
+	.append('<li><a></a></li>');
 	for(var i=0;i<items.length;i++){
 		var item = items[i];
 		var $a = JOBAD.refs.$("<a href='#'>");
@@ -1248,7 +1348,8 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 		.appendTo($ul)
 		.append($a);
 		$a
-		.text(item[0])
+		//.text(item[0])
+		.text(i) //TODO: Icons
 		.on('click', function(e){
 			return false; //Don't follow link. 
 		});
@@ -1261,8 +1362,8 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 					callback(element, elementOrg);
 				});		
 			} else {
-				
-				$li.append(JOBAD.UI.ContextMenu.buildMenuList(item[1], element, elementOrg));
+				$a.remove();
+				$li.append(JOBAD.UI.ContextMenu.buildPieMenuList(item[1], element, elementOrg));
 			}
 		})()
 				
@@ -1623,6 +1724,42 @@ JOBAD.events.leftClick =
 	}
 };
 
+/* double Click */
+JOBAD.events.dblClick = 
+{
+	'default': function(){
+		return false;
+	},
+	'Setup': {
+		'enable': function(root){
+			var me = this;
+			root.delegate("*", 'dblclick.JOBAD.dblClick', function(event){
+				var element = JOBAD.refs.$(event.target); //The base element.  
+				var res = me.Event.dblClick.trigger(element);
+				root.trigger('JOBAD.Event', ['dblClick', element]);
+				event.stopPropagation(); //Not for the parent. 
+			});
+		},
+		'disable': function(root){
+			root.undelegate("*", 'dblclick.JOBAD.dblClick');	
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(target){
+			return this.modules.iterateAnd(function(module){
+				module.dblClick.call(module, target, module.getJOBAD());
+				return true;
+			});
+		},
+		'trigger': function(target){
+			var evt = this.Event.dblClick.getResult(target);
+			return evt;
+		}
+	}
+};
+
 /* onEvent */
 JOBAD.events.onEvent = 
 {
@@ -1666,6 +1803,8 @@ JOBAD.events.contextMenuEntries =
 				var res = me.Event.contextMenuEntries.getResult(target);
 				root.trigger('JOBAD.Event', ['contextMenuEntries', target]);
 				return res;
+			}, function(target){
+				return me.Config.get("cmenu_type");
 			});
 		},
 		'disable': function(root){
@@ -1678,7 +1817,7 @@ JOBAD.events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return (JOBAD.refs._.isArray(entries))?entries:JOBAD.util.generateMenuList(entries);
+				return JOBAD.util.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
@@ -1997,6 +2136,8 @@ for(var key in JOBAD.events){
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//StorageBackend
+
 JOBAD.storageBackend = {
 	"getKey": function(key, def){
 		var res = JOBAD.storageBackend.engines[JOBAD.config.storageBackend][0](key);
@@ -2015,6 +2156,8 @@ JOBAD.storageBackend.engines = {
 
 JOBAD.config.storageBackend = "none";
 
+
+//Config Settings - module based
 /*
 	Validates if specefied object of a configuration object can be set. 
 	@param	obj Configuration Object
@@ -2354,6 +2497,7 @@ JOBAD.util.getDefaultConfigSetting = function(obj, key){
 	return obj[key][2];
 };
 
+//Config Settings - module
 var configCache = {};
 
 JOBAD.modules.extensions.config = {
@@ -2445,17 +2589,227 @@ JOBAD.modules.extensions.config = {
 }
 
 /*
+	Instance Bsed Configuration
+*/
+
+JOBAD.ifaces.push(function(JOBADRootElement, params){
+	var config = params[1];
+	
+	var spec = JOBAD.util.createProperUserSettingsObject({
+		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
+		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]]
+	}, "");
+	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
+
+	this.Config = {};
+	
+	this.Config.get = function(key){
+		if(!spec.hasOwnProperty(key)){
+			JOBAD.console.log("Can't find '"+key+"' in Instance Config. ");
+		}
+		if(cache.hasOwnProperty(key)){
+			return cache[key];
+		} else {
+			return spec[key][2]; 
+		}
+		
+	};
+	
+	this.Config.set = function(key, val){
+		cache[key] = val;
+	};
+	
+	this.Config.getTypes = function(){
+		return spec;
+	};
+	
+	this.Config.reset = function(){
+		cache = {};
+	};
+	
+	this.Config = JOBAD.util.bindEverything(this.Config, this);
+})
+
+/*
 	Config Manager UI
 */
 
 JOBAD.ifaces.push(function(){
+
+	/*
+		build a jQuery config 
+	*/
+	var buildjQueryConfig = function(UserConfig, $config, get_val){
+		for(var key in UserConfig){
+			(function(){
+			
+			var setting = UserConfig[key];
+			var val = get_val(key); // Get current value
+						
+			var item = JOBAD.refs.$("<div class='JOBAD_CONFIG_SETTTING'>")
+			.data({
+					"JOBAD.config.setting.key": key,
+					"JOBAD.config.setting.val": val
+			}).appendTo($config);
+			
+			var type = setting[0];
+			var validator = setting[1];
+			var meta = setting[3];
+			switch(type){
+				case "string":
+						item.append(
+							JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+							JOBAD.refs.$("<input type='text'>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK").val(val).keyup(function(){
+								var val = JOBAD.refs.$(this).val();
+								if(validator(val)){
+									item.data("JOBAD.config.setting.val", val);
+									JOBAD.refs.$(this).removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+								} else {
+									JOBAD.refs.$(this).addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+								}
+								
+							}),
+							"<br>", 
+							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
+						);
+					break;
+				case "bool":
+	
+					var radio = JOBAD.util.createRadio(["True", "False"], val?0:1);	
+	
+					item.append(
+						JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+						radio,
+						"<br>", 
+						JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
+					);
+					
+					radio.find("input").change(function(){
+						item.data("JOBAD.config.setting.val", radio.find("input").eq(0).is(":checked"));
+					});
+					
+					break;
+				case "integer":
+				
+					var update = function(val){
+						if(validator(val) && val % 1 == 0){
+							item.data("JOBAD.config.setting.val", val);
+							spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+							return true;
+						} else {
+							spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+							return false;
+						}
+					}
+				
+					var id = JOBAD.util.UID();
+					
+					var spinner = JOBAD.refs.$("<input>")
+					.attr("id", id)
+					.val(val)
+					.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
+					.keyup(function(){
+						var val = JOBAD.refs.$(this).val();
+						if(val != ""){
+							update(parseFloat(val));
+						}
+						
+					})
+					.spinner({
+						spin: function(ev, ui){
+							update(ui.value);
+						}
+					});
+					
+					item.append(
+						JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+						spinner,
+						"<br>", 
+						JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
+					);
+
+					break;
+				case "number":
+					var update = function(val){
+						if(validator(val)){
+							item.data("JOBAD.config.setting.val", val);
+							spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
+							return true;
+						} else {
+							spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
+							return false;
+						}
+					}
+				
+					var id = JOBAD.util.UID();
+					
+					var spinner = JOBAD.refs.$("<input>")
+					.attr("id", id)
+					.val(val)
+					.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
+					.keyup(function(){
+						var val = JOBAD.refs.$(this).val();
+						if(val != ""){
+							update(parseFloat(val));
+						}
+					});
+					
+					item.append(
+						JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+						spinner,
+						"<br>", 
+						JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
+					);
+
+					break;
+				case "list":
+					var values = setting[4]; 
+					var meta_data = meta.slice(1)
+					
+					var $select = JOBAD.refs.$("<select>");
+					
+					for(var i=0;i<values.length;i++){
+						$select.append(
+							JOBAD.refs.$("<option>").attr("value", JSON.stringify(values[i])).text(meta_data[i])
+						)
+					}
+					
+					$select
+					.val(JSON.stringify(val))
+					.change(function(){
+						item.data("JOBAD.config.setting.val", JSON.parse(JOBAD.refs.$(this).val()));
+					});
+					
+					item.append(
+						JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
+						$select,
+						"<br>"
+					);
+					
+					break;
+				default:
+					JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
+					item.remove();
+					break;
+			}
+			
+			})();
+			
+		}
+	};
+
+
 	this.showConfigUI = function(){
+	
+		var me = this;
 	
 		var $Div = JOBAD.refs.$("<div>");
 		
 		$Div.attr("title", "JOBAD Configuration Utility");
 
 		var mods = this.modules.getIdentifiers();
+		
+		
 
 		//create the table
 		
@@ -2473,17 +2827,22 @@ JOBAD.ifaces.push(function(){
 		var $displayer = JOBAD.refs.$("<td>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_infobox").attr("rowspan", len+1);
 
 		var showMain = function(){
+		
+			var $config = JOBAD.refs.$("<div>");
+			buildjQueryConfig(me.Config.getTypes(), $config, function(key){return me.Config.get(key);})
+		
 			$displayer
 			.trigger("JOBAD.modInfoClose")	
 			.html("")
 			.append(
 				JOBAD.util.createTabs(
-					["About JOBAD", "GPL License", "jQuery", "jQuery UI", "Underscore"], 
+					["About JOBAD", "Config", "GPL License", "jQuery", "jQuery UI", "Underscore"], 
 					[
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("JOBAD Core Version "+JOBAD.version),
 							JOBAD.refs.$("<pre>").text(JOBAD.resources.jobad_license)
 						),
+						$config,
 						JOBAD.refs.$("<pre>").text(JOBAD.resources.gpl_v3_text),
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("jQuery Version "+JOBAD.refs.$.fn.jquery),
@@ -2501,8 +2860,10 @@ JOBAD.ifaces.push(function(){
 				).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
 			)
 			.one('JOBAD.modInfoClose', function(){
-				//We are closing the main mod info. 
-				//We may want to save things
+				$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
+					var e = JOBAD.refs.$(e);
+					me.Config.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
+				});
 			});
 			return;
 		};
@@ -2560,161 +2921,9 @@ JOBAD.ifaces.push(function(){
 			//Build Config Stuff	
 			var UserConfig = mod.UserConfig.getTypes();
 			
-			for(var key in UserConfig){
-				(function(){
-				var setting = UserConfig[key];
-				var val = mod.UserConfig.get(key); // Get current value
-				
-				var item = JOBAD.refs.$("<div class='JOBAD_CONFIG_SETTTING'>")
-				.data({
-						"JOBAD.config.setting.key": key,
-						"JOBAD.config.setting.val": val
-				}).appendTo($config);
-				
-				var type = setting[0];
-				var validator = setting[1];
-				var meta = setting[3];
-				switch(type){
-					case "string":
-							item.append(
-								JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
-								JOBAD.refs.$("<input type='text'>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK").val(val).keyup(function(){
-									var val = JOBAD.refs.$(this).val();
-									if(validator(val)){
-										item.data("JOBAD.config.setting.val", val);
-										JOBAD.refs.$(this).removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
-									} else {
-										JOBAD.refs.$(this).addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
-									}
-									
-								}),
-								"<br>", 
-								JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
-							);
-						break;
-					case "bool":
-		
-						var radio = JOBAD.util.createRadio(["True", "False"], val?0:1);	
-		
-						item.append(
-							JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
-							radio,
-							"<br>", 
-							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")
-						);
-						
-						radio.find("input").change(function(){
-							item.data("JOBAD.config.setting.val", radio.find("input").eq(0).is(":checked"));
-						});
-						
-						break;
-					case "integer":
-					
-						var update = function(val){
-							if(validator(val) && val % 1 == 0){
-								item.data("JOBAD.config.setting.val", val);
-								spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
-								return true;
-							} else {
-								spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
-								return false;
-							}
-						}
-					
-						var id = JOBAD.util.UID();
-						
-						var spinner = JOBAD.refs.$("<input>")
-						.attr("id", id)
-						.val(val)
-						.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
-						.keyup(function(){
-							var val = JOBAD.refs.$(this).val();
-							if(val != ""){
-								update(parseFloat(val));
-							}
-							
-						})
-						.spinner({
-							spin: function(ev, ui){
-								update(ui.value);
-							}
-						});
-						
-						item.append(
-							JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
-							spinner,
-							"<br>", 
-							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
-						);
-
-						break;
-					case "number":
-						var update = function(val){
-							if(validator(val)){
-								item.data("JOBAD.config.setting.val", val);
-								spinner.removeClass("JOBAD_ConfigUI_validateFail").addClass("JOBAD_ConfigUI_validateOK");
-								return true;
-							} else {
-								spinner.addClass("JOBAD_ConfigUI_validateFail").removeClass("JOBAD_ConfigUI_validateOK");
-								return false;
-							}
-						}
-					
-						var id = JOBAD.util.UID();
-						
-						var spinner = JOBAD.refs.$("<input>")
-						.attr("id", id)
-						.val(val)
-						.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_validateOK")
-						.keyup(function(){
-							var val = JOBAD.refs.$(this).val();
-							if(val != ""){
-								update(parseFloat(val));
-							}
-						});
-						
-						item.append(
-							JOBAD.refs.$("<label for='"+id+"'>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
-							spinner,
-							"<br>", 
-							JOBAD.refs.$("<span>").text(meta[1]).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigDesc")				
-						);
-
-						break;
-					case "list":
-						var values = setting[4]; 
-						var meta_data = meta.slice(1)
-						
-						var $select = JOBAD.refs.$("<select>");
-						
-						for(var i=0;i<values.length;i++){
-							$select.append(
-								JOBAD.refs.$("<option>").attr("value", JSON.stringify(values[i])).text(meta_data[i])
-							)
-						}
-						
-						$select
-						.val(JSON.stringify(val))
-						.change(function(){
-							item.data("JOBAD.config.setting.val", JSON.parse(JOBAD.refs.$(this).val()));
-						});
-						
-						item.append(
-							JOBAD.refs.$("<span>").text(meta[0]+": ").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_MetaConfigTitle"),
-							$select,
-							"<br>"
-						);
-						
-						break;
-					default:
-						JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
-						item.remove();
-						break;
-				}
-				
-				})();
-				
-			}
+			buildjQueryConfig(UserConfig, $config, function(key){
+				return mod.UserConfig.get(key);
+			});
 			
 			$displayer
 			.trigger("JOBAD.modInfoClose")

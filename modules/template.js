@@ -79,6 +79,15 @@ var template = {
 			@returns Returns true iff it performed some action. 
 		*/
 	},
+	dblClick: function(target, JOBADInstance){
+		/*
+			called when a double click is performed.  
+			@this An instance of JOBAD.modules.loadedModule
+			@param target The element that has been double clicked on. 
+			@param JOBADInstance The instance of JOBAD the module is initiated on.  
+			@returns Returns true iff it performed some action. 
+		*/
+	},
 	contextMenuEntries: function(target, JOBADInstance){
 		/*
 			called when a context menu is requested. Context Menu entries will be merged. May be ommitted.  

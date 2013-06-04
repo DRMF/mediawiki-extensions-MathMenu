@@ -104,14 +104,21 @@ JOBAD.UI.ContextMenu.config = {
 	Registers a context menu on an element. 
 	@param element jQuery element to register on. 
 	@param demandFunction Function to call to get menu. 
+	@param menuType Optional. Type of menu to use. 0 => jQuery UI menu, 1 => Pie menu (unimplemented). 
 	@param onEnable Optional. Will be called before the context menu is enabled. 
 	@param onDisable Optional. Will be called after the context menu has been disabled. 
 	@return the jquery element. 
 */
-JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisable){
+JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, onEnable, onDisable){
+
+
 	if(typeof demandFunction != 'function'){
 		JOBAD.error('JOBAD.UI.ContextMenu.enable: demandFunction is not a function'); //die
-		return element;
+		return element
+	}
+	
+	if(typeof typeFunction != 'function'){
+		typeFunction = function(element){return 0;}; //Default
 	}
 	
 	if(typeof onEnable != 'function'){
@@ -144,8 +151,34 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisa
 
 		onEnable(element);
 
-		var menuBuild = JOBAD.UI.ContextMenu.buildMenuList(result, targetElement, elementOrg)
-		.menu()
+		var menuBuild = JOBAD.refs.$("<div>");
+		
+		var menuType = typeFunction(targetElement, elementOrg);
+		
+		if(menuType == 0){
+			menuBuild
+			.append(
+				JOBAD.UI.ContextMenu.buildContextMenuList(result, targetElement, elementOrg)
+				.menu()
+			);
+		} else if(menuType == 1){
+			menuBuild
+			.append(
+				JOBAD.UI.ContextMenu.buildPieMenuList(result, targetElement, elementOrg)
+				.circleMenu({
+					direction:'right-half', 
+					item_diameter: 25,
+					circle_radius: 60,
+					step_in: 80, 
+					step_out: 80,
+					
+				})
+				.circleMenu('open')
+			)
+		}
+		
+
+		menuBuild
 		.css({
 			'width': JOBAD.UI.ContextMenu.config.width,
 			'position': 'fixed'
@@ -156,11 +189,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, onEnable, onDisa
 		.on('mousedown', function(e){
 			e.stopPropagation();//prevent closemenu from triggering
 		})
-		.appendTo(JOBAD.refs.$("body"));
-		
-		
-
-		menuBuild
+		.appendTo(JOBAD.refs.$("body"))
 		.css("top", Math.min(mouseCoords[1], window.innerHeight-menuBuild.outerHeight(true)-JOBAD.UI.ContextMenu.config.margin))
 		.css("left", Math.min(mouseCoords[0], window.innerWidth-menuBuild.outerWidth(true)-JOBAD.UI.ContextMenu.config.margin))
 		var closeHandler = function(e){
@@ -198,14 +227,60 @@ JOBAD.UI.ContextMenu.disable = function(element){
 };
 
 /*
-	Builds the menu html element
+	Builds the menu html element for a standard context menu. 
 	@param items The menu to build. 
 	@param element The element the context menu has been requested on. 
 	@param elementOrg The element the context menu call originates from. 
 	@returns the menu element. 
 */
-JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
+JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, elementOrg){
 	var $ul = JOBAD.refs.$("<ul class='JOBAD JOBAD_Contextmenu'>");
+	for(var i=0;i<items.length;i++){
+		var item = items[i];
+		
+		var $a = JOBAD.refs.$("<a href='#'>");
+		
+		var $li = JOBAD.refs.$("<li>").appendTo($ul);
+		
+		$li.append($a);
+		
+		$a
+		.text(item[0])
+		.on('click', function(e){
+			return false; //Don't follow link. 
+		});
+		
+		if(item[2] != "none"){
+			$a.prepend(JOBAD.refs.$("<span>").addClass("ui-icon ui-icon-"+item[2]));
+		}
+		
+		(function(){
+			if(typeof item[1] == 'function'){
+				var callback = item[1];
+
+				$a.on('click', function(e){
+					JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
+					callback(element, elementOrg);
+				});		
+			} else {
+				$li.append(JOBAD.UI.ContextMenu.buildContextMenuList(item[1], element, elementOrg));
+			}
+		})()
+				
+	}
+	return $ul;
+};
+
+/*
+	Builds the menu html element for the pie menu. 
+	@param items The menu to build. 
+	@param element The element the context menu has been requested on. 
+	@param elementOrg The element the context menu call originates from. 
+	@returns the menu element. 
+*/
+JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, elementOrg){
+	var $ul = JOBAD.refs.$("<ul class='JOBAD JOBAD_Contextmenu menu'>")
+	.append('<li><a></a></li>');
 	for(var i=0;i<items.length;i++){
 		var item = items[i];
 		var $a = JOBAD.refs.$("<a href='#'>");
@@ -213,7 +288,8 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 		.appendTo($ul)
 		.append($a);
 		$a
-		.text(item[0])
+		//.text(item[0])
+		.text(i) //TODO: Icons
 		.on('click', function(e){
 			return false; //Don't follow link. 
 		});
@@ -226,8 +302,8 @@ JOBAD.UI.ContextMenu.buildMenuList = function(items, element, elementOrg){
 					callback(element, elementOrg);
 				});		
 			} else {
-				
-				$li.append(JOBAD.UI.ContextMenu.buildMenuList(item[1], element, elementOrg));
+				$a.remove();
+				$li.append(JOBAD.UI.ContextMenu.buildPieMenuList(item[1], element, elementOrg));
 			}
 		})()
 				
