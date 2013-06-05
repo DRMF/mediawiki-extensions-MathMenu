@@ -6,7 +6,7 @@ This object is the main JOBAD Namespace.
 	* **Object** `config` JOBAD Configuration. Currently unused. 
 	* **returns** a new [`JOBAD`](JOBADInstance/index.md) instance. 
 
-* **String** `JOBAD.version` - The current JOBAD Version ('3.0.0')
+* **String** `JOBAD.version` - The current JOBAD Version ('3.1.0')
 * **Object** [`JOBAD.config`](JOBAD.config.md) - Global Configuration namespace. 
 
 * **Array** [`JOBAD.ifaces`](JOBAD.ifaces/index.md) - JOBAD ifaces
