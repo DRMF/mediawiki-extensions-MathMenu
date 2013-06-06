@@ -162,7 +162,7 @@ JOBAD.util.generateMenuList = function(menu){
 	@returns the new representation. 
 */
 JOBAD.util.fullWrap = function(menu, wrapper){
-	var menu = (JOBAD.refs._.isArray(menu))?menu:JOBAD.util.generateMenuList(menu);
+	var menu = JOBAD.util.generateMenuList(menu);
 	var menu2 = [];
 	for(var i=0;i<menu.length;i++){
 		if(typeof menu[i][1] == 'function'){
@@ -170,10 +170,10 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 				var org = menu[i][1];
 				menu2.push([menu[i][0], function(){
 					return wrapper(org, arguments)
-				}]);
+				}, menu[i][2]]);
 			})();
 		} else {
-			menu2.push([menu[i][0], JOBAD.util.fullWrap(menu[i][1])]);
+			menu2.push([menu[i][0], JOBAD.util.fullWrap(menu[i][1]), menu[i][2]]);
 		}
 		
 	}

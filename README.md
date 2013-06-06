@@ -2,7 +2,7 @@
 
 Current Version: 3.1.0
 
-Current Stable Version: 3.0.0
+Current Stable Version: 3.0.1
 
 Development Branch. For the stable version, please see the 'stable' branch or the online documentation at [http://kwarc.github.io/jobad/doc/html/index.html](http://kwarc.github.io/jobad/doc/html/index.html)
 

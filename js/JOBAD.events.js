@@ -452,6 +452,55 @@ JOBAD.events.SideBarUpdate =
 	}
 };
 
+/* toolbar: ToolBarUpdate Event */
+JOBAD.events.ToolBarUpdate = 
+{
+	'default': function(){
+		//Does nothing
+	},
+	'Setup': {
+		'init': {
+			/* ToolBar namespace */
+			'ToolBar': {
+				'redraw': function(element){
+					//draw the gui bar on an element
+				},
+				'registerNotification': function(element, config){
+					//register a notification with an element
+				}, 
+				'removeNotification': function(item){
+					//remove a notificaiton
+				}	
+			}
+		},
+		'enable': function(root){
+			this.Event.ToolBarUpdate.enabled = true;
+			
+		},
+		'disable': function(root){
+			this.Event.ToolBarUpdate.enabled = undefined;
+		}
+	},
+	'namespace': 
+	{
+		
+		'getResult': function(){
+			if(this.Event.ToolBarUpdate.enabled){
+				this.modules.iterateAnd(function(module){
+					module.ToolBarUpdate.call(module, module.getJOBAD());
+					return true;
+				});
+			}
+		},
+		'trigger': function(){
+			this.Event.ToolBarUpdate.getResult();
+		}
+	}
+};
+
+
+
+
 for(var key in JOBAD.events){
 	JOBAD.modules.cleanProperties.push(key);
 }

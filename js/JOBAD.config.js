@@ -472,7 +472,7 @@ JOBAD.modules.extensions.config = {
 }
 
 /*
-	Instance Bsed Configuration
+	Instance Based Configuration
 */
 
 JOBAD.ifaces.push(function(JOBADRootElement, params){
@@ -480,7 +480,8 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	
 	var spec = JOBAD.util.createProperUserSettingsObject({
 		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
-		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]]
+		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
+		"sidebar_type": ["list", [0, 1], 0, ["Sidebar Position", "Right", "Bound to element"]]
 	}, "");
 	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
 
