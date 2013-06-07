@@ -278,7 +278,7 @@ JOBAD.UI.Sidebar.config =
 	@returns the original element, now wrapped. 
 */
 JOBAD.UI.Sidebar.wrap = function(element){
-	var org = $(element);
+	var org = JOBAD.refs.$(element);
 
 	var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
@@ -422,9 +422,17 @@ JOBAD.UI.Sidebar.unwrap = function(element){
 	@returns an empty new notification element. 
 */
 JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
+	
+	
+	
 	var config = (typeof config == 'undefined')?{}:config;
 	
 	var sbar = JOBAD.refs.$(sidebar);
+	
+	if(sbar.data("JOBAD.UI.Sidebar.active") !== true){
+		JOBAD.UI.Sidebar.wrap(sbar); //init the sidebar first. 
+	}
+	
 	var child = JOBAD.refs.$(element);
 	var offset = child.offset().top - sbar.offset().top; //offset
 	sbar = sbar.parent().parent().find("div").first();
@@ -544,7 +552,15 @@ JOBAD.UI.Toolbar.update = function(element){
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
-		toolbar.offset(element.offset()); //TODO: Maybe have it on hoverx
+		
+		var position = element.offset();
+		
+		toolbar.css({
+			"position": "absolute",
+			"top": position.top,
+			"left": position.left
+		});
+		
 		if(toolbar.children().length == 0){
 			JOBAD.UI.Toolbar.clear(element);
 		}
@@ -566,7 +582,6 @@ JOBAD.UI.Toolbar.update = function(element){
 	@returns The new item as a jquery element. 
 */
 JOBAD.UI.Toolbar.addItem = function(element, config){
-	
 	var element = JOBAD.refs.$(element);
 
 	//create toolbar if required
@@ -578,9 +593,9 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		    		"display": "inline-block"
 				}).appendTo("body")
 			.hover(function(){
-				JOBAD.refs.$(this).stop().fadeTo(600, 1);
+				JOBAD.refs.$(this).stop().fadeTo(300, 1);
 			}, function(){
-				JOBAD.refs.$(this).stop().fadeTo(600, 0.5);
+				JOBAD.refs.$(this).stop().fadeTo(300, 0.5);
 			}).fadeTo(0, 0.5)
 			.bind("contextmenu", function(){return false;})
 		);
@@ -596,19 +611,22 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	}
 	
+	
 	//toolbar config
 	
 	if(typeof config == "string"){
 		var config = {
 			"text": config
 		}
+	} else if(typeof config == "undefined"){
+		var config = {}
 	}
 	
 	
 	//new Item
+
 	
-	var newItem = JOBAD.refs.$("<button>");
-	
+	var newItem = JOBAD.refs.$("<span>");
 	
 	//text text 
 	if(typeof config.text == 'string'){
@@ -630,14 +648,17 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
 	}
 	
-	var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 	
 	
-	newItem.appendTo(toolbar).button()
-	.data("JOBAD.UI.Toolbar.element", element);
+	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button()
+	
+	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
 	element.data("JOBAD.UI.Toolbar.active", true);
+	
+	
 	JOBAD.UI.Toolbar.update(element);
+	
 	
 	return newItem; 
 }
@@ -647,9 +668,11 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	@param item Item to remove. 
 */
 JOBAD.UI.Toolbar.removeItem = function(item){
-	var element = JOABD.refs.$(item).data("JOBAD.UI.Toolbar.element");
+	var element = JOBAD.refs.$(item).data("JOBAD.UI.Toolbar.element");
+	
 	item.remove();
-	JOBAD.UI.Toolbar.update();
+	
+	JOBAD.UI.Toolbar.update(element);
 }
 
 

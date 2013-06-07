@@ -250,6 +250,7 @@ JOBAD.events.hoverText =
 				me.Event.hoverText.untrigger(); //remove active Hover menu
 			}
 		
+			
 			root
 			.undelegate("*", 'mouseenter.JOBAD.hoverText')
 			.undelegate("*", 'mouseleave.JOBAD.hoverText');
@@ -338,8 +339,6 @@ JOBAD.events.hoverText =
 				this.Event.hoverText.trigger(source.parent());//we are in the parent now
 				return false;
 			}
-
-			return true;
 		}
 	}
 }
@@ -354,73 +353,240 @@ JOBAD.events.SideBarUpdate =
 		'init': {
 			/* Sidebar namespace */
 			'Sidebar': {
+				'forceInit': function(){
+					if(typeof this.Sidebar.ElementRequestCache == 'undefined'){
+						this.Sidebar.ElementRequestCache = [];
+					}
+					
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
+					
+					if(typeof this.Sidebar.PastRequestCache == 'undefined'){
+						this.Sidebar.PastRequestCache = {};
+					}
+					
+					
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+				
+					var new_type = this.Config.get("sidebar_type");
+			
+					if(this.Event.SideBarUpdate.type != new_type){
+						if(this.Event.SideBarUpdate.type == 0){
+							this.Sidebar.toTB();
+						} else {
+							this.Sidebar.toSB();
+						}
+						
+						this.Event.SideBarUpdate.type = new_type;
+					}
+				},
+				'makeCache': function(){
+					var cache = [];
+					
+					for(var key in this.Sidebar.PastRequestCache){
+						cache.push(this.Sidebar.PastRequestCache[key]);
+					}
+					
+					return cache;
+				},
+				'toSB': function(){
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+					
+					var cache = this.Sidebar.makeCache(); //cache the loaded requests
+					
+					
+					//remove all old requests
+					for(var key in this.Sidebar.Elements){
+						this.Sidebar.removeNotificationTB(this.Sidebar.Elements[key], false);
+					}
+					
+					this.Sidebar.redrawTB(); //clears the toolbar
+					
+					this.Event.SideBarUpdate.type = 1; //update type
+					
+					//reregister everything
+					for(var i=0;i<cache.length;i++){
+						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
+					}
+					
+					this.Sidebar.redraw(); //redraw the sidebar
+				},
+				'toTB': function(){
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+					
+					var cache = this.Sidebar.makeCache(); //cache the loaded requests
+					
+					//remove all old requests
+					for(var key in this.Sidebar.Elements){
+						this.Sidebar.removeNotificationSB(this.Sidebar.Elements[key], false);
+					}
+					
+					this.Sidebar.redrawSB(); //clears the sidebar
+					
+					this.Event.SideBarUpdate.type = 1; //update type
+					
+					//reregister everything
+					for(var i=0;i<cache.length;i++){
+						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
+					}
+					
+					this.Sidebar.redraw(); //redraw the sidebar
+				},
 				/*
 					Redraws the sidebar. 
 				*/
 				'redraw': function(){
-					if(typeof this.Sidebar.Elements == 'undefined'){
-						this.Sidebar.Elements = {};
+				
+					if(typeof this.Event.SideBarUpdate.enabled == "undefined"){
+						return; //do not run if disabled
 					}
-					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
-						if(this.element.data("JOBAD.UI.Sidebar.active")){
-							JOBAD.UI.Sidebar.unwrap(this.element);
-						}	
+				
+					this.Sidebar.forceInit();
+					
+					if(this.Event.SideBarUpdate.type == 0){
+						return this.Sidebar.redrawSB();
 					} else {
-						if(!this.element.data("JOBAD.UI.Sidebar.active")){
-							JOBAD.UI.Sidebar.wrap(this.element);
-						}
-						for(var id in this.Sidebar.Elements){
-							var element = this.Sidebar.Elements[id];
-							if(!element.data("JOBAD.Events.Sidebar.id")){
-								this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, this.Sidebar.Elements[id], element.data("JOBAD.Events.Sidebar.config"));
-							}
-						}
+						return this.Sidebar.redrawTB();
 					}
+				},
+				'redrawSB': function(){
+					if(JOBAD.refs._.keys(this.Sidebar.Elements).length +  this.Sidebar.ElementRequestCache.length == 0){
+						//sidebar is empty; cache is also empty
+						if(this.element.data("JOBAD.UI.Sidebar.active")){ //remove the sidebar
+							JOBAD.UI.Sidebar.unwrap(this.element);
+						}
+					} else {
+						for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
+							var id = this.Sidebar.ElementRequestCache[i][0];
+							var element = this.Sidebar.ElementRequestCache[i][1];
+							var config = this.Sidebar.ElementRequestCache[i][2];
+							
+							this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, element, config)
+							.data("JOBAD.Events.Sidebar.id", id);
+							
+							this.Sidebar.PastRequestCache[id] = [element, config]; 
+						}
+						
+						this.Sidebar.ElementRequestCache = []; //clear the cache
+						
+					}
+					
 					JOBAD.UI.Sidebar.forceNotificationUpdate();
 					this.Event.SideBarUpdate.trigger();
 				},
+				'redrawTB': function(){
+					for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
+						var id = this.Sidebar.ElementRequestCache[i][0];
+						var element = this.Sidebar.ElementRequestCache[i][1];
+						var config = this.Sidebar.ElementRequestCache[i][2];
+						
+						this.Sidebar.Elements[id] = JOBAD.UI.Toolbar.addItem(element, config)
+						.data("JOBAD.Events.Sidebar.id", id);
+						
+						this.Sidebar.PastRequestCache[id] = [element, config]; 
+					}
+					
+					this.Sidebar.ElementRequestCache = []; //clear the cache
+					
+					JOBAD.UI.Toolbar.update();
+					this.Event.SideBarUpdate.trigger();
+				},
+				
 				/*
 					Registers a new notification. 
 					@param element Element to register notification on. 
 					@param config
 							config.class:	Notificaton class. Default: none. 
-							config.icon:	Icon (Default: Based on notification class. 
+							config.icon:	Icon (Default: Based on notification class. )
 							config.text:	Text
 							config.menu:	Context Menu
-							config.trace:	Trace the original element on hover?
-							config.click:	Callback on click
+							config.trace:	Trace the original element on hover? (Ignored for direct)
+							config.click:	Callback on click, Default: Open Context Menu
+					@param autoRedraw Optional. Should the sidebar be redrawn? (default: true)
 					@return jQuery element used as identification. 
 							
 				*/
-				'registerNotification': function(element, config){
-					var me = this;
-					if(typeof this.Sidebar.Elements == 'undefined'){
-						this.Sidebar.Elements = {};
-					}
-					var element = JOBAD.refs.$(element);
-					var id = (new Date()).getTime().toString();
+				'registerNotification': function(element, config, autoRedraw){
+				
+					this.Sidebar.forceInit(); //force an init
+				
+					var id = JOBAD.util.UID(); //generate new UID
+					
 					var config = (typeof config == 'undefined')?{}:config;
-					config.menuThis = me;
-					this.Sidebar.Elements[id] = element.data("JOBAD.Events.Sidebar.config", config);
+					config.menuThis = this;
 					
-					this.Sidebar.redraw();
+					this.Sidebar.ElementRequestCache.push([id, JOBAD.refs.$(element), JOBAD.refs._.clone(config)]); //cache the request. 
 					
-					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
-
-					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
+					if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+						this.Sidebar.redraw();
+						return this.Sidebar.Elements[id];
+					}		
 					
-					return sidebar_element;
-				}, 
+				},
+				'removeNotification': function(item, autoRedraw){
+					this.Sidebar.forceInit();
+					if(!this.Event.SideBarUpdate.enabled){
+						//we're disabled; just remove it from the cache
+						var id = item.data("JOBAD.Events.Sidebar.id");
+						
+						for(var i=0;i<this.Sidebar.PastRequestCache.length;i++){
+							if(this.Sidebar.PastRequestCache[i][0] == id){
+								this.Sidebar.PastRequestCache.splice(i, 1); //remove the element
+								break;
+							}
+						}
+					} else {
+						if(this.Event.SideBarUpdate.type == 0){
+							return this.Sidebar.removeNotificationSB(item, autoRedraw);
+						} else {
+							return this.Sidebar.removeNotificationTB(item, autoRedraw);
+						}
+					}
+				},
 				/*
 					removes a notification. 
-					@param	item	Notification to remove. 
+					@param	item	Notification to remove.
+					@param autoRedraw Optional. Should the sidebar be redrawn? (default: true)
+					
 				*/
-				'removeNotification': function(item){
+				'removeNotificationSB': function(item, autoRedraw){
 					if(item instanceof JOBAD.refs.$){
 						var id = item.data("JOBAD.Events.Sidebar.id");
+	
 						JOBAD.UI.Sidebar.removeNotification(item);
+						
 						delete this.Sidebar.Elements[id];
-						this.Sidebar.redraw();
+						delete this.Sidebar.PastRequestCache[id];
+						
+						if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+							this.Sidebar.redraw();
+						}
+						return id;
+					} else {
+						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
+					}
+				},
+				'removeNotificationTB': function(item, autoRedraw){
+					if(item instanceof JOBAD.refs.$){
+						var id = item.data("JOBAD.Events.Sidebar.id");
+	
+						JOBAD.UI.Toolbar.removeItem(item);
+						
+						delete this.Sidebar.Elements[id];
+						delete this.Sidebar.PastRequestCache[id];
+						
+						if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+							this.Sidebar.redraw();
+						}
+						
+						return id;
 					} else {
 						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
 					}
@@ -429,10 +595,25 @@ JOBAD.events.SideBarUpdate =
 		},
 		'enable': function(root){
 			this.Event.SideBarUpdate.enabled = true;
-			
+			this.Event.SideBarUpdate.type = this.Config.get("sidebar_type"); //init the type
+			this.Sidebar.redraw(); //redraw the sidebar
 		},
 		'disable': function(root){
-			this.Event.SideBarUpdate.enabled = undefined;
+		
+			var newCache = []
+		
+			//remove all old requests
+			for(var key in this.Sidebar.Elements){
+				newCache.push([key, this.Sidebar.PastRequestCache[key][0], this.Sidebar.PastRequestCache[key][1]]);
+				
+				this.Sidebar.removeNotification(this.Sidebar.Elements[key], false);
+			}
+			
+			this.Sidebar.redraw(); //redraw it one more time. 
+			
+			this.Sidebar.ElementRequestCache = newCache; //everything is now hidden
+			
+			this.Event.SideBarUpdate.enabled = undefined; 
 		}
 	},
 	'namespace': 
@@ -451,55 +632,6 @@ JOBAD.events.SideBarUpdate =
 		}
 	}
 };
-
-/* toolbar: ToolBarUpdate Event */
-JOBAD.events.ToolBarUpdate = 
-{
-	'default': function(){
-		//Does nothing
-	},
-	'Setup': {
-		'init': {
-			/* ToolBar namespace */
-			'ToolBar': {
-				'redraw': function(element){
-					//draw the gui bar on an element
-				},
-				'registerNotification': function(element, config){
-					//register a notification with an element
-				}, 
-				'removeNotification': function(item){
-					//remove a notificaiton
-				}	
-			}
-		},
-		'enable': function(root){
-			this.Event.ToolBarUpdate.enabled = true;
-			
-		},
-		'disable': function(root){
-			this.Event.ToolBarUpdate.enabled = undefined;
-		}
-	},
-	'namespace': 
-	{
-		
-		'getResult': function(){
-			if(this.Event.ToolBarUpdate.enabled){
-				this.modules.iterateAnd(function(module){
-					module.ToolBarUpdate.call(module, module.getJOBAD());
-					return true;
-				});
-			}
-		},
-		'trigger': function(){
-			this.Event.ToolBarUpdate.getResult();
-		}
-	}
-};
-
-
-
 
 for(var key in JOBAD.events){
 	JOBAD.modules.cleanProperties.push(key);

@@ -24,13 +24,14 @@
 
 //Provides custom events for modules
 JOBAD.ifaces.push(function(me, args){
-	/* Event namespace */
-	this.Event = {};
 
 	/* Setup core function */
 	/* Setup on an Element */
 
 	var enabled = false;
+	
+	var activation_cache = [];
+	var deactivation_cache = [];
 
 	/*
 		Enables or disables this JOBAD instance. 
@@ -44,11 +45,34 @@ JOBAD.ifaces.push(function(me, args){
 		}
 	}
 
+
+	/*
+		Checks if this Instance is enabled. 
+	*/
+	this.Setup.isEnabled = function(){
+		return enabled;
+	};
+	
+	/*
+		Defer an event until JOBAD is enabled. 
+	*/
+	this.Setup.deferUntilEnabled = function(func){
+		activation_cache.push(func);
+	};
+	
+	/*
+		Defer an even until JOBAD is disabled
+	*/
+	this.Setup.deferUntilDisabled = function(func){
+		deactivation_cache.push(func);
+	};
+	
 	/*
 		Enables this JOBAD instance 
 		@returns boolean indicating success. 
 	*/
 	this.Setup.enable = function(){
+		
 		if(enabled){
 			return false;
 		}
@@ -58,6 +82,16 @@ JOBAD.ifaces.push(function(me, args){
 		for(var key in me.Event){
 			JOBAD.events[key].Setup.enable.call(me, root);
 		}
+		
+		while(activation_cache.length > 0){
+			try{
+				activation_cache.pop()();
+			} catch(e){
+				JOBAD.console.log("Warning: Defered Activation event failed to execute: "+e.message);
+			}
+		}
+		
+		enabled = true; //we are enabled;
 
 		return true;
 	};
@@ -77,9 +111,24 @@ JOBAD.ifaces.push(function(me, args){
 				JOBAD.events[key].Setup.disable.call(me, root);
 			}	
 		}
+		
+		while(deactivation_cache.length > 0){
+			try{
+				deactivation_cache.pop()();
+			} catch(e){
+				JOBAD.console.log("Warning: Defered Deactivation event failed to execute: "+e);
+			}
+		}
+		
+		enabled = false;
 
 		return true;
 	};
+	
+	this.Setup.deferUntilDisabled(this.Event); //using this.Event as cache
+	
+	/* Event namespace */
+	this.Event = {};
 	
 	//Setup the events
 	for(var key in JOBAD.events){
@@ -104,6 +153,9 @@ JOBAD.ifaces.push(function(me, args){
 
 		}	
 	}
+	
+	//defer disable event
+	
 });
 
 

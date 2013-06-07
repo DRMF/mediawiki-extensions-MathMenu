@@ -476,6 +476,7 @@ JOBAD.modules.extensions.config = {
 */
 
 JOBAD.ifaces.push(function(JOBADRootElement, params){
+
 	var config = params[1];
 	
 	var spec = JOBAD.util.createProperUserSettingsObject({
@@ -490,6 +491,7 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	this.Config.get = function(key){
 		if(!spec.hasOwnProperty(key)){
 			JOBAD.console.log("Can't find '"+key+"' in Instance Config. ");
+			return undefined;
 		}
 		if(cache.hasOwnProperty(key)){
 			return cache[key];
@@ -748,6 +750,8 @@ JOBAD.ifaces.push(function(){
 					var e = JOBAD.refs.$(e);
 					me.Config.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
 				});
+				
+				me.Sidebar.redraw(); //update the sidebar
 			});
 			return;
 		};

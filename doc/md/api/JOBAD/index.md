@@ -3,7 +3,8 @@ This object is the main JOBAD Namespace.
 
 * **Function** `JOBAD(JOBADRootElement, config)` Creates a new instance of `JOBAD` bound to `JOBADRootElement`. 
 	* `JOBADRootElement` a jQuery-ish object[^1] to bind a new JOBAD instance to. 
-	* **Object** `config` JOBAD Configuration. Currently unused. 
+	* **Object** `config` JOBAD Configuration. 
+		* `config.sidebar_type` Type of sidebar to use: 0 for right style (default), 1 for  bound to element style. 
 	* **returns** a new [`JOBAD`](JOBADInstance/index.md) instance. 
 
 * **String** `JOBAD.version` - The current JOBAD Version ('3.1.0')

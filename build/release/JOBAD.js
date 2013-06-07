@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 06 Jun 2013 13:54:40 +0200
+	built: Fri, 07 Jun 2013 15:17:25 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -437,9 +437,10 @@ JOBAD.ifaces.push(function(me, args){
 		@param module Name of module to load. 
 		@param options Array of options to pass to the module. 
 		@param ignoredeps Boolean. Ignore dependencies? (Default: false). 
+		@param auto_activate Boolean. Automatically activate a module? (Default: true). 
 		@returns boolean
 	*/
-	this.modules.load = function(module, options, ignoredeps){
+	this.modules.load = function(module, options, auto_activate, ignoredeps){
 		if(me.modules.loaded(module)){
 			return;	
 		}
@@ -451,16 +452,27 @@ JOBAD.ifaces.push(function(me, args){
 				JOBAD.error('Error loading module '+module);			
 			}
 			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
-			InstanceModules[module].onActivate(me);
+			
+			if((typeof auto_activate == 'boolean')?auto_activate:true){
+				if(this.Setup.isEnabled()){
+					InstanceModules[module].onActivate(me);
+				} else {
+					
+					this.Setup.deferUntilEnabled(function(){
+						InstanceModules[module].onActivate(me);
+					});
+				}
+			}
+			
 			return true;
 		} else {
 			var deps = JOBAD.modules.getDependencyList(module);
-		        if(!deps){
+		    if(!deps){
 				JOBAD.console.warn("Unresolved dependencies for module '"+module+"'. "); //Module not found (has no dependecnies)
 				return false;	
 			}
 			for(var i=0;i<deps.length;i++){
-				me.modules.load(deps[i], options, true);
+				me.modules.load(deps[i], options, auto_activate, true);
 			}
 			return true;
 		}
@@ -487,7 +499,7 @@ JOBAD.ifaces.push(function(me, args){
 			return;
 		}
 		disabledModules.push(module);
-		this.element.trigger('JOBAD.Event', ['deactivate']);
+		this.element.trigger('JOBAD.Event', ['deactivate', module]);
 		InstanceModules[module].onDeactivate(me);
 	}
 
@@ -496,13 +508,26 @@ JOBAD.ifaces.push(function(me, args){
 		@param module Module to be activated. 
 	*/
 	this.modules.activate = function(module){
+	
 		if(me.modules.isActive(module)){
 			JOBAD.console.warn("Module '"+module+"' is already activated. ");
 			return;	
 		}
+		
+		
 		disabledModules = JOBAD.refs._.without(disabledModules, module);
-		this.element.trigger('JOBAD.Event', ['activate']);
+		
+		
+		var deps = JOBAD.modules.getDependencyList(module);
+		
+				
+		for(var i=0;i<deps.length-1;i++){
+			me.modules.activate(deps[i]);
+		}
+		
 		InstanceModules[module].onActivate(me);
+		
+		this.element.trigger('JOBAD.Event', ['activate', module]);
 	};
 	
 	/*
@@ -578,6 +603,32 @@ JOBAD.ifaces.push(function(me, args){
 		}
 		return true;
 	};
+	
+	
+	var onDisable = function(){
+		var cache = [];
+		
+		//cache all the modules
+		me.modules.iterate(function(mod){
+			var name = mod.info().identifier;
+			cache.push(name);
+			me.modules.deactivate(name);
+			return true;
+		});
+		
+		//reactivate all once setup is called again
+		me.Setup.deferUntilEnabled(function(){
+			for(var i=0;i<cache.length;i++){
+				var name = cache[i];
+				if(!me.modules.isActive(name)){
+					me.modules.activate(name);
+				}
+			}
+			me.Setup.deferUntilDisabled(onDisable); //reregister me
+		});
+	};
+	
+	this.Event = onDisable; 
 	
 	this.modules = JOBAD.util.bindEverything(this.modules, this);
 });
@@ -697,11 +748,6 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 		}
 		
-		for(var i=0;i<JOBAD.modules.ifaces.length;i++){
-			var mod = JOBAD.modules.ifaces[i];
-			properObject = mod[0].call(this, properObject, ModuleObject);
-		}
-		
 		for(var key in JOBAD.modules.extensions){
 			var mod = JOBAD.modules.extensions[key];
 			var av = ModuleObject.hasOwnProperty(key);
@@ -717,6 +763,11 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 			
 			properObject[key] = mod.init(av, prop, ModuleObject, properObject);
+		}
+		
+		for(var i=0;i<JOBAD.modules.ifaces.length;i++){
+			var mod = JOBAD.modules.ifaces[i];
+			properObject = mod[0].call(this, properObject, ModuleObject);
 		}
 		
 		return properObject;
@@ -941,13 +992,14 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 
 //Provides custom events for modules
 JOBAD.ifaces.push(function(me, args){
-	/* Event namespace */
-	this.Event = {};
 
 	/* Setup core function */
 	/* Setup on an Element */
 
 	var enabled = false;
+	
+	var activation_cache = [];
+	var deactivation_cache = [];
 
 	/*
 		Enables or disables this JOBAD instance. 
@@ -961,11 +1013,34 @@ JOBAD.ifaces.push(function(me, args){
 		}
 	}
 
+
+	/*
+		Checks if this Instance is enabled. 
+	*/
+	this.Setup.isEnabled = function(){
+		return enabled;
+	};
+	
+	/*
+		Defer an event until JOBAD is enabled. 
+	*/
+	this.Setup.deferUntilEnabled = function(func){
+		activation_cache.push(func);
+	};
+	
+	/*
+		Defer an even until JOBAD is disabled
+	*/
+	this.Setup.deferUntilDisabled = function(func){
+		deactivation_cache.push(func);
+	};
+	
 	/*
 		Enables this JOBAD instance 
 		@returns boolean indicating success. 
 	*/
 	this.Setup.enable = function(){
+		
 		if(enabled){
 			return false;
 		}
@@ -975,6 +1050,16 @@ JOBAD.ifaces.push(function(me, args){
 		for(var key in me.Event){
 			JOBAD.events[key].Setup.enable.call(me, root);
 		}
+		
+		while(activation_cache.length > 0){
+			try{
+				activation_cache.pop()();
+			} catch(e){
+				JOBAD.console.log("Warning: Defered Activation event failed to execute: "+e.message);
+			}
+		}
+		
+		enabled = true; //we are enabled;
 
 		return true;
 	};
@@ -994,9 +1079,24 @@ JOBAD.ifaces.push(function(me, args){
 				JOBAD.events[key].Setup.disable.call(me, root);
 			}	
 		}
+		
+		while(deactivation_cache.length > 0){
+			try{
+				deactivation_cache.pop()();
+			} catch(e){
+				JOBAD.console.log("Warning: Defered Deactivation event failed to execute: "+e);
+			}
+		}
+		
+		enabled = false;
 
 		return true;
 	};
+	
+	this.Setup.deferUntilDisabled(this.Event); //using this.Event as cache
+	
+	/* Event namespace */
+	this.Event = {};
 	
 	//Setup the events
 	for(var key in JOBAD.events){
@@ -1021,6 +1121,9 @@ JOBAD.ifaces.push(function(me, args){
 
 		}	
 	}
+	
+	//defer disable event
+	
 });
 
 
@@ -1338,7 +1441,7 @@ JOBAD.UI.Sidebar.config =
 	@returns the original element, now wrapped. 
 */
 JOBAD.UI.Sidebar.wrap = function(element){
-	var org = $(element);
+	var org = JOBAD.refs.$(element);
 
 	var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
@@ -1482,9 +1585,17 @@ JOBAD.UI.Sidebar.unwrap = function(element){
 	@returns an empty new notification element. 
 */
 JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
+	
+	
+	
 	var config = (typeof config == 'undefined')?{}:config;
 	
 	var sbar = JOBAD.refs.$(sidebar);
+	
+	if(sbar.data("JOBAD.UI.Sidebar.active") !== true){
+		JOBAD.UI.Sidebar.wrap(sbar); //init the sidebar first. 
+	}
+	
 	var child = JOBAD.refs.$(element);
 	var offset = child.offset().top - sbar.offset().top; //offset
 	sbar = sbar.parent().parent().find("div").first();
@@ -1604,7 +1715,15 @@ JOBAD.UI.Toolbar.update = function(element){
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
-		toolbar.offset(element.offset()); //TODO: Maybe have it on hoverx
+		
+		var position = element.offset();
+		
+		toolbar.css({
+			"position": "absolute",
+			"top": position.top,
+			"left": position.left
+		});
+		
 		if(toolbar.children().length == 0){
 			JOBAD.UI.Toolbar.clear(element);
 		}
@@ -1626,7 +1745,6 @@ JOBAD.UI.Toolbar.update = function(element){
 	@returns The new item as a jquery element. 
 */
 JOBAD.UI.Toolbar.addItem = function(element, config){
-	
 	var element = JOBAD.refs.$(element);
 
 	//create toolbar if required
@@ -1638,9 +1756,9 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		    		"display": "inline-block"
 				}).appendTo("body")
 			.hover(function(){
-				JOBAD.refs.$(this).stop().fadeTo(600, 1);
+				JOBAD.refs.$(this).stop().fadeTo(300, 1);
 			}, function(){
-				JOBAD.refs.$(this).stop().fadeTo(600, 0.5);
+				JOBAD.refs.$(this).stop().fadeTo(300, 0.5);
 			}).fadeTo(0, 0.5)
 			.bind("contextmenu", function(){return false;})
 		);
@@ -1656,19 +1774,22 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	}
 	
+	
 	//toolbar config
 	
 	if(typeof config == "string"){
 		var config = {
 			"text": config
 		}
+	} else if(typeof config == "undefined"){
+		var config = {}
 	}
 	
 	
 	//new Item
+
 	
-	var newItem = JOBAD.refs.$("<button>");
-	
+	var newItem = JOBAD.refs.$("<span>");
 	
 	//text text 
 	if(typeof config.text == 'string'){
@@ -1690,14 +1811,17 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
 	}
 	
-	var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 	
 	
-	newItem.appendTo(toolbar).button()
-	.data("JOBAD.UI.Toolbar.element", element);
+	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button()
+	
+	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
 	element.data("JOBAD.UI.Toolbar.active", true);
+	
+	
 	JOBAD.UI.Toolbar.update(element);
+	
 	
 	return newItem; 
 }
@@ -1707,9 +1831,11 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	@param item Item to remove. 
 */
 JOBAD.UI.Toolbar.removeItem = function(item){
-	var element = JOABD.refs.$(item).data("JOBAD.UI.Toolbar.element");
+	var element = JOBAD.refs.$(item).data("JOBAD.UI.Toolbar.element");
+	
 	item.remove();
-	JOBAD.UI.Toolbar.update();
+	
+	JOBAD.UI.Toolbar.update(element);
 }
 
 
@@ -1999,6 +2125,7 @@ JOBAD.events.hoverText =
 				me.Event.hoverText.untrigger(); //remove active Hover menu
 			}
 		
+			
 			root
 			.undelegate("*", 'mouseenter.JOBAD.hoverText')
 			.undelegate("*", 'mouseleave.JOBAD.hoverText');
@@ -2087,8 +2214,6 @@ JOBAD.events.hoverText =
 				this.Event.hoverText.trigger(source.parent());//we are in the parent now
 				return false;
 			}
-
-			return true;
 		}
 	}
 }
@@ -2103,73 +2228,240 @@ JOBAD.events.SideBarUpdate =
 		'init': {
 			/* Sidebar namespace */
 			'Sidebar': {
+				'forceInit': function(){
+					if(typeof this.Sidebar.ElementRequestCache == 'undefined'){
+						this.Sidebar.ElementRequestCache = [];
+					}
+					
+					if(typeof this.Sidebar.Elements == 'undefined'){
+						this.Sidebar.Elements = {};
+					}
+					
+					if(typeof this.Sidebar.PastRequestCache == 'undefined'){
+						this.Sidebar.PastRequestCache = {};
+					}
+					
+					
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+				
+					var new_type = this.Config.get("sidebar_type");
+			
+					if(this.Event.SideBarUpdate.type != new_type){
+						if(this.Event.SideBarUpdate.type == 0){
+							this.Sidebar.toTB();
+						} else {
+							this.Sidebar.toSB();
+						}
+						
+						this.Event.SideBarUpdate.type = new_type;
+					}
+				},
+				'makeCache': function(){
+					var cache = [];
+					
+					for(var key in this.Sidebar.PastRequestCache){
+						cache.push(this.Sidebar.PastRequestCache[key]);
+					}
+					
+					return cache;
+				},
+				'toSB': function(){
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+					
+					var cache = this.Sidebar.makeCache(); //cache the loaded requests
+					
+					
+					//remove all old requests
+					for(var key in this.Sidebar.Elements){
+						this.Sidebar.removeNotificationTB(this.Sidebar.Elements[key], false);
+					}
+					
+					this.Sidebar.redrawTB(); //clears the toolbar
+					
+					this.Event.SideBarUpdate.type = 1; //update type
+					
+					//reregister everything
+					for(var i=0;i<cache.length;i++){
+						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
+					}
+					
+					this.Sidebar.redraw(); //redraw the sidebar
+				},
+				'toTB': function(){
+					if(!this.Event.SideBarUpdate.enabled){
+						return;
+					}
+					
+					var cache = this.Sidebar.makeCache(); //cache the loaded requests
+					
+					//remove all old requests
+					for(var key in this.Sidebar.Elements){
+						this.Sidebar.removeNotificationSB(this.Sidebar.Elements[key], false);
+					}
+					
+					this.Sidebar.redrawSB(); //clears the sidebar
+					
+					this.Event.SideBarUpdate.type = 1; //update type
+					
+					//reregister everything
+					for(var i=0;i<cache.length;i++){
+						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
+					}
+					
+					this.Sidebar.redraw(); //redraw the sidebar
+				},
 				/*
 					Redraws the sidebar. 
 				*/
 				'redraw': function(){
-					if(typeof this.Sidebar.Elements == 'undefined'){
-						this.Sidebar.Elements = {};
+				
+					if(typeof this.Event.SideBarUpdate.enabled == "undefined"){
+						return; //do not run if disabled
 					}
-					if(JOBAD.refs._.keys(this.Sidebar.Elements).length == 0){
-						if(this.element.data("JOBAD.UI.Sidebar.active")){
-							JOBAD.UI.Sidebar.unwrap(this.element);
-						}	
+				
+					this.Sidebar.forceInit();
+					
+					if(this.Event.SideBarUpdate.type == 0){
+						return this.Sidebar.redrawSB();
 					} else {
-						if(!this.element.data("JOBAD.UI.Sidebar.active")){
-							JOBAD.UI.Sidebar.wrap(this.element);
-						}
-						for(var id in this.Sidebar.Elements){
-							var element = this.Sidebar.Elements[id];
-							if(!element.data("JOBAD.Events.Sidebar.id")){
-								this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, this.Sidebar.Elements[id], element.data("JOBAD.Events.Sidebar.config"));
-							}
-						}
+						return this.Sidebar.redrawTB();
 					}
+				},
+				'redrawSB': function(){
+					if(JOBAD.refs._.keys(this.Sidebar.Elements).length +  this.Sidebar.ElementRequestCache.length == 0){
+						//sidebar is empty; cache is also empty
+						if(this.element.data("JOBAD.UI.Sidebar.active")){ //remove the sidebar
+							JOBAD.UI.Sidebar.unwrap(this.element);
+						}
+					} else {
+						for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
+							var id = this.Sidebar.ElementRequestCache[i][0];
+							var element = this.Sidebar.ElementRequestCache[i][1];
+							var config = this.Sidebar.ElementRequestCache[i][2];
+							
+							this.Sidebar.Elements[id] = JOBAD.UI.Sidebar.addNotification(this.element, element, config)
+							.data("JOBAD.Events.Sidebar.id", id);
+							
+							this.Sidebar.PastRequestCache[id] = [element, config]; 
+						}
+						
+						this.Sidebar.ElementRequestCache = []; //clear the cache
+						
+					}
+					
 					JOBAD.UI.Sidebar.forceNotificationUpdate();
 					this.Event.SideBarUpdate.trigger();
 				},
+				'redrawTB': function(){
+					for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
+						var id = this.Sidebar.ElementRequestCache[i][0];
+						var element = this.Sidebar.ElementRequestCache[i][1];
+						var config = this.Sidebar.ElementRequestCache[i][2];
+						
+						this.Sidebar.Elements[id] = JOBAD.UI.Toolbar.addItem(element, config)
+						.data("JOBAD.Events.Sidebar.id", id);
+						
+						this.Sidebar.PastRequestCache[id] = [element, config]; 
+					}
+					
+					this.Sidebar.ElementRequestCache = []; //clear the cache
+					
+					JOBAD.UI.Toolbar.update();
+					this.Event.SideBarUpdate.trigger();
+				},
+				
 				/*
 					Registers a new notification. 
 					@param element Element to register notification on. 
 					@param config
 							config.class:	Notificaton class. Default: none. 
-							config.icon:	Icon (Default: Based on notification class. 
+							config.icon:	Icon (Default: Based on notification class. )
 							config.text:	Text
 							config.menu:	Context Menu
-							config.trace:	Trace the original element on hover?
-							config.click:	Callback on click
+							config.trace:	Trace the original element on hover? (Ignored for direct)
+							config.click:	Callback on click, Default: Open Context Menu
+					@param autoRedraw Optional. Should the sidebar be redrawn? (default: true)
 					@return jQuery element used as identification. 
 							
 				*/
-				'registerNotification': function(element, config){
-					var me = this;
-					if(typeof this.Sidebar.Elements == 'undefined'){
-						this.Sidebar.Elements = {};
-					}
-					var element = JOBAD.refs.$(element);
-					var id = (new Date()).getTime().toString();
+				'registerNotification': function(element, config, autoRedraw){
+				
+					this.Sidebar.forceInit(); //force an init
+				
+					var id = JOBAD.util.UID(); //generate new UID
+					
 					var config = (typeof config == 'undefined')?{}:config;
-					config.menuThis = me;
-					this.Sidebar.Elements[id] = element.data("JOBAD.Events.Sidebar.config", config);
+					config.menuThis = this;
 					
-					this.Sidebar.redraw();
+					this.Sidebar.ElementRequestCache.push([id, JOBAD.refs.$(element), JOBAD.refs._.clone(config)]); //cache the request. 
 					
-					var sidebar_element = this.Sidebar.Elements[id].data("JOBAD.Events.Sidebar.id", id);
-
-					sidebar_element.data("JOBAD.Events.Sidebar.element", element)					
+					if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+						this.Sidebar.redraw();
+						return this.Sidebar.Elements[id];
+					}		
 					
-					return sidebar_element;
-				}, 
+				},
+				'removeNotification': function(item, autoRedraw){
+					this.Sidebar.forceInit();
+					if(!this.Event.SideBarUpdate.enabled){
+						//we're disabled; just remove it from the cache
+						var id = item.data("JOBAD.Events.Sidebar.id");
+						
+						for(var i=0;i<this.Sidebar.PastRequestCache.length;i++){
+							if(this.Sidebar.PastRequestCache[i][0] == id){
+								this.Sidebar.PastRequestCache.splice(i, 1); //remove the element
+								break;
+							}
+						}
+					} else {
+						if(this.Event.SideBarUpdate.type == 0){
+							return this.Sidebar.removeNotificationSB(item, autoRedraw);
+						} else {
+							return this.Sidebar.removeNotificationTB(item, autoRedraw);
+						}
+					}
+				},
 				/*
 					removes a notification. 
-					@param	item	Notification to remove. 
+					@param	item	Notification to remove.
+					@param autoRedraw Optional. Should the sidebar be redrawn? (default: true)
+					
 				*/
-				'removeNotification': function(item){
+				'removeNotificationSB': function(item, autoRedraw){
 					if(item instanceof JOBAD.refs.$){
 						var id = item.data("JOBAD.Events.Sidebar.id");
+	
 						JOBAD.UI.Sidebar.removeNotification(item);
+						
 						delete this.Sidebar.Elements[id];
-						this.Sidebar.redraw();
+						delete this.Sidebar.PastRequestCache[id];
+						
+						if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+							this.Sidebar.redraw();
+						}
+						return id;
+					} else {
+						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
+					}
+				},
+				'removeNotificationTB': function(item, autoRedraw){
+					if(item instanceof JOBAD.refs.$){
+						var id = item.data("JOBAD.Events.Sidebar.id");
+	
+						JOBAD.UI.Toolbar.removeItem(item);
+						
+						delete this.Sidebar.Elements[id];
+						delete this.Sidebar.PastRequestCache[id];
+						
+						if((typeof autoRedraw == 'boolean')?autoRedraw:true){
+							this.Sidebar.redraw();
+						}
+						
+						return id;
 					} else {
 						JOBAD.error("JOBAD Sidebar Error: Tried to remove invalid Element. ");
 					}
@@ -2178,10 +2470,25 @@ JOBAD.events.SideBarUpdate =
 		},
 		'enable': function(root){
 			this.Event.SideBarUpdate.enabled = true;
-			
+			this.Event.SideBarUpdate.type = this.Config.get("sidebar_type"); //init the type
+			this.Sidebar.redraw(); //redraw the sidebar
 		},
 		'disable': function(root){
-			this.Event.SideBarUpdate.enabled = undefined;
+		
+			var newCache = []
+		
+			//remove all old requests
+			for(var key in this.Sidebar.Elements){
+				newCache.push([key, this.Sidebar.PastRequestCache[key][0], this.Sidebar.PastRequestCache[key][1]]);
+				
+				this.Sidebar.removeNotification(this.Sidebar.Elements[key], false);
+			}
+			
+			this.Sidebar.redraw(); //redraw it one more time. 
+			
+			this.Sidebar.ElementRequestCache = newCache; //everything is now hidden
+			
+			this.Event.SideBarUpdate.enabled = undefined; 
 		}
 	},
 	'namespace': 
@@ -2200,55 +2507,6 @@ JOBAD.events.SideBarUpdate =
 		}
 	}
 };
-
-/* toolbar: ToolBarUpdate Event */
-JOBAD.events.ToolBarUpdate = 
-{
-	'default': function(){
-		//Does nothing
-	},
-	'Setup': {
-		'init': {
-			/* ToolBar namespace */
-			'ToolBar': {
-				'redraw': function(element){
-					//draw the gui bar on an element
-				},
-				'registerNotification': function(element, config){
-					//register a notification with an element
-				}, 
-				'removeNotification': function(item){
-					//remove a notificaiton
-				}	
-			}
-		},
-		'enable': function(root){
-			this.Event.ToolBarUpdate.enabled = true;
-			
-		},
-		'disable': function(root){
-			this.Event.ToolBarUpdate.enabled = undefined;
-		}
-	},
-	'namespace': 
-	{
-		
-		'getResult': function(){
-			if(this.Event.ToolBarUpdate.enabled){
-				this.modules.iterateAnd(function(module){
-					module.ToolBarUpdate.call(module, module.getJOBAD());
-					return true;
-				});
-			}
-		},
-		'trigger': function(){
-			this.Event.ToolBarUpdate.getResult();
-		}
-	}
-};
-
-
-
 
 for(var key in JOBAD.events){
 	JOBAD.modules.cleanProperties.push(key);
@@ -2733,6 +2991,7 @@ JOBAD.modules.extensions.config = {
 */
 
 JOBAD.ifaces.push(function(JOBADRootElement, params){
+
 	var config = params[1];
 	
 	var spec = JOBAD.util.createProperUserSettingsObject({
@@ -2747,6 +3006,7 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	this.Config.get = function(key){
 		if(!spec.hasOwnProperty(key)){
 			JOBAD.console.log("Can't find '"+key+"' in Instance Config. ");
+			return undefined;
 		}
 		if(cache.hasOwnProperty(key)){
 			return cache[key];
@@ -3005,6 +3265,8 @@ JOBAD.ifaces.push(function(){
 					var e = JOBAD.refs.$(e);
 					me.Config.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
 				});
+				
+				me.Sidebar.redraw(); //update the sidebar
 			});
 			return;
 		};
