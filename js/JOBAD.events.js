@@ -414,7 +414,7 @@ JOBAD.events.SideBarUpdate =
 						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
 					}
 					
-					this.Sidebar.redraw(); //redraw the sidebar
+					this.Sidebar.redrawSB(); //redraw the sidebar
 				},
 				'toTB': function(){
 					if(!this.Event.SideBarUpdate.enabled){
@@ -437,7 +437,7 @@ JOBAD.events.SideBarUpdate =
 						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
 					}
 					
-					this.Sidebar.redraw(); //redraw the sidebar
+					this.Sidebar.redrawTB(); //redraw the sidebar
 				},
 				/*
 					Redraws the sidebar. 

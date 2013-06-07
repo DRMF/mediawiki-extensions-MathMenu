@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 07 Jun 2013 15:17:25 +0200
+	built: Fri, 07 Jun 2013 22:17:13 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2289,7 +2289,7 @@ JOBAD.events.SideBarUpdate =
 						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
 					}
 					
-					this.Sidebar.redraw(); //redraw the sidebar
+					this.Sidebar.redrawSB(); //redraw the sidebar
 				},
 				'toTB': function(){
 					if(!this.Event.SideBarUpdate.enabled){
@@ -2312,7 +2312,7 @@ JOBAD.events.SideBarUpdate =
 						this.Sidebar.registerNotification(cache[i][0], cache[i][1], false);
 					}
 					
-					this.Sidebar.redraw(); //redraw the sidebar
+					this.Sidebar.redrawTB(); //redraw the sidebar
 				},
 				/*
 					Redraws the sidebar. 
