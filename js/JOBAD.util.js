@@ -181,11 +181,47 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 };
 
 /*
+	Applies a function to the arguments of a function every time it is called. 
+	@param func Function to wrap
+	@param wrap Wrapper function. 
+*/
+
+JOBAD.util.argWrap = function(func, wrapper){
+	return function(){
+		var new_args = [];
+		for(var i=0;i<arguments.length;i++){
+			new_args.push(arguments[i]);
+		}
+		
+		return func.apply(this, wrapper(new_args));
+	};
+};
+
+
+/*
+	Applies Array.slice to the arguments of a function every time it is called. 
+	@param func Function to wrap
+	@param to First parameter for args
+	@param from Second Parameter for slice
+*/
+
+JOBAD.util.argSlice = function(func, from, to){
+	return JOBAD.util.argWrap(func, function(args){
+		return args.slice(from, to);
+	});
+};
+
+/*
 	Checks if 2 objects are equal. Does not accept functions. 
 	@param a Object A
 	@param b Object B
 	@returns boolean
 */
 JOBAD.util.objectEquals = function(a, b){
-	return JSON.stringify(a) == JSON.stringify(b);
+	try{
+		return JSON.stringify(a) == JSON.stringify(b);
+	} catch(e){
+		return a==b;
+	}
+	
 };

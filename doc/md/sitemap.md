@@ -1,6 +1,7 @@
 # Index
 
 * [About](about.md) (about.md)
+* [JOBAD.Sidebar](api/JOBAD/JOBAD.Sidebar.md) (api/JOBAD/JOBAD.Sidebar.md)
 * [JOBAD.UI.ContextMenu](api/JOBAD/JOBAD.UI/contextmenu.md) (api/JOBAD/JOBAD.UI/contextmenu.md)
 * [JOBAD.UI.hover](api/JOBAD/JOBAD.UI/hover.md) (api/JOBAD/JOBAD.UI/hover.md)
 * [JOBAD.UI](api/JOBAD/JOBAD.UI/index.md) (api/JOBAD/JOBAD.UI/index.md)

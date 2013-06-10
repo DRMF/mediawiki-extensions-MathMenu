@@ -482,7 +482,7 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	var spec = JOBAD.util.createProperUserSettingsObject({
 		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
 		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
-		"sidebar_type": ["list", [0, 1], 0, ["Sidebar Position", "Right", "Bound to element"]]
+		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc]
 	}, "");
 	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
 

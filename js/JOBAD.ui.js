@@ -275,18 +275,23 @@ JOBAD.UI.Sidebar.config =
 /*
 	Wraps an element to create a sidebar UI. 
 	@param element The element to wrap. 
+	@param align Alignment of the new sidebar. 
 	@returns the original element, now wrapped. 
 */
-JOBAD.UI.Sidebar.wrap = function(element){
+JOBAD.UI.Sidebar.wrap = function(element, align){
+
 	var org = JOBAD.refs.$(element);
+	
+	var sbar_align = (align === 'left')?'left':'right';
+	var sbar_class = "JOBAD_Sidebar_"+(sbar_align);
 
 	var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
-	var sideBarElement = JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Container'>").css({
+	var sideBarElement = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Container'>").css({
 		"width": JOBAD.UI.Sidebar.config.width
 	});
 
-	var container = JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Wrapper'>");
+	var container = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Wrapper'>");
 
 	org.wrap(orgWrapper);
 
@@ -307,7 +312,7 @@ JOBAD.UI.Sidebar.wrap = function(element){
 		children.each(function(i, e){
 			var e = JOBAD.refs.$(e).detach().appendTo(sideBarElement).addClass("JOBAD_Sidebar_Single");
 			var offset = e.data("JOBAD.UI.Sidebar.orgElement").offset().top - sideBarElement.offset().top; //offset
-			e.css({"top": offset, "right": 0});
+			e.css("top", offset).css(sbar_align, 0);
 		});
 		
 		//Sort the children in some way
@@ -348,7 +353,7 @@ JOBAD.UI.Sidebar.wrap = function(element){
 				(function(){
 					var group = JOBAD.refs.$(groups[i]);
 					var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
-					var par = JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
+					var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
 					.css("top", top).appendTo(sideBarElement);
 					var img = par.find("img");
 					var state = false;
@@ -368,10 +373,9 @@ JOBAD.UI.Sidebar.wrap = function(element){
 						
 					});
 					for(var j=0;j<group.length;j++){
-						JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element").css({
-							"right": 20,
-							"top": -16
-						});
+						JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element")
+						.css("top", -16)
+						.css(sbar_align, 20);
 					}
 				})();
 			} else {
@@ -386,6 +390,7 @@ JOBAD.UI.Sidebar.wrap = function(element){
 	});
 
 	org.data("JOBAD.UI.Sidebar.active", true);
+	org.data("JOBAD.UI.Sidebar.align", sbar_align);
 	return org;
 };
 
@@ -396,19 +401,26 @@ JOBAD.UI.Sidebar.wrap = function(element){
 */
 JOBAD.UI.Sidebar.unwrap = function(element){
 	var org = JOBAD.refs.$(element);
+	
+	if(!org.data("JOBAD.UI.Sidebar.active")){
+		return;
+	}
+	
 	org
 	.unwrap()
 	.parent()
 	.find("div")
 	.first().remove();
 
-	org.removeData("JOBAD.UI.Sidebar.active");
+	org
+	.removeData("JOBAD.UI.Sidebar.active")
+	.removeData("JOBAD.UI.Sidebar.align");
 
 	return org.unwrap();
 };
 
 /*
-	Adds a new notification to the sidebar. (It must already exist)
+	Adds a new notification to the sidebar. Will be auto created if it does not exist. 
 	@param sidebar The element which has a sidebar. 
 	@param element The element to bind the notification to. 
 	@param config The configuration. 
@@ -419,9 +431,10 @@ JOBAD.UI.Sidebar.unwrap = function(element){
 			config.trace:	Trace the original element on hover?
 			config.click:	Callback on click
 			config.menuThis: This for menu callbacks
+	@param align Alignment of sidebar if it still has to be created. 
 	@returns an empty new notification element. 
 */
-JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
+JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	
 	
 	
@@ -430,14 +443,16 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
 	var sbar = JOBAD.refs.$(sidebar);
 	
 	if(sbar.data("JOBAD.UI.Sidebar.active") !== true){
-		JOBAD.UI.Sidebar.wrap(sbar); //init the sidebar first. 
+		sbar = JOBAD.UI.Sidebar.wrap(sbar, align); //init the sidebar first. 
 	}
+	
+	var sbar_class = "JOBAD_Sidebar_"+((sbar.data("JOBAD.UI.Sidebar.align") === 'left')?'left':'right');
 	
 	var child = JOBAD.refs.$(element);
 	var offset = child.offset().top - sbar.offset().top; //offset
 	sbar = sbar.parent().parent().find("div").first();
 
-	var newGuy =  JOBAD.refs.$("<div class='JOBAD JOBAD_Sidebar JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar);
+	var newGuy =  JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar);
 	newGuy.data("JOBAD.UI.Sidebar.orgElement", element);
 	newGuy.data("JOBAD.UI.Sidebar.isElement", true);
 	
@@ -453,19 +468,38 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
 	if(config.hasOwnProperty("text")){
 		newGuy.text(config.text);
 	}
-	
 
+	var icon = false;
+	var class_color = "#C0C0C0";
+	var class_colors = {
+		"info": "#00FFFF",
+		"error": "#FF0000",
+		"warning": "#FFFF00",
+	};
+	
+	if(typeof config["class"] == 'string'){
+		var notClass = config["class"];
+		
+		if(JOBAD.UI.Sidebar.config.icons.hasOwnProperty(notClass)){
+			icon = JOBAD.UI.Sidebar.config.icons[notClass];
+		}	
+		
+		if(class_colors.hasOwnProperty(notClass)){
+			class_color = class_colors[notClass];
+		}
+	}
+	
 	if(config.trace){
 		//highlight the element
 		newGuy.hover(
 		function(){
-			JOBAD.UI.highlight(element);
+			JOBAD.UI.highlight(element, class_color);
 		},
 		function(){
 			JOBAD.UI.unhighlight(element);
 		});
 	}
-
+	
 	if(typeof config.click == "function"){
 		newGuy.click(config.click);
 	} else {
@@ -473,15 +507,6 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config){
 			newGuy.trigger("contextmenu");
 			return false;
 		})
-	}
-
-	var icon = false;
-	if(typeof config["class"] == 'string'){
-		var notClass = config["class"];
-		
-		if(JOBAD.UI.Sidebar.config.icons.hasOwnProperty(notClass)){
-			icon = JOBAD.UI.Sidebar.config.icons[notClass];
-		}						
 	}
 	
 	if(typeof config.icon == 'string'){
@@ -681,7 +706,7 @@ JOBAD.UI.Toolbar.removeItem = function(item){
 /*
 	highlights an element
 */
-JOBAD.UI.highlight = function(element){
+JOBAD.UI.highlight = function(element, color){
 	var element = JOBAD.refs.$(element);
 	var col;
 	if(typeof element.data("JOBAD.UI.highlight.orgColor") == 'string'){
@@ -692,7 +717,7 @@ JOBAD.UI.highlight = function(element){
 	
 	element
 	.stop().data("JOBAD.UI.highlight.orgColor", col)
-	.animate({ backgroundColor: "#FFFF9C"}, 1000);	
+	.animate({ backgroundColor: (typeof color == 'string')?color:"#FFFF9C"}, 1000);	
 };
 /*
 	unhighlights an element.	

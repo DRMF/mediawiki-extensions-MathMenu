@@ -44,6 +44,7 @@ As a developer who wants to work on the JOBAD core you can load the JOBAD Core f
 	<script src='js/JOBAD.core.modules.js'></script>
 	<script src='js/JOBAD.core.events.js'></script>
 	<script src='js/JOBAD.ui.js'></script>
+	<script src='js/JOBAD.sidebar.js'></script>
 	<script src='js/JOBAD.events.js'></script>
 	<script src='js/JOBAD.config.js'></script>
 	<script src='js/JOBAD.wrap.js'></script>
