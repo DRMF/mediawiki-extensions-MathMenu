@@ -28,16 +28,15 @@
 */
 var JOBAD = function(element){
 
+	//create new instance of JOBAD
 	if(!(this instanceof JOBAD)){
 		return new JOBAD(element);	
 	}
-
-	var me = this; //Kept in functions
 	
 	//Add init arguments
-	me.args = [];
+	this.args = [];
 	for(var i=0;i<arguments.length;i++){
-		me.args.push(arguments[i]);
+		this.args.push(arguments[i]);
 	}
 
 	//The element the current JOBAD instance works on. 

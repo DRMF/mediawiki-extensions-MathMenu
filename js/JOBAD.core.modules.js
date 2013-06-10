@@ -231,8 +231,9 @@ JOBAD.ifaces.push(function(me, args){
 });
 
 JOBAD.modules = {};
-JOBAD.modules.extensions = {}; //EXtensions for modules
-JOBAD.modules.ifaces = []; //JOABd Module ifaces
+JOBAD.modules.extensions = {}; //Extensions for modules
+JOBAD.modules.ifaces = []; //JOABD Module ifaces
+
 JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit", "info"];
 
 var moduleList = {};
@@ -479,6 +480,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	}
 
 	var ServiceObject = moduleList[name];
+	
 	/*
 		Information about this module. 
 	*/

@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 07 Jun 2013 22:17:13 +0200
+	built: Mon, 10 Jun 2013 09:58:31 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -54,16 +54,15 @@ var JOBAD = (function(){
 */
 var JOBAD = function(element){
 
+	//create new instance of JOBAD
 	if(!(this instanceof JOBAD)){
 		return new JOBAD(element);	
 	}
-
-	var me = this; //Kept in functions
 	
 	//Add init arguments
-	me.args = [];
+	this.args = [];
 	for(var i=0;i<arguments.length;i++){
-		me.args.push(arguments[i]);
+		this.args.push(arguments[i]);
 	}
 
 	//The element the current JOBAD instance works on. 
@@ -208,7 +207,7 @@ JOBAD.resources =
 	"underscore_license": "Copyright (c) 2009-2013 Jeremy Ashkenas, DocumentCloud\n\nPermission is hereby granted, free of charge, to any person\nobtaining a copy of this software and associated documentation\nfiles (the \"Software\"), to deal in the Software without\nrestriction, including without limitation the rights to use,\ncopy, modify, merge, publish, distribute, sublicense, and\x2For sell\ncopies of the Software, and to permit persons to whom the\nSoftware is furnished to do so, subject to the following\nconditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\nOF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\nHOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nWHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\nOTHER DEALINGS IN THE SOFTWARE.",
 	"jobad_license": "JOBAD - JavaScript API for OMDoc-based Active Documents\n\nCopyright (C) 2013 KWARC Group \x3Ckwarc.info\x3E\n\nJOBAD is free software: you can redistribute it and\x2For modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nJOBAD is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with JOBAD.  If not, see \x3Chttp:\x2F\x2Fwww.gnu.org\x2Flicenses\x2F\x3E."
 }/* end   <resources.js> */
-/* start <JOBAD.utils.js> */
+/* start <JOBAD.util.js> */
 /*
 	JOBAD utility functions
 	
@@ -399,7 +398,7 @@ JOBAD.util.fullWrap = function(menu, wrapper){
 */
 JOBAD.util.objectEquals = function(a, b){
 	return JSON.stringify(a) == JSON.stringify(b);
-};/* end   <JOBAD.utils.js> */
+};/* end   <JOBAD.util.js> */
 /* start <JOBAD.core.modules.js> */
 /*
 	JOBAD Core Module logic
@@ -634,8 +633,9 @@ JOBAD.ifaces.push(function(me, args){
 });
 
 JOBAD.modules = {};
-JOBAD.modules.extensions = {}; //EXtensions for modules
-JOBAD.modules.ifaces = []; //JOABd Module ifaces
+JOBAD.modules.extensions = {}; //Extensions for modules
+JOBAD.modules.ifaces = []; //JOABD Module ifaces
+
 JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit", "info"];
 
 var moduleList = {};
@@ -882,6 +882,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	}
 
 	var ServiceObject = moduleList[name];
+	
 	/*
 		Information about this module. 
 	*/
