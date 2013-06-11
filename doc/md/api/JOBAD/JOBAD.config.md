@@ -8,3 +8,6 @@ This object contains the configuration settings for JOBAD.
 * **Array[String]** `JOBAD.config.disabledEvents` List of disabled events. Default: `[]`. 
 
 * **String** `JOBAD.config.storageBackend` Storage Backend to use. Default: `none`. 
+
+* **Array[String]** `JOBAD.config.storageBackend` Storage Backend to use. Default: `none`. 
+

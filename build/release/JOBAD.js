@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 10 Jun 2013 13:52:08 +0200
+	built: Tue, 11 Jun 2013 10:48:45 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -23,7 +23,7 @@
 */
 
 var JOBAD = (function(){
-/* start <JOBAD.core.js> */
+/* start <core/JOBAD.core.js> */
 /*
 	JOBAD 3 Core
 	
@@ -175,7 +175,7 @@ JOBAD.noConflict.$ = function(){
 JOBAD.noConflict._ = function(){
 	JOBAD.refs._ = JOBAD.refs._.noConflict();
 	return JOBAD.refs._;
-};/* end   <JOBAD.core.js> */
+};/* end   <core/JOBAD.core.js> */
 /* start <resources.js> */
 /*
 	JOBAD String Resoucres
@@ -435,7 +435,7 @@ JOBAD.util.objectEquals = function(a, b){
 	}
 	
 };/* end   <JOBAD.util.js> */
-/* start <JOBAD.core.modules.js> */
+/* start <core/JOBAD.core.modules.js> */
 /*
 	JOBAD Core Module logic
 	depends:
@@ -1001,8 +1001,8 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	
 	ServiceObject.init.apply(this, params);		
 };
-/* end   <JOBAD.core.modules.js> */
-/* start <JOBAD.core.events.js> */
+/* end   <core/JOBAD.core.modules.js> */
+/* start <core/JOBAD.core.events.js> */
 /*
 	JOBAD Core Event Logic
 	depends:
@@ -1196,8 +1196,8 @@ JOBAD.events = {};
 
 //config
 JOBAD.config.disabledEvents = []; //Disabled events
-JOBAD.config.cleanModuleNamespace = false;//if set to true this.loadedModule instances will not allow additional functions/* end   <JOBAD.core.events.js> */
-/* start <JOBAD.ui.js> */
+JOBAD.config.cleanModuleNamespace = false;//if set to true this.loadedModule instances will not allow additional functions/* end   <core/JOBAD.core.events.js> */
+/* start <ui/JOBAD.ui.js> */
 /*
 	JOBAD 3 UI Functions
 	JOBAD.ui.js
@@ -1223,6 +1223,8 @@ JOBAD.config.cleanModuleNamespace = false;//if set to true this.loadedModule ins
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// This file contains general JOBAD.UI functions
+
 //Mouse coordinates
 var mouseCoords = [0, 0];
 
@@ -1234,7 +1236,65 @@ JOBAD.refs.$(document).on("mousemove.JOBADListener", function(e){
 //UI Namespace. 
 JOBAD.UI = {}
 
-//Hover UI. 
+
+/*
+	highlights an element
+*/
+JOBAD.UI.highlight = function(element, color){
+	var element = JOBAD.refs.$(element);
+	var col;
+	if(typeof element.data("JOBAD.UI.highlight.orgColor") == 'string'){
+		col = element.data("JOBAD.UI.highlight.orgColor");
+	} else {
+		col = element.css("backgroundColor");
+	}
+	
+	element
+	.stop().data("JOBAD.UI.highlight.orgColor", col)
+	.animate({ backgroundColor: (typeof color == 'string')?color:"#FFFF9C"}, 1000);	
+};
+/*
+	unhighlights an element.	
+*/		
+JOBAD.UI.unhighlight = function(element){
+	var element = JOBAD.refs.$(element);
+	element
+	.stop()
+	.animate({
+		backgroundColor: element.data("JOBAD.UI.highlight.orgColor"),
+		finish: function(){
+			element.removeData("JOBAD.UI.highlight.orgColor");
+		}
+	}, 1000);
+		
+};/* end   <ui/JOBAD.ui.js> */
+/* start <ui/JOBAD.ui.hover.js> */
+/*
+	JOBAD 3 UI Functions - Hover Text
+	JOBAD.ui.hover.js
+	
+	requires: 
+		JOBAD.core.js
+		JOBAD.ui.js
+		
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 JOBAD.UI.hover = {}
 
 JOBAD.UI.hover.config = {
@@ -1290,7 +1350,33 @@ JOBAD.UI.hover.refresh = function(){
 		.css("top", Math.min(mouseCoords[1]+JOBAD.UI.hover.config.offsetY, window.innerHeight-hoverElement.outerHeight(true)))
 		.css("left", Math.min(mouseCoords[0]+JOBAD.UI.hover.config.offsetX, window.innerWidth-hoverElement.outerWidth(true)))
 	}
-}
+}/* end   <ui/JOBAD.ui.hover.js> */
+/* start <ui/JOBAD.ui.contextmenu.js> */
+/*
+	JOBAD 3 UI Functions - Context Menu
+	JOBAD.ui.contextmenu.js
+	
+	requires: 
+		JOBAD.core.js
+		JOBAD.ui.js
+		
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 //Context Menu UI
 JOBAD.UI.ContextMenu = {}
@@ -1453,9 +1539,34 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, elementOrg)
 	}
 	return $ul;
 };
+/* end   <ui/JOBAD.ui.contextmenu.js> */
+/* start <ui/JOBAD.ui.sidebar.js> */
+/*
+	JOBAD 3 UI Functions
+	JOBAD.ui.sidebar.js
+	
+	requires: 
+		JOBAD.core.js
+		JOBAD.ui.js
+		
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-
-//Sidebar UI
 JOBAD.UI.Sidebar = {}; 
 
 JOBAD.UI.Sidebar.config = 
@@ -1674,7 +1785,7 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	var class_colors = {
 		"info": "#00FFFF",
 		"error": "#FF0000",
-		"warning": "#FFFF00",
+		"warning": "#FFFF00"
 	};
 	
 	if(typeof config["class"] == 'string'){
@@ -1741,10 +1852,34 @@ JOBAD.UI.Sidebar.forceNotificationUpdate = function(){
 */
 JOBAD.UI.Sidebar.removeNotification = function(notification){
 	notification.remove();
-};
+};/* end   <ui/JOBAD.ui.sidebar.js> */
+/* start <ui/JOBAD.ui.toolbar.js> */
+/*
+	JOBAD 3 UI Functions - Toolbar
+	JOBAD.ui.toolbar.js
+	
+	requires: 
+		JOBAD.core.js
+		JOBAD.ui.js
+		
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-
-//Toolbar
 JOBAD.UI.Toolbar = {};
 
 /*
@@ -1898,43 +2033,8 @@ JOBAD.UI.Toolbar.removeItem = function(item){
 	item.remove();
 	
 	JOBAD.UI.Toolbar.update(element);
-}
-
-
-
-//highlighting
-/*
-	highlights an element
-*/
-JOBAD.UI.highlight = function(element, color){
-	var element = JOBAD.refs.$(element);
-	var col;
-	if(typeof element.data("JOBAD.UI.highlight.orgColor") == 'string'){
-		col = element.data("JOBAD.UI.highlight.orgColor");
-	} else {
-		col = element.css("backgroundColor");
-	}
-	
-	element
-	.stop().data("JOBAD.UI.highlight.orgColor", col)
-	.animate({ backgroundColor: (typeof color == 'string')?color:"#FFFF9C"}, 1000);	
-};
-/*
-	unhighlights an element.	
-*/		
-JOBAD.UI.unhighlight = function(element){
-	var element = JOBAD.refs.$(element);
-	element
-	.stop()
-	.animate({
-		backgroundColor: element.data("JOBAD.UI.highlight.orgColor"),
-		finish: function(){
-			element.removeData("JOBAD.UI.highlight.orgColor");
-		}
-	}, 1000);
-		
-};/* end   <JOBAD.ui.js> */
-/* start <JOBAD.sidebar.js> */
+}/* end   <ui/JOBAD.ui.toolbar.js> */
+/* start <events/JOBAD.sidebar.js> */
 /*
 	JOBAD 3 Sidebar
 	depends:
@@ -2243,8 +2343,8 @@ JOBAD.events.SideBarUpdate =
 			this.Event.SideBarUpdate.getResult();
 		}
 	}
-};/* end   <JOBAD.sidebar.js> */
-/* start <JOBAD.events.js> */
+};/* end   <events/JOBAD.sidebar.js> */
+/* start <events/JOBAD.events.js> */
 /*
 	JOBAD 3 Events
 	depends:
@@ -2593,7 +2693,7 @@ JOBAD.events.hoverText =
 for(var key in JOBAD.events){
 	JOBAD.modules.cleanProperties.push(key);
 }
-/* end   <JOBAD.events.js> */
+/* end   <events/JOBAD.events.js> */
 /* start <JOBAD.config.js> */
 /*
 	JOBAD Configuration
@@ -2637,6 +2737,7 @@ JOBAD.storageBackend.engines = {
 JOBAD.config.storageBackend = "none";
 
 
+
 //Config Settings - module based
 /*
 	Validates if specefied object of a configuration object can be set. 
@@ -2667,6 +2768,9 @@ JOBAD.util.validateConfigSetting = function(obj, key, val){
 			break;
 		case "list":
 			return validator(val);
+			break;
+		case "none":
+			return true;
 			break;
 	}
 };
@@ -2705,8 +2809,14 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 				JOBAD.console.warn(WRONG_FORMAT_MSG+" (type must be a string). ");
 				return; 
 			}
-			
-			if(spec.length == 4){
+			if(type == "none"){
+				if(spec.length == 2){
+					var def = spec[1];
+				} else {
+					JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array length 2 required for 'none'. ");
+					return;
+				}
+			} else if(spec.length == 4){
 				var validator = spec[1];
 				var def = spec[2];
 				var meta = spec[3];
@@ -2951,6 +3061,10 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					newSpec.push(validator); 
 					
 					break;
+				case "none": 
+					newSpec.push("none");
+					newSpec.push(def);
+					break;
 				default:
 					JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown type '"+type+"'. ). ");
 					return;
@@ -3079,7 +3193,8 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	var spec = JOBAD.util.createProperUserSettingsObject({
 		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
 		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
-		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc]
+		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc],
+		"restricted_user_config": ["none", []]
 	}, "");
 	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
 
@@ -3270,6 +3385,8 @@ JOBAD.ifaces.push(function(){
 					);
 					
 					break;
+				case "none":
+					break;
 				default:
 					JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
 					item.remove();
@@ -3313,6 +3430,16 @@ JOBAD.ifaces.push(function(){
 		
 			var $config = JOBAD.refs.$("<div>");
 			buildjQueryConfig(me.Config.getTypes(), $config, function(key){return me.Config.get(key);})
+		
+		
+			//remove restricted items
+			var restricted_items = me.Config.get("restricted_user_config");
+			$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
+					var e = JOBAD.refs.$(e);
+					if(JOBAD.refs._.indexOf(restricted_items, e.data("JOBAD.config.setting.key")) != -1){
+						e.remove();
+					}
+			});
 		
 			$displayer
 			.trigger("JOBAD.modInfoClose")	

@@ -508,7 +508,8 @@
 <li><strong>Mixed</strong> <code>spec[2|1] = default</code> Default value for the setting. Must match the restrictions (if applicable). </li>
 <li><strong>Mixed</strong> <code>spec[3|2] = meta</code> Meta information. If type is not <code>list</code>, may either be a string (with name of setting) 
 or an array containg the name of the setting and optionally a longer description of this setting. For <code>list</code>, this must be an array containg the setting name 
-and the name of each option.  </li>
+and the name of each option. <br />
+There is also the special option type 'none', which represents a hidden setting which can not be changed by the user. It has a default but no validator. </li>
 </ul></li>
 </ul></li>
 <li><p><strong>Function</strong> <code>template.configUpdate(key, JOBADInstance)</code> Called every time a user configuration is updated.  </p>

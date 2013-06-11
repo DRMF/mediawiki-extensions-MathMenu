@@ -23,6 +23,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 		* **Mixed** `spec[3|2] = meta` Meta information. If type is not `list`, may either be a string (with name of setting) 
 		or an array containg the name of the setting and optionally a longer description of this setting. For `list`, this must be an array containg the setting name 
 		and the name of each option.  
+		There is also the special option type 'none', which represents a hidden setting which can not be changed by the user. It has a default but no validator. 
 
 * **Function** `template.configUpdate(key, JOBADInstance)` Called every time a user configuration is updated.  
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 

@@ -40,6 +40,7 @@ JOBAD.storageBackend.engines = {
 JOBAD.config.storageBackend = "none";
 
 
+
 //Config Settings - module based
 /*
 	Validates if specefied object of a configuration object can be set. 
@@ -70,6 +71,9 @@ JOBAD.util.validateConfigSetting = function(obj, key, val){
 			break;
 		case "list":
 			return validator(val);
+			break;
+		case "none":
+			return true;
 			break;
 	}
 };
@@ -108,8 +112,14 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 				JOBAD.console.warn(WRONG_FORMAT_MSG+" (type must be a string). ");
 				return; 
 			}
-			
-			if(spec.length == 4){
+			if(type == "none"){
+				if(spec.length == 2){
+					var def = spec[1];
+				} else {
+					JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array length 2 required for 'none'. ");
+					return;
+				}
+			} else if(spec.length == 4){
 				var validator = spec[1];
 				var def = spec[2];
 				var meta = spec[3];
@@ -354,6 +364,10 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					newSpec.push(validator); 
 					
 					break;
+				case "none": 
+					newSpec.push("none");
+					newSpec.push(def);
+					break;
 				default:
 					JOBAD.console.warn(WRONG_FORMAT_MSG+" (Unknown type '"+type+"'. ). ");
 					return;
@@ -482,7 +496,8 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	var spec = JOBAD.util.createProperUserSettingsObject({
 		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
 		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
-		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc]
+		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc],
+		"restricted_user_config": ["none", []]
 	}, "");
 	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
 
@@ -673,6 +688,8 @@ JOBAD.ifaces.push(function(){
 					);
 					
 					break;
+				case "none":
+					break;
 				default:
 					JOBAD.console.warn("Unable to create config dialog: Unknown configuration type '"+type+"' for user setting '"+key+"'");
 					item.remove();
@@ -716,6 +733,16 @@ JOBAD.ifaces.push(function(){
 		
 			var $config = JOBAD.refs.$("<div>");
 			buildjQueryConfig(me.Config.getTypes(), $config, function(key){return me.Config.get(key);})
+		
+		
+			//remove restricted items
+			var restricted_items = me.Config.get("restricted_user_config");
+			$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
+					var e = JOBAD.refs.$(e);
+					if(JOBAD.refs._.indexOf(restricted_items, e.data("JOBAD.config.setting.key")) != -1){
+						e.remove();
+					}
+			});
 		
 			$displayer
 			.trigger("JOBAD.modInfoClose")	

@@ -38,14 +38,18 @@ It is also possible to include each file individually.
 As a developer who wants to work on the JOBAD core you can load the JOBAD Core files: 
 
 ```html
-	<script src='js/JOBAD.core.js'></script>
+	<script src='js/core/JOBAD.core.js'></script>
 	<script src='js/resources.js'></script>
 	<script src='js/JOBAD.util.js'></script>
-	<script src='js/JOBAD.core.modules.js'></script>
-	<script src='js/JOBAD.core.events.js'></script>
-	<script src='js/JOBAD.ui.js'></script>
-	<script src='js/JOBAD.sidebar.js'></script>
-	<script src='js/JOBAD.events.js'></script>
+	<script src='js/core/JOBAD.core.modules.js'></script>
+	<script src='js/core/JOBAD.core.events.js'></script>
+	<script src='js/ui/JOBAD.ui.js'></script>
+	<script src='js/ui/JOBAD.ui.hover.js'></script>
+	<script src='js/ui/JOBAD.ui.contextmenu.js'></script>
+	<script src='js/ui/JOBAD.ui.sidebar.js'></script>
+	<script src='js/ui/JOBAD.ui.toolbar.js'></script>
+	<script src='js/events/JOBAD.sidebar.js'></script>
+	<script src='js/events/JOBAD.events.js'></script>
 	<script src='js/JOBAD.config.js'></script>
 	<script src='js/JOBAD.wrap.js'></script>
 ```
