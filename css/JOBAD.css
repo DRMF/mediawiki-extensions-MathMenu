@@ -21,10 +21,15 @@
 
 */
 
+
 /* general */
 .JOBAD {
 	/* general JOBAD class applied to all JOBAD items */
 }
+
+/* 
+	=== Hover ===
+*/
 
 /* JOBAD Hover */
 .JOBAD.JOBAD_Hover {
@@ -36,11 +41,19 @@
 	border: 1px solid #000000;
 }
 
+/* 
+	=== ContextMenu ===
+*/
+
 /* JOBAD ContextMenu */
 .JOBAD.JOBAD_Contextmenu {
 	/* applied to the context menu */
 	z-index: 100;
 }
+
+/* 
+	=== Sidebar ===
+*/
 
 /* JOBAD Sidebar */
 .JOBAD.JOBAD_Sidebar_left,  .JOBAD.JOBAD_Sidebar_right{
@@ -71,14 +84,12 @@
 	/* wraps the element that has a sidebar */
 	width: 100%;
 	float: left;
-	overflow: hidden;	
 }
 
 .JOBAD.JOBAD_Sidebar_left.JOBAD_Sidebar_Wrapper {
 	/* wraps the element that has a sidebar */
 	width: 100%;
-	float: right;
-	overflow: hidden;	
+	float: right;	
 }
 
 
@@ -129,9 +140,50 @@
 	border: 1px solid red;
 }
 
+
+/* 
+	=== Folding ===
+*/
+
+/* JOBAD Folding */
+.JOBAD.JOBAD_Folding_left, .JOBAD.JOBAD_Folding_right{
+	/* applied to all sidebar elements (including parent) */
+}
+
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Wrapper {
+	/* wraps the element that has a sidebar */
+	width: 100%;
+	float: left;
+}
+
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Wrapper {
+	/* wraps the element that has a sidebar */
+	width: 100%;
+	float: right;
+}
+
+
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container {
+	/* Contains all sidebar elements */
+	position: relative;
+	float: right;
+	margin-left: 5px;
+	width: 5px;
+	background-color: black; /* TODO: Make this better; */
+}
+
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container {
+	/* Contains all sidebar elements */
+	position: relative;
+	float: left;
+	margin-right: 5px;
+	width: 5px;
+	background-color: black; /* TODO: Make this better; */
+}
+
 /*
- * JOBAD Config UI
- */
+	=== JOBAD Config UI ===
+*/
 
 /* JOBAD Config UI Main */
 .JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_tablemain{

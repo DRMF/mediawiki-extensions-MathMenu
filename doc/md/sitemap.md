@@ -3,6 +3,7 @@
 * [About](about.md) (about.md)
 * [JOBAD.Sidebar](api/JOBAD/JOBAD.Sidebar.md) (api/JOBAD/JOBAD.Sidebar.md)
 * [JOBAD.UI.ContextMenu](api/JOBAD/JOBAD.UI/contextmenu.md) (api/JOBAD/JOBAD.UI/contextmenu.md)
+* [JOBAD.UI.Folding](api/JOBAD/JOBAD.UI/folding.md) (api/JOBAD/JOBAD.UI/folding.md)
 * [JOBAD.UI.hover](api/JOBAD/JOBAD.UI/hover.md) (api/JOBAD/JOBAD.UI/hover.md)
 * [JOBAD.UI](api/JOBAD/JOBAD.UI/index.md) (api/JOBAD/JOBAD.UI/index.md)
 * [JOBAD.UI.Sidebar](api/JOBAD/JOBAD.UI/sidebar.md) (api/JOBAD/JOBAD.UI/sidebar.md)

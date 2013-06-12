@@ -34,6 +34,13 @@ JOBAD.UI.Toolbar.clear = function(element){
 
 	var element = JOBAD.refs.$(element);
 
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element);
+        });
+    }
+
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		element.data("JOBAD.UI.Toolbar.ToolBarElement").remove();
 	
@@ -53,6 +60,13 @@ JOBAD.UI.Toolbar.update = function(element){
 
 	var element = JOBAD.refs.$(element);
 
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element);
+        });
+    }
+
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
@@ -64,6 +78,12 @@ JOBAD.UI.Toolbar.update = function(element){
 			"top": position.top,
 			"left": position.left
 		});
+		
+		if(element.is(":hidden")){
+		  toolbar.hide();
+		} else {
+		  toolbar.show();
+		}
 		
 		if(toolbar.children().length == 0){
 			JOBAD.UI.Toolbar.clear(element);
@@ -87,6 +107,13 @@ JOBAD.UI.Toolbar.update = function(element){
 */
 JOBAD.UI.Toolbar.addItem = function(element, config){
 	var element = JOBAD.refs.$(element);
+
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element, config);
+        });
+    }
 
 	//create toolbar if required
 	if(!element.data("JOBAD.UI.Toolbar.active")){

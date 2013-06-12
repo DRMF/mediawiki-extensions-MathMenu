@@ -55,6 +55,7 @@
 				JOBADInstance.Sidebar.registerNotification($target, {
 					"text": "A second something. ",
 					"trace": true, 
+					"hide": true,
 					"class": classes[(i+1) % 3],
 					"click": function(){
 							JOBADInstance.Event.leftClick.trigger($target);

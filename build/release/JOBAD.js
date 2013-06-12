@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 11 Jun 2013 11:43:38 +0200
+	built: Wed, 12 Jun 2013 15:37:33 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1592,6 +1592,13 @@ JOBAD.UI.Sidebar.config =
 JOBAD.UI.Sidebar.wrap = function(element, align){
 
 	var org = JOBAD.refs.$(element);
+
+	if(org.length > 1){
+        var me = arguments.callee;
+        return org.each(function(i, e){
+            me(e, align);
+        });
+    }
 	
 	var sbar_align = (align === 'left')?'left':'right';
 	var sbar_class = "JOBAD_Sidebar_"+(sbar_align);
@@ -1622,7 +1629,16 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		var cs = [];
 		children.each(function(i, e){
 			var e = JOBAD.refs.$(e).detach().appendTo(sideBarElement).addClass("JOBAD_Sidebar_Single");
-			var offset = e.data("JOBAD.UI.Sidebar.orgElement").offset().top - sideBarElement.offset().top; //offset
+			var el = e.data("JOBAD.UI.Sidebar.orgElement").closest(":visible");
+			var offset = el.offset().top - sideBarElement.offset().top; //offset
+			e.data("JOBAD.UI.Sidebar.hidden", false);
+			
+			if(e.data("JOBAD.UI.Sidebar.orgElement").is(":hidden") && e.data("JOBAD.UI.Sidebar.hide")){
+			     e.data("JOBAD.UI.Sidebar.hidden", true);
+			} else {
+			     e.data("JOBAD.UI.Sidebar.hidden", false);
+			}
+
 			e.css("top", offset).css(sbar_align, 0);
 		});
 		
@@ -1638,6 +1654,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 				return 0;
 			}
 		}));
+		
 		var prev = children.eq(0);
 		var me = children.eq(1);
 		var groups = [[prev]];
@@ -1659,40 +1676,61 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		sideBarElement.find("*").remove(); //clear the sidebar now
 		
 		for(var i=0;i<groups.length;i++){
-			//Group them together
-			if(groups[i].length > 1){
-				(function(){
-					var group = JOBAD.refs.$(groups[i]);
-					var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
-					var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
-					.css("top", top).appendTo(sideBarElement);
-					var img = par.find("img");
-					var state = false;
-					par.click(function(){
-						if(state){
-							for(var j=0;j<group.length;j++){
-								group[j].hide();
-							}
-							img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_open);
-						} else {
-							for(var j=0;j<group.length;j++){
-								group[j].show();
-							}
-							img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_close);
-						}
-						state = !state;
-						
-					});
-					for(var j=0;j<group.length;j++){
-						JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element")
-						.css("top", -16)
-						.css(sbar_align, 20);
+			(function(){
+				//Group them together
+				var hidden_count = 0;
+				var last_unhidden = -1;
+				for(var j=0;j<groups[i].length;j++){
+					if(!groups[i][j].data("JOBAD.UI.Sidebar.hidden")){
+						hidden_count++;
+						last_unhidden = j;
 					}
-				})();
-			} else {
-				sideBarElement.append(JOBAD.refs.$(groups[i][0]).removeClass("JOBAD_Sidebar_group_element").show());
-			}
-			
+				}
+
+
+				if(hidden_count > 1){
+						var group = JOBAD.refs.$(groups[i]);
+						var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
+						var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
+						.css("top", top).appendTo(sideBarElement);
+						var img = par.find("img");
+						var state = false;
+						par.click(function(){
+							if(state){
+								for(var j=0;j<group.length;j++){
+									group[j].hide();
+								}
+								img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_open);
+							} else {
+								for(var j=0;j<group.length;j++){
+									if(!group[j].data("JOBAD.UI.Sidebar.hidden")){
+									    group[j].show();
+									}
+								}
+								img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_close);
+							}
+							state = !state;
+							
+						});
+						for(var j=0;j<group.length;j++){
+							JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element")
+							.css("top", -16)
+							.css(sbar_align, 20);
+						}
+				} else {
+					if(last_unhidden != -1){
+						var single = JOBAD.refs.$(groups[i][last_unhidden]);
+					    sideBarElement.append(JOBAD.refs.$(groups[i][last_unhidden]).removeClass("JOBAD_Sidebar_group_element").show());
+					}
+				     
+				    for(var j=0;j<groups[i].length;j++){
+				    	if(j != last_unhidden){
+				    		sideBarElement.append(JOBAD.refs.$(groups[i][j]).removeClass("JOBAD_Sidebar_group_element"));
+				    	}
+				   	}
+				     
+				}
+			})()
 		}
 	})
 	
@@ -1712,6 +1750,13 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 */
 JOBAD.UI.Sidebar.unwrap = function(element){
 	var org = JOBAD.refs.$(element);
+
+	if(org.length > 1){
+        var me = arguments.callee;
+        return org.each(function(i, e){
+            me(e);
+        });
+    }
 	
 	if(!org.data("JOBAD.UI.Sidebar.active")){
 		return;
@@ -1742,13 +1787,11 @@ JOBAD.UI.Sidebar.unwrap = function(element){
 			config.trace:	Trace the original element on hover?
 			config.click:	Callback on click
 			config.menuThis: This for menu callbacks
+			config.hide: 	Should we hide this element (true) when it is not visible or travel up the dom tree (false, default)?
 	@param align Alignment of sidebar if it still has to be created. 
 	@returns an empty new notification element. 
 */
-JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
-	
-	
-	
+JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){	
 	var config = (typeof config == 'undefined')?{}:config;
 	
 	var sbar = JOBAD.refs.$(sidebar);
@@ -1763,9 +1806,10 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	var offset = child.offset().top - sbar.offset().top; //offset
 	sbar = sbar.parent().parent().find("div").first();
 
-	var newGuy =  JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar);
-	newGuy.data("JOBAD.UI.Sidebar.orgElement", element);
-	newGuy.data("JOBAD.UI.Sidebar.isElement", true);
+	var newGuy =  JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar)
+	.data("JOBAD.UI.Sidebar.orgElement", element)
+	.data("JOBAD.UI.Sidebar.isElement", true)
+	.data("JOBAD.UI.Sidebar.hide", config.hide === true);
 	
 	//config
 	if(typeof config.menu != 'undefined'){
@@ -1890,6 +1934,13 @@ JOBAD.UI.Toolbar.clear = function(element){
 
 	var element = JOBAD.refs.$(element);
 
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element);
+        });
+    }
+
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		element.data("JOBAD.UI.Toolbar.ToolBarElement").remove();
 	
@@ -1909,6 +1960,13 @@ JOBAD.UI.Toolbar.update = function(element){
 
 	var element = JOBAD.refs.$(element);
 
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element);
+        });
+    }
+
 	if(element.data("JOBAD.UI.Toolbar.active")){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
@@ -1920,6 +1978,12 @@ JOBAD.UI.Toolbar.update = function(element){
 			"top": position.top,
 			"left": position.left
 		});
+		
+		if(element.is(":hidden")){
+		  toolbar.hide();
+		} else {
+		  toolbar.show();
+		}
 		
 		if(toolbar.children().length == 0){
 			JOBAD.UI.Toolbar.clear(element);
@@ -1943,6 +2007,13 @@ JOBAD.UI.Toolbar.update = function(element){
 */
 JOBAD.UI.Toolbar.addItem = function(element, config){
 	var element = JOBAD.refs.$(element);
+
+	if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(element, config);
+        });
+    }
 
 	//create toolbar if required
 	if(!element.data("JOBAD.UI.Toolbar.active")){
@@ -2034,6 +2105,267 @@ JOBAD.UI.Toolbar.removeItem = function(item){
 	
 	JOBAD.UI.Toolbar.update(element);
 }/* end   <ui/JOBAD.ui.toolbar.js> */
+/* start <ui/JOBAD.ui.folding.js> */
+/*
+    JOBAD 3 UI Functions
+    JOBAD.ui.folding.js
+    
+    requires: 
+        JOBAD.core.js
+        JOBAD.ui.js
+        
+    Copyright (C) 2013 KWARC Group <kwarc.info>
+    
+    This file is part of JOBAD.
+    
+    JOBAD is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    JOBAD is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+//JOAD UI Folding Namespace
+JOBAD.UI.Folding = {};
+
+JOBAD.UI.Folding.config = {
+    "placeHolderHeightMin": 20, //minmum height of the placholder in pixels
+    "placeHolderPercent": 10, //percentage of opriginal height to use
+    "placeHolderHeightMax": 100, //maxiumum height of the placholder in pixels
+    "placeHolderContent": "Click to unfold me. " //jquery ish stuff in the placholder
+}
+
+/*
+    Enables folding on an element
+    @param element  Element to enable folding on. 
+    @param config   Configuration. 
+        config.enable Callback on enable. 
+        config.disable Callback on disable
+        config.fold  Callback on folding
+        config.unfold: Callback on unfold
+        config.stateChange: Callback on state change. 
+        config.align:   Alignment of the folding. Either 'left' or 'right' (default). 
+        config.update: Called every time the folding UI is updated. 
+*/
+
+JOBAD.UI.Folding.enable = function(element, config){
+    var element = JOBAD.refs.$(element);
+
+    if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(e, config);
+        });
+    }
+
+    //check if we are already enabled
+    if(element.data("JOBAD.UI.Folding.enabled")){
+        JOBAD.console.log("Can't enable folding on element: Folding already enabled. ");
+        return;
+    }
+
+    var config = JOBAD.refs._.clone(config); //clone the config object
+
+    if(typeof config == "undefined"){
+        config = {};
+    }
+
+    //normalise config properties
+    config.enable = (typeof config.enable == 'function')?config.enable:function(){};
+    config.disable = (typeof config.disable == 'function')?config.disable:function(){};
+    config.fold = (typeof config.fold == 'function')?config.fold:function(){};
+    config.unfold = (typeof config.unfold == 'function')?config.unfold:function(){};
+    config.stateChange = (typeof config.stateChange == 'function')?config.stateChange:function(){};
+    config.update = (typeof config.update == 'function')?config.update:function(){};
+
+    config.align = (config.align == "left")?"left":"right";
+
+    //get the folding right
+    var folding_class = "JOBAD_Folding_"+config.align;
+
+    var container = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Wrapper'>");
+
+    element.wrap(container);
+    container = element.parent();
+
+    var placeHolder = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_PlaceHolder'>")
+    .prependTo(container)
+    .height(JOBAD.UI.Folding.config.placeHolderHeight)
+    .append(JOBAD.UI.Folding.config.placeHolderContent)
+    .hide(); //prepend and hide me
+
+    var foldingElement = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Container'>")
+    .prependTo(container);
+
+    container
+    .data("JOBAD.UI.Folding.state", false)
+    .data("JOBAD.UI.Folding.update", function(event){
+        event.stopPropagation();
+        JOBAD.UI.Folding.update(element);
+    })
+    .on("JOBAD.UI.Folding.fold", function(event){
+        event.stopPropagation();
+        //fold me
+        container.data("JOBAD.UI.Folding.state", true);
+        //trigger event
+        config.fold(element);
+        config.stateChange(element, true);
+        JOBAD.UI.Folding.update(element);
+    })
+    .on("JOBAD.UI.Folding.unfold", function(event){
+        event.stopPropagation();
+        //unfold me
+        container.data("JOBAD.UI.Folding.state", false);
+        //trigger event
+        config.unfold(element);
+        config.stateChange(element, false);
+        JOBAD.UI.Folding.update(element);
+    }).on("JOBAD.UI.Folding.update", function(event){
+        //update everything
+        if(container.data("JOBAD.UI.Folding.state")){
+            //we are hiding stuff
+            //hide both element and parent
+            element.parent().show();
+            element.show();
+
+            placeHolder.height(1);
+
+
+            var height = container.height()*(JOBAD.UI.Folding.config.placeHolderPercent/100);
+            if(height < JOBAD.UI.Folding.config.placeHolderHeightMin){
+                height = JOBAD.UI.Folding.config.placeHolderHeightMin;
+            } else if(height > JOBAD.UI.Folding.config.placeHolderHeightMax){
+                height = JOBAD.UI.Folding.config.placeHolderHeightMax;
+            }
+
+            element.parent().hide();
+            element.hide();
+
+            placeHolder.height(height);
+            placeHolder.show();
+            foldingElement.height(height);
+        } else {
+            //we are going back to the normal state
+            //hide both element and parent
+            placeHolder.hide();
+            element.parent().show();
+            element.show();
+            foldingElement.height(element.height());
+        }
+
+        config.update(element);
+
+    });
+
+    foldingElement.click(function(event){
+        //fold or unfold goes here
+        if(container.data("JOBAD.UI.Folding.state")){
+            JOBAD.UI.Folding.unfold(element);
+        } else {
+            JOBAD.UI.Folding.fold(element);
+        }
+    });
+
+    element
+    .wrap("<div style='overflow: hidden; '>")
+    .data("JOBAD.UI.Folding.wrappers", JOBAD.refs.$([foldingElement, placeHolder]))
+    .data("JOBAD.UI.Folding.enabled", true)
+    .data("JOBAD.UI.Folding.callback", config.disable);
+
+    JOBAD.refs.$(window).on("resize", container.data("JOBAD.UI.Folding.update"));
+
+    config.enable(element);
+    JOBAD.UI.Folding.update(element);
+
+    //set all the right states
+    return element;
+}
+
+/*
+    Updates a folded element. 
+*/
+JOBAD.UI.Folding.update = function(element){
+    var element = JOBAD.refs.$(element);
+    if(!element.data("JOBAD.UI.Folding.enabled")){
+        JOBAD.console.log("Can't update element: Folding not enabled. ");
+        return false;
+    }
+    element.parent().parent().trigger("JOBAD.UI.Folding.update");
+    return true;
+}
+
+/*
+    Folds an element
+*/
+JOBAD.UI.Folding.fold = function(element){
+    var element = JOBAD.refs.$(element);
+    if(!element.data("JOBAD.UI.Folding.enabled")){
+        JOBAD.console.log("Can't fold element: Folding not enabled. ");
+        return false;
+    }
+    element.parent().parent().trigger("JOBAD.UI.Folding.fold");
+    return true;
+}
+
+/*
+    Unfolds an element
+*/
+JOBAD.UI.Folding.unfold = function(element){
+    var element = JOBAD.refs.$(element);
+    if(!element.data("JOBAD.UI.Folding.enabled")){
+        JOBAD.console.log("Can't unfold element: Folding not enabled. ");
+        return false;
+    }
+    element.parent().parent().trigger("JOBAD.UI.Folding.unfold");
+    return true;
+}
+
+/*
+    Disables folding on an element
+    @param element Element to disable folding on. 
+*/
+JOBAD.UI.Folding.disable = function(element){
+    var element = JOBAD.refs.$(element);
+
+    if(element.length > 1){
+        var me = arguments.callee;
+        return element.each(function(i, e){
+            me(e);
+        });
+    }
+
+    if(element.data("JOBAD.UI.Folding.enabled") !== true){
+        JOBAD.console.log("Can't disable folding on element: Folding already disabled. ");
+        return;
+    }
+
+    JOBAD.UI.Folding.unfold(element); //Unfold element
+    JOBAD.refs.$(window).off("resize", element.parent().data("JOBAD.UI.Folding.update"));
+
+    //remove stuff
+    element.data("JOBAD.UI.Folding.callback")(element);
+
+    //remove the placeholders
+    element.data("JOBAD.UI.Folding.wrappers").remove();
+
+
+    //claer up the last stuff
+    element
+    .unwrap()
+    .unwrap()
+    .removeData("JOBAD.UI.Folding.callback")
+    .removeData("JOBAD.UI.Folding.enabled")
+    .removeData("JOBAD.UI.Folding.wrappers");
+
+    return element;
+}/* end   <ui/JOBAD.ui.folding.js> */
 /* start <events/JOBAD.sidebar.js> */
 /*
 	JOBAD 3 Sidebar

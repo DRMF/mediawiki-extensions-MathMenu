@@ -49,6 +49,13 @@ JOBAD.UI.Sidebar.config =
 JOBAD.UI.Sidebar.wrap = function(element, align){
 
 	var org = JOBAD.refs.$(element);
+
+	if(org.length > 1){
+        var me = arguments.callee;
+        return org.each(function(i, e){
+            me(e, align);
+        });
+    }
 	
 	var sbar_align = (align === 'left')?'left':'right';
 	var sbar_class = "JOBAD_Sidebar_"+(sbar_align);
@@ -79,7 +86,16 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		var cs = [];
 		children.each(function(i, e){
 			var e = JOBAD.refs.$(e).detach().appendTo(sideBarElement).addClass("JOBAD_Sidebar_Single");
-			var offset = e.data("JOBAD.UI.Sidebar.orgElement").offset().top - sideBarElement.offset().top; //offset
+			var el = e.data("JOBAD.UI.Sidebar.orgElement").closest(":visible");
+			var offset = el.offset().top - sideBarElement.offset().top; //offset
+			e.data("JOBAD.UI.Sidebar.hidden", false);
+			
+			if(e.data("JOBAD.UI.Sidebar.orgElement").is(":hidden") && e.data("JOBAD.UI.Sidebar.hide")){
+			     e.data("JOBAD.UI.Sidebar.hidden", true);
+			} else {
+			     e.data("JOBAD.UI.Sidebar.hidden", false);
+			}
+
 			e.css("top", offset).css(sbar_align, 0);
 		});
 		
@@ -95,6 +111,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 				return 0;
 			}
 		}));
+		
 		var prev = children.eq(0);
 		var me = children.eq(1);
 		var groups = [[prev]];
@@ -116,40 +133,61 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		sideBarElement.find("*").remove(); //clear the sidebar now
 		
 		for(var i=0;i<groups.length;i++){
-			//Group them together
-			if(groups[i].length > 1){
-				(function(){
-					var group = JOBAD.refs.$(groups[i]);
-					var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
-					var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
-					.css("top", top).appendTo(sideBarElement);
-					var img = par.find("img");
-					var state = false;
-					par.click(function(){
-						if(state){
-							for(var j=0;j<group.length;j++){
-								group[j].hide();
-							}
-							img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_open);
-						} else {
-							for(var j=0;j<group.length;j++){
-								group[j].show();
-							}
-							img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_close);
-						}
-						state = !state;
-						
-					});
-					for(var j=0;j<group.length;j++){
-						JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element")
-						.css("top", -16)
-						.css(sbar_align, 20);
+			(function(){
+				//Group them together
+				var hidden_count = 0;
+				var last_unhidden = -1;
+				for(var j=0;j<groups[i].length;j++){
+					if(!groups[i][j].data("JOBAD.UI.Sidebar.hidden")){
+						hidden_count++;
+						last_unhidden = j;
 					}
-				})();
-			} else {
-				sideBarElement.append(JOBAD.refs.$(groups[i][0]).removeClass("JOBAD_Sidebar_group_element").show());
-			}
-			
+				}
+
+
+				if(hidden_count > 1){
+						var group = JOBAD.refs.$(groups[i]);
+						var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
+						var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.UI.Sidebar.config.icons.multiple_open+"' width='16' height='16'></div>")
+						.css("top", top).appendTo(sideBarElement);
+						var img = par.find("img");
+						var state = false;
+						par.click(function(){
+							if(state){
+								for(var j=0;j<group.length;j++){
+									group[j].hide();
+								}
+								img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_open);
+							} else {
+								for(var j=0;j<group.length;j++){
+									if(!group[j].data("JOBAD.UI.Sidebar.hidden")){
+									    group[j].show();
+									}
+								}
+								img.attr("src", JOBAD.UI.Sidebar.config.icons.multiple_close);
+							}
+							state = !state;
+							
+						});
+						for(var j=0;j<group.length;j++){
+							JOBAD.refs.$(group[j]).appendTo(par).hide().removeClass("JOBAD_Sidebar_Single").addClass("JOBAD_Sidebar_group_element")
+							.css("top", -16)
+							.css(sbar_align, 20);
+						}
+				} else {
+					if(last_unhidden != -1){
+						var single = JOBAD.refs.$(groups[i][last_unhidden]);
+					    sideBarElement.append(JOBAD.refs.$(groups[i][last_unhidden]).removeClass("JOBAD_Sidebar_group_element").show());
+					}
+				     
+				    for(var j=0;j<groups[i].length;j++){
+				    	if(j != last_unhidden){
+				    		sideBarElement.append(JOBAD.refs.$(groups[i][j]).removeClass("JOBAD_Sidebar_group_element"));
+				    	}
+				   	}
+				     
+				}
+			})()
 		}
 	})
 	
@@ -169,6 +207,13 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 */
 JOBAD.UI.Sidebar.unwrap = function(element){
 	var org = JOBAD.refs.$(element);
+
+	if(org.length > 1){
+        var me = arguments.callee;
+        return org.each(function(i, e){
+            me(e);
+        });
+    }
 	
 	if(!org.data("JOBAD.UI.Sidebar.active")){
 		return;
@@ -199,13 +244,11 @@ JOBAD.UI.Sidebar.unwrap = function(element){
 			config.trace:	Trace the original element on hover?
 			config.click:	Callback on click
 			config.menuThis: This for menu callbacks
+			config.hide: 	Should we hide this element (true) when it is not visible or travel up the dom tree (false, default)?
 	@param align Alignment of sidebar if it still has to be created. 
 	@returns an empty new notification element. 
 */
-JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
-	
-	
-	
+JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){	
 	var config = (typeof config == 'undefined')?{}:config;
 	
 	var sbar = JOBAD.refs.$(sidebar);
@@ -220,9 +263,10 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	var offset = child.offset().top - sbar.offset().top; //offset
 	sbar = sbar.parent().parent().find("div").first();
 
-	var newGuy =  JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar);
-	newGuy.data("JOBAD.UI.Sidebar.orgElement", element);
-	newGuy.data("JOBAD.UI.Sidebar.isElement", true);
+	var newGuy =  JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Notification'>").css({"top": offset}).appendTo(sbar)
+	.data("JOBAD.UI.Sidebar.orgElement", element)
+	.data("JOBAD.UI.Sidebar.isElement", true)
+	.data("JOBAD.UI.Sidebar.hide", config.hide === true);
 	
 	//config
 	if(typeof config.menu != 'undefined'){
