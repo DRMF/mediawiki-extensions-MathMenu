@@ -245,7 +245,6 @@ JOBAD.UI.Folding.disable = function(element, keep){
 
 
     if(keep?false:true){
-        console.log("unfolding stuffs")
         JOBAD.UI.Folding.unfold(element); //Unfold element
     }
     

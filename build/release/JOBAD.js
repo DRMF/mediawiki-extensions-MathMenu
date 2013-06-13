@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 13 Jun 2013 14:08:48 +0200
+	built: Thu, 13 Jun 2013 14:15:09 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2357,7 +2357,6 @@ JOBAD.UI.Folding.disable = function(element, keep){
 
 
     if(keep?false:true){
-        console.log("unfolding stuffs")
         JOBAD.UI.Folding.unfold(element); //Unfold element
     }
     
