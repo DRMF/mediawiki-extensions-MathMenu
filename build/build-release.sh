@@ -4,9 +4,14 @@ mkdir -p "release"
 basedir=../
 destdir=release/
 
+# JS Builting config
 build="$destdir"JOBAD.js
 buildmin="$destdir"JOBAD.min.js
-sourcedir="$basedir"js
+sourcedirjs="$basedir"js
+
+# CSS Building config
+buildc="$destdir"JOBAD.css
+sourcedirc="$basedir"css
 
 echo "JOBAD build script "
 
@@ -31,9 +36,9 @@ cat config/dev_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $build
 while read filename
 do
 	echo "/* start <$filename> */" >> $build
-	cat $sourcedir/$filename >> $build
+	cat $sourcedirjs/$filename >> $build
 	echo "/* end   <$filename> */" >> $build
-done < "./config/files.txt"
+done < "./config/js.txt"
 
 cat config/dev_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $build
 
@@ -59,16 +64,15 @@ RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"
 [ $RETVAL -ne 0 ] && echo "FAIL" && rm $buildmin
 
-echo "Done. Copying additional files ..."
-while IFS=$'\t' read -r -a readData
-do
-	source="$basedir""${readData[0]}"
-	dest="$destdir""${readData[1]}"
-	
-	echo $source " => " $dest
-	cp $source $dest
 
-done < "./config/copies.txt"
+echo "Done. Building CSS file ..."
+cat config/css_header.css | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildc
+while read filename
+do
+	echo "/* start <$filename> */" >> $buildc
+	cat $sourcedirc/$filename >> $buildc
+	echo "/* end   <$filename> */" >> $buildc
+done < "./config/css.txt"
 
 printf "Done. "
 

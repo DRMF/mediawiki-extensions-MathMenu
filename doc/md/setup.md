@@ -66,10 +66,16 @@ If you want to minimize bandwith and just want to embed JOBAD onto your webpage,
 	<script src="./build/release/JOBAD.min.js"></script>
 ```
 
-Finally, you should include the JOBAD CSS file in your website: 
+Finally, you should either include the JOBAD CSS release file in your website: 
 
 ```html
 	<link href="./build/release/JOBAD.css" rel="stylesheet">
+```
+
+As a developer you can also include the individual theme files: 
+```html
+	<link href="./css/JOBAD.css" rel="stylesheet">
+	<link href="./css/JOBAD.theme.css" rel="stylesheet">
 ```
 
 That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 

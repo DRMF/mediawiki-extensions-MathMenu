@@ -10,14 +10,23 @@ mkdir $template_build_dir
 
 jobad_base=".\/..\/..\/.."
 jobad_script_full=""
+
 while read filename
 do
 	jobad_script_full="$jobad_script_full<script src='$jobad_base\/js\/$filename'><\/script>\n"
 
-done < "./config/files.txt"
+done < "./config/js.txt"
+
+jobad_css_full=""
+while read filename
+do
+	jobad_css_full="$jobad_css_full<link rel='stylesheet' type='text/css' href='$jobad_base\/css\/$filename'>\n"
+
+done < "./config/css.txt"
 
 jobad_release="<script src='$jobad_base\/build\/release\/JOBAD.min.js'><\/script>\n"
 jobad_dev="<script src='$jobad_base\/build\/release\/JOBAD.js'><\/script>\n"
+jobad_css="<link rel='stylesheet' type='text/css' href='$jobad_base\/build\/release\/JOBAD.css'>"
 jobad_templates=""
 
 echo "Building JOBAD templates..."
@@ -30,13 +39,28 @@ do
 	mkdir "$template_build_dir/$template"
 	jobad_templates="$jobad_templates\* $template - $desc\n"
 
-	cat "$template_dir/$template.html" | sed -e "s%\${JOBAD_BASE}%$jobad_base%" -e "s%\${JS_INCLUDE}%$jobad_script_full%" -e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->%"> "$template_build_dir/$template/unbuilt.html"
+	cat "$template_dir/$template.html" | sed \
+		-e "s%\${JOBAD_BASE}%$jobad_base%" \
+		-e "s%\${JS_INCLUDE}%$jobad_script_full%" \
+		-e "s%\${CSS_INCLUDE}%$jobad_css_full%" \
+		-e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->%" \
+	> "$template_build_dir/$template/unbuilt.html"
 	echo "Wrote $template/unbuilt.html"
 
-	cat "$template_dir/$template.html" | sed -e "s%\${JOBAD_BASE}%$jobad_base%" -e "s%\${JS_INCLUDE}%$jobad_release%" -e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->%"> "$template_build_dir/$template/release.html"
+	cat "$template_dir/$template.html" | sed \
+		-e "s%\${JOBAD_BASE}%$jobad_base%" \
+		-e "s%\${JS_INCLUDE}%$jobad_release%" \
+		-e "s%\${CSS_INCLUDE}%$jobad_css%" \
+		-e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->%" \
+	> "$template_build_dir/$template/release.html"
 	echo "Wrote $template/release.html"
 
-	cat "$template_dir/$template.html" | sed -e "s%\${JOBAD_BASE}%$jobad_base%" -e "s%\${JS_INCLUDE}%$jobad_dev%" -e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->\n%"> "$template_build_dir/$template/dev.html"
+	cat "$template_dir/$template.html" | sed \
+		-e "s%\${JOBAD_BASE}%$jobad_base%" \
+		-e "s%\${JS_INCLUDE}%$jobad_dev%" \
+		-e "s%\${CSS_INCLUDE}%$jobad_css%" \
+		-e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->\n%" \
+	> "$template_build_dir/$template/dev.html"
 	echo "Wrote $template/dev.html"
 
 	jobad_templates="$jobad_templates\t\* \[Release version\]\(.\/..\/..\/examples\/build\/$template\/release.html\)\n"	

@@ -31,7 +31,7 @@ JOBAD.UI.Folding.config = {
     "placeHolderHeightMin": 20, //minmum height of the placholder in pixels
     "placeHolderPercent": 10, //percentage of opriginal height to use
     "placeHolderHeightMax": 100, //maxiumum height of the placholder in pixels
-    "placeHolderContent": "Click to unfold me. " //jquery ish stuff in the placholder
+    "placeHolderContent": "<p>Click to unfold me. </p>" //jquery ish stuff in the placholder
 }
 
 /*
@@ -43,12 +43,13 @@ JOBAD.UI.Folding.config = {
         config.fold  Callback on folding
         config.unfold: Callback on unfold
         config.stateChange: Callback on state change. 
-        config.align:   Alignment of the folding. Either 'left' or 'right' (default). 
+        config.align:   Alignment of the folding. Either 'left' (default) or 'right'.  
         config.update: Called every time the folding UI is updated. 
 */
 
 JOBAD.UI.Folding.enable = function(element, config){
-    var element = JOBAD.refs.$(element);
+
+    var element = (element instanceof jQuery)?element:JOBAD.refs.$(element);
 
     if(element.length > 1){
         var me = arguments.callee;
@@ -77,7 +78,7 @@ JOBAD.UI.Folding.enable = function(element, config){
     config.stateChange = (typeof config.stateChange == 'function')?config.stateChange:function(){};
     config.update = (typeof config.update == 'function')?config.update:function(){};
 
-    config.align = (config.align == "left")?"left":"right";
+    config.align = (config.align == "right")?"right":"left";
 
     //get the folding right
     var folding_class = "JOBAD_Folding_"+config.align;
@@ -90,8 +91,11 @@ JOBAD.UI.Folding.enable = function(element, config){
     var placeHolder = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_PlaceHolder'>")
     .prependTo(container)
     .height(JOBAD.UI.Folding.config.placeHolderHeight)
-    .append(JOBAD.UI.Folding.config.placeHolderContent)
-    .hide(); //prepend and hide me
+    .append(
+        JOBAD.UI.Folding.config.placeHolderContent
+    ).hide().click(function(){
+        JOBAD.UI.Folding.unfold(element);
+    }); //prepend and hide me
 
     var foldingElement = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Container'>")
     .prependTo(container);
@@ -127,8 +131,8 @@ JOBAD.UI.Folding.enable = function(element, config){
             element.parent().show();
             element.show();
 
-            placeHolder.height(1);
-
+            foldingElement
+            .css("height", "")
 
             var height = container.height()*(JOBAD.UI.Folding.config.placeHolderPercent/100);
             if(height < JOBAD.UI.Folding.config.placeHolderHeightMin){
@@ -142,15 +146,17 @@ JOBAD.UI.Folding.enable = function(element, config){
 
             placeHolder.height(height);
             placeHolder.show();
-            foldingElement.height(height);
         } else {
             //we are going back to the normal state
             //hide both element and parent
             placeHolder.hide();
             element.parent().show();
             element.show();
-            foldingElement.height(element.height());
         }
+
+        foldingElement
+        .css("height", "")
+        .height(container.height());
 
         config.update(element);
     });
