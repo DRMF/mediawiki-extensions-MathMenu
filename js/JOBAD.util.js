@@ -43,12 +43,14 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 
 /*
 	Creates a unique ID
+	@param	prefix	Optional. A prefix to use for the UID. 
 */
-JOBAD.util.UID = function(){
+JOBAD.util.UID = function(prefix){
+	var prefix = (typeof prefix == "string")?prefix+"_":"";
 	var time = (new Date()).getTime();
 	var id1 = Math.floor(Math.random()*1000);
 	var id2 = Math.floor(Math.random()*1000);
-	return "JOBAD_"+time+"_"+id1+"_"+id2;
+	return ""+prefix+time+"_"+id1+"_"+id2;
 };
 
 /*

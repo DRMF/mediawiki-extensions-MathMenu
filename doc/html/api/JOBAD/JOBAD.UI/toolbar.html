@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.UI.Sidebar] - JOBAD Documentation</title>
+		<title>[JOBAD.UI.Toolbar] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,31 +478,23 @@
 -->
 	</head>
 	<body>
-<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.UI</a> &gt; <strong>JOBAD.UI.Sidebar</strong></p>
-<h1>JOBAD.UI.Sidebar</h1>
+<p><a href="../../../index.html">Start</a> &gt; <a href="../../index.html">API Documentation</a> &gt; <a href="../index.html">JOBAD</a> &gt; <a href="index.html">JOBAD.UI</a> &gt; <strong>JOBAD.UI.Toolbar</strong></p>
+<h1>JOBAD.UI.Toolbar</h1>
 
 <ul>
-<li><strong>Object</strong> <code>JOBAD.UI.Sidebar.config</code> - JOBAD Sidebar UI Configuration namespace</li>
-<li><strong>Number</strong> <code>JOBAD.UI.Sidebar.config.width</code> Width of the sidebar. Default: 100. </li>
-<li><strong>Object</strong> <code>JOBAD.UI.Sidebar.config.iconDistance</code> Minimal icon distance (in pixels) before grouping. Default: 15. </li>
-<li><p><strong>Object</strong> <code>JOBAD.UI.Sidebar.config.icons</code> Contains urls for default icons. (Depending on the class)</p></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.wrap(element, align)</code> - Wraps an element to create a sidebar UI. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Toolbar.clear(element)</code> - Clears the toolbar and destroys it. </p>
 
 <ul>
-<li><code>element</code> a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="sidebar.html#fn-1">1</a></sup> to create a sidebar for. </li>
-<li><strong>String</strong> <code>align</code> Alignment for the sidebar. Either <code>right</code> (default) or <code>left</code>. </li>
-<li><strong>returns</strong> the original element, now wrapped. </li>
+<li><strong>jQuery</strong> <code>element</code> Element to clear toolbar of. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.unwrap(element)</code> - Unwraps an element, destroying the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Toolbar.update(element)</code> - Updated the toolbar. </p>
 
 <ul>
-<li><code>element</code> a jQuery-ish object to remove the sidebar from. </li>
-<li><strong>returns</strong> the original element, now unwrapped. </li>
+<li><strong>jQuery</strong> <code>element</code> Element to updated toolbar from. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.addNotification(sidebar, element, config, align)</code> - Adds a new notification to the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Toolbar.addItem(element, config)</code> - Adds a new item to the toolbar. </p>
 
 <ul>
-<li><code>sidebar</code> Sidebar to bind notification to. </li>
 <li><code>element</code> Element to bind notification to. </li>
 <li><strong>Object</strong> <code>config</code> A map which may contain any of the following members: 
 <ul>
@@ -510,32 +502,19 @@
 <li><strong>String</strong> <code>config.icon</code> An icon to use for the notification. Default depends on <code>config.class</code>. </li>
 <li><strong>String</strong> <code>config.menu</code> A context menu for the notification. </li>
 <li><strong>Object</strong> <code>config.menuThis</code> value of <code>this</code> for menu callbacks. </li>
-<li><strong>String</strong> <code>config.text</code> A text to use for the notification</li>
-<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification ? </li>
-<li><strong>Boolean</strong> <code>config.hide</code> If set to true, the notification will be hidden when the element is hidden. Otherwise, the notification will travel up the dom tree. </li>
+<li><strong>String</strong> <code>config.text</code> A text to use for the notification. </li>
+<li><strong>Boolean</strong> <code>config.trace</code> Highlight the original element when hovering the notification. <strong>Ignored.</strong> </li>
+<li><strong>Boolean</strong> <code>config.hide</code> If set to true, the notification will be hidden when the element is hidden. Otherwise, the notification will travel up the dom tree. <strong>Ignored</strong></li>
 <li><strong>Function</strong> <code>config.click</code> On click callback. </li>
 </ul></li>
-<li><strong>String</strong> <code>align</code> Alignment for the sidebar if it still has to be created. </li>
 <li><strong>returns</strong> a new empty jQuery sidebar notification element. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.removeNotification(notification)</code> - Removes a notification from the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Toolbar.removeItem(item)</code> - Removes an item from the toolbar. </p>
 
 <ul>
-<li><code>notification</code> Notification to remove. </li>
+<li><strong>jQuery</strong> <code>item</code> Item to remove. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Sidebar.forceNotificationUpdate()</code> - Forces a sidebar notification position update. </p></li>
 </ul>
-
-<h2>Footnotes</h2>
-
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="sidebar.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
-</li>
-</ol>
-</div>
 
 	</body>
 </html>

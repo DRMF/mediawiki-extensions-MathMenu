@@ -48,7 +48,9 @@ JOBAD.Sidebar.registerSidebarStyle = function(styleName, styleDesc, registerFunc
 };
 
 JOBAD.Sidebar.registerSidebarStyle("right", "Right", 
-	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){args.push("right"); return args; }), 
+	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){
+		args.push("right"); return args;
+	}), 
 	JOBAD.UI.Sidebar.removeNotification,
 	function(){
 		JOBAD.UI.Sidebar.forceNotificationUpdate();
@@ -59,7 +61,9 @@ JOBAD.Sidebar.registerSidebarStyle("right", "Right",
 );
 
 JOBAD.Sidebar.registerSidebarStyle("left", "Left", 
-	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){args.push("left"); return args; }), 
+	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){
+		args.push("left"); return args;
+	}), 
 	JOBAD.UI.Sidebar.removeNotification,
 	function(){
 		JOBAD.UI.Sidebar.forceNotificationUpdate();
@@ -153,8 +157,7 @@ JOBAD.events.SideBarUpdate =
 				/*
 					Redraws the sidebar. 
 				*/
-				'redraw': function(){
-				
+				'redraw': function(){				
 					if(typeof this.Event.SideBarUpdate.enabled == "undefined"){
 						return; //do not run if disabled
 					}
@@ -167,6 +170,17 @@ JOBAD.events.SideBarUpdate =
 					Redraws the sidebar assuming the specefied type. 
 				*/
 				'redrawT': function(type){
+
+					this.Sidebar.redrawing = true;
+
+					var enable_later = false;
+					var root = this.element;
+
+					if(root.data("JOBAD.UI.Folding.enabled")){
+						JOBAD.UI.Folding.disable(root, true); //keep me hidden
+						enable_later = true;
+					}
+
 					var implementation = this.Sidebar.getSidebarImplementation(type);
 					
 					for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
@@ -186,6 +200,12 @@ JOBAD.events.SideBarUpdate =
 					//update and trigger event
 					implementation["update"]();
 					this.Event.SideBarUpdate.trigger();
+
+					if(enable_later){
+						JOBAD.UI.Folding.enable(root, root.data("JOBAD.UI.Folding.config"));
+					}
+
+					this.Sidebar.redrawing = false;
 				},
 				
 				/*
@@ -307,3 +327,36 @@ JOBAD.events.SideBarUpdate =
 		}
 	}
 };
+
+JOBAD.ifaces.push(function(){
+	var me = this;
+
+	this.enableFolding = function(element, align){
+		if((element == "left" || element == "right") && typeof align == "undefined"){
+			align = element;
+			element = undefined;
+		}
+		var element = JOBAD.refs.$(element);
+		if(element.length == 0){
+			var element = this.element;
+		}
+
+		return JOBAD.UI.Folding.enable(element, {
+			"update": function(){
+				if(me.Sidebar.redrawing !== true){
+					me.Sidebar.redraw();
+				}
+			},
+			"align": align
+		});
+	};
+
+	this.disableFolding = function(element){
+		var element = JOBAD.refs.$(element);
+		if(element.length == 0){
+			var element = this.element;
+		}
+
+		return JOBAD.UI.Folding.disable(element);
+	};
+});

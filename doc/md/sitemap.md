@@ -7,6 +7,7 @@
 * [JOBAD.UI.hover](api/JOBAD/JOBAD.UI/hover.md) (api/JOBAD/JOBAD.UI/hover.md)
 * [JOBAD.UI](api/JOBAD/JOBAD.UI/index.md) (api/JOBAD/JOBAD.UI/index.md)
 * [JOBAD.UI.Sidebar](api/JOBAD/JOBAD.UI/sidebar.md) (api/JOBAD/JOBAD.UI/sidebar.md)
+* [JOBAD.UI.Toolbar](api/JOBAD/JOBAD.UI/toolbar.md) (api/JOBAD/JOBAD.UI/toolbar.md)
 * [JOBAD.config](api/JOBAD/JOBAD.config.md) (api/JOBAD/JOBAD.config.md)
 * [JOBAD.console](api/JOBAD/JOBAD.console.md) (api/JOBAD/JOBAD.console.md)
 * [JOBAD.events.SideBarUpdate](api/JOBAD/JOBAD.events/SideBarUpdate.md) (api/JOBAD/JOBAD.events/SideBarUpdate.md)

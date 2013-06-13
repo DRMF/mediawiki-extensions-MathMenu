@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 12 Jun 2013 15:37:33 +0200
+	built: Thu, 13 Jun 2013 14:08:48 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -253,12 +253,14 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 
 /*
 	Creates a unique ID
+	@param	prefix	Optional. A prefix to use for the UID. 
 */
-JOBAD.util.UID = function(){
+JOBAD.util.UID = function(prefix){
+	var prefix = (typeof prefix == "string")?prefix+"_":"";
 	var time = (new Date()).getTime();
 	var id1 = Math.floor(Math.random()*1000);
 	var id2 = Math.floor(Math.random()*1000);
-	return "JOBAD_"+time+"_"+id1+"_"+id2;
+	return ""+prefix+time+"_"+id1+"_"+id2;
 };
 
 /*
@@ -1633,6 +1635,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 			var offset = el.offset().top - sideBarElement.offset().top; //offset
 			e.data("JOBAD.UI.Sidebar.hidden", false);
 			
+
 			if(e.data("JOBAD.UI.Sidebar.orgElement").is(":hidden") && e.data("JOBAD.UI.Sidebar.hide")){
 			     e.data("JOBAD.UI.Sidebar.hidden", true);
 			} else {
@@ -2002,6 +2005,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
 		config.click:	Callback on click. Default: Open Context Menu
+		config.hide:	Ignored.  
 
 	@returns The new item as a jquery element. 
 */
@@ -2171,7 +2175,7 @@ JOBAD.UI.Folding.enable = function(element, config){
         return;
     }
 
-    var config = JOBAD.refs._.clone(config); //clone the config object
+    var config = config;
 
     if(typeof config == "undefined"){
         config = {};
@@ -2205,7 +2209,7 @@ JOBAD.UI.Folding.enable = function(element, config){
     .prependTo(container);
 
     container
-    .data("JOBAD.UI.Folding.state", false)
+    .data("JOBAD.UI.Folding.state", element.data("JOBAD.UI.Folding.state")?true:false)
     .data("JOBAD.UI.Folding.update", function(event){
         event.stopPropagation();
         JOBAD.UI.Folding.update(element);
@@ -2261,7 +2265,6 @@ JOBAD.UI.Folding.enable = function(element, config){
         }
 
         config.update(element);
-
     });
 
     foldingElement.click(function(event){
@@ -2275,11 +2278,13 @@ JOBAD.UI.Folding.enable = function(element, config){
 
     element
     .wrap("<div style='overflow: hidden; '>")
-    .data("JOBAD.UI.Folding.wrappers", JOBAD.refs.$([foldingElement, placeHolder]))
+    .data("JOBAD.UI.Folding.wrappers", foldingElement.add(placeHolder))
     .data("JOBAD.UI.Folding.enabled", true)
-    .data("JOBAD.UI.Folding.callback", config.disable);
+    .data("JOBAD.UI.Folding.callback", config.disable)
+    .data("JOBAD.UI.Folding.onStateChange", config.update)
+    .data("JOBAD.UI.Folding.config", config);;
 
-    JOBAD.refs.$(window).on("resize", container.data("JOBAD.UI.Folding.update"));
+    JOBAD.refs.$(window).on("resize.JOBAD.UI.Folding", container.data("JOBAD.UI.Folding.update"));
 
     config.enable(element);
     JOBAD.UI.Folding.update(element);
@@ -2330,8 +2335,9 @@ JOBAD.UI.Folding.unfold = function(element){
 /*
     Disables folding on an element
     @param element Element to disable folding on. 
+    @param keep Keeps elements hidden if set to true. 
 */
-JOBAD.UI.Folding.disable = function(element){
+JOBAD.UI.Folding.disable = function(element, keep){
     var element = JOBAD.refs.$(element);
 
     if(element.length > 1){
@@ -2346,21 +2352,30 @@ JOBAD.UI.Folding.disable = function(element){
         return;
     }
 
-    JOBAD.UI.Folding.unfold(element); //Unfold element
-    JOBAD.refs.$(window).off("resize", element.parent().data("JOBAD.UI.Folding.update"));
+    
+    element.data("JOBAD.UI.Folding.state", element.data("JOBAD.UI.Folding.wrappers").eq(0).parent().data("JOBAD.UI.Folding.state")?true:false);
+
+
+    if(keep?false:true){
+        console.log("unfolding stuffs")
+        JOBAD.UI.Folding.unfold(element); //Unfold element
+    }
+    
+    JOBAD.refs.$(window).off("resize.JOBAD.UI.Folding", element.parent().data("JOBAD.UI.Folding.update"));
 
     //remove stuff
     element.data("JOBAD.UI.Folding.callback")(element);
+    element.data("JOBAD.UI.Folding.onStateChange")(element);
 
     //remove the placeholders
     element.data("JOBAD.UI.Folding.wrappers").remove();
-
 
     //claer up the last stuff
     element
     .unwrap()
     .unwrap()
     .removeData("JOBAD.UI.Folding.callback")
+    .removeData("JOBAD.UI.Folding.onStateChange")
     .removeData("JOBAD.UI.Folding.enabled")
     .removeData("JOBAD.UI.Folding.wrappers");
 
@@ -2417,7 +2432,9 @@ JOBAD.Sidebar.registerSidebarStyle = function(styleName, styleDesc, registerFunc
 };
 
 JOBAD.Sidebar.registerSidebarStyle("right", "Right", 
-	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){args.push("right"); return args; }), 
+	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){
+		args.push("right"); return args;
+	}), 
 	JOBAD.UI.Sidebar.removeNotification,
 	function(){
 		JOBAD.UI.Sidebar.forceNotificationUpdate();
@@ -2428,7 +2445,9 @@ JOBAD.Sidebar.registerSidebarStyle("right", "Right",
 );
 
 JOBAD.Sidebar.registerSidebarStyle("left", "Left", 
-	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){args.push("left"); return args; }), 
+	JOBAD.util.argWrap(JOBAD.UI.Sidebar.addNotification, function(args){
+		args.push("left"); return args;
+	}), 
 	JOBAD.UI.Sidebar.removeNotification,
 	function(){
 		JOBAD.UI.Sidebar.forceNotificationUpdate();
@@ -2522,8 +2541,7 @@ JOBAD.events.SideBarUpdate =
 				/*
 					Redraws the sidebar. 
 				*/
-				'redraw': function(){
-				
+				'redraw': function(){				
 					if(typeof this.Event.SideBarUpdate.enabled == "undefined"){
 						return; //do not run if disabled
 					}
@@ -2536,6 +2554,17 @@ JOBAD.events.SideBarUpdate =
 					Redraws the sidebar assuming the specefied type. 
 				*/
 				'redrawT': function(type){
+
+					this.Sidebar.redrawing = true;
+
+					var enable_later = false;
+					var root = this.element;
+
+					if(root.data("JOBAD.UI.Folding.enabled")){
+						JOBAD.UI.Folding.disable(root, true); //keep me hidden
+						enable_later = true;
+					}
+
 					var implementation = this.Sidebar.getSidebarImplementation(type);
 					
 					for(var i=0;i<this.Sidebar.ElementRequestCache.length;i++){
@@ -2555,6 +2584,12 @@ JOBAD.events.SideBarUpdate =
 					//update and trigger event
 					implementation["update"]();
 					this.Event.SideBarUpdate.trigger();
+
+					if(enable_later){
+						JOBAD.UI.Folding.enable(root, root.data("JOBAD.UI.Folding.config"));
+					}
+
+					this.Sidebar.redrawing = false;
 				},
 				
 				/*
@@ -2675,7 +2710,40 @@ JOBAD.events.SideBarUpdate =
 			this.Event.SideBarUpdate.getResult();
 		}
 	}
-};/* end   <events/JOBAD.sidebar.js> */
+};
+
+JOBAD.ifaces.push(function(){
+	var me = this;
+
+	this.enableFolding = function(element, align){
+		if((element == "left" || element == "right") && typeof align == "undefined"){
+			align = element;
+			element = undefined;
+		}
+		var element = JOBAD.refs.$(element);
+		if(element.length == 0){
+			var element = this.element;
+		}
+
+		return JOBAD.UI.Folding.enable(element, {
+			"update": function(){
+				if(me.Sidebar.redrawing !== true){
+					me.Sidebar.redraw();
+				}
+			},
+			"align": align
+		});
+	};
+
+	this.disableFolding = function(element){
+		var element = JOBAD.refs.$(element);
+		if(element.length == 0){
+			var element = this.element;
+		}
+
+		return JOBAD.UI.Folding.disable(element);
+	};
+});/* end   <events/JOBAD.sidebar.js> */
 /* start <events/JOBAD.events.js> */
 /*
 	JOBAD 3 Events

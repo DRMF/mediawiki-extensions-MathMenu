@@ -90,6 +90,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 			var offset = el.offset().top - sideBarElement.offset().top; //offset
 			e.data("JOBAD.UI.Sidebar.hidden", false);
 			
+
 			if(e.data("JOBAD.UI.Sidebar.orgElement").is(":hidden") && e.data("JOBAD.UI.Sidebar.hide")){
 			     e.data("JOBAD.UI.Sidebar.hidden", true);
 			} else {

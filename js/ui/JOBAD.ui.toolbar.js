@@ -102,6 +102,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
 		config.click:	Callback on click. Default: Open Context Menu
+		config.hide:	Ignored.  
 
 	@returns The new item as a jquery element. 
 */

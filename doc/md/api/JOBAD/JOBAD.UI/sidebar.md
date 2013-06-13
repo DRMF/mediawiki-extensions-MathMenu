@@ -21,8 +21,9 @@
 		* **String** `config.icon` An icon to use for the notification. Default depends on `config.class`. 
 		* **String** `config.menu` A context menu for the notification. 
 		* **Object** `config.menuThis` value of `this` for menu callbacks. 
-		* **String** `config.text` A text to use for the notification. 
+		* **String** `config.text` A text to use for the notification
 		* **Boolean** `config.trace` Highlight the original element when hovering the notification ? 
+		* **Boolean** `config.hide`	If set to true, the notification will be hidden when the element is hidden. Otherwise, the notification will travel up the dom tree. 
 		* **Function** `config.click` On click callback. 
 	* **String** `align` Alignment for the sidebar if it still has to be created. 
 	* **returns** a new empty jQuery sidebar notification element. 

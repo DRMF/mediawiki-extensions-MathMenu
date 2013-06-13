@@ -4,6 +4,7 @@ This object contains the JOBAD User interface
 * **Object** [`JOBAD.UI.hover`](hover.md) Namespace for the hover UI. 
 * **Object** [`JOBAD.UI.ContextMenu`](contextmenu.md) Namespace for the Context Menu UI. 
 * **Object** [`JOBAD.UI.Sidebar`](sidebar.md) Namespace for the Sidebar UI. 
+* **Object** [`JOBAD.UI.Toolbar`](toolbar.md) Namespace for the Toolbar UI. 
 * **Object** [`JOBAD.UI.Folding`](folding.md) Namespace for the Folding UI. 
 * **Function** `JOBAD.UI.highlight(element, color)` Highlights an element
 	* **jQuery** `element` Element to highlight. 
