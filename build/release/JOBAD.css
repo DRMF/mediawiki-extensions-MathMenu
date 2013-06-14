@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Thu, 13 Jun 2013 16:03:27 +0200
+	built: Fri, 14 Jun 2013 18:21:17 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -321,4 +321,5 @@
 */
 
 /* fix for bad size */
-.ui-widget { font-size: 70%; }/* end   <JOBAD.theme.css> */
+.ui-widget { font-size: 70%; }
+/* end   <JOBAD.theme.css> */

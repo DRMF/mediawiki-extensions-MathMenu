@@ -36,7 +36,8 @@ This object is the main JOBAD Namespace.
 * **Object** [`JOBAD.console`](JOBAD.console.md) - Wraps the native console object if available. 
 * **Function** `JOBAD.error(msg)` Produces an error message. 
 	* **String** `msg` The message to produce. 
-* **Function** `JOBAD.toString()`
+* **Function** `JOBAD.toString()` 
+
 
 ## Footnotes
 [^1]: A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector. 

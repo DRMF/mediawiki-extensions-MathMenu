@@ -227,3 +227,10 @@ JOBAD.util.objectEquals = function(a, b){
 	}
 	
 };
+
+/*
+	Checks if something is a pure javascript object
+*/
+JOBAD.util.isObject = function(obj){
+
+}

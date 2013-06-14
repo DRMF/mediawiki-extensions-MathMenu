@@ -1,6 +1,6 @@
 /*
-	example3.js - An example module for JOBAD. 
-	Test the menu and adds several items. 
+	example6.js - An example module for JOBAD. 
+	Shows several menu items for testing some of the features of JOBAD. 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -22,25 +22,34 @@
 (function($){
 	JOBAD.modules.register({
 		info:{
-			'identifier':	'test.color.menu',
-			'title':	'Test Module: Menu',
+			'identifier':	'test.features',
+			'title':	'Feature tester',
 			'author':	'Tom Wiesing',
-			'description':	'Test the menu and adds several items. '
+			'description':	'Shows several menu items for testing some of the features of JOBAD. '
 		},
 		contextMenuEntries: function(target, JOBADInstance){
 			if(target.is('#nomenu,#nomenu *')){
 				return false;
 			}
 			return {
-				"Colors": 
-					{
-						"Make me orange": function(element){element.css("color", "orange");}, 
-						"Highlight my background": function(element){
-							element
-							.stop().css("background-color", "#FFFF9C")
-							.animate({ backgroundColor: "#FFFFFF"}, 1500);
+					"Show Config UI": function(element){
+						JOBADInstance.showConfigUI();
+					},
+					"Folding": {
+						"Trigger on this JOBAD Instance": function(){
+							if(JOBADInstance.element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled on the overall element
+								JOBADInstance.disableFolding();
+							} else {
+								JOBADInstance.enableFolding();
+							}
 						},
-						"Revert": function(element){element.stop().css('color', '');}
+						"Trigger on this element": function(element){
+							if(element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled
+								JOBADInstance.disableFolding(element);
+							} else {
+								JOBADInstance.enableFolding(element);
+							}
+						}
 					}
 				};
 		}
