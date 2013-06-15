@@ -86,7 +86,10 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		var cs = [];
 		children.each(function(i, e){
 			var e = JOBAD.refs.$(e).detach().appendTo(sideBarElement).addClass("JOBAD_Sidebar_Single");
-			var el = e.data("JOBAD.UI.Sidebar.orgElement").closest(":visible");
+			var el = JOBAD.util.closest(e.data("JOBAD.UI.Sidebar.orgElement"), function(element){
+				//check if an element is visible
+				return !JOBAD.util.isHidden(element);
+			});
 			var offset = el.offset().top - sideBarElement.offset().top; //offset
 			e.data("JOBAD.UI.Sidebar.hidden", false);
 			

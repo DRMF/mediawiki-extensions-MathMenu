@@ -1,10 +1,8 @@
 # JOBAD.UI.Folding
 
 * **Object** `JOBAD.UI.Folding.config` - JOBAD Folding UI Configuration namespace. 
-* **Number** `JOBAD.UI.Folding.config.placeHolderHeightMin` - Minimum height for the folded placeholders. (Default: 20)
-* **Number** `JOBAD.UI.Folding.config.placeHolderHeightMax` - Maxium height for the folded placeholders. (Default: 100)
-* **Number** `JOBAD.UI.Folding.config.placeHolderPercent` - Percentage of height to use in normal cases for placeholder. (Default: 10)
-* **Mixed** `JOBAD.UI.Folding.config.placeHolderPercent` - Anything jQuery-like to append to the placeholder. 
+* **Number** `JOBAD.UI.Folding.config.placeHolderHeight` - Default Height for the folded placeholders. (Default: 50)
+* **jQuery** `JOBAD.UI.Folding.config.placeHolderContent` - jQuery-ish stuff in the placeholder. Ignored for livePreview mode. 
 
 * **Function** `JOBAD.UI.Folding.enable(element, config)` - Enables folding on an element. 
 	* **jQuery** `element` - Element(s) to enable folding on. 
@@ -15,7 +13,9 @@
         * **Function** `config.unfold(element)` Callback on unfold
         * **Function** `config.stateChange(element)` Callback on state change. 
         * **Function** `config.update(element)` Called every time the folding UI is updated. 
-        * **Number** `config.align` Alignment of the folding. Either 'left' (default) or 'right'.  
+        * **Object** `config.align` Alignment of the folding. Either 'left' (default) or 'right'.  
+        * **Number** `config.height` Height fo the preview / replacement element. Leave empty to assume default. 
+        * **Boolean** `config.livePreview` Enable live preview for an element. Default: true. 
     * **returns** `element`. 
 
 * **Function** `JOBAD.UI.Folding.disable(element, keep)` - Disables folding on an element. 

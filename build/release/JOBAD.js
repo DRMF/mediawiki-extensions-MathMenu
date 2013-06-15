@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Fri, 14 Jun 2013 18:21:12 +0200
+	built: Sat, 15 Jun 2013 21:40:39 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -435,15 +435,84 @@ JOBAD.util.objectEquals = function(a, b){
 	} catch(e){
 		return a==b;
 	}
-	
 };
 
 /*
-	Checks if something is a pure javascript object
+	Similary to jQuery's .closest() but also accepts functions. 
 */
-JOBAD.util.isObject = function(obj){
+JOBAD.util.closest = function(element, selector){
+	var element = JOBAD.refs.$(element);
+	if(typeof selector == "function"){
+		while(element.length > 0){
+			if(selector.call(element[0], element)){
+				break; //we are matching
+			}
+			element = element.parent(); //go up
+		}
+		return element;
+	} else {
+		return element.closest(selector);
+	}
+}
 
-}/* end   <JOBAD.util.js> */
+/* Element marking */
+/*
+	Marks an element as hidden. 
+	@param	element	Element to mark as hidden. 
+*/
+JOBAD.util.markHidden = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden", true);
+};
+
+/*
+	Marks an element as visible.
+	@param	element	Element to mark as visible. 
+*/
+JOBAD.util.markVisible = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden", false);
+};
+
+/*
+	Removes a marking from an element. Everything is treated as normal. 
+	@param	element	Element to remove Marking from. 
+*/
+JOBAD.util.markDefault = function(element){
+	return JOBAD.refs.$(element).removeData("JOBAD.util.hidden")
+}
+
+/*
+	Checks if an element is marked as hidden. 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isMarkedHidden = function(element){
+	return (JOBAD.util.closest(element, function(e){
+		//find the closest hidden one. 
+		return e.data("JOBAD.util.hidden") == true;
+	}).length > 0);
+};
+
+/*
+	Checks if an element is marked as visible. 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isMarkedVisible = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden") == false;
+};
+
+/*
+	Checks if an element is hidden (either in reality or marked) . 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isHidden = function(element){
+	var element = JOBAD.refs.$(element);
+	if(JOBAD.util.isMarkedVisible(element)){
+		return false;
+	} else if(JOBAD.util.isMarkedHidden(element)){
+		return true;
+	} else {
+		return element.is(":hidden");
+	}
+};/* end   <JOBAD.util.js> */
 /* start <core/JOBAD.core.modules.js> */
 /*
 	JOBAD Core Module logic
@@ -1638,7 +1707,10 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		var cs = [];
 		children.each(function(i, e){
 			var e = JOBAD.refs.$(e).detach().appendTo(sideBarElement).addClass("JOBAD_Sidebar_Single");
-			var el = e.data("JOBAD.UI.Sidebar.orgElement").closest(":visible");
+			var el = JOBAD.util.closest(e.data("JOBAD.UI.Sidebar.orgElement"), function(element){
+				//check if an element is visible
+				return !JOBAD.util.isHidden(element);
+			});
 			var offset = el.offset().top - sideBarElement.offset().top; //offset
 			e.data("JOBAD.UI.Sidebar.hidden", false);
 			
@@ -2116,6 +2188,80 @@ JOBAD.UI.Toolbar.removeItem = function(item){
 	
 	JOBAD.UI.Toolbar.update(element);
 }/* end   <ui/JOBAD.ui.toolbar.js> */
+/* start <ui/JOBAD.ui.overlay.js> */
+/*
+	JOBAD 3 UI Functions
+	JOBAD.ui.overlay.js
+	
+	requires: 
+		JOBAD.core.js
+		JOBAD.ui.js
+		JOBAD.util.js
+		
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+var overlay_count = 1000;//we want to go higher
+
+//JOBAD UI Overlay namespace. 
+JOBAD.UI.Overlay = {};
+
+/*
+	Draws an overlay for an element. 
+	@param	element			Element to draw overlay for. 
+*/
+JOBAD.UI.Overlay.draw = function(element, undrawOthers){
+
+	//trigger undraw
+	var element = JOBAD.refs.$(element);
+
+	//trigger undraw
+	JOBAD.UI.Overlay.undraw(element.find("div.ui-widget-overlay").parent());
+	
+	//get offset for element and draw it. 
+	var offset = element.offset()
+	var overlay_element = JOBAD.refs.$('<div>')
+	.css({
+		"position": "absolute",
+		"z-index": overlay_count++,
+		"top": offset.top
+,		"left": offset.left,
+		"width": JOBAD.refs.$(element).outerWidth(),
+		"height": JOBAD.refs.$(element).outerHeight()
+	})
+	.addClass('ui-widget-overlay')
+	.appendTo(element);
+
+	//listen for undraw
+	element.one("JOBAD.UI.Overlay.undraw", function(){
+		overlay_element.remove();
+	})
+
+	return overlay_element;
+}
+
+/*
+	Removes the overlay from an element. 
+	@param	element	element to remove overlay from. 
+*/
+JOBAD.UI.Overlay.undraw = function(element){
+	return JOBAD.refs.$(element).trigger("JOBAD.UI.Overlay.undraw");
+}/* end   <ui/JOBAD.ui.overlay.js> */
 /* start <ui/JOBAD.ui.folding.js> */
 /*
     JOBAD 3 UI Functions
@@ -2124,6 +2270,7 @@ JOBAD.UI.Toolbar.removeItem = function(item){
     requires: 
         JOBAD.core.js
         JOBAD.ui.js
+        JOBAD.ui.overlay.js
         
     Copyright (C) 2013 KWARC Group <kwarc.info>
     
@@ -2148,10 +2295,8 @@ JOBAD.UI.Folding = {};
 
 //Folding config
 JOBAD.UI.Folding.config = {
-    "placeHolderHeightMin": 20, //minmum height of the placholder in pixels
-    "placeHolderPercent": 10, //percentage of opriginal height to use
-    "placeHolderHeightMax": 100, //maxiumum height of the placholder in pixels
-    "placeHolderContent": "<p>Click to unfold me. </p>" //jquery ish stuff in the placholder
+    "placeHolderHeight": 50, //height of the place holder
+    "placeHolderContent": "<p>Click to unfold me. </p>" //jquery ish stuff in the placeholder; ignored for livePreview mode. 
 }
 
 /*
@@ -2165,6 +2310,8 @@ JOBAD.UI.Folding.config = {
         config.stateChange  Callback on state change. 
         config.align        Alignment of the folding. Either 'left' (default) or 'right'.  
         config.update       Called every time the folding UI is updated. 
+        config.height       Height fo the preview / replacement element. Leave empyt to assume default. 
+        config.livePreview  Enable livePreview, shows a preview of the element instead of a replacement div. Default: true. 
 */
 
 JOBAD.UI.Folding.enable = function(element, config){
@@ -2198,6 +2345,8 @@ JOBAD.UI.Folding.enable = function(element, config){
     config.stateChange = (typeof config.stateChange == 'function')?config.stateChange:function(){};
     config.update = (typeof config.update == 'function')?config.update:function(){}
     config.align = (config.align == "right")?"right":"left";
+    config.livePreview = (typeof config.livePreview == "boolean")?config.livePreview:true; //TODO: Disable this by default?
+    config.height = (typeof config.height == "number")?config.height:JOBAD.UI.Folding.config.placeHolderHeight;
 
     //Folding class
     var folding_class = "JOBAD_Folding_"+config.align;
@@ -2208,6 +2357,7 @@ JOBAD.UI.Folding.enable = function(element, config){
     element.wrap(wrapper);
     wrapper = element.parent();
 
+    //make the placeHolder
     var placeHolder = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_PlaceHolder'>")
     .prependTo(wrapper)
     .height(JOBAD.UI.Folding.config.placeHolderHeight)
@@ -2216,14 +2366,14 @@ JOBAD.UI.Folding.enable = function(element, config){
     ).hide().click(function(){
         JOBAD.UI.Folding.unfold(element);
     }); //prepend and hide me
+    
 
     var container = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Container'>")
     .prependTo(wrapper);
 
     wrapper
     .data("JOBAD.UI.Folding.state", element.data("JOBAD.UI.Folding.state")?true:false)
-    .data("JOBAD.UI.Folding.update", function(event){
-        event.stopPropagation();
+    .data("JOBAD.UI.Folding.update", function(){
         JOBAD.UI.Folding.update(element);
     })
     .on("JOBAD.UI.Folding.fold", function(event){
@@ -2243,39 +2393,75 @@ JOBAD.UI.Folding.enable = function(element, config){
         config.unfold(element);
         config.stateChange(element, false);
         JOBAD.UI.Folding.update(element);
-    }).on("JOBAD.UI.Folding.update", function(event){
-        //update everything
-        if(wrapper.data("JOBAD.UI.Folding.state")){
-            //we are hiding stuff
-            //hide both element and parent
-            element.parent().show();
-            element.show();
+    })
+    .on("JOBAD.UI.Folding.update", config.livePreview?
+    function(event, childCall){
 
-            container
-            .css("height", "")
-
-            var height = wrapper.height()*(JOBAD.UI.Folding.config.placeHolderPercent/100);
-            if(height < JOBAD.UI.Folding.config.placeHolderHeightMin){
-                height = JOBAD.UI.Folding.config.placeHolderHeightMin;
-            } else if(height > JOBAD.UI.Folding.config.placeHolderHeightMax){
-                height = JOBAD.UI.Folding.config.placeHolderHeightMax;
-            }
-
-            element.parent().hide();
-            element.hide();
-
-            placeHolder.height(height);
-            placeHolder.show();
-        } else {
-            //we are going back to the normal state
-            //hide both element and parent
-            placeHolder.hide();
-            element.parent().show();
-            element.show();
+        if(childCall !== true){
+            //we call on the children and self. 
+            element.find("div.JOBAD_Folding_Wrapper").trigger("JOBAD.UI.Folding.update", true);
         }
+
+        //live preview
+        JOBAD.UI.Overlay.undraw(element.parent());
+
+        element
+        .unwrap()
+
+
+        JOBAD.util.markHidden(element);
 
         container
         .css("height", "")
+
+        if(wrapper.data("JOBAD.UI.Folding.state")){
+            element
+            .wrap(
+                JOBAD.refs.$("<div style='overflow: hidden; '>").css("height", config.height)
+            );
+
+            JOBAD.UI.Overlay.draw(element.parent()).click(function(){
+                JOBAD.UI.Folding.unfold(element);
+            });
+        } else {
+            element.wrap("<div style='overflow: hidden; '>");
+
+            JOBAD.util.markDefault(element);
+        }
+
+        //reset height
+        container
+        .height(wrapper.height());
+
+        config.update(element);
+    }
+    :
+    function(event){
+        //we dont have life preview; fallback to the old stuff. 
+        //reset first
+
+        element.parent().show()
+        .end().show();
+
+        container
+        .css("height", "")
+
+
+        if(wrapper.data("JOBAD.UI.Folding.state")){
+            //hide the element again
+            element.parent().hide()
+            .end().hide();
+
+            //adjust placeholder height
+            placeHolder.height(config.height)
+            .show()
+        } else {
+            //we are going back to the normal state
+            //hide the placeholder
+            placeHolder.hide();
+        }
+
+        container
         .height(wrapper.height());
 
         config.update(element);
@@ -2375,6 +2561,7 @@ JOBAD.UI.Folding.disable = function(element, keep){
     //do we keep it hidden?
     if(keep?false:true){
         JOBAD.UI.Folding.unfold(element);
+        JOBAD.util.markDefault(element); 
     }
     
     //call event handlers
@@ -2386,6 +2573,9 @@ JOBAD.UI.Folding.disable = function(element, keep){
 
     //remove unneccesary elements. 
     element.data("JOBAD.UI.Folding.wrappers").remove();
+
+    //remove any overlays. 
+    JOBAD.UI.Overlay.undraw(element.parent());
 
     //clear up the last stuff
     element

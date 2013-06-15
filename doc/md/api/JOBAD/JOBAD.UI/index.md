@@ -6,6 +6,7 @@ This object contains the JOBAD User interface
 * **Object** [`JOBAD.UI.Sidebar`](sidebar.md) Namespace for the Sidebar UI. 
 * **Object** [`JOBAD.UI.Toolbar`](toolbar.md) Namespace for the Toolbar UI. 
 * **Object** [`JOBAD.UI.Folding`](folding.md) Namespace for the Folding UI. 
+* **Object** [`JOBAD.UI.Overlay`](overlay.md) Namespace for the Overlay UI. 
 * **Function** `JOBAD.UI.highlight(element, color)` Highlights an element
 	* **jQuery** `element` Element to highlight. 
 	* **String** `color` Optional. Color to use. 

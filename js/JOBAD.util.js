@@ -225,12 +225,81 @@ JOBAD.util.objectEquals = function(a, b){
 	} catch(e){
 		return a==b;
 	}
-	
 };
 
 /*
-	Checks if something is a pure javascript object
+	Similary to jQuery's .closest() but also accepts functions. 
 */
-JOBAD.util.isObject = function(obj){
-
+JOBAD.util.closest = function(element, selector){
+	var element = JOBAD.refs.$(element);
+	if(typeof selector == "function"){
+		while(element.length > 0){
+			if(selector.call(element[0], element)){
+				break; //we are matching
+			}
+			element = element.parent(); //go up
+		}
+		return element;
+	} else {
+		return element.closest(selector);
+	}
 }
+
+/* Element marking */
+/*
+	Marks an element as hidden. 
+	@param	element	Element to mark as hidden. 
+*/
+JOBAD.util.markHidden = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden", true);
+};
+
+/*
+	Marks an element as visible.
+	@param	element	Element to mark as visible. 
+*/
+JOBAD.util.markVisible = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden", false);
+};
+
+/*
+	Removes a marking from an element. Everything is treated as normal. 
+	@param	element	Element to remove Marking from. 
+*/
+JOBAD.util.markDefault = function(element){
+	return JOBAD.refs.$(element).removeData("JOBAD.util.hidden")
+}
+
+/*
+	Checks if an element is marked as hidden. 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isMarkedHidden = function(element){
+	return (JOBAD.util.closest(element, function(e){
+		//find the closest hidden one. 
+		return e.data("JOBAD.util.hidden") == true;
+	}).length > 0);
+};
+
+/*
+	Checks if an element is marked as visible. 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isMarkedVisible = function(element){
+	return JOBAD.refs.$(element).data("JOBAD.util.hidden") == false;
+};
+
+/*
+	Checks if an element is hidden (either in reality or marked) . 
+	@param	element	Element to check. 
+*/
+JOBAD.util.isHidden = function(element){
+	var element = JOBAD.refs.$(element);
+	if(JOBAD.util.isMarkedVisible(element)){
+		return false;
+	} else if(JOBAD.util.isMarkedHidden(element)){
+		return true;
+	} else {
+		return element.is(":hidden");
+	}
+};

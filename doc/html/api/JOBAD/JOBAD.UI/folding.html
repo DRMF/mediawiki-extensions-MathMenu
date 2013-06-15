@@ -483,10 +483,8 @@
 
 <ul>
 <li><strong>Object</strong> <code>JOBAD.UI.Folding.config</code> - JOBAD Folding UI Configuration namespace. </li>
-<li><strong>Number</strong> <code>JOBAD.UI.Folding.config.placeHolderHeightMin</code> - Minimum height for the folded placeholders. (Default: 20)</li>
-<li><strong>Number</strong> <code>JOBAD.UI.Folding.config.placeHolderHeightMax</code> - Maxium height for the folded placeholders. (Default: 100)</li>
-<li><strong>Number</strong> <code>JOBAD.UI.Folding.config.placeHolderPercent</code> - Percentage of height to use in normal cases for placeholder. (Default: 10)</li>
-<li><p><strong>Mixed</strong> <code>JOBAD.UI.Folding.config.placeHolderPercent</code> - Anything jQuery-like to append to the placeholder. </p></li>
+<li><strong>Number</strong> <code>JOBAD.UI.Folding.config.placeHolderHeight</code> - Default Height for the folded placeholders. (Default: 50)</li>
+<li><p><strong>jQuery</strong> <code>JOBAD.UI.Folding.config.placeHolderContent</code> - jQuery-ish stuff in the placeholder. Ignored for livePreview mode. </p></li>
 <li><p><strong>Function</strong> <code>JOBAD.UI.Folding.enable(element, config)</code> - Enables folding on an element. </p>
 
 <ul>
@@ -499,7 +497,9 @@
 <li><strong>Function</strong> <code>config.unfold(element)</code> Callback on unfold</li>
 <li><strong>Function</strong> <code>config.stateChange(element)</code> Callback on state change. </li>
 <li><strong>Function</strong> <code>config.update(element)</code> Called every time the folding UI is updated. </li>
-<li><strong>Number</strong> <code>config.align</code> Alignment of the folding. Either 'left' (default) or 'right'.  </li>
+<li><strong>Object</strong> <code>config.align</code> Alignment of the folding. Either 'left' (default) or 'right'.  </li>
+<li><strong>Number</strong> <code>config.height</code> Height fo the preview / replacement element. Leave empty to assume default. </li>
+<li><strong>Boolean</strong> <code>config.livePreview</code> Enable live preview for an element. Default: true. </li>
 </ul></li>
 <li><strong>returns</strong> <code>element</code>. </li>
 </ul></li>
