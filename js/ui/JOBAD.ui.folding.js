@@ -86,8 +86,10 @@ JOBAD.UI.Folding.enable = function(element, config){
     //Folding class
     var folding_class = "JOBAD_Folding_"+config.align;
 
-
     var wrapper = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Wrapper'>");
+
+    //spacing
+    var spacer = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Spacing'></div>").insertAfter(element);
 
     element.wrap(wrapper);
     wrapper = element.parent();
@@ -202,7 +204,9 @@ JOBAD.UI.Folding.enable = function(element, config){
         config.update(element);
     });
 
-    container.click(function(event){
+    container
+    .add(spacer)
+    .click(function(event){
         //fold or unfold goes here
         if(wrapper.data("JOBAD.UI.Folding.state")){
             JOBAD.UI.Folding.unfold(element);
@@ -213,7 +217,7 @@ JOBAD.UI.Folding.enable = function(element, config){
 
     element
     .wrap("<div style='overflow: hidden; '>")
-    .data("JOBAD.UI.Folding.wrappers", container.add(placeHolder))
+    .data("JOBAD.UI.Folding.wrappers", container.add(placeHolder).add(spacer))
     .data("JOBAD.UI.Folding.enabled", true)
     .data("JOBAD.UI.Folding.callback", config.disable)
     .data("JOBAD.UI.Folding.onStateChange", config.update)
@@ -322,4 +326,13 @@ JOBAD.UI.Folding.disable = function(element, keep){
     .removeData("JOBAD.UI.Folding.wrappers");
 
     return element;
+}
+/*
+    Checks if an element is foldable. 
+    @param  element element to check. 
+*/
+JOBAD.UI.Folding.isFoldable = function(element){
+    return JOBAD.util.closest(element, function(e){
+        return e.data("JOBAD.UI.Folding.enabled");
+    }).length > 0;
 }

@@ -34,3 +34,7 @@
 * **Function** `JOBAD.UI.Folding.unfold(update)` - Unfolds an element. 
 	* **jQuery** `element` - Element(s) to unfold. 
 	* **returns** boolean
+
+* **Function** `JOBAD.UI.Folding.foldable(element)` - Checks if an element is foldable. 
+	* **jQuery** `element` - Element to check. 
+	* **returns** boolean

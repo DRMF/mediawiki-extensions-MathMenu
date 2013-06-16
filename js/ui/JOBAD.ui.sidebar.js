@@ -274,7 +274,7 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	
 	//config
 	if(typeof config.menu != 'undefined'){
-		var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
+		var entries = JOBAD.UI.ContextMenu.fullWrap(config.menu, function(org, args){
 			return org.apply(newGuy, [element, config.menuThis]);
 		});
 		JOBAD.UI.ContextMenu.enable(newGuy, function(){return entries;});

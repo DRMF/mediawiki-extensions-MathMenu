@@ -21,9 +21,16 @@
 * **Function** `JOBAD.UI.ContextMenu.disable(element)` - Disables the context menu. 
 	* **jQuery** `element` The element to remove the menu from. 
 	* **returns** The `element` the menu was registered on. 
-* **Function** `JOBAD.UI.ContextMenu.buildContextMenuList(items, element, elementOrg)` Builds the menu html element for the standard menu element. 
+* **Function** `JOBAD.UI.ContextMenu.buildContextMenuList(items, element, elementOrg)` - Builds the menu html element for the standard menu element. 
 	* **Array** `items` a list of `[name, callback, icon]` and `[name, submenu, icon]` pairs representing the menu to be built. 
 	* **jQuery** `element` The element the context menu has been requested on. 
 	* **jQuery** `elementOrg` The element the context menu call originates from. 
 	* **returns** a **jQuery** element representing the menu. 
 
+* **Function** `JOBAD.UI.ContextMenu.generateMenuList(menu)` - Generates a list menu representation from an object representation. 
+	* **Object** `menu` an object representation of the menu. 
+	* **returns** the new representation. 
+* **Function** `JOBAD.UI.ContextMenu.fullWrap(menu, wrapper)` - Wraps a menu callback with the spacefied wrapper. 
+	* **Object** `menu` The menu to wrap. 
+	* **Function** `wrapper(org, arguments)` The wrapper function. 
+	* **returns** the new representation. 

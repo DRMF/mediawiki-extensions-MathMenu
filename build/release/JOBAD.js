@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Sat, 15 Jun 2013 21:40:39 +0200
+	built: Sun, 16 Jun 2013 15:55:06 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -320,77 +320,6 @@ JOBAD.util.createTabs = function(names, divs, options, height){
 	}
 	return div.tabs(options);
 }
-
-/*
-	Generates a list menu representation from an object representation. 
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.generateMenuList = function(menu){
-	var DEFAULT_ICON = "none";
-	if(typeof menu == 'undefined'){
-		return [];
-	}
-	var res = [];
-	if(JOBAD.refs._.isArray(menu)){
-		for(var i=0;i<menu.length;i++){
-			var key = menu[i][0];
-			var val = menu[i][1];
-			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
-			if(typeof val == 'function'){
-				res.push([key, val, icon]);		
-			} else {
-				res.push([key, JOBAD.util.generateMenuList(val), icon]);
-			}
-		}
-	} else {
-		for(var key in menu){
-			if(menu.hasOwnProperty(key)){
-				var val = menu[key];
-				if(typeof val == 'function'){
-					res.push([key, val, DEFAULT_ICON]);	
-				} else if(JOBAD.refs._.isArray(val)){
-					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
-						if(typeof val[0] == 'function'){
-							res.push([key, val[0], val[1]]);
-						} else {
-							res.push([key, JOBAD.util.generateMenuList(val[0]), val[1]]);
-						}
-					} else {
-						res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
-					}
-					
-				} else {
-					res.push([key, JOBAD.util.generateMenuList(val), DEFAULT_ICON]);
-				}
-			}
-		}
-	}
-	return res;
-};
-/*
-	Wraps a menu function
-	@param menu Menu to generate. 
-	@returns the new representation. 
-*/
-JOBAD.util.fullWrap = function(menu, wrapper){
-	var menu = JOBAD.util.generateMenuList(menu);
-	var menu2 = [];
-	for(var i=0;i<menu.length;i++){
-		if(typeof menu[i][1] == 'function'){
-			(function(){
-				var org = menu[i][1];
-				menu2.push([menu[i][0], function(){
-					return wrapper(org, arguments)
-				}, menu[i][2]]);
-			})();
-		} else {
-			menu2.push([menu[i][0], JOBAD.util.fullWrap(menu[i][1]), menu[i][2]]);
-		}
-		
-	}
-	return menu2;
-};
 
 /*
 	Applies a function to the arguments of a function every time it is called. 
@@ -1513,7 +1442,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 
 		onEnable(element);
 
-		var menuBuild = JOBAD.refs.$("<div>");
+		var menuBuild = JOBAD.refs.$("<div>").addClass("ui-front"); //we ant to be in front. 
 		
 		var menuType = typeFunction(targetElement, elementOrg);
 		
@@ -1617,7 +1546,79 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, elementOrg)
 	}
 	return $ul;
 };
-/* end   <ui/JOBAD.ui.contextmenu.js> */
+
+
+/*
+	Generates a list menu representation from an object representation. 
+	@param menu Menu to generate. 
+	@returns the new representation. 
+*/
+JOBAD.UI.ContextMenu.generateMenuList = function(menu){
+	var DEFAULT_ICON = "none";
+	if(typeof menu == 'undefined'){
+		return [];
+	}
+	var res = [];
+	if(JOBAD.refs._.isArray(menu)){
+		for(var i=0;i<menu.length;i++){
+			var key = menu[i][0];
+			var val = menu[i][1];
+			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
+			if(typeof val == 'function'){
+				res.push([key, val, icon]);		
+			} else {
+				res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), icon]);
+			}
+		}
+	} else {
+		for(var key in menu){
+			if(menu.hasOwnProperty(key)){
+				var val = menu[key];
+				if(typeof val == 'function'){
+					res.push([key, val, DEFAULT_ICON]);	
+				} else if(JOBAD.refs._.isArray(val)){
+					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
+						if(typeof val[0] == 'function'){
+							res.push([key, val[0], val[1]]);
+						} else {
+							res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val[0]), val[1]]);
+						}
+					} else {
+						res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), DEFAULT_ICON]);
+					}
+					
+				} else {
+					res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), DEFAULT_ICON]);
+				}
+			}
+		}
+	}
+	return res;
+};
+
+/*
+	Wraps a menu function
+	@param menu Menu to generate. 
+	@returns the new representation. 
+*/
+JOBAD.UI.ContextMenu.fullWrap = function(menu, wrapper){
+	var menu = JOBAD.UI.ContextMenu.generateMenuList(menu);
+	var menu2 = [];
+	for(var i=0;i<menu.length;i++){
+		if(typeof menu[i][1] == 'function'){
+			(function(){
+				var org = menu[i][1];
+				menu2.push([menu[i][0], function(){
+					return wrapper(org, arguments)
+				}, menu[i][2]]);
+			})();
+		} else {
+			menu2.push([menu[i][0], JOBAD.UI.ContextMenu.fullWrap(menu[i][1]), menu[i][2]]);
+		}
+		
+	}
+	return menu2;
+};/* end   <ui/JOBAD.ui.contextmenu.js> */
 /* start <ui/JOBAD.ui.sidebar.js> */
 /*
 	JOBAD 3 UI Functions
@@ -1895,7 +1896,7 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	
 	//config
 	if(typeof config.menu != 'undefined'){
-		var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
+		var entries = JOBAD.UI.ContextMenu.fullWrap(config.menu, function(org, args){
 			return org.apply(newGuy, [element, config.menuThis]);
 		});
 		JOBAD.UI.ContextMenu.enable(newGuy, function(){return entries;});
@@ -2215,9 +2216,6 @@ JOBAD.UI.Toolbar.removeItem = function(item){
 	You should have received a copy of the GNU General Public License
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-var overlay_count = 1000;//we want to go higher
-
 //JOBAD UI Overlay namespace. 
 JOBAD.UI.Overlay = {};
 
@@ -2225,7 +2223,7 @@ JOBAD.UI.Overlay = {};
 	Draws an overlay for an element. 
 	@param	element			Element to draw overlay for. 
 */
-JOBAD.UI.Overlay.draw = function(element, undrawOthers){
+JOBAD.UI.Overlay.draw = function(element){
 
 	//trigger undraw
 	var element = JOBAD.refs.$(element);
@@ -2238,13 +2236,12 @@ JOBAD.UI.Overlay.draw = function(element, undrawOthers){
 	var overlay_element = JOBAD.refs.$('<div>')
 	.css({
 		"position": "absolute",
-		"z-index": overlay_count++,
 		"top": offset.top
 ,		"left": offset.left,
 		"width": JOBAD.refs.$(element).outerWidth(),
 		"height": JOBAD.refs.$(element).outerHeight()
 	})
-	.addClass('ui-widget-overlay')
+	.addClass('ui-widget-overlay ui-front')
 	.appendTo(element);
 
 	//listen for undraw
@@ -2351,8 +2348,10 @@ JOBAD.UI.Folding.enable = function(element, config){
     //Folding class
     var folding_class = "JOBAD_Folding_"+config.align;
 
-
     var wrapper = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Wrapper'>");
+
+    //spacing
+    var spacer = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Spacing'></div>").insertAfter(element);
 
     element.wrap(wrapper);
     wrapper = element.parent();
@@ -2467,7 +2466,9 @@ JOBAD.UI.Folding.enable = function(element, config){
         config.update(element);
     });
 
-    container.click(function(event){
+    container
+    .add(spacer)
+    .click(function(event){
         //fold or unfold goes here
         if(wrapper.data("JOBAD.UI.Folding.state")){
             JOBAD.UI.Folding.unfold(element);
@@ -2478,7 +2479,7 @@ JOBAD.UI.Folding.enable = function(element, config){
 
     element
     .wrap("<div style='overflow: hidden; '>")
-    .data("JOBAD.UI.Folding.wrappers", container.add(placeHolder))
+    .data("JOBAD.UI.Folding.wrappers", container.add(placeHolder).add(spacer))
     .data("JOBAD.UI.Folding.enabled", true)
     .data("JOBAD.UI.Folding.callback", config.disable)
     .data("JOBAD.UI.Folding.onStateChange", config.update)
@@ -2587,6 +2588,15 @@ JOBAD.UI.Folding.disable = function(element, keep){
     .removeData("JOBAD.UI.Folding.wrappers");
 
     return element;
+}
+/*
+    Checks if an element is foldable. 
+    @param  element element to check. 
+*/
+JOBAD.UI.Folding.isFoldable = function(element){
+    return JOBAD.util.closest(element, function(e){
+        return e.data("JOBAD.UI.Folding.enabled");
+    }).length > 0;
 }/* end   <ui/JOBAD.ui.folding.js> */
 /* start <events/JOBAD.sidebar.js> */
 /*
@@ -3113,7 +3123,7 @@ JOBAD.events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return JOBAD.util.generateMenuList(entries);
+				return JOBAD.UI.ContextMenu.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];

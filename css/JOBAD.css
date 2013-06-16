@@ -35,7 +35,7 @@
 */
 
 .JOBAD.JOBAD_Contextmenu {
-	z-index: 100; /* some high number to keep it on top. */
+		/* nothing here */
 }
 
 
@@ -125,6 +125,7 @@
 	width: 100%;
 	float: right;
 	margin-bottom: 2px;
+	display: inline;
 }
 
 
@@ -140,4 +141,13 @@
 	position: relative;
 	float: left;
 	margin-right: 5px;
+}
+
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Spacing, 
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Spacing {
+	/* add some spacing after me */
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	display: block;
 }

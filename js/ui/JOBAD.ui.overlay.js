@@ -24,9 +24,6 @@
 	You should have received a copy of the GNU General Public License
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-var overlay_count = 1000;//we want to go higher
-
 //JOBAD UI Overlay namespace. 
 JOBAD.UI.Overlay = {};
 
@@ -47,13 +44,12 @@ JOBAD.UI.Overlay.draw = function(element){
 	var overlay_element = JOBAD.refs.$('<div>')
 	.css({
 		"position": "absolute",
-		"z-index": overlay_count++,
 		"top": offset.top
 ,		"left": offset.left,
 		"width": JOBAD.refs.$(element).outerWidth(),
 		"height": JOBAD.refs.$(element).outerHeight()
 	})
-	.addClass('ui-widget-overlay')
+	.addClass('ui-widget-overlay ui-front')
 	.appendTo(element);
 
 	//listen for undraw

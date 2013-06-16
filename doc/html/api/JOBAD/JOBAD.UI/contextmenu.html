@@ -513,12 +513,25 @@
 <li><strong>jQuery</strong> <code>element</code> The element to remove the menu from. </li>
 <li><strong>returns</strong> The <code>element</code> the menu was registered on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.UI.ContextMenu.buildContextMenuList(items, element, elementOrg)</code> Builds the menu html element for the standard menu element. 
+<li><p><strong>Function</strong> <code>JOBAD.UI.ContextMenu.buildContextMenuList(items, element, elementOrg)</code> - Builds the menu html element for the standard menu element. </p>
+
 <ul>
 <li><strong>Array</strong> <code>items</code> a list of <code>[name, callback, icon]</code> and <code>[name, submenu, icon]</code> pairs representing the menu to be built. </li>
 <li><strong>jQuery</strong> <code>element</code> The element the context menu has been requested on. </li>
 <li><strong>jQuery</strong> <code>elementOrg</code> The element the context menu call originates from. </li>
 <li><strong>returns</strong> a <strong>jQuery</strong> element representing the menu. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.UI.ContextMenu.generateMenuList(menu)</code> - Generates a list menu representation from an object representation. </p>
+
+<ul>
+<li><strong>Object</strong> <code>menu</code> an object representation of the menu. </li>
+<li><strong>returns</strong> the new representation. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.UI.ContextMenu.fullWrap(menu, wrapper)</code> - Wraps a menu callback with the spacefied wrapper. 
+<ul>
+<li><strong>Object</strong> <code>menu</code> The menu to wrap. </li>
+<li><strong>Function</strong> <code>wrapper(org, arguments)</code> The wrapper function. </li>
+<li><strong>returns</strong> the new representation. </li>
 </ul></li>
 </ul>
 

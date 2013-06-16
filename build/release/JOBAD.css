@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Sat, 15 Jun 2013 21:40:45 +0200
+	built: Sun, 16 Jun 2013 15:55:11 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -60,7 +60,7 @@
 */
 
 .JOBAD.JOBAD_Contextmenu {
-	z-index: 100; /* some high number to keep it on top. */
+		/* nothing here */
 }
 
 
@@ -150,6 +150,7 @@
 	width: 100%;
 	float: right;
 	margin-bottom: 2px;
+	display: inline;
 }
 
 
@@ -165,6 +166,15 @@
 	position: relative;
 	float: left;
 	margin-right: 5px;
+}
+
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Spacing, 
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Spacing {
+	/* add some spacing after me */
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	display: block;
 }/* end   <JOBAD.css> */
 /* start <JOBAD.theme.css> */
 /*
@@ -321,5 +331,4 @@
 */
 
 /* fix for bad size */
-.ui-widget { font-size: 70%; }
-/* end   <JOBAD.theme.css> */
+.ui-widget { font-size: 70%; }/* end   <JOBAD.theme.css> */

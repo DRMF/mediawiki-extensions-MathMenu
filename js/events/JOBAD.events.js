@@ -159,7 +159,7 @@ JOBAD.events.contextMenuEntries =
 			var res = [];
 			var mods = this.modules.iterate(function(module){
 				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return JOBAD.util.generateMenuList(entries);
+				return JOBAD.UI.ContextMenu.generateMenuList(entries);
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
