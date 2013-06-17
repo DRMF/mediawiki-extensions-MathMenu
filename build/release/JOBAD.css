@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Sun, 16 Jun 2013 15:55:11 +0200
+	built: Mon, 17 Jun 2013 17:48:15 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -263,18 +263,18 @@
 
 .JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container {
 	/* Right Folding Bracket */
-	width: 5px;
-	border-right: 3px solid black;
-	border-top: 3px solid black;
-	border-bottom: 3px solid black;
+	width: 3px;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 }
 
 .JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container {
 	/* Left Folding Bracket */
-	width: 5px;
-	border-left: 3px solid black;
-	border-top: 3px solid black;
-	border-bottom: 3px solid black;
+	width: 3px;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 }
 
 /*

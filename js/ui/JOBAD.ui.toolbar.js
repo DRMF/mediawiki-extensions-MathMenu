@@ -46,9 +46,11 @@ JOBAD.UI.Toolbar.clear = function(element){
 	
 		JOBAD.refs.$(window).off("resize", element.data("JOBAD.UI.Toolbar.resizeFunction"));
 		
-		element.removeData("JOBAD.UI.Toolbar.ToolBarElement");
-		element.removeData("JOBAD.UI.Toolbar.active");
-		element.removeData("JOBAD.UI.Toolbar.resizeFunction");
+		element
+		.removeData("JOBAD.UI.Toolbar.ToolBarElement")
+		.removeData("JOBAD.UI.Toolbar.active")
+		.removeData("JOBAD.UI.Toolbar.resizeFunction")
+		.removeData("JOBAD.UI.Toolbar.hide")
 	}
 }
 
@@ -57,6 +59,8 @@ JOBAD.UI.Toolbar.clear = function(element){
 	@param element The element the toolbar belongs to. 
 */
 JOBAD.UI.Toolbar.update = function(element){
+
+	//TODO: Group elements (like in sidebar. )
 
 	var element = JOBAD.refs.$(element);
 
@@ -71,7 +75,10 @@ JOBAD.UI.Toolbar.update = function(element){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
 		
-		var position = element.offset();
+		var position = /*JOBAD.util.closest(element, function(e){
+				//check if an element is visible
+				return !JOBAD.util.isHidden(e);
+		}).*/element.offset(); //TODO: Make this element wise. 
 		
 		toolbar.css({
 			"position": "absolute",
@@ -79,7 +86,7 @@ JOBAD.UI.Toolbar.update = function(element){
 			"left": position.left
 		});
 		
-		if(element.is(":hidden")){
+		if(JOBAD.util.isHidden(element) /* && element.data("JOBAD.UI.Toolbar.hide")*/){
 		  toolbar.hide();
 		} else {
 		  toolbar.show();
@@ -102,7 +109,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
 		config.click:	Callback on click. Default: Open Context Menu
-		config.hide:	Ignored.  
+		config.hide:	Currently unimplemented. Should we hide this element (true) when it is not visible or travel up the dom tree (false, default)?
 
 	@returns The new item as a jquery element. 
 */
@@ -174,7 +181,7 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	//menu
 	if(typeof config.menu != 'undefined'){
-		var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
+		var entries = JOBAD.UI.ContextMenu.fullWrap(config.menu, function(org, args){
 			return org.apply(newItem, [element, config.menuThis]);
 		});
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
@@ -186,7 +193,10 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
-	element.data("JOBAD.UI.Toolbar.active", true);
+	//store the data
+	element
+	.data("JOBAD.UI.Toolbar.active", true)
+	//.data("JOBAD.UI.Toolbar.hide", typeof(config.hide=='boolean')?true:false); //TODO: Make this element wise. 
 	
 	
 	JOBAD.UI.Toolbar.update(element);

@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Sun, 16 Jun 2013 15:55:06 +0200
+	built: Mon, 17 Jun 2013 17:48:10 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1404,8 +1404,8 @@ JOBAD.UI.ContextMenu.config = {
 */
 JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, onEnable, onDisable){
 	if(typeof demandFunction != 'function'){
-		JOBAD.error('JOBAD.UI.ContextMenu.enable: demandFunction is not a function'); //die
-		return element
+		JOBAD.warning('JOBAD.UI.ContextMenu.enable: demandFunction is not a function, assuming empty function. '); //die
+		return element;
 	}
 	
 	if(typeof typeFunction != 'function'){
@@ -1422,6 +1422,9 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 	element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
 		if(e.ctrlKey){
 			return true;
+		}
+		if(JOBAD.util.isHidden(e.target)){
+			return false; //we're hidden
 		}
 		var targetElement = JOBAD.refs.$(e.target);
 		var elementOrg = JOBAD.refs.$(e.target);
@@ -1650,7 +1653,7 @@ JOBAD.UI.Sidebar = {};
 
 JOBAD.UI.Sidebar.config = 
 {
-	"width": 100, //Sidebar Width
+	"width": 50, //Sidebar Width
 	"iconDistance": 15, //Minimal Icon distance
 	"icons": { //Class Icons 
 		/* All icons are public domain taken from http://openiconlibrary.sourceforge.net/ */
@@ -2029,9 +2032,11 @@ JOBAD.UI.Toolbar.clear = function(element){
 	
 		JOBAD.refs.$(window).off("resize", element.data("JOBAD.UI.Toolbar.resizeFunction"));
 		
-		element.removeData("JOBAD.UI.Toolbar.ToolBarElement");
-		element.removeData("JOBAD.UI.Toolbar.active");
-		element.removeData("JOBAD.UI.Toolbar.resizeFunction");
+		element
+		.removeData("JOBAD.UI.Toolbar.ToolBarElement")
+		.removeData("JOBAD.UI.Toolbar.active")
+		.removeData("JOBAD.UI.Toolbar.resizeFunction")
+		.removeData("JOBAD.UI.Toolbar.hide")
 	}
 }
 
@@ -2040,6 +2045,8 @@ JOBAD.UI.Toolbar.clear = function(element){
 	@param element The element the toolbar belongs to. 
 */
 JOBAD.UI.Toolbar.update = function(element){
+
+	//TODO: Group elements (like in sidebar. )
 
 	var element = JOBAD.refs.$(element);
 
@@ -2054,7 +2061,10 @@ JOBAD.UI.Toolbar.update = function(element){
 		var toolbar = element.data("JOBAD.UI.Toolbar.ToolBarElement");
 		toolbar.children().button("refresh");
 		
-		var position = element.offset();
+		var position = /*JOBAD.util.closest(element, function(e){
+				//check if an element is visible
+				return !JOBAD.util.isHidden(e);
+		}).*/element.offset(); //TODO: Make this element wise. 
 		
 		toolbar.css({
 			"position": "absolute",
@@ -2062,7 +2072,7 @@ JOBAD.UI.Toolbar.update = function(element){
 			"left": position.left
 		});
 		
-		if(element.is(":hidden")){
+		if(JOBAD.util.isHidden(element) /* && element.data("JOBAD.UI.Toolbar.hide")*/){
 		  toolbar.hide();
 		} else {
 		  toolbar.show();
@@ -2085,7 +2095,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
 		config.click:	Callback on click. Default: Open Context Menu
-		config.hide:	Ignored.  
+		config.hide:	Currently unimplemented. Should we hide this element (true) when it is not visible or travel up the dom tree (false, default)?
 
 	@returns The new item as a jquery element. 
 */
@@ -2157,7 +2167,7 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	//menu
 	if(typeof config.menu != 'undefined'){
-		var entries = JOBAD.util.fullWrap(config.menu, function(org, args){
+		var entries = JOBAD.UI.ContextMenu.fullWrap(config.menu, function(org, args){
 			return org.apply(newItem, [element, config.menuThis]);
 		});
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
@@ -2169,7 +2179,10 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	
 	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
-	element.data("JOBAD.UI.Toolbar.active", true);
+	//store the data
+	element
+	.data("JOBAD.UI.Toolbar.active", true)
+	//.data("JOBAD.UI.Toolbar.hide", typeof(config.hide=='boolean')?true:false); //TODO: Make this element wise. 
 	
 	
 	JOBAD.UI.Toolbar.update(element);
@@ -2243,6 +2256,8 @@ JOBAD.UI.Overlay.draw = function(element){
 	})
 	.addClass('ui-widget-overlay ui-front')
 	.appendTo(element);
+
+	JOBAD.util.markHidden(overlay_element); //hide the overlay element
 
 	//listen for undraw
 	element.one("JOBAD.UI.Overlay.undraw", function(){
@@ -2432,7 +2447,7 @@ JOBAD.UI.Folding.enable = function(element, config){
         container
         .height(wrapper.height());
 
-        config.update(element);
+        config.update(element, childCall?true:false);
     }
     :
     function(event){
@@ -2463,7 +2478,7 @@ JOBAD.UI.Folding.enable = function(element, config){
         container
         .height(wrapper.height());
 
-        config.update(element);
+        config.update(element, false);
     });
 
     container
@@ -2483,7 +2498,8 @@ JOBAD.UI.Folding.enable = function(element, config){
     .data("JOBAD.UI.Folding.enabled", true)
     .data("JOBAD.UI.Folding.callback", config.disable)
     .data("JOBAD.UI.Folding.onStateChange", config.update)
-    .data("JOBAD.UI.Folding.config", config);;
+    .data("JOBAD.UI.Folding.config", config);
+
 
     JOBAD.refs.$(window).on("resize.JOBAD.UI.Folding", wrapper.data("JOBAD.UI.Folding.update"));
 
@@ -2563,6 +2579,7 @@ JOBAD.UI.Folding.disable = function(element, keep){
     if(keep?false:true){
         JOBAD.UI.Folding.unfold(element);
         JOBAD.util.markDefault(element); 
+        element.removeData("JOBAD.UI.Folding.config"); //reset to default. 
     }
     
     //call event handlers
@@ -2678,8 +2695,8 @@ JOBAD.Sidebar.registerSidebarStyle("bound", "Bound to element",
 	JOBAD.util.argSlice(JOBAD.UI.Toolbar.addItem, 1),
 	JOBAD.UI.Toolbar.removeItem, 
 	function(){
-		for(var key in this.Sidebar.Elements){
-			JOBAD.UI.Toolbar.update(this.Sidebar.Elements[key]);
+		for(var key in this.Sidebar.PastRequestCache){
+			JOBAD.UI.Toolbar.update(this.Sidebar.PastRequestCache[key][0]);
 		}
 	}
 );
@@ -2771,7 +2788,6 @@ JOBAD.events.SideBarUpdate =
 					Redraws the sidebar assuming the specefied type. 
 				*/
 				'redrawT': function(type){
-
 					this.Sidebar.redrawing = true;
 
 					var enable_later = false;
@@ -2943,8 +2959,9 @@ JOBAD.ifaces.push(function(){
 		}
 
 		return JOBAD.UI.Folding.enable(element, {
-			"update": function(){
-				if(me.Sidebar.redrawing !== true){
+			"update": function(e, childCall){
+				//only update on parent calls; if we do otherwise we'll block. 
+				if(me.Sidebar.redrawing !== true && !childCall){
 					me.Sidebar.redraw();
 				}
 			},

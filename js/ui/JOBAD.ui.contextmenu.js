@@ -43,8 +43,8 @@ JOBAD.UI.ContextMenu.config = {
 */
 JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, onEnable, onDisable){
 	if(typeof demandFunction != 'function'){
-		JOBAD.error('JOBAD.UI.ContextMenu.enable: demandFunction is not a function'); //die
-		return element
+		JOBAD.warning('JOBAD.UI.ContextMenu.enable: demandFunction is not a function, assuming empty function. '); //die
+		return element;
 	}
 	
 	if(typeof typeFunction != 'function'){
@@ -61,6 +61,9 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 	element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
 		if(e.ctrlKey){
 			return true;
+		}
+		if(JOBAD.util.isHidden(e.target)){
+			return false; //we're hidden
 		}
 		var targetElement = JOBAD.refs.$(e.target);
 		var elementOrg = JOBAD.refs.$(e.target);

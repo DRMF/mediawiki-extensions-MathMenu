@@ -28,7 +28,7 @@ JOBAD.UI.Sidebar = {};
 
 JOBAD.UI.Sidebar.config = 
 {
-	"width": 100, //Sidebar Width
+	"width": 50, //Sidebar Width
 	"iconDistance": 15, //Minimal Icon distance
 	"icons": { //Class Icons 
 		/* All icons are public domain taken from http://openiconlibrary.sourceforge.net/ */

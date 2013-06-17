@@ -170,7 +170,7 @@ JOBAD.UI.Folding.enable = function(element, config){
         container
         .height(wrapper.height());
 
-        config.update(element);
+        config.update(element, childCall?true:false);
     }
     :
     function(event){
@@ -201,7 +201,7 @@ JOBAD.UI.Folding.enable = function(element, config){
         container
         .height(wrapper.height());
 
-        config.update(element);
+        config.update(element, false);
     });
 
     container
@@ -221,7 +221,8 @@ JOBAD.UI.Folding.enable = function(element, config){
     .data("JOBAD.UI.Folding.enabled", true)
     .data("JOBAD.UI.Folding.callback", config.disable)
     .data("JOBAD.UI.Folding.onStateChange", config.update)
-    .data("JOBAD.UI.Folding.config", config);;
+    .data("JOBAD.UI.Folding.config", config);
+
 
     JOBAD.refs.$(window).on("resize.JOBAD.UI.Folding", wrapper.data("JOBAD.UI.Folding.update"));
 
@@ -301,6 +302,7 @@ JOBAD.UI.Folding.disable = function(element, keep){
     if(keep?false:true){
         JOBAD.UI.Folding.unfold(element);
         JOBAD.util.markDefault(element); 
+        element.removeData("JOBAD.UI.Folding.config"); //reset to default. 
     }
     
     //call event handlers

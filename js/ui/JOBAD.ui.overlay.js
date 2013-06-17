@@ -52,6 +52,8 @@ JOBAD.UI.Overlay.draw = function(element){
 	.addClass('ui-widget-overlay ui-front')
 	.appendTo(element);
 
+	JOBAD.util.markHidden(overlay_element); //hide the overlay element
+
 	//listen for undraw
 	element.one("JOBAD.UI.Overlay.undraw", function(){
 		overlay_element.remove();

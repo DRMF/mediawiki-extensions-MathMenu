@@ -77,8 +77,8 @@ JOBAD.Sidebar.registerSidebarStyle("bound", "Bound to element",
 	JOBAD.util.argSlice(JOBAD.UI.Toolbar.addItem, 1),
 	JOBAD.UI.Toolbar.removeItem, 
 	function(){
-		for(var key in this.Sidebar.Elements){
-			JOBAD.UI.Toolbar.update(this.Sidebar.Elements[key]);
+		for(var key in this.Sidebar.PastRequestCache){
+			JOBAD.UI.Toolbar.update(this.Sidebar.PastRequestCache[key][0]);
 		}
 	}
 );
@@ -170,7 +170,6 @@ JOBAD.events.SideBarUpdate =
 					Redraws the sidebar assuming the specefied type. 
 				*/
 				'redrawT': function(type){
-
 					this.Sidebar.redrawing = true;
 
 					var enable_later = false;
@@ -342,8 +341,9 @@ JOBAD.ifaces.push(function(){
 		}
 
 		return JOBAD.UI.Folding.enable(element, {
-			"update": function(){
-				if(me.Sidebar.redrawing !== true){
+			"update": function(e, childCall){
+				//only update on parent calls; if we do otherwise we'll block. 
+				if(me.Sidebar.redrawing !== true && !childCall){
 					me.Sidebar.redraw();
 				}
 			},
