@@ -34,10 +34,34 @@ JOBAD.storageBackend = {
 }
 
 JOBAD.storageBackend.engines = {
-	"none": [function(key){}, function(key, value){}]
-}
+	"none": [function(key){}, function(key, value){}],
+	"cookie": [function(key){
+		var cookies = document.cookie;
+		
+		var startIndex = cookies.indexOf(" "+key+"=");
+		startIndex = (startIndex == -1)?cookies.indexOf(key+"="):startIndex;
 
-JOBAD.config.storageBackend = "none";
+		if(startIndex == -1){
+			//we can't find it
+			return false;
+		}
+
+		//we sart after start Index
+		startIndex = cookies.indexOf("=", startIndex)+1; 
+
+		var endIndex = cookies.indexOf(";", startIndex);
+		endIndex = (endIndex == -1)?cookies.length:endIndex; //till the end
+
+		return unescape(cookies.substring(startIndex, endIndex));
+	}, function(key, value){
+		//sets a cookie
+		var expires=new Date();
+		expires.setDate(expires.getDate()+7); //store settings for 7 days
+		document.cookie = escape(key) + "=" + escape(value) + "; expires="+expires.toUTCString()+"";
+	}]
+};
+
+JOBAD.config.storageBackend = "cookie";
 
 
 

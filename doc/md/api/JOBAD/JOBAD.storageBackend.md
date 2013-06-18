@@ -8,4 +8,4 @@
 	* **String** `key` Key to set. 
 	* **Mixed** `val` Value to set. 
 
-* **Object** `JOBAD.storageBackend.engines` Contains storage engines. Available engines are currently: `none`. 
+* **Object** `JOBAD.storageBackend.engines` Contains storage engines. Available engines are currently: `none`, `cookie`. 
