@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[API Documentation] - JOBAD Documentation</title>
+		<title>[Undocumented API] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,45 +478,15 @@
 -->
 	</head>
 	<body>
-<p><a href="../index.html">Start</a> &gt; <strong>API Documentation</strong></p>
-<h1>API Documentation</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">API Documentation</a> &gt; <strong>Undocumented API</strong></p>
+<h1>Undocumented API</h1>
+
+<p>The following API functionailty is currently not documented at all or the documenattion is not up-to-date: </p>
 
 <ul>
-<li><a href="JOBAD/index.html">JOBAD</a> - Main JOBAD Namespace</li>
-<li><p><a href="template.html">template</a> - A Module template</p></li>
-<li><p><a href="undocumented.html">Undocumented</a> - Contains a list of currently undocumented things. </p></li>
-</ul>
-
-<h2>Documentation Convention</h2>
-
-<p>An Object is documented like this:</p>
-
-<ul>
-<li><strong>Type</strong> <code>Name</code>: Description
-<ul>
-<li>description of properties</li>
-<li><strong>returns</strong> Return value. </li>
-</ul></li>
-</ul>
-
-<p>If <strong>returns</strong> is omitted then the Object is either not a function or it returns <code>undefined</code>. </p>
-
-<p>The following types are available: </p>
-
-<ul>
-<li><code>Undefined</code> Javascripts undefined. </li>
-<li><code>Object</code> A javascript object of string / object pairs. Often used as namespace. </li>
-<li><code>Boolean</code> A javascript boolean object. Is either <code>true</code> or <code>false</code>. </li>
-<li><code>Number</code> A javascript number object. This should not be <code>NaN</code>, <code>Infinity</code> or <code>-Infinity</code> unless specefied otherwise. </li>
-<li><code>String</code> A javascript string. </li>
-<li><code>Function</code> A javascript function. </li>
-<li><code>Instance[</code><strong>Function</strong><code>]</code> Instance of the specefied function. Addtionally has the following abbreviations: 
-<ul>
-<li><code>jQuery</code> is the same as <code>Instance[jQuery]</code>. Note that any jQuery element may also just be a jQuery selector. </li>
-<li><code>JOBAD</code> is the same as <code>Instance[JOBAD]</code></li>
-</ul></li>
-<li><code>Array[</code><strong>Type</strong><code>][</code><strong>Length</strong><code>]</code> Array of specefied type and length. Unless specefied otherwise, this may be empty. If length is omitted, the array can have any length. </li>
-<li><code>Mixed</code> May be any of the types specefied above. May be further restricted by the appopriate description.  </li>
+<li><code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar</code> - contains references to old functions</li>
+<li><code>JOBAD.util</code> - add udnerscore function reference</li>
+<li><code>JOBAD.UI.Folding</code> - May be incomplete</li>
 </ul>
 
 	</body>

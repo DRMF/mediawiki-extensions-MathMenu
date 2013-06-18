@@ -484,45 +484,37 @@
 <p>The SideBarUpdate event is triggered every time the sidebar is updated. </p>
 
 <ul>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.default()</code> The default Event Handler for SideBarUpdate Events. Just returns false. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.enable(root)</code> Enables the SideBarUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.default()</code> - The default Event Handler for SideBarUpdate Events. Just returns false. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.enable(root)</code> - Enables the SideBarUpdate event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 <li><strong>jQuery</strong> <code>root</code> The root element to enable SideBarUpdate on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.disable(root)</code> Disables the SideBarUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.disable(root)</code> - Disables the SideBarUpdate event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 <li><strong>jQuery</strong> <code>root</code> The root element to disable SideBarUpdate on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.getResult()</code> Get the Result of the SideBarUpdate event handlers. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.getResult()</code> - Get the Result of the SideBarUpdate event handlers. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.trigger()</code> Trigger the SideBarUpdate event. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.namespace.trigger()</code> - Trigger the SideBarUpdate event. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
 <li><p><strong>Object</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar</code> - Namespace for <a href="../JOBADInstance/index.html">JOBADInstance</a> related sidebar functions. </p></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()</code> Redraws the sidebar. <em>*To redraw the sidebar use this function *</em></p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()</code> - Redraws the sidebar. <em>*To redraw the sidebar use this function *</em></p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redrawSB()</code> Redraws the sidebar for the display style right. 
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redrawTB()</code> Redraws the sidebar for the display style bound to element. </p>
-
-<ul>
-<li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config, autoRedraw)</code> Registers a new notification on the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redrawT(type)</code> - Redraws the sidebar for the specefied display style. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config, autoRedraw)</code> - Registers a new notification on the sidebar. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
@@ -540,43 +532,43 @@
 <li><p><strong>returns</strong> a jQuery element representing the added notification if autoredraw is true, otherwise nothing. </p></li>
 <li><p><strong>returns</strong> a jQuery element representing the added notification. </p></li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification, autoRedraw)</code> Removes a notification from the sidebar. <em>*To remove an element use this function *</em></p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification, autoRedraw)</code> - Removes a notification from the sidebar. <em>*To remove an element use this function *</em></p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 <li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
 <li><strong>Boolean</strong> <code>autoRedraw</code> Optional. Should the sidebar be redrawn? (default: true)</li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationSB(notification, autoRedraw)</code> Removes a notification from the sidebar for the display style right. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationSB(notification, autoRedraw)</code> - Removes a notification from the sidebar for the display style right. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 <li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
 <li><strong>Boolean</strong> <code>autoRedraw</code> Optional. Should the sidebar be redrawn? (default: true)</li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationTB(notification, autoRedraw)</code> Removes a notification from the sidebar for the display style bound to element. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationTB(notification, autoRedraw)</code> - Removes a notification from the sidebar for the display style bound to element. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 <li><strong>jQuery</strong> <code>notification</code> A jQuery element represnting the notification. </li>
 <li><strong>Boolean</strong> <code>autoRedraw</code> Optional. Should the sidebar be redrawn? (default: true)</li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.forceInit()</code> Forces an initialisation of the sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.forceInit()</code> - Forces an initialisation of the sidebar. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.makeCache()</code> Creates a cache of requests for all currently active notifications. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.makeCache()</code> - Creates a cache of requests for all currently active notifications. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toSB()</code> Removes the bound to element style sidebar and switches to the right sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toSB()</code> - Removes the bound to element style sidebar and switches to the right sidebar. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toTB()</code> Removes the right style sidebar and switches to the bound to element sidebar. </p>
+<li><p><strong>Function</strong> <code>JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toTB()</code> - Removes the right style sidebar and switches to the bound to element sidebar. </p>
 
 <ul>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>this</code> The JOBAD Instance to work on. </li>

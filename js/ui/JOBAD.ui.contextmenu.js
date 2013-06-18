@@ -43,7 +43,7 @@ JOBAD.UI.ContextMenu.config = {
 */
 JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, onEnable, onDisable){
 	if(typeof demandFunction != 'function'){
-		JOBAD.warning('JOBAD.UI.ContextMenu.enable: demandFunction is not a function, assuming empty function. '); //die
+		JOBAD.warning('JOBAD.UI.ContextMenu.enable: demandFunction is not a function. '); //die
 		return element;
 	}
 	
@@ -101,8 +101,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, typeFunction, on
 			'width': JOBAD.UI.ContextMenu.config.width,
 			'position': 'fixed'
 		})
-		.on('contextmenu', function(){
-			return false;			
+		.on('contextmenu', function(e){
+			return (e.ctrlKey);
 		})
 		.on('mousedown', function(e){
 			e.stopPropagation();//prevent closemenu from triggering

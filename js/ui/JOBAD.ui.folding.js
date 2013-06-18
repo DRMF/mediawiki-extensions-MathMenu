@@ -106,7 +106,10 @@ JOBAD.UI.Folding.enable = function(element, config){
     
 
     var container = JOBAD.refs.$("<div class='JOBAD "+folding_class+" JOBAD_Folding_Container'>")
-    .prependTo(wrapper);
+    .prependTo(wrapper)
+    .on("contextmenu", function(e){
+        return (e.ctrlKey);
+    });
 
     wrapper
     .data("JOBAD.UI.Folding.state", element.data("JOBAD.UI.Folding.state")?true:false)

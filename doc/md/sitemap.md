@@ -42,6 +42,7 @@
 * [JOBAD](api/JOBAD/index.md) (api/JOBAD/index.md)
 * [API Documentation](api/index.md) (api/index.md)
 * [template](api/template.md) (api/template.md)
+* [Undocumented API](api/undocumented.md) (api/undocumented.md)
 * [Building JOBAD](build.md) (build.md)
 * [CSS Classes](css.md) (css.md)
 * [Demos](demos.md) (demos.md)

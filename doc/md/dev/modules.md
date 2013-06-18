@@ -123,13 +123,13 @@ JOBAD.modules.register(template); //register the module.
 ```
 
 When you write a module and you wish to use jQuery, do not use the "$" reference to jQuery. This might not be available if jQuery is in noConflict mode. Always use the JOBAD.refs.$ reference to jQuery. 
-If you want to use the '$' inside your code you can use the following code. You can also use it if you want to use underscore. 
+If you want to use the '$' inside your code you can use the following code. 
 
 ```js
-(function($, _){
-	/* your code with $'s and _'s here */
+(function($){
+	/* your code with $'s here */
 	/* JOBAD.modules.register(template); */
-})(JOBAD.refs.$, JOBAD.refs._);
+})(JOBAD.refs.$);
 ```
 
 ## See also

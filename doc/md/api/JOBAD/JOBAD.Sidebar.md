@@ -1,8 +1,8 @@
 # JOBAD.Sidebar
 
 * **Object** `JOBAD.Sidebar.styles` - Contains JOBAD Sidebar styles. 
-* **Array** `JOBAD.Sidebar.types` - An array of all available sidebar styles. 
-* **Array** `JOBAD.Sidebar.desc` - An array of JOBAD Sidebar style descriptions. 
+* **Array** `JOBAD.Sidebar.types` An array of all available sidebar styles. 
+* **Array** `JOBAD.Sidebar.desc` An array of JOBAD Sidebar style descriptions. 
 
 * **Function** `JOBAD.Sidebar.registerSidebarStyle = function(styleName, styleDesc, registerFunc, deregisterFunc, updateFunc)` - Register a new Sidebar style. 
 	* **String** `styleName` Name of the style. 
