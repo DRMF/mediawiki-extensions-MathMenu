@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 18 Jun 2013 12:24:59 +0200
+	built: Tue, 18 Jun 2013 12:48:05 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -4287,6 +4287,9 @@ JOBAD.events.leftClick =
 			});
 		},
 		'trigger': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var evt = this.Event.leftClick.getResult(target);
 			return evt;
 		}
@@ -4323,6 +4326,9 @@ JOBAD.events.dblClick =
 			});
 		},
 		'trigger': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var evt = this.Event.dblClick.getResult(target);
 			return evt;
 		}
@@ -4354,6 +4360,9 @@ JOBAD.events.onEvent =
 			});
 		},
 		'trigger': function(event, element){
+			if(JOBAD.util.isHidden(element)){
+				return true;
+			}
 			return this.Event.onEvent.getResult(event, element);
 		}
 	}
@@ -4485,6 +4494,9 @@ JOBAD.events.hoverText =
 	},
 	'namespace': {
 		'getResult': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var res = false;
 			this.modules.iterate(function(module){
 				var hoverText = module.hoverText.call(module, target, module.getJOBAD()); //call apply and stuff here

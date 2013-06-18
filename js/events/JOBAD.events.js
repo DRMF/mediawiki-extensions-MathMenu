@@ -60,6 +60,9 @@ JOBAD.events.leftClick =
 			});
 		},
 		'trigger': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var evt = this.Event.leftClick.getResult(target);
 			return evt;
 		}
@@ -96,6 +99,9 @@ JOBAD.events.dblClick =
 			});
 		},
 		'trigger': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var evt = this.Event.dblClick.getResult(target);
 			return evt;
 		}
@@ -127,6 +133,9 @@ JOBAD.events.onEvent =
 			});
 		},
 		'trigger': function(event, element){
+			if(JOBAD.util.isHidden(element)){
+				return true;
+			}
 			return this.Event.onEvent.getResult(event, element);
 		}
 	}
@@ -258,6 +267,9 @@ JOBAD.events.hoverText =
 	},
 	'namespace': {
 		'getResult': function(target){
+			if(JOBAD.util.isHidden(target)){
+				return true;
+			}
 			var res = false;
 			this.modules.iterate(function(module){
 				var hoverText = module.hoverText.call(module, target, module.getJOBAD()); //call apply and stuff here
