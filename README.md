@@ -41,6 +41,8 @@ in order to check out the build dependencies.
 	You should have received a copy of the GNU General Public License
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 
+This project includes Underscore 1.4.4, which is licensed under [MIT License](https://github.com/documentcloud/underscore/blob/master/LICENSE). 
+
 ## Documentation
 Please refer to [the Documentation](doc/md/index.md) or to the html version in doc/html/index.html. 
 
