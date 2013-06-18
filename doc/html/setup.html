@@ -571,15 +571,12 @@ Then you can start JOBAD: </p>
 <span class="p">});</span>
 </code></pre></div>
 
-<p>If jQuery's "$" or Underscore's "_", cause conflicts with other libraries, you can simply use</p>
+<p>If jQuery's "$" causes conflicts with other libraries, you can simply use</p>
 
-<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">conflicts</span> <span class="o">=</span> <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">noConflict</span><span class="p">();</span>
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">conflict</span> <span class="o">=</span> <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">noConflict</span><span class="p">();</span>
 
-<span class="nx">conflicts</span><span class="p">.</span><span class="nx">$</span> <span class="c1">//now contains a reference to jQuery. </span>
+<span class="nx">conflicts</span> <span class="c1">//now contains a reference to jQuery. </span>
 <span class="nx">$</span> <span class="c1">//contains whatever it contained before jQuery was loaded</span>
-
-<span class="nx">conflicts</span><span class="p">.</span><span class="nx">_</span> <span class="c1">//now contains a reference to Underscore</span>
-<span class="nx">_</span> <span class="c1">//contains whatever it contained before Underscore was loaded</span>
 </code></pre></div>
 
 <h2>See also</h2>

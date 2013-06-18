@@ -410,7 +410,7 @@ JOBAD.modules.getDependencyList = function(name){
 	var depArray = [name];
 	var deps = moduleList[name].info.dependencies;
 
-        for(var i=deps.length-1;i>=0;i--){
+	for(var i=deps.length-1;i>=0;i--){
 		depArray = JOBAD.util.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
 	return depArray;
@@ -426,6 +426,10 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 
 	if(!JOBAD.modules.available(name)){
 		JOBAD.error("Module is not available and cant be loaded. ");	
+	}
+
+	if(!JOBAD.util.isArray(args)){
+		var args = []; //we force arguments
 	}
 
 	/*
@@ -514,12 +518,9 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		}
 	}
 
-	var params = [JOBADInstance];
-	
-	for(var i=0;i<args.length;i++){
-		params.push(args[i]);	
-	}
-
+	//add JOBADINstance
+	var params = args.slice(0);
+	params.unshift(JOBADInstance);
 
 	if(JOBAD.config.cleanModuleNamespace){
 		if(!ServiceObject.info.hasCleanNamespace){
