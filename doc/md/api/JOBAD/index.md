@@ -26,7 +26,9 @@ This object is the main JOBAD Namespace.
 
 * **Object** [`JOBAD.refs`](JOBAD.refs.md) - Contains internal references to  JOBADs dependencies. 
 
-* **Function** [`JOBAD.noConflict`](JOBAD.noConflict.md) - Provides a way to free the variables used by JOBADs dependencies. 
+
+* **Function** `JOBAD.noConflict()` Restores the variable $ created by jQuery to its previous state. 
+	* **returns** a reference to jQuery. 
 
 * **Object** [`JOBAD.storageBackend`](JOBAD.storageBackend.md) - Storage Backend namespace. 
 

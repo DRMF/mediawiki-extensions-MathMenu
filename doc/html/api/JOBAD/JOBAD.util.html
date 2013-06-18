@@ -481,6 +481,8 @@
 <p><a href="../../index.html">Start</a> &gt; <a href="../index.html">API Documentation</a> &gt; <a href="index.html">JOBAD</a> &gt; <strong>JOBAD.util</strong></p>
 <h1>JOBAD.util</h1>
 
+<p>In addition to these functions, JOBAD.util also contains all underscore (version 1.4.4) functions. See their documentation at <a href="http://underscorejs.org/">underscorejs.org</a>. </p>
+
 <ul>
 <li><strong>Function</strong> <code>JOBAD.util.UID()</code> - Gets a unique id which can be used as identifier. </li>
 <li><strong>Function</strong> <code>JOBAD.util.objectEquals(a, b)</code> - Checks if two objects are equal. </li>
@@ -519,27 +521,12 @@
 <li><strong>number</strong> <code>height</code> Optional. Height of the tabs. </li>
 <li><strong>returns</strong> jQuery object. </li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.createProperUserSettingsObject(obj, modName)</code> - Creates a proper User Settings Object. </p>
+<li><p><strong>Function</strong> <code>JOBAD.util.closest(element, check)</code> - Similar to jQuery's closest. Travels up the DOM tree and finds the first element which matches check. This includes element itself. </p>
 
 <ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>modName</code> Identifier of the module. </li>
+<li><strong>jQuery</strong> <code>element</code> Element to start with. </li>
+<li><strong>String</strong> <code>check</code> Check to perform. Either a function <code>check(element)</code> or a jQuery selector. </li>
 <li><strong>returns</strong> object</li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.getDefaultConfigSetting</code> - Gets the default of a configuration object. </p>
-
-<ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>key</code> Key to get. </li>
-<li><strong>returns</strong> object</li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.util.validateConfigSetting(obj, key, val)</code> - Validates if the specefied object of a configuration object can be set. </p>
-
-<ul>
-<li><strong>Object</strong> <code>obj</code> Configuration Object</li>
-<li><strong>String</strong> <code>key</code> Key to validate. </li>
-<li><strong>Object</strong> <code>value</code> Value to vaildate. </li>
-<li><strong>returns</strong> boolean. </li>
 </ul></li>
 <li><p><strong>Function</strong> <code>JOBAD.util.markHidden(element)</code> - Marks an element as hidden. </p>
 

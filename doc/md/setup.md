@@ -17,16 +17,14 @@ JOBAD itself depends on:
 
 * [jQuery](http://jquery.com) - tested with version 2.0.0
 * [jQuery UI](http://jqueryui.com/) - tested with version 1.10.3
-* [UNDERSCORE.JS](http://underscorejs.org/) - tested with version 1.4.4
 
-All 3 dependencies are bundled with JOBAD. You can include them in your HTML document header like so:
+All dependencies are bundled with JOBAD. You can include them in your HTML document header like so:
  
 ```html
 <head>
 	<!-- other header tags -->
 	<script src="js/deps/jquery/jquery-2.0.0.min.js"></script>
 	<script src="js/deps/jquery/jquery-ui-1.10.3.js"></script>
-	<script src="js/deps/underscore/underscore-min.js"></script>
 	<link href="css/jquery-ui.css" rel="stylesheet">
 	<!-- More files to include -->
 </head>

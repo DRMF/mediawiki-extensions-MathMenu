@@ -112,7 +112,7 @@ JOBAD.ifaces.push(function(me, args){
 		}
 		
 		
-		disabledModules = JOBAD.refs._.without(disabledModules, module);
+		disabledModules = JOBAD.util.without(disabledModules, module);
 		
 		
 		var deps = JOBAD.modules.getDependencyList(module);
@@ -132,7 +132,7 @@ JOBAD.ifaces.push(function(me, args){
 		@param module Module to check. 
 	*/
 	this.modules.isActive = function(module){
-		return (JOBAD.refs._.indexOf(disabledModules, module)==-1); 
+		return (JOBAD.util.indexOf(disabledModules, module)==-1); 
 	};
 	
 	/*
@@ -265,7 +265,7 @@ JOBAD.modules.register = function(ModuleObject){
 	@returns proper Module Object (adding omitted properties etc. Otherwise false. 
 */
 JOBAD.modules.createProperModuleObject = function(ModuleObject){
-	if(!JOBAD.refs._.isObject(ModuleObject)){
+	if(!JOBAD.util.isObject(ModuleObject)){
 		return false;
 	}
 	var properObject = 
@@ -312,14 +312,14 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		if(info.hasOwnProperty('dependencies')){
 			var arr = info['dependencies'];
-			if(!JOBAD.refs._.isArray(arr)){
+			if(!JOBAD.util.isArray(arr)){
 				return false;			
 			}
 			properObject.info['dependencies'] = arr;
 		}
 
 		try{
-			JOBAD.refs._.map(['identifier', 'title', 'author', 'description'], function(key){
+			JOBAD.util.map(['identifier', 'title', 'author', 'description'], function(key){
 				if(info.hasOwnProperty(key)){
 					var infoAttr = info[key];
 					if(typeof infoAttr != 'string'){
@@ -337,7 +337,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 		properObject.namespace = {};
 
 		for(var key in ModuleObject){
-			if(ModuleObject.hasOwnProperty(key) && JOBAD.refs._.indexOf(JOBAD.modules.cleanProperties, key) == -1){
+			if(ModuleObject.hasOwnProperty(key) && JOBAD.util.indexOf(JOBAD.modules.cleanProperties, key) == -1){
 				if(properObject.info.hasCleanNamespace){
 					JOBAD.console.warn("Warning: Module '"+properObject.info.identifier+"' says its namespace is clean, but property '"+key+"' found. Check ModuleObject.info.hasCleanNamespace. ");	
 				} else {
@@ -411,7 +411,7 @@ JOBAD.modules.getDependencyList = function(name){
 	var deps = moduleList[name].info.dependencies;
 
         for(var i=deps.length-1;i>=0;i--){
-		depArray = JOBAD.refs._.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
+		depArray = JOBAD.util.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
 	return depArray;
 };
@@ -526,7 +526,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 			JOBAD.console.warn("Warning: Module '"+name+"' may have unclean namespace, but JOBAD.config.cleanModuleNamespace is true. ");		
 		}
 	} else {
-		var orgClone = JOBAD.refs._.clone(ServiceObject.namespace);
+		var orgClone = JOBAD.util.clone(ServiceObject.namespace);
 		for(var key in orgClone){
 			if(!JOBAD.modules.cleanProperties.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];

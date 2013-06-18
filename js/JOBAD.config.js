@@ -49,7 +49,7 @@ JOBAD.config.storageBackend = "none";
 	@param	val	Value to validate. 
 	@returns boolean
 */
-JOBAD.util.validateConfigSetting = function(obj, key, val){
+JOBAD.modules.validateConfigSetting = function(obj, key, val){
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return false;
@@ -84,7 +84,7 @@ JOBAD.util.validateConfigSetting = function(obj, key, val){
 	@param modName	Name of the module
 	@returns object
 */
-JOBAD.util.createProperUserSettingsObject = function(obj, modName){
+JOBAD.modules.createProperUserSettingsObject = function(obj, modName){
 
 	var newObj = {};
 	for(var key in obj){
@@ -96,7 +96,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 			var spec = obj[key];
 			var newSpec = [];
 			
-			if(!JOBAD.refs._.isArray(spec)){
+			if(!JOBAD.util.isArray(spec)){
 				JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array required). ");
 				return;
 			}
@@ -137,7 +137,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					newSpec.push("string");
 					
 					//validator
-					if(JOBAD.refs._.isRegExp(validator)){
+					if(JOBAD.util.isRegExp(validator)){
 						newSpec.push(function(val){return validator.test(val)});
 					} else if(typeof validator == 'function') {
 						newSpec.push(validator);
@@ -162,7 +162,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					//meta
 					if(typeof meta == 'string'){
 						newSpec.push([meta, ""]);
-					} else if(JOBAD.refs._.isArray(meta)) {
+					} else if(JOBAD.util.isArray(meta)) {
 						if(meta.length == 1){
 							meta.push("");
 						}
@@ -204,7 +204,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					//meta
 					if(typeof meta == 'string'){
 						newSpec.push([meta, ""]);
-					} else if(JOBAD.refs._.isArray(meta)) {
+					} else if(JOBAD.util.isArray(meta)) {
 						if(meta.length == 1){
 							meta.push("");
 						}
@@ -224,7 +224,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					newSpec.push("integer");
 					
 					//validator
-					if(JOBAD.refs._.isArray(validator)){
+					if(JOBAD.util.isArray(validator)){
 						if(validator.length == 2){
 							newSpec.push(function(val){return (val >= validator[0])&&(val <= validator[1]);});
 						} else {
@@ -253,7 +253,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					//meta
 					if(typeof meta == 'string'){
 						newSpec.push([meta, ""]);
-					} else if(JOBAD.refs._.isArray(meta)) {
+					} else if(JOBAD.util.isArray(meta)) {
 						if(meta.length == 1){
 							meta.push("");
 						}
@@ -273,7 +273,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					newSpec.push("number");
 					
 					//validator
-					if(JOBAD.refs._.isArray(validator)){
+					if(JOBAD.util.isArray(validator)){
 						if(validator.length == 2){
 							newSpec.push(function(val){return (val >= validator[0])&&(val <= validator[1]);});
 						} else {
@@ -302,7 +302,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					//meta
 					if(typeof meta == 'string'){
 						newSpec.push([meta, ""]);
-					} else if(JOBAD.refs._.isArray(meta)) {
+					} else if(JOBAD.util.isArray(meta)) {
 						if(meta.length == 1){
 							meta.push("");
 						}
@@ -323,12 +323,12 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					
 					
 					//validator
-					if(JOBAD.refs._.isArray(validator) && spec.length == 4){
+					if(JOBAD.util.isArray(validator) && spec.length == 4){
 							if(validator.length == 0){
 								JOBAD.console.warn(WRONG_FORMAT_MSG+" (Array restriction must be non-empty). ");
 								return;
 							}
-							newSpec.push(function(val){return (JOBAD.refs._.indexOf(validator, val) != -1);});
+							newSpec.push(function(val){return (JOBAD.util.indexOf(validator, val) != -1);});
 					} else {
 						JOBAD.console.warn(WRONG_FORMAT_MSG+" (Type 'list' needs array restriction. ). ");
 						return;
@@ -348,7 +348,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 					}
 					
 					//meta
-					if(JOBAD.refs._.isArray(meta)) {
+					if(JOBAD.util.isArray(meta)) {
 						if(meta.length == validator.length+1){
 							newSpec.push(meta);
 						} else {
@@ -386,7 +386,7 @@ JOBAD.util.createProperUserSettingsObject = function(obj, modName){
 	@param	key	Key to get. 
 	@returns object
 */
-JOBAD.util.getDefaultConfigSetting = function(obj, key){
+JOBAD.modules.getDefaultConfigSetting = function(obj, key){
 	if(!obj.hasOwnProperty(key)){
 		JOBAD.console.warn("Undefined user setting: "+key);
 		return;
@@ -403,7 +403,7 @@ JOBAD.modules.extensions.config = {
 	"validate": function(prop){return true; }, 
 	
 	"init": function(available, value, originalObject, properObject){
-		return JOBAD.util.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
+		return JOBAD.modules.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
 	},
 	
 	"onLoad": function(value, properObject, loadedModule){
@@ -439,7 +439,7 @@ JOBAD.modules.extensions.config = {
 			@param val	Value to set. 
 		*/
 		this.UserConfig.canSet = function(prop, val){
-			return JOBAD.util.validateConfigSetting(value, prop, val);
+			return JOBAD.modules.validateConfigSetting(value, prop, val);
 		};
 		
 		/*
@@ -449,7 +449,7 @@ JOBAD.modules.extensions.config = {
 		*/
 		this.UserConfig.get = function(prop){
 			var res = configCache[id][prop];
-			if(JOBAD.util.validateConfigSetting(value, prop, res)){
+			if(JOBAD.modules.validateConfigSetting(value, prop, res)){
 				return res;
 			} else {
 				JOBAD.console.log("Failed to access user setting '"+prop+"'");
@@ -460,7 +460,7 @@ JOBAD.modules.extensions.config = {
 			Gets the user configuration types. 
 		*/
 		this.UserConfig.getTypes = function(){
-			return JOBAD.refs._.clone(value); 
+			return JOBAD.util.clone(value); 
 		}
 		
 		/*
@@ -471,7 +471,7 @@ JOBAD.modules.extensions.config = {
 			if(typeof configCache[id] == "undefined"){
 				configCache[id] = {};
 				for(var key in value){
-					configCache[id][key] = JOBAD.util.getDefaultConfigSetting(value, key);
+					configCache[id][key] = JOBAD.modules.getDefaultConfigSetting(value, key);
 					JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, this.info().identifier]);
 				}
 			}
@@ -493,13 +493,13 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 
 	var config = params[1];
 	
-	var spec = JOBAD.util.createProperUserSettingsObject({
+	var spec = JOBAD.modules.createProperUserSettingsObject({
 		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
 		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
 		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc],
 		"restricted_user_config": ["none", []]
 	}, "");
-	var cache = JOBAD.refs._.extend({}, (typeof config == 'undefined')?{}:config);
+	var cache = JOBAD.util.extend({}, (typeof config == 'undefined')?{}:config);
 
 	this.Config = {};
 	
@@ -739,7 +739,7 @@ JOBAD.ifaces.push(function(){
 			var restricted_items = me.Config.get("restricted_user_config");
 			$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
 					var e = JOBAD.refs.$(e);
-					if(JOBAD.refs._.indexOf(restricted_items, e.data("JOBAD.config.setting.key")) != -1){
+					if(JOBAD.util.indexOf(restricted_items, e.data("JOBAD.config.setting.key")) != -1){
 						e.remove();
 					}
 			});
@@ -766,7 +766,7 @@ JOBAD.ifaces.push(function(){
 							JOBAD.refs.$("<pre>").text(JOBAD.resources.jqueryui_license)
 						),
 						JOBAD.refs.$("<div>").append(
-							JOBAD.refs.$("<span>").text("Underscore Version "+JOBAD.refs._.VERSION),
+							JOBAD.refs.$("<span>").text("Underscore Version "+JOBAD.util.VERSION),
 							JOBAD.refs.$("<pre>").text(JOBAD.resources.underscore_license)
 						)
 					], {}, 400

@@ -230,7 +230,7 @@ JOBAD.events.SideBarUpdate =
 					var config = (typeof config == 'undefined')?{}:config;
 					config.menuThis = this;
 					
-					this.Sidebar.ElementRequestCache.push([id, JOBAD.refs.$(element), JOBAD.refs._.clone(config)]); //cache the request. 
+					this.Sidebar.ElementRequestCache.push([id, JOBAD.refs.$(element), JOBAD.util.clone(config)]); //cache the request. 
 					
 					if((typeof autoRedraw == 'boolean')?autoRedraw:true){
 						this.Sidebar.redraw();

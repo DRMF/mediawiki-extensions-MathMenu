@@ -22,7 +22,6 @@
 * [JOBAD.ifaces](api/JOBAD/JOBAD.ifaces/index.md) (api/JOBAD/JOBAD.ifaces/index.md)
 * [JOBAD.modules](api/JOBAD/JOBAD.modules/index.md) (api/JOBAD/JOBAD.modules/index.md)
 * [JOBAD.modules.loadedModule](api/JOBAD/JOBAD.modules/loadedModule.md) (api/JOBAD/JOBAD.modules/loadedModule.md)
-* [JOBAD.noConflict](api/JOBAD/JOBAD.noConflict.md) (api/JOBAD/JOBAD.noConflict.md)
 * [JOBAD.refs](api/JOBAD/JOBAD.refs.md) (api/JOBAD/JOBAD.refs.md)
 * [JOBAD.resources](api/JOBAD/JOBAD.resources.md) (api/JOBAD/JOBAD.resources.md)
 * [JOBAD.storageBackend](api/JOBAD/JOBAD.storageBackend.md) (api/JOBAD/JOBAD.storageBackend.md)

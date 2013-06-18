@@ -28,16 +28,16 @@ JOBAD.util = {};
 	@param thisObj 'this' inside functions. 
 */
 JOBAD.util.bindEverything = function(obj, thisObj){
-	if(JOBAD.refs._.isObject(obj) && typeof obj != 'function' ){
+	if(JOBAD.util.isObject(obj) && typeof obj != 'function' ){
 		var ret = {};
 		for(var key in obj){
 			ret[key] = JOBAD.util.bindEverything(obj[key], thisObj);
 		}
 		return ret;
 	} else if(typeof obj == 'function'){
-		return JOBAD.refs._.bind(obj, thisObj);
+		return JOBAD.util.bind(obj, thisObj);
 	} else {
-		return JOBAD.refs._.clone(obj);
+		return JOBAD.util.clone(obj);
 	}
 }
 
@@ -232,3 +232,7 @@ JOBAD.util.isHidden = function(element){
 		return element.is(":hidden");
 	}
 };
+
+//Merge underscore and JOBAD.util namespace
+_.mixin(JOBAD.util);
+JOBAD.util = _.noConflict(); //destroy the original underscore instance. 

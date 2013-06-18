@@ -125,10 +125,11 @@ JOBAD.ifaces.push(function(me, args){
 		return true;
 	};
 	
-	this.Setup.deferUntilDisabled(this.Event); //using this.Event as cache
+	//this.Event is a cache for setup events
+	this.Setup.deferUntilDisabled(this.Event);
 	
 	/* Event namespace */
-	this.Event = {};
+	this.Event = {}; //redefine it
 	
 	//Setup the events
 	for(var key in JOBAD.events){
@@ -184,7 +185,7 @@ JOBAD.modules.ifaces.push([
 	@param evtname Name of the event that is disabled. 
 */
 JOBAD.isEventDisabled = function(evtname){
-	return (JOBAD.refs._.indexOf(JOBAD.config.disabledEvents, evtname) != -1);
+	return (JOBAD.util.indexOf(JOBAD.config.disabledEvents, evtname) != -1);
 };
 
 JOBAD.events = {};

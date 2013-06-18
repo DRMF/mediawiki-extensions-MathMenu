@@ -17,3 +17,23 @@
 * **Function** `JOBAD.modules.getDependencyList(name)` checks the complete dependency tree of a module. Warning: Does not check for circular dependencies. May hang up it in a loop in that case. 
 	* **String** `name` Name of the module to check. 
 	* **returns** an array of dependencies of name including name in such an order, thet they can all be loaded without unresolved dependencies. 
+
+* **Function** `JOBAD.modules.createProperModuleObject(ModuleObject)` - Creates a proper Module Object. 
+	* **Object** `ModuleObject` Module object which is loaded directly. 
+	* **returns** object
+
+* **Function** `JOBAD.modules.createProperUserSettingsObject(obj, modName)` - Creates a proper User Settings Object. 
+	* **Object** `obj` Configuration Object
+	* **String** `modName` Identifier of the module. 
+	* **returns** object
+	
+* **Function** `JOBAD.modules.getDefaultConfigSetting(obj, key)` - Gets the default of a configuration object. 
+	* **Object** `obj` Configuration Object
+	* **String** `key` Key to get. 
+	* **returns** object
+
+* **Function** `JOBAD.modules.validateConfigSetting(obj, key, val)` - Validates if the specefied object of a configuration object can be set. 
+	* **Object** `obj` Configuration Object
+	* **String** `key` Key to validate. 
+	* **Object** `value` Value to vaildate. 
+	* **returns** boolean. 

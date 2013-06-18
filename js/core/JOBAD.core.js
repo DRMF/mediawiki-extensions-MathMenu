@@ -1,5 +1,7 @@
 /*
 	JOBAD 3 Core
+
+	Needs JOBAD.util.js at runtime. 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -41,7 +43,7 @@ var JOBAD = function(element){
 
 	//The element the current JOBAD instance works on. 
 	this.element = element;
-	if(JOBAD.refs._.isElement(this.element)){
+	if(JOBAD.util.isElement(this.element)){
 		this.element = JOBAD.refs.$(this.element);
 	}
 	if(!(this.element instanceof JOBAD.refs.$)){
@@ -80,7 +82,7 @@ JOBAD.config =
 /*
 	JOBAD.console: Mimics  or wraps the native console object if available and debugging is enabled. 
 */
-if(!_.isUndefined(console)){//Console available
+if(typeof console != "undefined"){//Console available
 	
 	JOBAD.console = 
 	{
@@ -123,30 +125,8 @@ JOBAD.error = function(msg){
 */
 JOBAD.refs = {};
 JOBAD.refs.$ = jQuery;
-JOBAD.refs._ = _; 
 
 JOBAD.noConflict = function(){
-	return {
-		"_": JOBAD.noConflict._(),
-		"$": JOBAD.noConflict.$()	
-	}
-}; //No conflict mode
-
-/*
-	sets jQuery in noConflict mode. 
-	@returns jQuery.noConflict()
-*/
-JOBAD.noConflict.$ = function(){
-	
 	JOBAD.refs.$ = JOBAD.refs.$.noConflict();
 	return JOBAD.refs.$;
-};
-
-/*
-	sets Underscore in noConflict mode. 
-	@returns _.noConflict()
-*/
-JOBAD.noConflict._ = function(){
-	JOBAD.refs._ = JOBAD.refs._.noConflict();
-	return JOBAD.refs._;
-};
+}; //No conflict mode

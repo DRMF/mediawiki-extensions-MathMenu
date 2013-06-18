@@ -201,7 +201,7 @@ JOBAD.UI.ContextMenu.generateMenuList = function(menu){
 		return [];
 	}
 	var res = [];
-	if(JOBAD.refs._.isArray(menu)){
+	if(JOBAD.util.isArray(menu)){
 		for(var i=0;i<menu.length;i++){
 			var key = menu[i][0];
 			var val = menu[i][1];
@@ -218,7 +218,7 @@ JOBAD.UI.ContextMenu.generateMenuList = function(menu){
 				var val = menu[key];
 				if(typeof val == 'function'){
 					res.push([key, val, DEFAULT_ICON]);	
-				} else if(JOBAD.refs._.isArray(val)){
+				} else if(JOBAD.util.isArray(val)){
 					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
 						if(typeof val[0] == 'function'){
 							res.push([key, val[0], val[1]]);

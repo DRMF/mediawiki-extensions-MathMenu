@@ -1,5 +1,7 @@
 # JOBAD.util
 
+In addition to these functions, JOBAD.util also contains all underscore (version 1.4.4) functions. See their documentation at [underscorejs.org](http://underscorejs.org/). 
+
 * **Function** `JOBAD.util.UID()` - Gets a unique id which can be used as identifier. 
 * **Function** `JOBAD.util.objectEquals(a, b)` - Checks if two objects are equal. 
 * **Function** `JOBAD.util.bindEverything(object, thisObject)` - Binds every function in `object` to `thisObject`. Also includes nested namespaces. 
@@ -27,22 +29,10 @@
 	* **number** `height` Optional. Height of the tabs. 
 	* **returns** jQuery object. 
 
-
-* **Function** `JOBAD.util.createProperUserSettingsObject(obj, modName)` - Creates a proper User Settings Object. 
-	* **Object** `obj` Configuration Object
-	* **String** `modName` Identifier of the module. 
+* **Function** `JOBAD.util.closest(element, check)` - Similar to jQuery's closest. Travels up the DOM tree and finds the first element which matches check. This includes element itself. 
+	* **jQuery** `element` Element to start with. 
+	* **String** `check` Check to perform. Either a function `check(element)` or a jQuery selector. 
 	* **returns** object
-	
-* **Function** `JOBAD.util.getDefaultConfigSetting` - Gets the default of a configuration object. 
-	* **Object** `obj` Configuration Object
-	* **String** `key` Key to get. 
-	* **returns** object
-
-* **Function** `JOBAD.util.validateConfigSetting(obj, key, val)` - Validates if the specefied object of a configuration object can be set. 
-	* **Object** `obj` Configuration Object
-	* **String** `key` Key to validate. 
-	* **Object** `value` Value to vaildate. 
-	* **returns** boolean. 
 
 * **Function** `JOBAD.util.markHidden(element)` - Marks an element as hidden. 
 	* **jQuery** `element` Element to mark as hidden. 
