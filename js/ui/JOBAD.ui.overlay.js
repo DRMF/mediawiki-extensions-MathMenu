@@ -35,6 +35,7 @@ JOBAD.UI.Overlay.draw = function(element){
 
 	//trigger undraw
 	var element = JOBAD.refs.$(element);
+	var overlay_active = true;
 
 	//trigger undraw
 	JOBAD.UI.Overlay.undraw(element.find("div.ui-widget-overlay").parent());
@@ -57,7 +58,14 @@ JOBAD.UI.Overlay.draw = function(element){
 	//listen for undraw
 	element.one("JOBAD.UI.Overlay.undraw", function(){
 		overlay_element.remove();
+		overlay_active = false; //preven redrawing
 	})
+
+	JOBAD.refs.$(window).one("resize.JOBAD.UI.Overlay", function(){
+		if(overlay_active){
+			JOBAD.UI.Overlay.draw(element); //redraw me
+		}
+	});
 
 	return overlay_element;
 }
@@ -68,4 +76,11 @@ JOBAD.UI.Overlay.draw = function(element){
 */
 JOBAD.UI.Overlay.undraw = function(element){
 	return JOBAD.refs.$(element).trigger("JOBAD.UI.Overlay.undraw");
+}
+
+/*
+	Readraws all overlays. 
+	*/
+JOBAD.UI.Overlay.redraw = function(){
+	JOBAD.refs.$(window).trigger("resize.JOBAD.UI.Overlay");
 }

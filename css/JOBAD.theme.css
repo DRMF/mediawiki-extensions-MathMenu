@@ -82,7 +82,7 @@
 	JOBAD Folding
 */
 
-.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container {
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_folded {
 	/* Right Folding Bracket */
 	width: 3px;
 	border-right: 1px solid black;
@@ -90,12 +90,28 @@
 	border-bottom: 1px solid black;
 }
 
-.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container {
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_folded {
 	/* Left Folding Bracket */
 	width: 3px;
 	border-left: 1px solid black;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
+}
+
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_unfolded {
+	/* Right Folding Bracket */
+	width: 3px;
+	border-right: 1px solid gray;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_unfolded {
+	/* Left Folding Bracket */
+	width: 3px;
+	border-left: 1px solid gray;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
 }
 
 /*

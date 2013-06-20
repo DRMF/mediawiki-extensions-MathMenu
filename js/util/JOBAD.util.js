@@ -233,6 +233,14 @@ JOBAD.util.isHidden = function(element){
 	}
 };
 
+JOBAD.util.defined = function(obj){
+	return (typeof obj == "undefined")?{}:obj;
+}
+
+
+JOBAD.util.forceBool = function(obj, def){
+	return (typeof obj == "boolean"?obj:(def?true:false));
+}
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);
 JOBAD.util = _.noConflict(); //destroy the original underscore instance. 

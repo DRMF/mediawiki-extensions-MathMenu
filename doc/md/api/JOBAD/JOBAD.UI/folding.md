@@ -16,6 +16,7 @@
         * **Object** `config.align` Alignment of the folding. Either 'left' (default) or 'right'.  
         * **Number** `config.height` Height fo the preview / replacement element. Leave empty to assume default. 
         * **Boolean** `config.livePreview` Enable live preview for an element. Default: true. 
+        * **String|Function** `config.preview` String or function which describes the element(s). Will be used as preview text. Optional. `
     * **returns** `element`. 
 
 * **Function** `JOBAD.UI.Folding.disable(element, keep)` - Disables folding on an element. 

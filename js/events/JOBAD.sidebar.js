@@ -330,25 +330,19 @@ JOBAD.events.SideBarUpdate =
 JOBAD.ifaces.push(function(){
 	var me = this;
 
-	this.enableFolding = function(element, align){
-		if((element == "left" || element == "right") && typeof align == "undefined"){
-			align = element;
-			element = undefined;
-		}
+	this.enableFolding = function(element, config){
 		var element = JOBAD.refs.$(element);
-		if(element.length == 0){
-			var element = this.element;
-		}
 
-		return JOBAD.UI.Folding.enable(element, {
-			"update": function(e, childCall){
-				//only update on parent calls; if we do otherwise we'll block. 
-				if(me.Sidebar.redrawing !== true && !childCall){
-					me.Sidebar.redraw();
+		return JOBAD.UI.Folding.enable(element, 
+			JOBAD.util.extend(JOBAD.util.defined(config), {
+				"update": function(e){
+					//only update on parent calls; if we do otherwise we'll block. 
+					if(me.Sidebar.redrawing !== true ){
+						me.Sidebar.redraw();
+					}
 				}
-			},
-			"align": align
-		});
+			})
+		);
 	};
 
 	this.disableFolding = function(element){
