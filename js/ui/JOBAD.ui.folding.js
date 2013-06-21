@@ -299,13 +299,16 @@ JOBAD.UI.Folding.fold = function(element){
 /*
     Unfolds an element
 */
-JOBAD.UI.Folding.unfold = function(element){
-    var element = JOBAD.refs.$(element);
-    if(!element.data("JOBAD.UI.Folding.enabled")){
-        JOBAD.console.log("Can't unfold element: Folding not enabled. ");
-        return false;
-    }
-    element.parent().parent().trigger("JOBAD.UI.Folding.unfold");
+JOBAD.UI.Folding.unfold = function(el){
+    JOBAD.refs.$(el)
+    .each(function(){
+        var element = JOBAD.refs.$(this);
+        if(!element.data("JOBAD.UI.Folding.enabled")){
+            JOBAD.console.log("Can't unfold element: Folding not enabled. ");
+        }
+        element.parent().parent().trigger("JOBAD.UI.Folding.unfold");
+    });
+    
     return true;
 }
 
@@ -372,4 +375,21 @@ JOBAD.UI.Folding.isFoldable = function(element){
     return JOBAD.util.closest(element, function(e){
         return e.data("JOBAD.UI.Folding.enabled");
     }).length > 0;
+}
+/*
+    Shows this element if it is folded.
+*/
+JOBAD.UI.Folding.show = function(element){
+    return JOBAD.refs.$(element).each(function(){
+        var folded = JOBAD.refs.$(this).parents().add(JOBAD.refs.$(this)).filter(function(){
+            var me = JOBAD.refs.$(this);
+            return me.data("JOBAD.UI.Folding.enabled")?true:false;
+        });
+
+        window.folded = folded;
+
+        if(folded.length > 0){
+            JOBAD.UI.Folding.unfold(folded.get().reverse()); //unfold
+         }
+    });
 }

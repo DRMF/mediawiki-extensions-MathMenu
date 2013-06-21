@@ -333,6 +333,10 @@ JOBAD.ifaces.push(function(){
 	this.enableFolding = function(element, config){
 		var element = JOBAD.refs.$(element);
 
+		if(element.length == 0){
+			var element = this.element;
+		}
+
 		return JOBAD.UI.Folding.enable(element, 
 			JOBAD.util.extend(JOBAD.util.defined(config), {
 				"update": function(e){

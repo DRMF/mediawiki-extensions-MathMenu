@@ -27,6 +27,7 @@
 
 .JOBAD.JOBAD_Hover {
 	position: fixed;
+	z-index: 101;
 }
 
 
@@ -38,6 +39,10 @@
 		/* nothing here */
 }
 
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
+	position: fixed;
+	overflow: hidden;
+}
 
 /* 
 	JOBAD Sidebar 

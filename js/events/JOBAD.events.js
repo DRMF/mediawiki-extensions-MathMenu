@@ -154,8 +154,10 @@ JOBAD.events.contextMenuEntries =
 				var res = me.Event.contextMenuEntries.getResult(target);
 				root.trigger('JOBAD.Event', ['contextMenuEntries', target]);
 				return res;
-			}, function(target){
-				return me.Config.get("cmenu_type");
+			}, {
+				"type": function(target){
+					return me.Config.get("cmenu_type");
+				}
 			});
 		},
 		'disable': function(root){

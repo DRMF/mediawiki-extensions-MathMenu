@@ -233,14 +233,64 @@ JOBAD.util.isHidden = function(element){
 	}
 };
 
+/*
+	Checks if object is defined and return obj, otherwise an empty Object. 
+	@param	obj	Object to check. 
+*/
 JOBAD.util.defined = function(obj){
 	return (typeof obj == "undefined")?{}:obj;
 }
 
-
+/*
+	Forces obj to be a boolean. 
+	@param obj	Object to check. 
+	@param def	Optional. Default to use instead. 
+*/
 JOBAD.util.forceBool = function(obj, def){
+	if(typeof def == "undefined"){
+		def = obj; 
+	}
 	return (typeof obj == "boolean"?obj:(def?true:false));
+};
+
+/*
+	Forces obj to be a function. 
+	@param func	Function to check. 
+	@param def	Optional. Default to use instead. 
+*/
+JOBAD.util.forceFunction = function(func, def){
+	//local References
+	var def = def;
+	var func = func;
+	if(typeof func == "function"){
+		return func;
+	} else if(typeof def == "undefined"){
+		return function(){return func; }
+	} else if(typeof def == "function"){
+		return def;
+	} else {
+		return function(){return def; }
+	}
 }
+
+/*
+	If obj is of type type, return obj else def. 
+*/
+JOBAD.util.ifType = function(obj, type, def){
+	return (obj instanceof type)?obj:def;
+}
+
+/*
+	Checks if two strings are equal, ignoring upper and lower case. 
+*/
+JOBAD.util.equalsIgnoreCase = function(a, b){
+	var a = String(a);
+	var b = String(b);
+
+	return (a.toLowerCase() == b.toLowerCase())
+};
+
+
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);
 JOBAD.util = _.noConflict(); //destroy the original underscore instance. 

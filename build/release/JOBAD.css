@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Thu, 20 Jun 2013 13:04:03 +0200
+	built: Fri, 21 Jun 2013 15:02:13 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -52,6 +52,7 @@
 
 .JOBAD.JOBAD_Hover {
 	position: fixed;
+	z-index: 101;
 }
 
 
@@ -63,6 +64,10 @@
 		/* nothing here */
 }
 
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
+	position: fixed;
+	overflow: hidden;
+}
 
 /* 
 	JOBAD Sidebar 
@@ -223,6 +228,23 @@
 
 .JOBAD.JOBAD_Contextmenu {
 	/* applied to the context menu */
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
+	width: 18px;
+	height: 18px;
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
+	/* a radial context menu item */
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem:hover{
+	/* a radial context menu item */
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	border: 1px solid black; 
 }
 
 /* 

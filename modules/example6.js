@@ -31,27 +31,38 @@
 			if(target.is('#nomenu,#nomenu *')){
 				return false;
 			}
-			return {
-					"Show Config UI": function(element){
-						JOBADInstance.showConfigUI();
+
+			
+
+			var entries = [
+				["Show Config UI", function(element){
+					JOBADInstance.showConfigUI();
+				}],
+				["Folding",  {
+					"Trigger on this JOBAD Instance": function(){
+						if(JOBADInstance.element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled on the overall element
+							JOBADInstance.disableFolding();
+						} else {
+							JOBADInstance.enableFolding();
+						}
 					},
-					"Folding": {
-						"Trigger on this JOBAD Instance": function(){
-							if(JOBADInstance.element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled on the overall element
-								JOBADInstance.disableFolding();
-							} else {
-								JOBADInstance.enableFolding();
-							}
-						},
-						"Trigger on this element": function(element){
-							if(element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled
-								JOBADInstance.disableFolding(element);
-							} else {
-								JOBADInstance.enableFolding(element);
-							}
+					"Trigger on this element": function(element){
+						if(element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled
+							JOBADInstance.disableFolding(element);
+						} else {
+							JOBADInstance.enableFolding(element);
 						}
 					}
-				};
+				}]
+			];
+
+			var c = JOBAD.util.random(1, 15);
+
+			for(var i=0;i<c;i++){
+				entries.push(["Random Text No. "+i, function(){alert("nothing here. Move along. "); }])
+			}
+
+			return entries; 
 		}
 	});
 })(JOBAD.refs.$);

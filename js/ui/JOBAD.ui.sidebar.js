@@ -305,6 +305,7 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 		//highlight the element
 		newGuy.hover(
 		function(){
+			JOBAD.UI.Folding.show(element);
 			JOBAD.UI.highlight(element, class_color);
 		},
 		function(){

@@ -518,8 +518,7 @@ JOBAD.ifaces.push(function(JOBADRootElement, params){
 	var config = params[1];
 	
 	var spec = JOBAD.modules.createProperUserSettingsObject({
-		//"cmenu_type": ["list", [0, 1], 0, ["Context Menu Type", "Standard", "Radial"]] //Disabled for now
-		"cmenu_type": ["list", [0], 0, ["Context Menu Type", "Standard"]],
+		"cmenu_type": ["list", ['standard', 'radial'], 'standard', ["Context Menu Type", "Standard", "Radial"]],
 		"sidebar_type": ["list", JOBAD.Sidebar.types, JOBAD.Sidebar.types[0], JOBAD.Sidebar.desc],
 		"restricted_user_config": ["none", []]
 	}, "");
@@ -735,8 +734,6 @@ JOBAD.ifaces.push(function(){
 		$Div.attr("title", "JOBAD Configuration Utility");
 
 		var mods = this.modules.getIdentifiers();
-		
-		
 
 		//create the table
 		
@@ -754,7 +751,6 @@ JOBAD.ifaces.push(function(){
 		var $displayer = JOBAD.refs.$("<td>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_infobox").attr("rowspan", len+1);
 
 		var showMain = function(){
-		
 			var $config = JOBAD.refs.$("<div>");
 			buildjQueryConfig(me.Config.getTypes(), $config, function(key){return me.Config.get(key);})
 		
@@ -907,16 +903,28 @@ JOBAD.ifaces.push(function(){
 		
 		$Div.append($table);
 		
+
+
 		$Div.dialog({
-			modal: true,
 			width: 700,
 			height: 600,
-			open: showMain,
+			modal: true,
 			close: function(){
 				$displayer
 				.trigger("JOBAD.modInfoClose")
-			}
+			},
+			autoOpen: false
 		});	
+
+		showMain();
+
+		$Div
+		.dialog("open")
+		.parent().css({
+			"position": "fixed",
+			"top": Math.max(0, ((window.innerHeight - $Div.outerHeight()) / 2)),
+			"left": Math.max(0, ((window.innerWidth - $Div.outerWidth()) / 2))
+		}).end();
 	}
 });
 

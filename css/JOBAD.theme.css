@@ -46,6 +46,23 @@
 	/* applied to the context menu */
 }
 
+.JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
+	width: 18px;
+	height: 18px;
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
+	/* a radial context menu item */
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem:hover{
+	/* a radial context menu item */
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	border: 1px solid black; 
+}
+
 /* 
 	JOBAD Sidebar 
 */

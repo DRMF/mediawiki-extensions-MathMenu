@@ -16,8 +16,9 @@
         * **Object** `config.align` Alignment of the folding. Either 'left' (default) or 'right'.  
         * **Number** `config.height` Height fo the preview / replacement element. Leave empty to assume default. 
         * **Boolean** `config.livePreview` Enable live preview for an element. Default: true. 
+        * **Boolean** `config.autoFold` Automatically fold this element? Default: false. 
         * **String|Function** `config.preview` String or function which describes the element(s). Will be used as preview text. Optional. `
-    * **returns** `element`. 
+    * **returns** `element`
 
 * **Function** `JOBAD.UI.Folding.disable(element, keep)` - Disables folding on an element. 
 	* **jQuery** `element` - Element(s) to disable folding on. 
@@ -36,6 +37,9 @@
 	* **jQuery** `element` - Element(s) to unfold. 
 	* **returns** boolean
 
-* **Function** `JOBAD.UI.Folding.foldable(element)` - Checks if an element is foldable. 
+* **Function** `JOBAD.UI.Folding.isFoldable(element)` - Checks if an element is foldable. 
 	* **jQuery** `element` - Element to check. 
 	* **returns** boolean
+
+* **Function** `JOBAD.UI.Folding.show(element)` - Shows an element if it is folded. 
+	* **jQuery** `element` - Element to show. 

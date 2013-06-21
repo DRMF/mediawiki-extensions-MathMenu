@@ -500,9 +500,10 @@
 <li><strong>Object</strong> <code>config.align</code> Alignment of the folding. Either 'left' (default) or 'right'.  </li>
 <li><strong>Number</strong> <code>config.height</code> Height fo the preview / replacement element. Leave empty to assume default. </li>
 <li><strong>Boolean</strong> <code>config.livePreview</code> Enable live preview for an element. Default: true. </li>
+<li><strong>Boolean</strong> <code>config.autoFold</code> Automatically fold this element? Default: false. </li>
 <li><strong>String|Function</strong> <code>config.preview</code> String or function which describes the element(s). Will be used as preview text. Optional. `</li>
 </ul></li>
-<li><strong>returns</strong> <code>element</code>. </li>
+<li><strong>returns</strong> <code>element</code></li>
 </ul></li>
 <li><p><strong>Function</strong> <code>JOBAD.UI.Folding.disable(element, keep)</code> - Disables folding on an element. </p>
 
@@ -528,11 +529,16 @@
 <li><strong>jQuery</strong> <code>element</code> - Element(s) to unfold. </li>
 <li><strong>returns</strong> boolean</li>
 </ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.UI.Folding.foldable(element)</code> - Checks if an element is foldable. </p>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Folding.isFoldable(element)</code> - Checks if an element is foldable. </p>
 
 <ul>
 <li><strong>jQuery</strong> <code>element</code> - Element to check. </li>
 <li><strong>returns</strong> boolean</li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.UI.Folding.show(element)</code> - Shows an element if it is folded. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>element</code> - Element to show. </li>
 </ul></li>
 </ul>
 

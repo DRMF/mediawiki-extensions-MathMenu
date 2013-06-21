@@ -19,11 +19,30 @@ The SideBarUpdate event is triggered every time the sidebar is updated.
 
 * **Object** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar` - Namespace for [JOBADInstance](../JOBADInstance/index.md) related sidebar functions. 
 
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()` - Redraws the sidebar. **To redraw the sidebar use this function **
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.getSidebarImplementation(type)` - Gets the specefied sidebar implementation. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redrawT(type)` - Redraws the sidebar for the specefied display style. 
+	* **String** `type` implementation to get. 
 
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config, autoRedraw)` - Registers a new notification on the sidebar. 
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.forceInit()` - Forces an initialisation of the sidebar. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+	* **String** `type` implementation to get. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.makeCache()` Creates a cache of all objects currently in the sidebar. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+	* **returns** the cache. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.transit(to)` Changes the sidebar type to the specefied type. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+	* **String** `to` New type to use. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redraw()` Redraws the sidebar. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.redrawT(type)` Redraws the sidebar using the specefied type. 
+	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+	* **String** `type` Type to use. 
+
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.registerNotification(element, config)` Registers a new notification on the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 	* **jQuery** `element` An element to register the notification on. 
 	* **Object** `config` A map which may contain any of the following members: 
@@ -33,35 +52,15 @@ The SideBarUpdate event is triggered every time the sidebar is updated.
 		* **String** `config.text` A text to use for the notification. 
 		* **Boolean** `config.trace` Highlight the original element when hovering the notification ? 
 		* **Function** `config.click` On click callback. 
-	* **Boolean** `autoRedraw` Optional. Should the sidebar be redrawn? (default: true)
-	* **returns** a jQuery element representing the added notification if autoredraw is true, otherwise nothing. 
-	
-	
 	* **returns** a jQuery element representing the added notification. 
 
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification, autoRedraw)` - Removes a notification from the sidebar. **To remove an element use this function **
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotification(notification, autoRedraw)` Removes a notification from the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 	* **jQuery** `notification` A jQuery element represnting the notification. 
 	* **Boolean** `autoRedraw` Optional. Should the sidebar be redrawn? (default: true)
 
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationSB(notification, autoRedraw)` - Removes a notification from the sidebar for the display style right. 
+* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationT(notification, autoRedraw, type)` Removes a notification from the sidebar. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
 	* **jQuery** `notification` A jQuery element represnting the notification. 
 	* **Boolean** `autoRedraw` Optional. Should the sidebar be redrawn? (default: true)
-
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.removeNotificationTB(notification, autoRedraw)` - Removes a notification from the sidebar for the display style bound to element. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-	* **jQuery** `notification` A jQuery element represnting the notification. 
-	* **Boolean** `autoRedraw` Optional. Should the sidebar be redrawn? (default: true)
-	
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.forceInit()` - Forces an initialisation of the sidebar. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.makeCache()` - Creates a cache of requests for all currently active notifications. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-	
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toSB()` - Removes the bound to element style sidebar and switches to the right sidebar. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
-	
-* **Function** `JOBAD.events.SideBarUpdate.Setup.init.Sidebar.toTB()` - Removes the right style sidebar and switches to the bound to element sidebar. 
-	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `this` The JOBAD Instance to work on. 
+	* **String** `type` Type of Sidebar to use. 
