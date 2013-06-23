@@ -1,10 +1,6 @@
 /*
 	JOBAD 3 UI Functions
 	JOBAD.ui.sidebar.js
-	
-	requires: 
-		JOBAD.core.js
-		JOBAD.ui.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -60,6 +56,8 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 
 	var container = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Wrapper'>");
 
+
+	var orgWrapId = JOBAD.util.safeWrap(org, orgWrapper);
 	org.wrap(orgWrapper);
 
 	orgWrapper = org.parent();
@@ -145,7 +143,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 						var group = JOBAD.refs.$(groups[i]);
 						var top = parseInt(JOBAD.refs.$(group[0]).css("top"));
 
-						var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.resources.icons.open+"' width='16' height='16'></div>")
+						var par = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Group'><img src='"+JOBAD.resources.getIconResource("open")+"' width='16' height='16'></div>")
 						.css("top", top).appendTo(sideBarElement);
 
 						par.on("contextmenu", function(e){return (e.ctrlKey)}); 
@@ -157,14 +155,14 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 								for(var j=0;j<group.length;j++){
 									group[j].hide();
 								}
-								img.attr("src", JOBAD.resources.icons.open);
+								img.attr("src", JOBAD.resources.getIconResource("open"));
 							} else {
 								for(var j=0;j<group.length;j++){
 									if(!group[j].data("JOBAD.UI.Sidebar.hidden")){
 									    group[j].show();
 									}
 								}
-								img.attr("src", JOBAD.resources.icons.close);
+								img.attr("src", JOBAD.resources.getIconResource("close"));
 							}
 							state = !state;
 							
@@ -292,8 +290,8 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	if(typeof config["class"] == 'string'){
 		var notClass = config["class"];
 		
-		if(JOBAD.resources.icons.hasOwnProperty(notClass)){
-			icon = JOBAD.resources.icons[notClass];
+		if(JOBAD.resources.available("icon", notClass)){
+			icon = JOBAD.resources.getIconResource(notClass);
 		}	
 		
 		if(class_colors.hasOwnProperty(notClass)){
@@ -323,7 +321,7 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	}
 	
 	if(typeof config.icon == 'string'){
-		icon = config.icon;
+		icon =  JOBAD.resources.getIconResource(config.icon);
 	}
 	if(typeof icon == 'string'){
 		newGuy.html("<img src='"+icon+"' width='16px' height='16px'>")

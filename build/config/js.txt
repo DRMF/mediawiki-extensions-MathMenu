@@ -1,7 +1,7 @@
 core/JOBAD.core.js
-resources.js
 util/underscore.js
 util/JOBAD.util.js
+JOBAD.resources.js
 core/JOBAD.core.modules.js
 core/JOBAD.core.events.js
 ui/JOBAD.ui.js
@@ -12,6 +12,7 @@ ui/JOBAD.ui.toolbar.js
 ui/JOBAD.ui.overlay.js
 ui/JOBAD.ui.folding.js
 events/JOBAD.sidebar.js
+events/JOBAD.folding.js
 events/JOBAD.events.js
 JOBAD.config.js
 JOBAD.wrap.js

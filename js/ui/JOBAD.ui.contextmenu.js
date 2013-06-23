@@ -1,10 +1,6 @@
 /*
 	JOBAD 3 UI Functions - Context Menu
 	JOBAD.ui.contextmenu.js
-	
-	requires: 
-		JOBAD.core.js
-		JOBAD.ui.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -248,13 +244,8 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 		});
 
 		if(item[2] != "none" ){
-			if(!JOBAD.resources.icons.hasOwnProperty(item[2])){
-				console.log("Can't find icon '"+item[2]+"' in JOBAD.resources.icons. ");
-				item[2] = "error"; //Icon not found
-			}
-			icon = JOBAD.resources.icons[item[2]]; 
 			$a.prepend(
-				JOBAD.refs.$("<img class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon' src='"+icon+"'>")
+				JOBAD.refs.$("<img class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon' src='"+JOBAD.resources.getIconResource(item[2])+"'>")
 			)
 			
 		}
@@ -316,19 +307,8 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 			"left": Y
 		}, 400);
 
-
-
-		//TODO: Add none icon. 
-
-		if(!JOBAD.resources.icons.hasOwnProperty(item[2])){
-			console.log("Can't find icon '"+item[2]+"' in JOBAD.resources.icons. ");
-			item[2] = "error"; //TODO: Add a better default icon
-		}
-		
-		var icon = JOBAD.resources.icons[item[2]];
-
 		$item.append(
-			JOBAD.refs.$("<img src='"+icon+"'>")
+			JOBAD.refs.$("<img src='"+JOBAD.resources.getIconResource(item[2], {"none": "warning"})+"'>")
 			.width(2*r)
 			.height(2*r)
 		);

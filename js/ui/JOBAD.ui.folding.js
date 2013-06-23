@@ -1,11 +1,6 @@
 /*
     JOBAD 3 UI Functions
     JOBAD.ui.folding.js
-    
-    requires: 
-        JOBAD.core.js
-        JOBAD.ui.js
-        JOBAD.ui.overlay.js
         
     Copyright (C) 2013 KWARC Group <kwarc.info>
     
@@ -53,7 +48,7 @@ JOBAD.UI.Folding.config = {
 
 JOBAD.UI.Folding.enable = function(e, c){
 
-    return JOBAD.refs.$(e).each(function(i, element){
+    var results = JOBAD.refs.$(e).each(function(i, element){
         var element = JOBAD.refs.$(element);
 
         //check if we are already enabled
@@ -71,6 +66,7 @@ JOBAD.UI.Folding.enable = function(e, c){
 
         //normalise config properties
         config.autoFold = (typeof config.autoFold == 'boolean')?config.autoFold:false;
+        config.autoRender = JOBAD.util.forceBool(config.autoRender, true);
         config.enable = (typeof config.enable == 'function')?config.enable:function(){};
         config.disable = (typeof config.disable == 'function')?config.disable:function(){};
         config.fold = (typeof config.fold == 'function')?config.fold:function(){};
@@ -133,7 +129,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             //trigger event
             config.fold(element);
             config.stateChange(element, true);
-            JOBAD.UI.Folding.update(element);
+            JOBAD.UI.Folding.update();
         })
         .on("JOBAD.UI.Folding.unfold", function(event){
             event.stopPropagation();
@@ -142,7 +138,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             //trigger event
             config.unfold(element);
             config.stateChange(element, false);
-            JOBAD.UI.Folding.update(element);
+            JOBAD.UI.Folding.update();
         })
         .on("JOBAD.UI.Folding.update", config.livePreview?
         function(event){
@@ -181,7 +177,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             container
             .height(wrapper.height());
 
-            config.update(element);
+            config.update();
         }
         :
         function(event){
@@ -229,7 +225,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             container
             .height(wrapper.height());
 
-            config.update(element, false);
+            config.update();
         });
 
         container
@@ -253,17 +249,16 @@ JOBAD.UI.Folding.enable = function(e, c){
 
         element.click(function(ev){
                 //we are folded
-                JOBAD.UI.Folding.unfold(element);       
+                JOBAD.UI.Folding.unfold();       
                 ev.stopPropagation();
-            
         });
 
-
-        JOBAD.refs.$(window).on("resize.JOBAD.UI.Folding", wrapper.data("JOBAD.UI.Folding.update"));
-
         config.enable(element);
-        JOBAD.UI.Folding.update(element);
     }); 
+
+    JOBAD.UI.Folding.update(); //update at the end
+
+    return results; 
 }
 
 
@@ -271,15 +266,23 @@ JOBAD.UI.Folding.enable = function(e, c){
     Updates a folded element. 
     @param element  Element to update folding on. 
 */
-JOBAD.UI.Folding.update = function(element){
-    var element = JOBAD.refs.$(element);
-    if(!element.data("JOBAD.UI.Folding.enabled")){
-        JOBAD.console.log("Can't update element: Folding not enabled. ");
-        return false;
-    }
 
-    element.parent().parent().trigger("JOBAD.UI.Folding.update");    
-    return true;
+JOBAD.UI.Folding.updating = false; 
+
+JOBAD.UI.Folding.update = function(element){
+    if(JOBAD.UI.Folding.updating){
+        return false;
+    } else {
+        JOBAD.UI.Folding.updating = true;
+        JOBAD.util.orderTree("div.JOBAD_Folding_Wrapper").each(function(){
+            //trigger each one individually. 
+            JOBAD.refs.$(this).trigger("JOBAD.UI.Folding.update");
+        });
+        JOBAD.UI.Folding.updating = false; 
+        JOBAD.refs.$(window).trigger("JOBAD.UI.Folding.update");
+        return true; 
+    }
+    
 }
 
 /*
@@ -346,9 +349,6 @@ JOBAD.UI.Folding.disable = function(element, keep){
     //call event handlers
     element.data("JOBAD.UI.Folding.callback")(element);
     element.data("JOBAD.UI.Folding.onStateChange")(element);
-
-    //unregister event handlers
-    JOBAD.refs.$(window).off("resize.JOBAD.UI.Folding", element.parent().data("JOBAD.UI.Folding.update"));
 
     //remove unneccesary elements. 
     element.data("JOBAD.UI.Folding.wrappers").remove();

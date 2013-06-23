@@ -1,9 +1,6 @@
 /*
 	JOBAD 3 Events
-	depends:
-		JOBAD.core.modules.js
-		JOBAD.core.events.js
-		JOABD.core.js
+	JOBAD.events.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	

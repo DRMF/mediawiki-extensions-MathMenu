@@ -1,9 +1,6 @@
 /*
 	JOBAD 3 UI Functions
 	JOBAD.ui.js
-	
-	requires: 
-		JOBAD.core.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -65,6 +62,5 @@ JOBAD.UI.unhighlight = function(element){
 		finish: function(){
 			element.removeData("JOBAD.UI.highlight.orgColor");
 		}
-	}, 1000);
-		
+	}, 1000);		
 };

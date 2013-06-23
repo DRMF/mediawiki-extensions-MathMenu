@@ -36,24 +36,7 @@ It is also possible to include each file individually.
 As a developer who wants to work on the JOBAD core you can load the JOBAD Core files: 
 
 ```html
-	<script src='js/core/JOBAD.core.js'></script>
-	<script src='js/util/underscore.js'></script>
-	<script src='js/util/JOBAD.util.js'></script>
-	<script src='js/JOBAD.resources.js'></script>
-	<script src='js/core/JOBAD.core.modules.js'></script>
-	<script src='js/core/JOBAD.core.events.js'></script>
-	<script src='js/ui/JOBAD.ui.js'></script>
-	<script src='js/ui/JOBAD.ui.hover.js'></script>
-	<script src='js/ui/JOBAD.ui.contextmenu.js'></script>
-	<script src='js/ui/JOBAD.ui.sidebar.js'></script>
-	<script src='js/ui/JOBAD.ui.toolbar.js'></script>
-	<script src='js/ui/JOBAD.ui.overlay.js'></script>
-	<script src='js/ui/JOBAD.ui.folding.js'></script>
-	<script src='js/events/JOBAD.sidebar.js'></script>
-	<script src='js/events/JOBAD.folding.js'></script>
-	<script src='js/events/JOBAD.events.js'></script>
-	<script src='js/JOBAD.config.js'></script>
-	<script src='js/JOBAD.wrap.js'></script>
+${JS_INCLUDE}
 ```
 
 As a developer who develops JOBAD modules, you can include the built development version: 
@@ -76,8 +59,7 @@ Finally, you should either include the JOBAD CSS release file in your website:
 
 As a developer you can also include the individual theme files: 
 ```html
-	<link rel='stylesheet' type='text/css' href='./../../../css/JOBAD.css'>
-	<link rel='stylesheet' type='text/css' href='./../../../css/JOBAD.theme.css'>
+${CSS_INCLUDE}
 ```
 
 That's it. JOBAD is now included in your web page. Additionally you should include some modules by loading their files as well, see the individual modules. 

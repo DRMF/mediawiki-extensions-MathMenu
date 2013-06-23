@@ -1,8 +1,5 @@
 /*
 	JOBAD Core Event Logic
-	depends:
-		JOBAD.core.modules.js
-		JOABD.core.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	

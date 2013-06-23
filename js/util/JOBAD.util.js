@@ -290,6 +290,117 @@ JOBAD.util.equalsIgnoreCase = function(a, b){
 	return (a.toLowerCase() == b.toLowerCase())
 };
 
+//contains all the safewraps
+var JOBAD_safeWrap_Array = {};
+
+JOBAD.util.safeWrap = function(element, wrapper){
+	//wraps an element safely. 
+	var id = JOBAD.util.UID();
+
+	JOBAD_safeWrap_Array[id] = JOBAD.refs.$(element).map(function(e){
+		var me = JOBAD.refs.$(this);
+		me.wrap(wrapper);
+		return me.parent();
+	});
+
+	return id;
+};
+
+JOBAD.util.getWrapper = function(id){
+	return JOBAD_safeWrap_Array[id];
+}
+
+JOBAD.util.safeUnWrap = function(id){
+	//unwraps an element with the given id safely
+	var wrappers = JOBAD.refs.$(JOBAD_safeWrap_Array[id]);
+	delete JOBAD_safeWrap_Array[id];
+
+	return wrappers.each(function(){
+		if(!JOBAD.refs.$.nodeName(this, "body")){
+			JOBAD.refs.$(this).replaceWith(JOBAD.refs.$(this).children());
+		}
+	})
+};
+
+/*
+	Orders a jQuery collection by their tree depth. 
+	@param element Collection to sort. 
+*/
+JOBAD.util.orderTree = function(element){
+	var element = JOBAD.refs.$(element);
+	return JOBAD.refs.$(element.get().sort(function(a, b){
+		var a = JOBAD.refs.$(a).parents().filter(element).length;
+		var b = JOBAD.refs.$(b).parents().filter(element).length;
+
+		if(a<b){
+			return -1;
+		} else if(a > b){
+			return 1;
+		} else {
+			return 0;
+		}
+	}));
+}
+/*
+	Checks if a string is a URL. 
+	@param str	String to check. 
+	@returns boolean. 
+*/
+JOBAD.util.isUrl = function(str){
+	return (new RegExp('^(https?:\/\/)?'+
+    '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+
+    '((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
+    '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
+    '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
+    '(\#[-a-z\d_]*)?$','i')).test(str); // fragment locater
+}
+
+/*
+	logical or
+*/
+JOBAD.util.lOr = function(){
+	var args = [];
+	for(var i=0;i<arguments.length;i++){
+		args.push(arguments[i]);
+	}
+
+	args = JOBAD.util.map(JOBAD.util.flatten(args), JOBAD.util.forceBool);
+
+	return (JOBAD.util.indexOf(args, true)!= -1);
+
+}
+
+/*
+	logical and
+*/
+JOBAD.util.lAnd = function(){
+	var args = [];
+	for(var i=0;i<arguments.length;i++){
+		args.push(arguments[i]);
+	}
+
+	args = JOBAD.util.map(JOBAD.util.flatten(args), JOBAD.util.forceBool);
+
+	return (JOBAD.util.indexOf(args, false)== -1);
+
+}
+
+/*
+	Checks if a jQuery element container contains all of contained. 
+	Similar to jQuery.contains
+	@param	container	Container element. 
+	@param	contained	Contained elements. 
+	@param	includeSelf	Should container itself be included in the search
+*/
+JOBAD.util.containsAll = function(container, contained, includeSelf){
+	var container = JOBAD.refs.$(container); 
+	return JOBAD.util.lAnd(
+		JOBAD.refs.$(contained).map(function(){
+			return container.is(contained) || (includeSelf && container.find(contained).length > 0); 
+		}).get()
+	);
+}
+
 
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);

@@ -10,4 +10,3 @@ Here you can find examples of JOBAD.
 	* [Release version](./../../examples/build/math/release.html)
 	* [Development version](./../../examples/build/math/dev.html)
 	* [Unbuilt version](./../../examples/build/math/unbuilt.html)
-

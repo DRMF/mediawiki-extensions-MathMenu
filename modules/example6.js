@@ -40,17 +40,17 @@
 				}],
 				["Folding",  {
 					"Trigger on this JOBAD Instance": function(){
-						if(JOBADInstance.element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled on the overall element
-							JOBADInstance.disableFolding();
+						if(JOBADInstance.Folding.isEnabled(JOBADInstance.element)){ //check if folding is enabled on the overall element
+							JOBADInstance.Folding.disable(); 
 						} else {
-							JOBADInstance.enableFolding();
+							JOBADInstance.Folding.enable(); 
 						}
 					},
 					"Trigger on this element": function(element){
-						if(element.data("JOBAD.UI.Folding.enabled")){ //check if folding is enabled
-							JOBADInstance.disableFolding(element);
+						if(JOBADInstance.Folding.isEnabled(element)){ //check if folding is enabled on the overall element
+							JOBADInstance.Folding.disable(element); 
 						} else {
-							JOBADInstance.enableFolding(element);
+							JOBADInstance.Folding.enable(element); 
 						}
 					}
 				}]

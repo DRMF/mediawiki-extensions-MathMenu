@@ -1,9 +1,6 @@
 /*
 	JOBAD 3 Sidebar
-	depends:
-		JOBAD.core.modules.js
-		JOBAD.core.events.js
-		JOABD.core.js
+	JOBAD.sidebar.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -24,7 +21,6 @@
 */
 
 
-//TODO: Implement the API properly
 JOBAD.Sidebar = {};
 JOBAD.Sidebar.styles = {};
 JOBAD.Sidebar.types = [];
@@ -172,13 +168,7 @@ JOBAD.events.SideBarUpdate =
 				'redrawT': function(type){
 					this.Sidebar.redrawing = true;
 
-					var enable_later = false;
 					var root = this.element;
-
-					if(root.data("JOBAD.UI.Folding.enabled")){
-						JOBAD.UI.Folding.disable(root, true); //keep me hidden
-						enable_later = true;
-					}
 
 					var implementation = this.Sidebar.getSidebarImplementation(type);
 					
@@ -199,10 +189,6 @@ JOBAD.events.SideBarUpdate =
 					//update and trigger event
 					implementation["update"]();
 					this.Event.SideBarUpdate.trigger();
-
-					if(enable_later){
-						JOBAD.UI.Folding.enable(root, root.data("JOBAD.UI.Folding.config"));
-					}
 
 					this.Sidebar.redrawing = false;
 				},
@@ -288,6 +274,8 @@ JOBAD.events.SideBarUpdate =
 			}
 		},
 		'enable': function(root){
+			var me = this; 
+
 			this.Event.SideBarUpdate.enabled = true;
 			this.Event.SideBarUpdate.type = this.Config.get("sidebar_type"); //init the type
 			this.Sidebar.redraw(); //redraw the sidebar
@@ -326,35 +314,3 @@ JOBAD.events.SideBarUpdate =
 		}
 	}
 };
-
-JOBAD.ifaces.push(function(){
-	var me = this;
-
-	this.enableFolding = function(element, config){
-		var element = JOBAD.refs.$(element);
-
-		if(element.length == 0){
-			var element = this.element;
-		}
-
-		return JOBAD.UI.Folding.enable(element, 
-			JOBAD.util.extend(JOBAD.util.defined(config), {
-				"update": function(e){
-					//only update on parent calls; if we do otherwise we'll block. 
-					if(me.Sidebar.redrawing !== true ){
-						me.Sidebar.redraw();
-					}
-				}
-			})
-		);
-	};
-
-	this.disableFolding = function(element){
-		var element = JOBAD.refs.$(element);
-		if(element.length == 0){
-			var element = this.element;
-		}
-
-		return JOBAD.UI.Folding.disable(element);
-	};
-});

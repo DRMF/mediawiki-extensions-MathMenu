@@ -1,11 +1,6 @@
 /*
 	JOBAD 3 UI Functions
 	JOBAD.ui.overlay.js
-	
-	requires: 
-		JOBAD.core.js
-		JOBAD.ui.js
-		JOBAD.util.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	

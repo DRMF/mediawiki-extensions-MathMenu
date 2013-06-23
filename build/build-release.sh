@@ -1,8 +1,12 @@
 #!/bin/bash
 
-mkdir -p "release"
-basedir=../
-destdir=release/
+BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+
+basedir=$BASE_PATH/../
+destdir=$BASE_PATH/release/
+
+mkdir -p $destdir
 
 # JS Builting config
 build="$destdir"JOBAD.js
@@ -31,16 +35,16 @@ fi
 printf "Compiling development version ... "
 
 
-cat config/dev_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $build
+cat $BASE_PATH/config/dev_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $build
 
 while read filename
 do
 	echo "/* start <$filename> */" >> $build
 	cat $sourcedirjs/$filename >> $build
 	echo "/* end   <$filename> */" >> $build
-done < "./config/js.txt"
+done < "$BASE_PATH/config/js.txt"
 
-cat config/dev_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $build
+cat $BASE_PATH/config/dev_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $build
 
 echo "OK"
 
@@ -54,11 +58,11 @@ echo "OK"
 
 printf "Compiling minimized version ... "
 
-cat config/min_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildmin
+cat $BASE_PATH/config/min_header.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildmin
 
-python ./deps/closurecompilerpy/closureCompiler.py -s $buildmin.tmp >> $buildmin
+python $BASE_PATH/deps/closurecompilerpy/closureCompiler.py -s $buildmin.tmp >> $buildmin
 
-cat config/min_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $buildmin
+cat $BASE_PATH/config/min_footer.js | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $buildmin
 
 RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"
@@ -66,13 +70,13 @@ RETVAL=$?
 
 
 echo "Done. Building CSS file ..."
-cat config/css_header.css | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildc
+cat $BASE_PATH/config/css_header.css | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildc
 while read filename
 do
 	echo "/* start <$filename> */" >> $buildc
 	cat $sourcedirc/$filename >> $buildc
 	echo "/* end   <$filename> */" >> $buildc
-done < "./config/css.txt"
+done < "$BASE_PATH/config/css.txt"
 
 printf "Done. "
 

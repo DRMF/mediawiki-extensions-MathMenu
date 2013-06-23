@@ -1,7 +1,5 @@
 /*
 	JOBAD Core Module logic
-	depends:
-		JOBAD.core.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	

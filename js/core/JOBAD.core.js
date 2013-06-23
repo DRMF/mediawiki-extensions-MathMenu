@@ -1,7 +1,5 @@
 /*
 	JOBAD 3 Core
-
-	Needs JOBAD.util.js at runtime. 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -34,6 +32,8 @@ var JOBAD = function(element){
 	if(!(this instanceof JOBAD)){
 		return new JOBAD(element);	
 	}
+
+	var me = this; 
 	
 	//Add init arguments
 	this.args = [];
@@ -48,6 +48,15 @@ var JOBAD = function(element){
 	}
 	if(!(this.element instanceof JOBAD.refs.$)){
 		JOBAD.error("Can't create JOBADInstance: Not a DOM Element. ");
+		return false;
+	}
+
+	/*
+		Checks if this JOBAD Instance contains an element. 
+		@param	el	Element to check. 
+	*/
+	this.contains = function(el){
+		return JOBAD.util.containsAll(me.element, el, true);
 	}
 	
 	//IFace extensions
@@ -57,6 +66,8 @@ var JOBAD = function(element){
 			mod.call(this, this, this.args); 
 		}
 	}
+
+	this.ID = JOBAD.util.UID(); 
 };
 
 JOBAD.ifaces = []; //JOBAD interfaces

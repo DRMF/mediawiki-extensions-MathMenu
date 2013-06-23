@@ -35,6 +35,7 @@
 * [JOBADInstance.Event.leftClick](api/JOBAD/JOBADInstance/event/leftClick.md) (api/JOBAD/JOBADInstance/event/leftClick.md)
 * [JOBADInstance.Event.onEvent](api/JOBAD/JOBADInstance/event/onEvent.md) (api/JOBAD/JOBADInstance/event/onEvent.md)
 * [JOBADInstance.Event.SideBarUpdate](api/JOBAD/JOBADInstance/event/onSideBarUpdate.md) (api/JOBAD/JOBADInstance/event/onSideBarUpdate.md)
+* [JOBADInstance.Folding](api/JOBAD/JOBADInstance/folding.md) (api/JOBAD/JOBADInstance/folding.md)
 * [JOBADInstance](api/JOBAD/JOBADInstance/index.md) (api/JOBAD/JOBADInstance/index.md)
 * [JOBADInstance.Modules](api/JOBAD/JOBADInstance/modules.md) (api/JOBAD/JOBADInstance/modules.md)
 * [JOBADInstance.Setup](api/JOBAD/JOBADInstance/setup.md) (api/JOBAD/JOBADInstance/setup.md)

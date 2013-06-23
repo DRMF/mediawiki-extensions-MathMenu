@@ -1,5 +1,6 @@
 /*
 	JOBAD Configuration
+	JOBAD.config.js
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
@@ -773,21 +774,21 @@ JOBAD.ifaces.push(function(){
 					[
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("JOBAD Core Version "+JOBAD.version),
-							JOBAD.refs.$("<pre>").text(JOBAD.resources.jobad_license)
+							JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("jobad_license"))
 						),
 						$config,
-						JOBAD.refs.$("<pre>").text(JOBAD.resources.gpl_v3_text),
+						JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("gpl_v3_text")),
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("jQuery Version "+JOBAD.refs.$.fn.jquery),
-							JOBAD.refs.$("<pre>").text(JOBAD.resources.jquery_license)
+							JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("jquery_license"))
 						),
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("jQuery UI Version "+JOBAD.refs.$.ui.version),
-							JOBAD.refs.$("<pre>").text(JOBAD.resources.jqueryui_license)
+							JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("jqueryui_license"))
 						),
 						JOBAD.refs.$("<div>").append(
 							JOBAD.refs.$("<span>").text("Underscore Version "+JOBAD.util.VERSION),
-							JOBAD.refs.$("<pre>").text(JOBAD.resources.underscore_license)
+							JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("underscore_license"))
 						)
 					], {}, 400
 				).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")

@@ -1,10 +1,6 @@
 /*
 	JOBAD 3 UI Functions - Hover Text
 	JOBAD.ui.hover.js
-	
-	requires: 
-		JOBAD.core.js
-		JOBAD.ui.js
 		
 	Copyright (C) 2013 KWARC Group <kwarc.info>
 	
