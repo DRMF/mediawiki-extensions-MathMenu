@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD.config] - JOBAD Documentation</title>
+		<title>[Building JOBAD] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,17 +478,58 @@
 -->
 	</head>
 	<body>
-<p><a href="../../index.html">Start</a> &gt; <a href="../index.html">API Documentation</a> &gt; <a href="index.html">JOBAD</a> &gt; <strong>JOBAD.config</strong></p>
-<h1>JOBAD.config</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Building JOBAD</strong></p>
+<h1>Building JOBAD</h1>
 
-<p>This object contains the configuration settings for JOBAD. </p>
+<p><strong>Building is not neccessary for the end user.</strong></p>
 
-<ul>
-<li><strong>Boolean</strong> <code>JOBAD.config.debug</code> - <code>true</code> if debugging is enabled, otherwise <code>false</code>. Determines if errors are automatically logged to the console. Default: <code>false</code> for relase versions, <code>true</code> for development versions</li>
-<li><strong>Boolean</strong> <code>JOBAD.config.cleanModuleNamespace</code> - Force modules to have a clean namespace. May cause errors when set to <code>true</code> with some modules. Default: <code>false</code></li>
-<li><strong>Array[String]</strong> <code>JOBAD.config.disabledEvents</code> - List of disabled events. Default: <code>[]</code></li>
-<li><strong>String</strong> <code>JOBAD.config.storageBackend</code> - Storage Backend to use. Default: <code>cookie</code></li>
-</ul>
+<p>Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
+A minimized version is also created by running it through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </p>
+
+<p>The documentation of JOBAD can also be build. It needs to be compiled from markdown files into html files. </p>
+
+<p>The examples of JOBAD are also auto-generated from templates. </p>
+
+<p>Both the current release versions and the Documentation are always found in the repository.</p>
+
+<p>Building is currently only supported on linux. </p>
+
+<p><strong>Building is not neccessary for the end user.</strong></p>
+
+<h2>Building preparations</h2>
+
+<p>To build JOBAD, you need to have <code>python</code> installed. To compile the minimized version, an active internet connection is required. </p>
+
+<p>To build the JOBAD documentation, the python modules <a href="https://github.com/trentm/python-markdown2">markdown2</a>, <a href="http://pygments.org/">pygments</a> and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup 4</a> are required. </p>
+
+<p>Before you build make sure that all the git submodules of the repository have been pulled. If you cloned with <code>--recursive</code> you should be fine, otherwise 
+you might want to run <code>git submodule update --init --recursive</code>. </p>
+
+<h2>Building</h2>
+
+<p>To build the the JOBAD developments versions, run </p>
+
+<div class="codehilite"><pre><code><span class="nb">cd </span>build
+./build-release.sh
+</code></pre></div>
+
+<p>If you wish to build the Documentation, use </p>
+
+<div class="codehilite"><pre><code><span class="nb">cd </span>build
+./build-doc.sh
+</code></pre></div>
+
+<p>If you wish to build the Examples, use </p>
+
+<div class="codehilite"><pre><code><span class="nb">cd </span>build
+./build-templates.sh
+</code></pre></div>
+
+<p>To build everything use </p>
+
+<div class="codehilite"><pre><code><span class="nb">cd </span>build
+./build-all.sh
+</code></pre></div>
 
 	</body>
 </html>

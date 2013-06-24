@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Sun, 23 Jun 2013 14:51:01 +0200
+	built: Mon, 24 Jun 2013 18:13:37 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -68,13 +68,20 @@ var JOBAD = function(element){
 	}
 
 	//The element the current JOBAD instance works on. 
-	this.element = element;
-	if(JOBAD.util.isElement(this.element)){
-		this.element = JOBAD.refs.$(this.element);
+	this.element = JOBAD.refs.$(element);
+
+	if(this.element.length == 0){
+		JOBAD.error("Can't create JOBADInstance: Element Collection seems to be empty. ");
+		return; 
 	}
-	if(!(this.element instanceof JOBAD.refs.$)){
-		JOBAD.error("Can't create JOBADInstance: Not a DOM Element. ");
-		return false;
+
+	if(this.element.length > 1){
+		JOBAD.console.warn("Warning: More than one element specefied for JOBADInstance. This may cause problems with some modules. ");
+	}
+
+	if(JOBAD.util.isMarkedHidden(element)){
+		JOBAD.error("Can't create JOBADInstance: Element marked as hidden. ");
+		return; 
 	}
 
 	/*
@@ -1461,7 +1468,7 @@ JOBAD.util.bindEverything = function(obj, thisObj){
 	} else {
 		return JOBAD.util.clone(obj);
 	}
-}
+};
 
 /*
 	Creates a unique ID
@@ -1531,7 +1538,7 @@ JOBAD.util.createTabs = function(names, divs, options, height){
 		div.append(ndiv);
 	}
 	return div.tabs(options);
-}
+};
 
 /*
 	Applies a function to the arguments of a function every time it is called. 
@@ -1594,7 +1601,7 @@ JOBAD.util.closest = function(element, selector){
 	} else {
 		return element.closest(selector);
 	}
-}
+};
 
 /* Element marking */
 /*
@@ -1602,7 +1609,7 @@ JOBAD.util.closest = function(element, selector){
 	@param	element	Element to mark as hidden. 
 */
 JOBAD.util.markHidden = function(element){
-	return JOBAD.refs.$(element).data("JOBAD.util.hidden", true);
+	return JOBAD.util.markDefault(element).addClass("JOBAD_Ignore");
 };
 
 /*
@@ -1610,7 +1617,7 @@ JOBAD.util.markHidden = function(element){
 	@param	element	Element to mark as visible. 
 */
 JOBAD.util.markVisible = function(element){
-	return JOBAD.refs.$(element).data("JOBAD.util.hidden", false);
+	return JOBAD.util.markDefault(element).addClass("JOBAD_Notice");
 };
 
 /*
@@ -1618,8 +1625,8 @@ JOBAD.util.markVisible = function(element){
 	@param	element	Element to remove Marking from. 
 */
 JOBAD.util.markDefault = function(element){
-	return JOBAD.refs.$(element).removeData("JOBAD.util.hidden")
-}
+	return JOBAD.refs.$(element).removeClass("JOBAD_Ignore").removeClass("JOBAD_Notice");
+};
 
 /*
 	Checks if an element is marked as hidden. 
@@ -1628,7 +1635,7 @@ JOBAD.util.markDefault = function(element){
 JOBAD.util.isMarkedHidden = function(element){
 	return (JOBAD.util.closest(element, function(e){
 		//find the closest hidden one. 
-		return e.data("JOBAD.util.hidden") == true;
+		return e.hasClass("JOBAD_Ignore");
 	}).length > 0);
 };
 
@@ -1637,7 +1644,7 @@ JOBAD.util.isMarkedHidden = function(element){
 	@param	element	Element to check. 
 */
 JOBAD.util.isMarkedVisible = function(element){
-	return JOBAD.refs.$(element).data("JOBAD.util.hidden") == false;
+	return JOBAD.refs.$(element).hasClass("JOBAD_Notice");;
 };
 
 /*
@@ -1661,7 +1668,7 @@ JOBAD.util.isHidden = function(element){
 */
 JOBAD.util.defined = function(obj){
 	return (typeof obj == "undefined")?{}:obj;
-}
+};
 
 /*
 	Forces obj to be a boolean. 
@@ -1762,7 +1769,8 @@ JOBAD.util.orderTree = function(element){
 			return 0;
 		}
 	}));
-}
+};
+
 /*
 	Checks if a string is a URL. 
 	@param str	String to check. 
@@ -1775,7 +1783,7 @@ JOBAD.util.isUrl = function(str){
     '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
     '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
     '(\#[-a-z\d_]*)?$','i')).test(str); // fragment locater
-}
+};
 
 /*
 	logical or
@@ -1785,12 +1793,10 @@ JOBAD.util.lOr = function(){
 	for(var i=0;i<arguments.length;i++){
 		args.push(arguments[i]);
 	}
-
 	args = JOBAD.util.map(JOBAD.util.flatten(args), JOBAD.util.forceBool);
-
 	return (JOBAD.util.indexOf(args, true)!= -1);
 
-}
+};
 
 /*
 	logical and
@@ -1800,12 +1806,9 @@ JOBAD.util.lAnd = function(){
 	for(var i=0;i<arguments.length;i++){
 		args.push(arguments[i]);
 	}
-
 	args = JOBAD.util.map(JOBAD.util.flatten(args), JOBAD.util.forceBool);
-
 	return (JOBAD.util.indexOf(args, false)== -1);
-
-}
+};
 
 /*
 	Checks if a jQuery element container contains all of contained. 
@@ -1821,7 +1824,7 @@ JOBAD.util.containsAll = function(container, contained, includeSelf){
 			return container.is(contained) || (includeSelf && container.find(contained).length > 0); 
 		}).get()
 	);
-}
+};
 
 
 //Merge underscore and JOBAD.util namespace

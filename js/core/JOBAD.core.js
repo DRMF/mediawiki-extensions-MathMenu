@@ -42,13 +42,20 @@ var JOBAD = function(element){
 	}
 
 	//The element the current JOBAD instance works on. 
-	this.element = element;
-	if(JOBAD.util.isElement(this.element)){
-		this.element = JOBAD.refs.$(this.element);
+	this.element = JOBAD.refs.$(element);
+
+	if(this.element.length == 0){
+		JOBAD.error("Can't create JOBADInstance: Element Collection seems to be empty. ");
+		return; 
 	}
-	if(!(this.element instanceof JOBAD.refs.$)){
-		JOBAD.error("Can't create JOBADInstance: Not a DOM Element. ");
-		return false;
+
+	if(this.element.length > 1){
+		JOBAD.console.warn("Warning: More than one element specefied for JOBADInstance. This may cause problems with some modules. ");
+	}
+
+	if(JOBAD.util.isMarkedHidden(element)){
+		JOBAD.error("Can't create JOBADInstance: Element marked as hidden. ");
+		return; 
 	}
 
 	/*

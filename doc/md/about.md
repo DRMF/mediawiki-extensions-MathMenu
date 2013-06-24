@@ -25,14 +25,20 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * removed Underscore as a dependency
 	* it is now included in the `JOBAD.util` namespace, `JOBAD.refs._` has been removed. 
 * added marking elements as hidden or visible so they can be ignored by events & UI. 
+* split up JOBAD into event more files; added foldes for more structure in code. 
 * added JOBAD Folding
 	* allows to fold elements, at the moment only usable via code. 
 	* either on the left or on the right. 
 	* always inside of the sidebar. 
+* added the radial menu (also known as the icon menu)
+	* as an alternative tto the normal menu. 
+	* only configurable via code. 
+	* also allowing custom icons
 * added configUpdate event
 * added doubleClick event
 * split up the CSS in one JOBAD.css file and one user-configurable JOBAD.theme.css file. 
 * a bunch of internal fixes and improvements
+* updated jQuery to version 2.0.2
 * updated the documentation (a lot)
 
 ### Version 3.0 (Stable)

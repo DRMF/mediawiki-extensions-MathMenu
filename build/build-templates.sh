@@ -29,10 +29,10 @@ jobad_css_dev_full=""
 while read filename
 do
 	jobad_css_full="$jobad_css_full<link rel='stylesheet' type='text/css' href='$jobad_base\/css\/$filename'>\n"
-	jobad_css_dev_full="$jobad_css_dev_full	<link rel='stylesheet' type='text/css' href='$jobad_base\/css\/$filename'>\n"
+	jobad_cssdev_full="$jobad_cssdev_full	<link rel=\"stylesheet\" type=\"text/css\" href=\"css\/$filename\">\n"
 done < "$BASE_PATH/config/css.txt"
 jobad_css_full="${jobad_css_full%??}"
-jobad_css_dev_full="${jobad_css_dev_full%??}"
+jobad_cssdev_full="${jobad_cssdev_full%??}"
 
 jobad_release="<script src='$jobad_base\/build\/release\/JOBAD.min.js'><\/script>\n"
 jobad_dev="<script src='$jobad_base\/build\/release\/JOBAD.js'><\/script>\n"
@@ -84,7 +84,7 @@ for fname in $(cd $doc_md_source; find -type f); do
  	cat "$doc_md_source/$fname" | sed \
 		-e "s/\${JOBAD_TEMPLATES}/$jobad_templates/" \
 		-e "s%\${JS_INCLUDE}%$jobad_script_dev_full%" \
-		-e "s%\${CSS_INCLUDE}%$jobad_css_dev_full%" \
+		-e "s%\${CSS_INCLUDE}%$jobad_cssdev_full%" \
 	> "$doc_md_dest/$fname"
 done
 

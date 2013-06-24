@@ -481,55 +481,24 @@
 <p><a href="index.html">Start</a> &gt; <strong>Building JOBAD</strong></p>
 <h1>Building JOBAD</h1>
 
-<p><strong>Building is not neccessary for the end user.</strong></p>
-
 <p>Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
-A minimized version is also created by running it through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </p>
+Also a minimized version is created by running it through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. 
+Similarly, the JOBAD Templates and Documentation are gernated automatically from source files. </p>
 
-<p>The documentation of JOBAD can also be build. It needs to be compiled from markdown files into html files. </p>
+<p>Building is currently only supported on linux, <strong>building is not neccessary for the end user</strong>. Building depends on the following software: 
+*  <a href="http://www.python.org/">Python</a>, tested with version 2.7.4. Also needs the following libraries / scripts: 
+    * <a href="https://github.com/trentm/python-markdown2">markdown2</a> - a python implmentation of markdown
+    * <a href="http://pygments.org/">pygments</a> - a python syntax highlighter
+    * <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup 4</a> - a python html library
+    * <a href="https://github.com/tkw1536/PythonMarkdownCompiler">PythonMarkdownCompiler</a>, included in the git repository as a git submodule
+    * <a href="https://github.com/tkw1536/ClosureCompilerPy">ClosureCompilerPy</a>, included in the git repository as a git submodule
+* <a href="https://www.gnu.org/software/bash/">GNU Bash</a></p>
 
-<p>The examples of JOBAD are also auto-generated from templates. </p>
-
-<p>Both the current release versions and the Documentation are always found in the repository.</p>
-
-<p>Building is currently only supported on linux. </p>
-
-<p><strong>Building is not neccessary for the end user.</strong></p>
-
-<h2>Building preparations</h2>
-
-<p>To build JOBAD, you need to have <code>python</code> installed. To compile the minimized version, an active internet connection is required. </p>
-
-<p>To build the JOBAD documentation, the python modules <a href="https://github.com/trentm/python-markdown2">markdown2</a>, <a href="http://pygments.org/">pygments</a> and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup 4</a> are required. </p>
-
-<p>Before you build make sure that all the git submodules of the repository have been pulled. If you cloned with <code>--recursive</code> you should be fine, otherwise 
-you might want to run <code>git submodule update --init --recursive</code>. </p>
-
-<h2>Building</h2>
-
-<p>To build the the JOBAD developments versions, run </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-release.sh
-</code></pre></div>
-
-<p>If you wish to build the Documentation, use </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-doc.sh
-</code></pre></div>
-
-<p>If you wish to build the Examples, use </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-templates.sh
-</code></pre></div>
-
-<p>To build everything use </p>
-
-<div class="codehilite"><pre><code><span class="nb">cd </span>build
-./build-all.sh
-</code></pre></div>
+<p>All build scripts are located in the <code>build</code> subdirectory. 
+    * To build the demos, use <code>build-templates.sh</code>
+    * To build the documentation, use <code>build-doc.sh</code>
+    * To build the release version, use <code>build-release.sh</code>
+    * To build all of the above, use <code>build-all.sh</code></p>
 
 	</body>
 </html>

@@ -4,6 +4,7 @@
 * [Modules](modules.md) - Introduction to writing your own modules. 
 * [Module examples](example_module.md) - Example Modules
 * [Events](events.md) - Information about Event Processing works in JOBAD
+* [Building](build.md) - Information on how to build JOBAD
 
 ## See also
 * [API Documentation](../api/index.md) - Detailed documentation of the API
