@@ -497,7 +497,7 @@
 <ul>
 <li><strong>Array[3|4]</strong> <code>spec</code> Contains the specification. 
 <ul>
-<li><strong>String</strong> <code>spec[0] = type</code> The type of the setting: <code>string</code> (a string), <code>bool</code> (a boolean), <code>number</code> (a number), <code>integer</code> (an integer) or <code>list</code> (a list of different values to select from). </li>
+<li><strong>String</strong> <code>spec[0] = type</code> The type of the setting: <code>string</code> (a string), <code>bool</code> (a boolean), <code>number</code> (a number), <code>integer</code> (an integer), <code>list</code> (a list of different values to select from) or <code>none</code> (hidden from user, can be anything). </li>
 <li><strong>Mixed</strong> <code>spec[1] = restrictions</code> Restrictions to apply for setting. Optional if type if not <code>list</code>. 
 <ul>
 <li>for <code>string</code>: a regular expression or a function <code>check(value)</code> which returns a boolean. </li>
@@ -509,7 +509,7 @@
 <li><strong>Mixed</strong> <code>spec[3|2] = meta</code> Meta information. If type is not <code>list</code>, may either be a string (with name of setting) 
 or an array containg the name of the setting and optionally a longer description of this setting. For <code>list</code>, this must be an array containg the setting name 
 and the name of each option. <br />
-There is also the special option type 'none', which represents a hidden setting which can not be changed by the user. It has a default but no validator. </li>
+There is also the special option type 'none', which represents a hidden setting which can not be changed by the user. It has a default but no validator and no meta. </li>
 </ul></li>
 </ul></li>
 <li><p><strong>Function</strong> <code>template.configUpdate(key, JOBADInstance)</code> Called every time a user configuration is updated.  </p>
@@ -548,7 +548,7 @@ There is also the special option type 'none', which represents a hidden setting 
 <ul>
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> a text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="template.html#fn-1">1</a></sup> or a boolean indicating either the text or if something was done. </li>
+<li><strong>returns</strong> a text, a jQuery-ish object[^1] or a boolean indicating either the text or if something was done. </li>
 </ul></li>
 <li><p><strong>Function</strong> <code>template.leftClick(target, JOBADInstance)</code> Called when a left click is performed. May be ommitted. </p>
 
@@ -587,7 +587,7 @@ There is also the special option type 'none', which represents a hidden setting 
 <li><strong>Instance[ <a href="JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> ]</strong> <code>this</code> The current module instance. </li>
 <li><strong>jQuery</strong> <code>target</code> The element that was hovered clicked on. </li>
 <li><strong>Instance[ <a href="JOBAD/JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
-<li><strong>returns</strong> a text, a jQuery-ish object<sup class="footnote-ref" id="fnref-1"><a href="template.html#fn-1">2</a></sup> or a boolean indicating either the text or if something was done. </li>
+<li><strong>returns</strong> a text, a jQuery element or a boolean indicating either the text or if something was done. </li>
 </ul></li>
 <li><strong>Function</strong> <code>template.onEvent(event, element, JOBADInstance)</code> Called when an onEvent handler is requested. May be ommitted. 
 <ul>
@@ -601,23 +601,8 @@ There is also the special option type 'none', which represents a hidden setting 
 <h2>See also</h2>
 
 <ul>
-<li><a href="../dev/modules.html">Getting started with modules</a></li>
+<li><a href="../intro/modules.html">Getting started with modules</a></li>
 </ul>
-
-<h2>Footnotes</h2>
-
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="template.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 1 in the text.">&#8617;</a></p>
-</li>
-
-<li id="fn-1">
-<p>A jQuery-ish object is any object that can be passed to the main jQuery function, for example a document node or a jQuery selector.&nbsp;<a href="template.html#fnref-1" class="footnoteBackLink" title="Jump back to footnote 2 in the text.">&#8617;</a></p>
-</li>
-</ol>
-</div>
 
 	</body>
 </html>

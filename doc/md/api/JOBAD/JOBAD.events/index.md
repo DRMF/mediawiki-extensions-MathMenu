@@ -14,4 +14,4 @@ This namespace represents Events.
 ## See also
 
 * [`JOBADInstance.Event`](../JOBADInstance/event/index.md)
-* [Event Handling](../../../dev/events.md)
+* [Event Handling](../../../intro/events.md)

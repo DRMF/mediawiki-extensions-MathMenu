@@ -1,5 +1,5 @@
-# The JOBAD Structure
-JOBAD is structured into several different areas. 
+# Extending the Core
+JOBAD is structured into several different areas: 
 
 The `JOBAD` variable holds everything related to JOBAD. It is also a constructor for JOBAD Instances. The JOBAD Core uses this as a namespace. 
 
@@ -14,7 +14,6 @@ The JOBAD Core is written in such a way that it can be modified very easily with
  **This API should not be used by module developers but only by developers who wish to extend the core.**
 ### JOBAD.ifaces
 `JOBAD.ifaces` is an array of functions. They are called every time the JOBAD constructor is called in order to allow extending JOBAD instances. 
-
 
 ### JOBAD.modules.ifaces
 `JOBAD.modules.ifaces` is an array of function pairs: 
@@ -53,6 +52,3 @@ The JOBAD Core is written in such a way that it can be modified very easily with
 	* **Object** `value` Value of the property to be added. 
 	* **Object** `properObject` The proper Module Object. 
 	* **Instance[JOBAD.modules.loadedModule]** `this`, `moduleObject` The currently loaded module object
-
-### JOBAD.Events
-`JOBAD.Events` provides an easy way to add events to JOBAD modules. DOC TBD. 

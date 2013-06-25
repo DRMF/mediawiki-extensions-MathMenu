@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Event Handling] - JOBAD Documentation</title>
+		<title>[Setting up JOBAD] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,61 +478,118 @@
 -->
 	</head>
 	<body>
-<p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Event Handling</strong></p>
-<h1>Event Handling</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">Introduction to JOBAD</a> &gt; <strong>Setting up JOBAD</strong></p>
+<h1>Setting up JOBAD</h1>
 
-<p>Every module can register listeners to events. Whenever an event occurs JOBAD will check if there is a handler for this from any of the active modules. </p>
+<p>This page will give instructions on how to include JOBAD into your website. </p>
 
-<h2>Available events</h2>
+<p>The source code for JOBAD can be found at <a href="https://github.com/KWARC/jobad">https://github.com/KWARC/jobad</a>. 
+To get the code use </p>
+
+<pre><code>git clone https://github.com/KWARC/jobad
+</code></pre>
+
+<p>To include JOBAD in your website, you will have to include several files in your HTML document. 
+JOBAD itself depends on: </p>
 
 <ul>
-<li><code>leftClick</code>: When an element is left clicked on. </li>
-<li><code>dblClick</code>: When an element is double clicked. </li>
-<li><code>contextMenu</code>: When an element is right clicked on, a context menu may appear. Is not triggered when the control key is pressed to allow access to the native context menu. </li>
-<li><code>hoverText</code>: A text which will appear in a tooltip hovering over the hovered element. Warning: If there are <code>title</code> attributes on the element, they might interfere with this event. </li>
-<li><code>SideBarUpdate</code>: Called when the sidebar is upated. </li>
-<li><code>configUpdate</code>: Called whenever the config is updated. </li>
-<li><code>onEvent</code>: Called whenever another event is raised.  (The event itself is excluded to prevent infinite loops)
-<h2>Event handling and DOM nodes</h2></li>
+<li><a href="http://jquery.com">jQuery</a> - tested with version 2.0.2</li>
+<li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.3</li>
 </ul>
 
-<p>JOBAD catches events at every level of the DOM tree up to the JOBAD root node. Then it performs the following algorithm to try to handle the event: </p>
+<p>Both dependencies are bundled with JOBAD. </p>
+
+<p>The javascript side of the JOBAD code exists in three different versions: </p>
 
 <ul>
-<li>Does a module provide event handling for this event at this DOM node?
-<ul>
-<li>If yes, allow the module to handle the event and prevent the browser from handling it. </li>
-<li>If not, continue below. </li>
-</ul></li>
-<li>Does this node have a parent for which JOBAD is active?
-<ul>
-<li>If so, allow the parent element to handle this event (i. e. pass it back to browser which will automatically bubble it up. )</li>
-<li>If not, allow the browser to handle the event. </li>
-</ul></li>
+<li>an unbuilt version, which consists of several files. </li>
+<li>a development version version which consists of one file with comments and readable version: (<code>JOBAD.js</code>)</li>
+<li>a release version which consists of one file with compressed code. It is created by running the development version through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </li>
 </ul>
 
-<p>This means that if, for example, the user click on a &lt;b&gt; element within a &lt;div&gt;, 
-JOBAD will first check if any active module handles the left click on the &lt;b&gt;
-element. If so <strong>only</strong> that specific module will handle this event. If not, JOBAD will check the parent &lt;div&gt; if some module can handle a click on 
-the &lt;div&gt; element. </p>
-
-<h2>Multiple event handlers</h2>
-
-<p>If there are multiple event handlers for one event, JOBAD might only execute only one. </p>
+<p>The CSS code version of the code exists in two different versions: </p>
 
 <ul>
-<li><code>contextMenu</code>: Context Menu entries will be merged. </li>
-<li><code>hoverText</code>: Every handler is triggered, however only the first tooltip is shown. </li>
+<li>an unbuilt version, which consists of several files. </li>
+<li>a built Version which consists of one file. </li>
 </ul>
 
-<p>For any other event, every handler will be called. </p>
+<p>You only need to use one version of the JS code and one version of the CSS code in your page. </p>
 
-<h2>See also</h2>
+<p>Your html <code>&lt;head&gt;</code> should look like this: </p>
 
-<ul>
-<li><a href="../api/JOBAD/JOBAD.events/index.html">API Documentation for JOBAD.events</a></li>
-<li><a href="modules.html">Modules</a></li>
-</ul>
+<div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
+    <span class="c">&lt;!-- other header tags here --&gt;</span>
+    <span class="c">&lt;!-- Include dependencies --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-ui-1.10.3.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/jquery-ui.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>If you want to include the unbuilt js files use this code: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/core/JOBAD.core.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/util/underscore.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/util/JOBAD.util.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.resources.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/core/JOBAD.core.modules.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/core/JOBAD.core.events.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.hover.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.contextmenu.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.sidebar.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.toolbar.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.overlay.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/ui/JOBAD.ui.folding.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/events/JOBAD.sidebar.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/events/JOBAD.folding.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/events/JOBAD.events.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.config.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/JOBAD.wrap.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div>
+
+<p>If you want to use the development version use the following code: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/release/JOBAD.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div>
+
+<p>To use the minimized code, use this: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/release/JOBAD.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div>
+
+<p>To use the unbuilt CSS version, use this version: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;css/JOBAD.css&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;css/JOBAD.theme.css&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>To use the built CSS version, use this code: </p>
+
+<div class="codehilite"><pre><code>     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>Afterwards, you can include any modules you might want to use. Then you can use JOBAD on your page: </p>
+
+<div class="codehilite"><pre><code>    <span class="c">&lt;!-- Include your awesome modules here --&gt;</span>
+    <span class="c">&lt;!-- now you can use JOBAD on your page --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">JOBAD1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#my_JOBAD_area&quot;</span><span class="p">));</span> <span class="c1">//bind JOBAD to an element on the page. </span>
+            <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">]);</span> <span class="c1">//Load a module</span>
+            <span class="nx">JOBAD1</span><span class="p">.</span><span class="nx">Setup</span><span class="p">.</span><span class="nx">enable</span><span class="p">();</span> <span class="c1">//Enable JOBAD</span>
+        <span class="p">});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</code></pre></div>
+
+<p>If jQuery's "$" causes conflicts with other libraries, you can simply use</p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">conflict</span> <span class="o">=</span> <span class="nx">JOBAD</span><span class="p">.</span><span class="nx">noConflict</span><span class="p">();</span>
+
+<span class="nx">conflicts</span> <span class="c1">//now contains a reference to jQuery. </span>
+<span class="nx">$</span> <span class="c1">//contains whatever it contained before jQuery was loaded</span>
+</code></pre></div>
 
 	</body>
 </html>

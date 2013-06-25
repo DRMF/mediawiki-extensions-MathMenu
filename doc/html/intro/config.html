@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Index] - JOBAD Documentation</title>
+		<title>[How to configure JOBAD Modules] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,72 +478,96 @@
 -->
 	</head>
 	<body>
-<p><a href="index.html">Start</a> &gt; <strong>Index</strong></p>
-<h1>Index</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">Introduction to JOBAD</a> &gt; <strong>How to configure JOBAD Modules</strong></p>
+<h1>How to configure JOBAD Modules</h1>
+
+<p>There are several ways to allow users to configure JOBAD Modules. </p>
+
+<h2>Init parameters</h2>
+
+<p>The probably easiest way is through parameters to the init function. Consider a module with the following init function: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;info&#39;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">&#39;identifier&#39;</span><span class="o">:</span> <span class="s1">&#39;a.test.module&#39;</span><span class="p">,</span>
+        <span class="c1">//...</span>
+    <span class="p">},</span>
+    <span class="c1">//other things here</span>
+    <span class="s1">&#39;init&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">parameter1</span><span class="p">){</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="nx">parameter1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>Then the module is bound to a JOBADInstance: </p>
+
+<div class="codehilite"><pre><code><span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;a.test.module&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Hello World! &#39;</span><span class="p">]);</span> <span class="c1">//will alert: &#39;Hello World! &#39;</span>
+</code></pre></div>
+
+<p>Note that the number of parameters is unlimted and the default parameters are empty. </p>
+
+<h2>LocalStore and globalStore</h2>
+
+<p>To store configuration options internally, you can use the <code>localStore</code> and <code>globalStore</code> of the loadModuleInstance: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//other things here</span>
+    <span class="s1">&#39;init&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">parameter1</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;parameter1&quot;</span><span class="p">,</span> <span class="nx">parameter1</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="c1">//somewhere else</span>
+    <span class="s1">&#39;leftClick&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">parameter1</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">localStore</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;parameter1&quot;</span><span class="p">);</span> <span class="c1">//gets parameter 1</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="nx">parameter1</span><span class="p">);</span> 
+    <span class="p">},</span>
+    <span class="c1">//...</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>If this module is loaded, whenever the user left Clicks, parameter1 will be alerted. 
+To delete a setting, use <code>loadedModule.localStore.delete</code>. </p>
+
+<p>The difference betweeen <code>localStore</code> and <code>globalStore</code> is that the the localStore is limited to one instance of a module while the globalStore is shared amongst all instances of the same module. </p>
+
+<h2>UserConfig</h2>
+
+<p>While <code>localStore</code> and <code>globalStore</code> only allow configuring via code, it is also possible to allow the end user to configure a module. 
+This can be done via the <code>config</code> property of the module object: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//other things here</span>
+    <span class="s1">&#39;config&#39;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s1">&#39;name of setting&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;restrictions&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;meta-data&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>The <code>type</code> gives the type of the setting: </p>
 
 <ul>
-<li><a href="about.html">About</a> (about.html)</li>
-<li><a href="api/JOBAD/JOBAD.Sidebar.html">JOBAD.Sidebar</a> (api/JOBAD/JOBAD.Sidebar.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/contextmenu.html">JOBAD.UI.ContextMenu</a> (api/JOBAD/JOBAD.UI/contextmenu.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/folding.html">JOBAD.UI.Folding</a> (api/JOBAD/JOBAD.UI/folding.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/hover.html">JOBAD.UI.hover</a> (api/JOBAD/JOBAD.UI/hover.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/index.html">JOBAD.UI</a> (api/JOBAD/JOBAD.UI/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/overlay.html">JOBAD.UI.Overlay</a> (api/JOBAD/JOBAD.UI/overlay.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/sidebar.html">JOBAD.UI.Sidebar</a> (api/JOBAD/JOBAD.UI/sidebar.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/toolbar.html">JOBAD.UI.Toolbar</a> (api/JOBAD/JOBAD.UI/toolbar.html)</li>
-<li><a href="api/JOBAD/JOBAD.config.html">JOBAD.config</a> (api/JOBAD/JOBAD.config.html)</li>
-<li><a href="api/JOBAD/JOBAD.console.html">JOBAD.console</a> (api/JOBAD/JOBAD.console.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/SideBarUpdate.html">JOBAD.events.SideBarUpdate</a> (api/JOBAD/JOBAD.events/SideBarUpdate.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/configUpdate.html">JOBAD.events.configUpdate</a> (api/JOBAD/JOBAD.events/configUpdate.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/contextMenuEntries.html">JOBAD.events.contextMenuEntries</a> (api/JOBAD/JOBAD.events/contextMenuEntries.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/dblClick.html">JOBAD.events.dblClick</a> (api/JOBAD/JOBAD.events/dblClick.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/hoverText.html">JOBAD.events.hoverText</a> (api/JOBAD/JOBAD.events/hoverText.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/index.html">JOBAD.events</a> (api/JOBAD/JOBAD.events/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/leftClick.html">JOBAD.events.leftClick</a> (api/JOBAD/JOBAD.events/leftClick.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/onEvent.html">JOBAD.events.onEvent</a> (api/JOBAD/JOBAD.events/onEvent.html)</li>
-<li><a href="api/JOBAD/JOBAD.ifaces/index.html">JOBAD.ifaces</a> (api/JOBAD/JOBAD.ifaces/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.modules/index.html">JOBAD.modules</a> (api/JOBAD/JOBAD.modules/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> (api/JOBAD/JOBAD.modules/loadedModule.html)</li>
-<li><a href="api/JOBAD/JOBAD.refs.html">JOBAD.refs</a> (api/JOBAD/JOBAD.refs.html)</li>
-<li><a href="api/JOBAD/JOBAD.resources.html">JOBAD.resources</a> (api/JOBAD/JOBAD.resources.html)</li>
-<li><a href="api/JOBAD/JOBAD.storageBackend.html">JOBAD.storageBackend</a> (api/JOBAD/JOBAD.storageBackend.html)</li>
-<li><a href="api/JOBAD/JOBAD.util.html">JOBAD.util</a> (api/JOBAD/JOBAD.util.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/Config.html">JOBADInstance.Config</a> (api/JOBAD/JOBADInstance/Config.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/configUpdate.html">JOBADInstance.Event.configUpdate</a> (api/JOBAD/JOBADInstance/event/configUpdate.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/contextMenuEntries.html">JOBADInstance.Event.contextMenuEntries</a> (api/JOBAD/JOBADInstance/event/contextMenuEntries.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/dblClick.html">JOBADInstance.Event.dblClick</a> (api/JOBAD/JOBADInstance/event/dblClick.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/hoverText.html">JOBADInstance.Event.hoverText</a> (api/JOBAD/JOBADInstance/event/hoverText.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/index.html">JOBADInstance.Event</a> (api/JOBAD/JOBADInstance/event/index.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/leftClick.html">JOBADInstance.Event.leftClick</a> (api/JOBAD/JOBADInstance/event/leftClick.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/onEvent.html">JOBADInstance.Event.onEvent</a> (api/JOBAD/JOBADInstance/event/onEvent.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/onSideBarUpdate.html">JOBADInstance.Event.SideBarUpdate</a> (api/JOBAD/JOBADInstance/event/onSideBarUpdate.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/folding.html">JOBADInstance.Folding</a> (api/JOBAD/JOBADInstance/folding.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/index.html">JOBADInstance</a> (api/JOBAD/JOBADInstance/index.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/modules.html">JOBADInstance.Modules</a> (api/JOBAD/JOBADInstance/modules.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/setup.html">JOBADInstance.Setup</a> (api/JOBAD/JOBADInstance/setup.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/sidebar.html">JOBADInstance.Sidebar</a> (api/JOBAD/JOBADInstance/sidebar.html)</li>
-<li><a href="api/JOBAD/index.html">JOBAD</a> (api/JOBAD/index.html)</li>
-<li><a href="api/index.html">API Documentation</a> (api/index.html)</li>
-<li><a href="api/template.html">template</a> (api/template.html)</li>
-<li><a href="api/undocumented.html">Undocumented API</a> (api/undocumented.html)</li>
-<li><a href="css.html">CSS</a> (css.html)</li>
-<li><a href="demos.html">Demos</a> (demos.html)</li>
-<li><a href="index.html">Start</a> (index.html)</li>
-<li><a href="intro/build.html">Building JOBAD</a> (intro/build.html)</li>
-<li><a href="intro/config.html">How to configure JOBAD Modules</a> (intro/config.html)</li>
-<li><a href="intro/contextmenu.html">The Context Menu</a> (intro/contextmenu.html)</li>
-<li><a href="intro/events.html">Events</a> (intro/events.html)</li>
-<li><a href="intro/example_modules.html">Example Modules</a> (intro/example_modules.html)</li>
-<li><a href="intro/extend.html">Extending the Core</a> (intro/extend.html)</li>
-<li><a href="intro/folding.html">Folding the DOM</a> (intro/folding.html)</li>
-<li><a href="intro/hover.html">Tooltips in JOBAD</a> (intro/hover.html)</li>
-<li><a href="intro/index.html">Introduction to JOBAD</a> (intro/index.html)</li>
-<li><a href="intro/modules.html">How to write Modules</a> (intro/modules.html)</li>
-<li><a href="intro/setup.html">Setting up JOBAD</a> (intro/setup.html)</li>
-<li><a href="intro/sidebar.html">The Sidebar</a> (intro/sidebar.html)</li>
-<li><a href="issues.html">(Known) Issues</a> (issues.html)</li>
-<li><a href="sitemap.html">Index</a> (sitemap.html)</li>
+<li><code>string</code>: a string</li>
+<li><code>bool</code>: a boolean (true or false). Does not allow restrictions. </li>
+<li><code>number</code>: a number (both integers and floats)</li>
+<li><code>integer</code>: any integer</li>
+<li><code>list</code>: a list of options to choose from. Needs restrictions. </li>
+<li><code>none</code>: hidden from the user, can be anything. Does not need meta data and does not allow restirctions. </li>
 </ul>
+
+<p>The <code>restrictions</code> give further limits on the type. They are usually optional. The can have the following values: </p>
+
+<ul>
+<li>a function <code>validate(value)</code> which should return a boolean stating if value is OK as a value. </li>
+<li>for <code>number</code> and <code>integer</code>: an array <code>[min, max]</code> of minimum and maximum value (min and max are included in the possibilities. )</li>
+<li>for <code>string</code>: a regular expression which has to match the value. </li>
+<li>for <code>list</code> an array of possible values has to be specefied</li>
+</ul>
+
+<p>The <code>default</code> is the default value of the setting. It has to match restrictions and type. </p>
+
+<p>The <code>meta-data</code> is a string giving a name of the setting. Additionally it can be specefied as a two-member-array containing name and a longer description of the setting. 
+For the <code>list</code> type it has to give names to all possible values in the array after the name of the setting. May not be used for the <code>none</code> type. </p>
+
+<p>To show a nice Configuration UI, you can use the method <code>.showConfigUI()</code> of any JOBADInstance. You can get UserConfig from within a loadedModule by calling <code>loadedModule.UserConfig.get("name")</code>. </p>
 
 	</body>
 </html>

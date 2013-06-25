@@ -5,7 +5,8 @@ Also a minimized version is created by running it through the [Google Closure Co
 Similarly, the JOBAD Templates and Documentation are gernated automatically from source files. 
 
 Building is currently only supported on linux, **building is not neccessary for the end user**. Building depends on the following software: 
-*  [Python](http://www.python.org/), tested with version 2.7.4. Also needs the following libraries / scripts: 
+
+* [Python](http://www.python.org/), tested with version 2.7.4. Also needs the following libraries / scripts: 
     * [markdown2](https://github.com/trentm/python-markdown2) - a python implmentation of markdown
     * [pygments](http://pygments.org/) - a python syntax highlighter
     * [BeautifulSoup 4](http://www.crummy.com/software/BeautifulSoup/) - a python html library
@@ -14,7 +15,8 @@ Building is currently only supported on linux, **building is not neccessary for 
 * [GNU Bash](https://www.gnu.org/software/bash/)
 
 All build scripts are located in the `build` subdirectory. 
-    * To build the demos, use `build-templates.sh`
-    * To build the documentation, use `build-doc.sh`
-    * To build the release version, use `build-release.sh`
-    * To build all of the above, use `build-all.sh`
+
+* To build the demos, use `build-templates.sh`
+* To build the documentation, use `build-doc.sh`
+* To build the release version, use `build-release.sh`
+* To build all of the above, use `build-all.sh`

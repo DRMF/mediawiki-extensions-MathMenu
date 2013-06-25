@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Index] - JOBAD Documentation</title>
+		<title>[Tooltips in JOBAD] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,71 +478,28 @@
 -->
 	</head>
 	<body>
-<p><a href="index.html">Start</a> &gt; <strong>Index</strong></p>
-<h1>Index</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">Introduction to JOBAD</a> &gt; <strong>Tooltips in JOBAD</strong></p>
+<h1>Tooltips in JOBAD</h1>
+
+<p>JOBAD also provides the <code>hoverText</code> event which makes it really easy to provdie tooltips. You can either return a jQuery element to use as tooltip or you can provide a text to use as tooltip: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//other stuff here</span>
+    <span class="s1">&#39;hoverText&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">JOBADInstance</span><span class="p">){</span>
+        <span class="k">return</span> <span class="s2">&quot;I am a cool hover text. &quot;</span><span class="p">;</span> <span class="c1">//may also depend on target. target is the element currently hovered. </span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>The tooltip automatically appears over an element after a short delay (which can be configured using <code>JOBAD.UI.hover.config.hoverdelay</code>). Ife you do not want to provide a tooltip for a specific element but rather want to pass it on to the next highest element, return <code>false</code>. If you want to provide some other hover functionailty for this element, call it and return <code>true</code>. This will stop JOBAD from attempting to query higher elements for tooltips. </p>
+
+<p>You may also want to read: </p>
 
 <ul>
-<li><a href="about.html">About</a> (about.html)</li>
-<li><a href="api/JOBAD/JOBAD.Sidebar.html">JOBAD.Sidebar</a> (api/JOBAD/JOBAD.Sidebar.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/contextmenu.html">JOBAD.UI.ContextMenu</a> (api/JOBAD/JOBAD.UI/contextmenu.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/folding.html">JOBAD.UI.Folding</a> (api/JOBAD/JOBAD.UI/folding.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/hover.html">JOBAD.UI.hover</a> (api/JOBAD/JOBAD.UI/hover.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/index.html">JOBAD.UI</a> (api/JOBAD/JOBAD.UI/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/overlay.html">JOBAD.UI.Overlay</a> (api/JOBAD/JOBAD.UI/overlay.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/sidebar.html">JOBAD.UI.Sidebar</a> (api/JOBAD/JOBAD.UI/sidebar.html)</li>
-<li><a href="api/JOBAD/JOBAD.UI/toolbar.html">JOBAD.UI.Toolbar</a> (api/JOBAD/JOBAD.UI/toolbar.html)</li>
-<li><a href="api/JOBAD/JOBAD.config.html">JOBAD.config</a> (api/JOBAD/JOBAD.config.html)</li>
-<li><a href="api/JOBAD/JOBAD.console.html">JOBAD.console</a> (api/JOBAD/JOBAD.console.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/SideBarUpdate.html">JOBAD.events.SideBarUpdate</a> (api/JOBAD/JOBAD.events/SideBarUpdate.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/configUpdate.html">JOBAD.events.configUpdate</a> (api/JOBAD/JOBAD.events/configUpdate.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/contextMenuEntries.html">JOBAD.events.contextMenuEntries</a> (api/JOBAD/JOBAD.events/contextMenuEntries.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/dblClick.html">JOBAD.events.dblClick</a> (api/JOBAD/JOBAD.events/dblClick.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/hoverText.html">JOBAD.events.hoverText</a> (api/JOBAD/JOBAD.events/hoverText.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/index.html">JOBAD.events</a> (api/JOBAD/JOBAD.events/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/leftClick.html">JOBAD.events.leftClick</a> (api/JOBAD/JOBAD.events/leftClick.html)</li>
-<li><a href="api/JOBAD/JOBAD.events/onEvent.html">JOBAD.events.onEvent</a> (api/JOBAD/JOBAD.events/onEvent.html)</li>
-<li><a href="api/JOBAD/JOBAD.ifaces/index.html">JOBAD.ifaces</a> (api/JOBAD/JOBAD.ifaces/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.modules/index.html">JOBAD.modules</a> (api/JOBAD/JOBAD.modules/index.html)</li>
-<li><a href="api/JOBAD/JOBAD.modules/loadedModule.html">JOBAD.modules.loadedModule</a> (api/JOBAD/JOBAD.modules/loadedModule.html)</li>
-<li><a href="api/JOBAD/JOBAD.refs.html">JOBAD.refs</a> (api/JOBAD/JOBAD.refs.html)</li>
-<li><a href="api/JOBAD/JOBAD.resources.html">JOBAD.resources</a> (api/JOBAD/JOBAD.resources.html)</li>
-<li><a href="api/JOBAD/JOBAD.storageBackend.html">JOBAD.storageBackend</a> (api/JOBAD/JOBAD.storageBackend.html)</li>
-<li><a href="api/JOBAD/JOBAD.util.html">JOBAD.util</a> (api/JOBAD/JOBAD.util.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/Config.html">JOBADInstance.Config</a> (api/JOBAD/JOBADInstance/Config.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/configUpdate.html">JOBADInstance.Event.configUpdate</a> (api/JOBAD/JOBADInstance/event/configUpdate.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/contextMenuEntries.html">JOBADInstance.Event.contextMenuEntries</a> (api/JOBAD/JOBADInstance/event/contextMenuEntries.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/dblClick.html">JOBADInstance.Event.dblClick</a> (api/JOBAD/JOBADInstance/event/dblClick.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/hoverText.html">JOBADInstance.Event.hoverText</a> (api/JOBAD/JOBADInstance/event/hoverText.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/index.html">JOBADInstance.Event</a> (api/JOBAD/JOBADInstance/event/index.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/leftClick.html">JOBADInstance.Event.leftClick</a> (api/JOBAD/JOBADInstance/event/leftClick.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/onEvent.html">JOBADInstance.Event.onEvent</a> (api/JOBAD/JOBADInstance/event/onEvent.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/event/onSideBarUpdate.html">JOBADInstance.Event.SideBarUpdate</a> (api/JOBAD/JOBADInstance/event/onSideBarUpdate.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/folding.html">JOBADInstance.Folding</a> (api/JOBAD/JOBADInstance/folding.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/index.html">JOBADInstance</a> (api/JOBAD/JOBADInstance/index.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/modules.html">JOBADInstance.Modules</a> (api/JOBAD/JOBADInstance/modules.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/setup.html">JOBADInstance.Setup</a> (api/JOBAD/JOBADInstance/setup.html)</li>
-<li><a href="api/JOBAD/JOBADInstance/sidebar.html">JOBADInstance.Sidebar</a> (api/JOBAD/JOBADInstance/sidebar.html)</li>
-<li><a href="api/JOBAD/index.html">JOBAD</a> (api/JOBAD/index.html)</li>
-<li><a href="api/index.html">API Documentation</a> (api/index.html)</li>
-<li><a href="api/template.html">template</a> (api/template.html)</li>
-<li><a href="api/undocumented.html">Undocumented API</a> (api/undocumented.html)</li>
-<li><a href="css.html">CSS</a> (css.html)</li>
-<li><a href="demos.html">Demos</a> (demos.html)</li>
-<li><a href="index.html">Start</a> (index.html)</li>
-<li><a href="intro/build.html">Building JOBAD</a> (intro/build.html)</li>
-<li><a href="intro/config.html">How to configure JOBAD Modules</a> (intro/config.html)</li>
-<li><a href="intro/contextmenu.html">The Context Menu</a> (intro/contextmenu.html)</li>
-<li><a href="intro/events.html">Events</a> (intro/events.html)</li>
-<li><a href="intro/example_modules.html">Example Modules</a> (intro/example_modules.html)</li>
-<li><a href="intro/extend.html">Extending the Core</a> (intro/extend.html)</li>
-<li><a href="intro/folding.html">Folding the DOM</a> (intro/folding.html)</li>
-<li><a href="intro/hover.html">Tooltips in JOBAD</a> (intro/hover.html)</li>
-<li><a href="intro/index.html">Introduction to JOBAD</a> (intro/index.html)</li>
-<li><a href="intro/modules.html">How to write Modules</a> (intro/modules.html)</li>
-<li><a href="intro/setup.html">Setting up JOBAD</a> (intro/setup.html)</li>
-<li><a href="intro/sidebar.html">The Sidebar</a> (intro/sidebar.html)</li>
-<li><a href="issues.html">(Known) Issues</a> (issues.html)</li>
-<li><a href="sitemap.html">Index</a> (sitemap.html)</li>
+<li><a href="contextmenu.html">Context Menu</a> - How to use the context menu</li>
+<li><a href="sidebar.html">Sidebar</a> - How does the sidebar work?</li>
+<li><a href="folding.html">Folding</a> - Folding the DOM</li>
+<li><a href="config.html">Config UI</a> - How can I configure JOBAD modules?</li>
 </ul>
 
 	</body>

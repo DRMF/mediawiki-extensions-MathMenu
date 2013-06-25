@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[Modules] - JOBAD Documentation</title>
+		<title>[How to write Modules] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,10 +478,10 @@
 -->
 	</head>
 	<body>
-<p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>Modules</strong></p>
-<h1>Modules</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">Introduction to JOBAD</a> &gt; <strong>How to write Modules</strong></p>
+<h1>How to write Modules</h1>
 
-<h2>Module Template</h2>
+<p>It is easy to write modules. A module is a JSON object with several properties. Take a look at the following template: </p>
 
 <div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">{</span>
     <span class="cm">/* Module Info / Meta Data */</span>
@@ -599,7 +599,7 @@
     <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span> <span class="c1">//register the module. </span>
+<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span> <span class="c1">//don&#39;t forget to register it. </span>
 </code></pre></div>
 
 <p>When you write a module and you wish to use jQuery, do not use the "$" reference to jQuery. This might not be available if jQuery is in noConflict mode. Always use the JOBAD.refs.$ reference to jQuery. 
@@ -611,11 +611,17 @@ If you want to use the '$' inside your code you can use the following code. </p>
 <span class="p">})(</span><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">$</span><span class="p">);</span>
 </code></pre></div>
 
-<h2>See also</h2>
+<p>Before writing your first module, you may want to take a look at the <a href="example_modules.html">Example Modules</a>. </p>
+
+<p>Afterwards you can also take a look at individual parts of modules: </p>
 
 <ul>
-<li><a href="example_module.html">Example Module</a> - Example Modules. </li>
-<li><a href="../api/template.html">Module Template API</a> - API for module. Contains the API documentation for the template. </li>
+<li><a href="events.html">Events</a> - What are events?</li>
+<li><a href="hover.html">Tooltips</a> - How to use tooltips in JOBAD</li>
+<li><a href="contextmenu.html">Context Menu</a> - How to use the context menu</li>
+<li><a href="sidebar.html">Sidebar</a> - How does the sidebar work?</li>
+<li><a href="folding.html">Folding</a> - Folding the DOM</li>
+<li><a href="config.html">Config UI</a> - How can I configure JOBAD modules?</li>
 </ul>
 
 	</body>

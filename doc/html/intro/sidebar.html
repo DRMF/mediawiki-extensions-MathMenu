@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[For Developers] - JOBAD Documentation</title>
+		<title>[The Sidebar] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,22 +478,40 @@
 -->
 	</head>
 	<body>
-<p><a href="../index.html">Start</a> &gt; <strong>For Developers</strong></p>
-<h1>For Developers</h1>
+<p><a href="../index.html">Start</a> &gt; <a href="index.html">Introduction to JOBAD</a> &gt; <strong>The Sidebar</strong></p>
+<h1>The Sidebar</h1>
+
+<p>The Sidebar is a way to register notifications to elements on the page. </p>
+
+<p>The Sidebar exists in 3 versions: </p>
 
 <ul>
-<li><a href="structure.html">JOBAD Structure</a> - Information on the structure of JOBAD and how to extend the core. </li>
-<li><a href="modules.html">Modules</a> - Introduction to writing your own modules. </li>
-<li><a href="example_module.html">Module examples</a> - Example Modules</li>
-<li><a href="events.html">Events</a> - Information about Event Processing works in JOBAD</li>
-<li><a href="build.html">Building</a> - Information on how to build JOBAD</li>
+<li>aligned to the left</li>
+<li>aligned to the right</li>
+<li>bound to an element</li>
 </ul>
 
-<h2>See also</h2>
+<p>The style can be changed in the configuration UI and via code. </p>
 
-<ul>
-<li><a href="../api/index.html">API Documentation</a> - Detailed documentation of the API</li>
-</ul>
+<p>Any module can register notifcations to an element on a page by using the <code>.Sidebar</code> namespace of any JOBADInstance: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">my_notification</span> <span class="o">=</span> <span class="nx">JOBADInstance</span><span class="p">.</span><span class="nx">Sidebar</span><span class="p">.</span><span class="nx">registerNotification</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="p">{</span> <span class="c1">//element is a jQuery element</span>
+    <span class="s2">&quot;class&quot;</span><span class="o">:</span> <span class="s2">&quot;warning&quot;</span> <span class="c1">//or &quot;info&quot; or &quot;error&quot;,</span>
+    <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="c1">//or anything else</span>
+    <span class="s2">&quot;icon&quot;</span><span class="o">:</span> <span class="s2">&quot;my-awesome-icon&quot;</span> <span class="c1">//an awesome icon</span>
+    <span class="s2">&quot;click&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;I have been clicked&quot;</span><span class="p">);</span> 
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>To remove a notification from the sidebar, use: </p>
+
+<div class="codehilite"><pre><code><span class="nx">my_notification</span><span class="p">.</span><span class="nx">removeNotification</span><span class="p">(</span><span class="nx">my_notification</span><span class="p">);</span>
+</code></pre></div>
+
+<p>The variable <code>my_notification</code> has the value of a jQuery element which represents the notification, hence anything can be done with it. 
+For a more detailed description of the available options, see the <a href="../api/JOBAD/JOBADInstance/sidebar.html">API Documentation</a>. </p>
 
 	</body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[The JOBAD Structure] - JOBAD Documentation</title>
+		<title>[Introduction to JOBAD] - JOBAD Documentation</title>
 		<style type="text/css">
 /* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
@@ -478,90 +478,77 @@
 -->
 	</head>
 	<body>
-<p><a href="../index.html">Start</a> &gt; <a href="index.html">For Developers</a> &gt; <strong>The JOBAD Structure</strong></p>
-<h1>The JOBAD Structure</h1>
+<p><a href="../index.html">Start</a> &gt; <strong>Introduction to JOBAD</strong></p>
+<h1>Introduction to JOBAD</h1>
 
-<p>JOBAD is structured into several different areas. </p>
+<p>JOBAD (JavaScript API for OMDoc-based Active Documents) is a javascript framework which makes it easy to create interactive web pages. As such it has several components which allow different features to be used on a webpage. </p>
 
-<p>The <code>JOBAD</code> variable holds everything related to JOBAD. It is also a constructor for JOBAD Instances. The JOBAD Core uses this as a namespace. </p>
-
-<p><code>JOBAD.modules</code> is a namespace which hold module related functions. These are functions which handle module loading, module dependencies etc. </p>
-
-<p><code>JOBAD.Events</code> contains all JOBAD Events code. </p>
-
-<p><code>JOBAD.UI</code> contains all UI related functions. </p>
-
-<h2>Extendability</h2>
-
-<p>The JOBAD Core is written in such a way that it can be modified very easily without having to change the existing functions. 
- <strong>This API should not be used by module developers but only by developers who wish to extend the core.</strong></p>
-
-<h3>JOBAD.ifaces</h3>
-
-<p><code>JOBAD.ifaces</code> is an array of functions. They are called every time the JOBAD constructor is called in order to allow extending JOBAD instances. </p>
-
-<h3>JOBAD.modules.ifaces</h3>
-
-<p><code>JOBAD.modules.ifaces</code> is an array of function pairs: </p>
-
-<p><code>[onCreateProperObject(properObject, ModuleObject), onModuleLoad(ServiceObject)]</code></p>
+<p>JOBAD mainly consists of three different components: </p>
 
 <ul>
-<li><strong>function</strong> <code>onCreateProperObject(properObject, ModuleObject)</code> called every time a proper module object is created. 
-<ul>
-<li><strong>Object</strong> <code>properObject</code> The proper Object to be created. May already contain previous registrations. </li>
-<li><strong>Object</strong> <code>moduleObject</code> The module Object that was registered with JOBAD. #</li>
-<li><strong>returns</strong> <code>properObject</code></li>
-</ul></li>
-<li><strong>function</strong> <code>onModuleLoad(ServiceObject)</code> called every time a module is loaded. 
-<ul>
-<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>this</code> The current loaded module. </li>
-<li><strong>Object</strong> <code>ServiceObject</code> A fully parsed Service Object which reprsensts the Service / Module currently being loaded. </li>
-</ul></li>
+<li>the <code>JOBAD Core</code>, which is responsible for loading modules and delegating their calls to the web page and the UI</li>
+<li>the <code>JOBAD UI</code>, which is responsible for providing the functionality required by the modules and modfying the DOM respectively</li>
+<li>and Modules for JOBAD which are written by other people. </li>
 </ul>
 
-<h3>JOBAD.modules.extensions</h3>
+<p>On any page, there can be several JOBAD Instances. A JOBADInstance is bound to a specific jQuery element within the DOM structure. Each instance can load modules whcih can then interact with that part of the page. While the part of the page the JOBADInstance is bound to is determined by the web developer who wants to use JOBAD, the modules are written by other people and provide a more general functionality. Since every module can be given options, the module can be configured individally. </p>
 
-<p><code>JOBAD.modules.extensions</code> provides a similar interface but allows to actually extend the module Objects. </p>
+<p>Before a module can be loaded for a specific JOBADInstance, it has to registered with JOBAD. This is usually done by the module authors, so you only need to include their js-file within your web page. It is done like so</p>
+
+<div class="codehilite"><pre><code><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">myModule</span><span class="p">);</span> <span class="c1">// myModule is a module object; more about that later</span>
+</code></pre></div>
+
+<p>Once this is done, you can create a JOBADInstance, bind it to an area on the page load a module and setup jobad.  </p>
+
+<div class="codehilite"><pre><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="c1">//run this code once the DOM is ready</span>
+    <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#jobad_area&quot;</span><span class="p">);</span> <span class="c1">// some area of the page to bind JOBAD to. Warning: Never bind to &quot;body&quot; or &quot;document&quot; directly. </span>
+    <span class="kd">var</span> <span class="nx">myJOBADInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="c1">//create a new jobad instance. </span>
+    <span class="c1">//load the module some.awesome.module.name</span>
+    <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">,</span> <span class="p">[]);</span> <span class="c1">//the second parameter is options to pass to the module. </span>
+    <span class="c1">//setup jobad (start it)</span>
+    <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">Setup</span><span class="p">();</span> 
+<span class="p">});</span>
+</code></pre></div>
+
+<p>After a module has been loaded and registered with a JOBADInstance, it can be activated or deactivated. If a module is deactivated, no events of it are called. 
+Modules are activated by default. To manually (re)activate a module, you can: </p>
+
+<div class="codehilite"><pre><code><span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">activate</span><span class="p">(</span><span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">);</span> 
+</code></pre></div>
+
+<p>Similarly, it can be deativated using the following code: </p>
+
+<div class="codehilite"><pre><code><span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">(</span><span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">);</span> 
+</code></pre></div>
+
+<p>You can also do this directly on a loaded module. To get a loaded Module object, use: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">loadedModule</span> <span class="o">=</span> <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">getLoadedModule</span><span class="p">(</span><span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">);</span> <span class="c1">//get the specefied module</span>
+<span class="nx">loadedModule</span><span class="p">.</span><span class="nx">deactivate</span><span class="p">();</span> <span class="c1">//deactivate the module</span>
+<span class="nx">loadedModule</span><span class="p">.</span><span class="nx">activate</span><span class="p">();</span> <span class="c1">//activate the module</span>
+</code></pre></div>
+
+<p>For more information on what you can do with loadedModules, please refer to the <a href="../api/JOBAD/JOBAD.modules/loadedModule.html">API Documentation</a>. </p>
+
+<p>For more information on what you can do with JOBADInstances, please refer to the respective section in the <a href="../api/JOBAD/JOBADInstance/index.html">API Documentation</a>. </p>
+
+<h2>More Information</h2>
 
 <ul>
-<li><strong>Object</strong> <code>JOBAD.modules.extensions.[name]</code>
+<li><a href="setup.html">Setup</a> - How to quickly include JOBAD on your webpage</li>
+<li><a href="modules.html">Writing Modules</a> - General introduction to writing modules
 <ul>
-<li><strong>string</strong> <code>name</code> The name of the property to be added to the Module object. </li>
+<li><a href="events.html">Events</a> - What are events?</li>
+<li><a href="hover.html">Tooltips</a> - How to use tooltips in JOBAD</li>
+<li><a href="contextmenu.html">Context Menu</a> - How to use the context menu</li>
+<li><a href="sidebar.html">Sidebar</a> - How does the sidebar work?</li>
+<li><a href="folding.html">Folding</a> - Folding the DOM</li>
+<li><a href="config.html">Configuration Options</a> - How can I configure JOBAD modules?</li>
+<li><a href="example_modules.html">Module examples</a> - Example Modules</li>
 </ul></li>
-<li><strong>Boolean</strong> <code>JOBAD.modules.extensions.[name].required</code> States if the property is required. </li>
-<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].validate(prop)</code> Validates a property. </p>
-
-<ul>
-<li><strong>Object</strong> <code>prop</code> The value of the property to validate. </li>
-<li><strong>returns</strong> a boolean indicating success. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].init(available, value, ModuleObject, properObject)</code> Initialises the module and adds it to the properModule Object </p>
-
-<ul>
-<li><strong>Boolean</strong> <code>available</code> States if the property is available. </li>
-<li><strong>Object</strong> <code>value</code> The value of the property, if available. </li>
-<li><strong>Object</strong> <code>ModuleObject</code> The original module object which was registered with JOBAD. </li>
-<li><strong>Object</strong> <code>properObject</code> The proper ModuleObject. </li>
-<li><strong>returns</strong> the new value of the property. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].onFirstLoad(globalStore)</code> Called when the module is loaded for the first time. </p>
-
-<ul>
-<li><strong>Object</strong> <code>globalStore</code> Module globalStore. </li>
-</ul></li>
-<li><p><strong>Function</strong> <code>JOBAD.modules.extensions.[name].onLoad(value, properObject, moduleObject)</code> Called when the module is loaded. </p>
-
-<ul>
-<li><strong>Object</strong> <code>value</code> Value of the property to be added. </li>
-<li><strong>Object</strong> <code>properObject</code> The proper Module Object. </li>
-<li><strong>Instance[JOBAD.modules.loadedModule]</strong> <code>this</code>, <code>moduleObject</code> The currently loaded module object</li>
-</ul></li>
+<li><a href="build.html">Building</a> - Information on how to build JOBAD</li>
+<li><a href="extend.html">Extending the Core</a> - How to extend the JOBAD Core</li>
 </ul>
-
-<h3>JOBAD.Events</h3>
-
-<p><code>JOBAD.Events</code> provides an easy way to add events to JOBAD modules. DOC TBD. </p>
 
 	</body>
 </html>

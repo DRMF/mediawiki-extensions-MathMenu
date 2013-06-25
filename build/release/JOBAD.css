@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Mon, 24 Jun 2013 18:13:49 +0200
+	built: Tue, 25 Jun 2013 13:53:51 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -67,6 +67,11 @@
 .JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
 	position: fixed;
 	overflow: hidden;
+}
+
+.JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
+	position: static;
+	float: left;
 }
 
 /* 
@@ -231,6 +236,7 @@
 }
 
 .JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
+	background-size:18px 18px; 
 	width: 18px;
 	height: 18px;
 }

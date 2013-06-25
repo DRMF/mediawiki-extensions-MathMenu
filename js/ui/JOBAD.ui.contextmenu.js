@@ -245,7 +245,10 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 
 		if(item[2] != "none" ){
 			$a.prepend(
-				JOBAD.refs.$("<img class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon' src='"+JOBAD.resources.getIconResource(item[2])+"'>")
+				JOBAD.refs.$("<span class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon'>")
+				.css({
+					"background-image": "url('"+JOBAD.resources.getIconResource(item[2])+"')"
+				})
 			)
 			
 		}

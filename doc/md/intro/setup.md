@@ -40,7 +40,24 @@ Your html `<head>` should look like this:
 If you want to include the unbuilt js files use this code: 
 
 ```html
-${JS_INCLUDE}
+	<script src='js/core/JOBAD.core.js'></script>
+	<script src='js/util/underscore.js'></script>
+	<script src='js/util/JOBAD.util.js'></script>
+	<script src='js/JOBAD.resources.js'></script>
+	<script src='js/core/JOBAD.core.modules.js'></script>
+	<script src='js/core/JOBAD.core.events.js'></script>
+	<script src='js/ui/JOBAD.ui.js'></script>
+	<script src='js/ui/JOBAD.ui.hover.js'></script>
+	<script src='js/ui/JOBAD.ui.contextmenu.js'></script>
+	<script src='js/ui/JOBAD.ui.sidebar.js'></script>
+	<script src='js/ui/JOBAD.ui.toolbar.js'></script>
+	<script src='js/ui/JOBAD.ui.overlay.js'></script>
+	<script src='js/ui/JOBAD.ui.folding.js'></script>
+	<script src='js/events/JOBAD.sidebar.js'></script>
+	<script src='js/events/JOBAD.folding.js'></script>
+	<script src='js/events/JOBAD.events.js'></script>
+	<script src='js/JOBAD.config.js'></script>
+	<script src='js/JOBAD.wrap.js'></script>
 ```
 
 If you want to use the development version use the following code: 
@@ -58,7 +75,8 @@ To use the minimized code, use this:
 To use the unbuilt CSS version, use this version: 
 
 ```html
-${CSS_INCLUDE}
+	<link rel="stylesheet" type="text/css" href="css/JOBAD.css">
+	<link rel="stylesheet" type="text/css" href="css/JOBAD.theme.css">
 ```
 
 To use the built CSS version, use this code: 
@@ -67,7 +85,7 @@ To use the built CSS version, use this code:
 	 <link href="build/release/JOBAD.css" rel="stylesheet">
 ```
 
-Afterward, you can include any modules you might want to use. Then you can use JOBAD on your page: 
+Afterwards, you can include any modules you might want to use. Then you can use JOBAD on your page: 
 
 ```html
 	<!-- Include your awesome modules here -->
@@ -90,8 +108,3 @@ conflicts //now contains a reference to jQuery.
 $ //contains whatever it contained before jQuery was loaded
 
 ```
-
-
-## See also
-
-* [API Documentation](api/index.md)

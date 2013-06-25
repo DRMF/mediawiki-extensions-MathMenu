@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 24 Jun 2013 18:13:37 +0200
+	built: Tue, 25 Jun 2013 13:53:49 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1777,13 +1777,24 @@ JOBAD.util.orderTree = function(element){
 	@returns boolean. 
 */
 JOBAD.util.isUrl = function(str){
-	return (new RegExp('^(https?:\/\/)?'+
-    '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+
-    '((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
-    '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
-    '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
-    '(\#[-a-z\d_]*)?$','i')).test(str); // fragment locater
+	var str = String(str);
+	var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+	var matches = str.match(new RegExp(expression));
+	if(JOBAD.util.isArray(matches)){
+		return matches.length > 0;
+	} else {
+		return JOBAD.util.startsWith(str, "data:"); 
+	}
 };
+
+/*
+	Checks if the string str starts with the string start. 
+*/
+JOBAD.util.startsWith = function(str, start){
+	var str = String(str);
+	var start = String(start);
+	return (str.substring(0, start.length) == start); 
+}
 
 /*
 	logical or
@@ -3092,7 +3103,10 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 
 		if(item[2] != "none" ){
 			$a.prepend(
-				JOBAD.refs.$("<img class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon' src='"+JOBAD.resources.getIconResource(item[2])+"'>")
+				JOBAD.refs.$("<span class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon'>")
+				.css({
+					"background-image": "url('"+JOBAD.resources.getIconResource(item[2])+"')"
+				})
 			)
 			
 		}

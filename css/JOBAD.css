@@ -44,6 +44,11 @@
 	overflow: hidden;
 }
 
+.JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
+	position: static;
+	float: left;
+}
+
 /* 
 	JOBAD Sidebar 
 */
