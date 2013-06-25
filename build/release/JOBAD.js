@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 25 Jun 2013 16:29:29 +0200
+	built: Tue, 25 Jun 2013 16:43:56 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2888,6 +2888,8 @@ JOBAD.UI.ContextMenu.config = {
 	'radius': 20 //small radius size
 };
 
+var ContextMenus = JOBAD.refs.$([]);
+
 /*
 	Registers a context menu on an element. 
 	@param	element jQuery element to register on. 
@@ -2897,7 +2899,7 @@ JOBAD.UI.ContextMenu.config = {
 		config.open Optional. Will be called before the context menu is opened. 
 		config.close Optional. Will be called after the context menu has been closed. 
 		config.callback Optional. Will be called after a menu callback was called. 
-		config.clean	Optional. Should we remove other menus on open? Ignored for radial type menus.  Default: True. 
+		config.parentMenus	Optional. Parent menus not to remove on trigger. 
 		config.element	Optional. Force to use this as an element for searching for menus. 
 		config.callBackTarget	Optional. Element to use for callback. 
 		config.callBackOrg	Optional. Element to use for callback. 
@@ -2921,7 +2923,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 	var onOpen = JOBAD.util.forceFunction(config.enable, true);
 	var onEmpty = JOBAD.util.forceFunction(config.empty, true);
 	var onClose = JOBAD.util.forceFunction(config.disable, true);
-	var clean = JOBAD.util.forceBool(config.clean, true);
+	var parents = JOBAD.refs.$(config.parents); 
 	var block = JOBAD.util.forceBool(config.block, false);
 
 	element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
@@ -2950,10 +2952,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 			targetElement = targetElement.parent();
 		}
 
-		//close other menus. 
-		if(clean){
-			JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
-		}
+		
+		JOBAD.UI.ContextMenu.clear(config.parents);
 		
 		//we are empty => allow browser to handle stuff
 		if(!result){
@@ -2991,7 +2991,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		} else if(menuType == 1 || JOBAD.util.equalsIgnoreCase(menuType, 'radial')){
 			var eventDispatcher = JOBAD.refs.$("<span>");
 
-			JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind'); //close all other menus
+			JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind'); //close all other menus
 
 			menuBuild
 			.append(
@@ -3004,7 +3004,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 				)
 				.find("div")
 				.click(function(){
-					eventDispatcher.trigger('JOBADContextMenuUnbind'); //unbind all the others. 
+					eventDispatcher.trigger('JOBAD.UI.ContextMenu.unbind'); //unbind all the others. 
 					JOBAD.refs.$(this).trigger("contextmenu.JOBAD.UI.ContextMenu"); //trigger my context menu. 
 					return false;
 				}).end()
@@ -3014,15 +3014,15 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 				return JOBAD.refs.$(e).closest("div").data("JOBAD.UI.ContextMenu.subMenuData");
 			}, {
 				"type": 0,
-				"clean": false,
+				"parents": menuBuild,
 				"callBackTarget": targetElement,
 				"callBackOrg": orgElement,
 				"unbindListener": eventDispatcher,
 				"open": function(){
-					eventDispatcher.trigger('JOBADContextMenuUnbind'); //unbind all the others.  
+					eventDispatcher.trigger('JOBAD.UI.ContextMenu.unbind'); //unbind all the others.  
 				},
 				"empty": function(){
-					eventDispatcher.trigger('JOBADContextMenuUnbind');
+					eventDispatcher.trigger('JOBAD.UI.ContextMenu.unbind');
 				},
 				"callback": closeHandler,
 				"block": true
@@ -3044,16 +3044,18 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		})
 		.appendTo(JOBAD.refs.$("body"))
 
-		JOBAD.refs.$(document).add(config.unbindListener).on('JOBADContextMenuUnbind', function(e){
+		JOBAD.refs.$(document).add(config.unbindListener).add(menuBuild).on('JOBAD.UI.ContextMenu.unbind', function(e){
 				closeHandler();
-				JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBADContextMenuUnbind');
+				JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBAD.UI.ContextMenu.unbind');
 				e.stopPropagation();
+				ContextMenus = ContextMenus.not(menuBuild);
 		});
 
 		JOBAD.refs.$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
-			JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
+			JOBAD.UI.ContextMenu.clear(); 
 		});
 
+		ContextMenus = ContextMenus.add(menuBuild);
 		
 		return false;
 	});
@@ -3071,6 +3073,13 @@ JOBAD.UI.ContextMenu.disable = function(element){
 	element.off('contextmenu.JOBAD.UI.ContextMenu'); //remove listener
 	return element;
 };
+
+JOBAD.UI.ContextMenu.clear = function(keep){
+	var keepers = ContextMenus.filter(keep);
+	var clearers = ContextMenus.not(keep).trigger("JOBAD.UI.ContextMenu.unbind").remove();
+	ContextMenus = keepers;
+};
+
 
 /*
 	Builds the menu html element for a standard context menu. 
@@ -3116,7 +3125,7 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 				var callback = item[1];
 
 				$a.on('click', function(e){
-					JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
 					callback(element, orgElement);
 					cb(element, orgElement);
 				});		
@@ -3181,7 +3190,7 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 
 				$item.click(function(e){
 					JOBAD.UI.hover.disable();
-					JOBAD.refs.$(document).trigger('JOBADContextMenuUnbind');
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
 					callback(element, orgElement);
 					cb(element, orgElement);
 				});		
