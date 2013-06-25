@@ -129,7 +129,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             //trigger event
             config.fold(element);
             config.stateChange(element, true);
-            JOBAD.UI.Folding.update();
+            JOBAD.UI.Folding.update(element);
         })
         .on("JOBAD.UI.Folding.unfold", function(event){
             event.stopPropagation();
@@ -138,7 +138,7 @@ JOBAD.UI.Folding.enable = function(e, c){
             //trigger event
             config.unfold(element);
             config.stateChange(element, false);
-            JOBAD.UI.Folding.update();
+            JOBAD.UI.Folding.update(element);
         })
         .on("JOBAD.UI.Folding.update", config.livePreview?
         function(event){
@@ -256,7 +256,7 @@ JOBAD.UI.Folding.enable = function(e, c){
         config.enable(element);
     }); 
 
-    JOBAD.UI.Folding.update(); //update at the end
+    JOBAD.UI.Folding.update(e); //update everythign at the ened
 
     return results; 
 }
@@ -269,15 +269,22 @@ JOBAD.UI.Folding.enable = function(e, c){
 
 JOBAD.UI.Folding.updating = false; 
 
-JOBAD.UI.Folding.update = function(element){
+JOBAD.UI.Folding.update = function(elements){
     if(JOBAD.UI.Folding.updating){
         return false;
     } else {
+        var elements = JOBAD.refs.$(elements);
+
+        if(elements.length > 0){
+            var updaters = elements.parents().filter("div.JOBAD_Folding_Wrapper");
+        } else {
+            var updaters = JOBAD.refs.$("div.JOBAD_Folding_Wrapper");
+        }
         JOBAD.UI.Folding.updating = true;
-        JOBAD.util.orderTree("div.JOBAD_Folding_Wrapper").each(function(){
-            //trigger each one individually. 
-            JOBAD.refs.$(this).trigger("JOBAD.UI.Folding.update");
-        });
+        JOBAD.util.orderTree(updaters).each(function(){
+                //trigger each one individually. 
+                JOBAD.refs.$(this).trigger("JOBAD.UI.Folding.update");
+            });
         JOBAD.UI.Folding.updating = false; 
         JOBAD.refs.$(window).trigger("JOBAD.UI.Folding.update");
         return true; 
