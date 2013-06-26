@@ -25,15 +25,15 @@
 	* **Boolean** `keep` - If set to true, the element will remain hidden if it currently is hidden. 
 
         
-* **Function** `JOBAD.UI.Folding.update(update)` - Updates a folded element. 
-	* **jQuery** `element` - Element(s) to update folding on. 
+* **Function** `JOBAD.UI.Folding.update(elements)` - Updates one or more folded elements. 
+	* **jQuery** `elements` - Optional. Element(s) to update folding on. 
 	* **returns** boolean
 
-* **Function** `JOBAD.UI.Folding.fold(update)` - Folds an element. 
+* **Function** `JOBAD.UI.Folding.fold(element)` - Folds an element. 
 	* **jQuery** `element` - Element(s) to fold. 
 	* **returns** boolean
 
-* **Function** `JOBAD.UI.Folding.unfold(update)` - Unfolds an element. 
+* **Function** `JOBAD.UI.Folding.unfold(element)` - Unfolds an element. 
 	* **jQuery** `element` - Element(s) to unfold. 
 	* **returns** boolean
 

@@ -17,13 +17,15 @@
 		* **Function** `config.open()` Optional. Will be called before the context menu is opened. 
 		* **Function** `config.close()`Optional. Will be called after the context menu has been closed. 
 		* **Function** `config.callback()` Optional. Will be called after a callback is called. 
-		* **Boolean** `config.clean` Optional. Should we remove other menus on open?. Default: True. 
+		* **jQuery** `config.parents` Optional. Menus not to keep open when this menu is opened. 
 		* **Boolean** `config.block` Optional. Always block the Browser context menu. 
 		* **jQuery** `config.element` Optional. Force to use this as an element for searching for menus. 
 		* **jQuery** `config.unbindListener` Element to additionally listen to for unbinds. 
 		* **jQuery** `config.callBackTarget` Optional. Element to use for callback. Defaults to found element. 
 		* **jQuery** `config.callBackOrg`	Optional. Element to use for callback. 
-	* **returns** The `element` the menu was registered on. 
+	* **returns** The `element` the menu was registered on.
+* **Function** `JOBAD.UI.ContextMenu.clear(keepers)` - Clears all context menus
+	* **jQuery** `keepers` Menus to keep open
 * **Function** `JOBAD.UI.ContextMenu.disable(element)` - Disables the context menu. 
 	* **jQuery** `element` The element to remove the menu from. 
 	* **returns** The `element` the menu was registered on. 

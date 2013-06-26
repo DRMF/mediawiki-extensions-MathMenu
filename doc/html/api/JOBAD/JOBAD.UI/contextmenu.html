@@ -503,14 +503,18 @@
 <li><strong>Function</strong> <code>config.open()</code> Optional. Will be called before the context menu is opened. </li>
 <li><strong>Function</strong> <code>config.close()</code>Optional. Will be called after the context menu has been closed. </li>
 <li><strong>Function</strong> <code>config.callback()</code> Optional. Will be called after a callback is called. </li>
-<li><strong>Boolean</strong> <code>config.clean</code> Optional. Should we remove other menus on open?. Default: True. </li>
+<li><strong>jQuery</strong> <code>config.parents</code> Optional. Menus not to keep open when this menu is opened. </li>
 <li><strong>Boolean</strong> <code>config.block</code> Optional. Always block the Browser context menu. </li>
 <li><strong>jQuery</strong> <code>config.element</code> Optional. Force to use this as an element for searching for menus. </li>
 <li><strong>jQuery</strong> <code>config.unbindListener</code> Element to additionally listen to for unbinds. </li>
 <li><strong>jQuery</strong> <code>config.callBackTarget</code> Optional. Element to use for callback. Defaults to found element. </li>
 <li><strong>jQuery</strong> <code>config.callBackOrg</code>   Optional. Element to use for callback. </li>
 </ul></li>
-<li><strong>returns</strong> The <code>element</code> the menu was registered on. </li>
+<li><strong>returns</strong> The <code>element</code> the menu was registered on.</li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.UI.ContextMenu.clear(keepers)</code> - Clears all context menus
+<ul>
+<li><strong>jQuery</strong> <code>keepers</code> Menus to keep open</li>
 </ul></li>
 <li><strong>Function</strong> <code>JOBAD.UI.ContextMenu.disable(element)</code> - Disables the context menu. 
 <ul>

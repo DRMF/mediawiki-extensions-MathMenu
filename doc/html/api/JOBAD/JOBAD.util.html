@@ -547,7 +547,39 @@
 <ul>
 <li><strong>jQuery</strong> <code>element</code> Element to check</li>
 </ul></li>
-<li>missing several newer functions</li>
+<li><strong>Function</strong> <code>JOBAD.util.defined(obj)</code> - Checks if <code>obj</code> is defined and returns it if so. Otherwise returns an empty JSON-object
+<ul>
+<li><strong>Object</strong> <code>obj</code> Object to check</li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.forceBool(obj, def)</code> - Forces <code>obj</code> to be of type boolean
+<ul>
+<li><strong>Object</strong> <code>obj</code> Object to check</li>
+<li><strong>Object</strong> <code>def</code> Optional. Default to use. If undefined, obj will be forced into a boolean. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.forceFunction(obj, def)</code> - Forces <code>obj</code> to be a function
+<ul>
+<li><strong>Object</strong> <code>obj</code> Object to check</li>
+<li><strong>Object</strong> <code>def</code> Optional. Default function to use. If not a function, will return a function which retruns def. If omitetd will use <code>obj</code> as <code>def</code></li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.ifType(obj, type, def)</code> - If <code>obj</code> is not of type <code>type</code>, will return <code>def</code>, otherwise return <code>obj</code></li>
+<li><strong>Function</strong> <code>JOBAD.util.equalsIgnoreCase(a, b)</code> - Checks if two strings are equal, ignoring case. </li>
+<li><strong>Function</strong> <code>JOBAD.util.orderTree(element)</code> - Return an order jQuery collection of element, where they are sorted by depth (deepest first)
+<ul>
+<li><strong>jQuery</strong> <code>element</code> Elements to sort</li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.isUrl(url)</code> - Checks if string is a valid url. Includes data urls. 
+<ul>
+<li><strong>String</strong> <code>url</code> String to check. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.startsWith(str, start)</code> - Checks if the string <code>str</code> starts with the string <code>start</code>. </li>
+<li><strong>Function</strong> <code>JOBAD.util.lOr()</code> - Performs a logical or on all arguments given to it. Note: This method flattens all arguments. </li>
+<li><strong>Function</strong> <code>JOBAD.util.lAnd()</code> - Performs a logical and on all arguments given to it. Note: This method flattens all arguments. </li>
+<li><strong>Function</strong> <code>JOBAD.util.containsAll(container, contained, includeSelf)</code> - Checks if all elements in <code>contained</code> are contained somewhere in <code>container</code>. 
+<ul>
+<li><strong>jQuery</strong> <code>container</code> Container to look in. </li>
+<li><strong>jQuery</strong> <code>contained</code> Contained elements to look for. </li>
+<li><strong>Boolean</strong> <code>includeSelf</code> Optional. Include the container element iteself in the search. Default: False. </li>
+</ul></li>
 </ul>
 
 	</body>

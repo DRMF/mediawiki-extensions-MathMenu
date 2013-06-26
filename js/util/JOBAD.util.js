@@ -233,6 +233,8 @@ JOBAD.util.isHidden = function(element){
 	}
 };
 
+/* Other utility functions */
+
 /*
 	Checks if object is defined and return obj, otherwise an empty Object. 
 	@param	obj	Object to check. 
@@ -288,38 +290,6 @@ JOBAD.util.equalsIgnoreCase = function(a, b){
 	var b = String(b);
 
 	return (a.toLowerCase() == b.toLowerCase())
-};
-
-//contains all the safewraps
-var JOBAD_safeWrap_Array = {};
-
-JOBAD.util.safeWrap = function(element, wrapper){
-	//wraps an element safely. 
-	var id = JOBAD.util.UID();
-
-	JOBAD_safeWrap_Array[id] = JOBAD.refs.$(element).map(function(e){
-		var me = JOBAD.refs.$(this);
-		me.wrap(wrapper);
-		return me.parent();
-	});
-
-	return id;
-};
-
-JOBAD.util.getWrapper = function(id){
-	return JOBAD_safeWrap_Array[id];
-}
-
-JOBAD.util.safeUnWrap = function(id){
-	//unwraps an element with the given id safely
-	var wrappers = JOBAD.refs.$(JOBAD_safeWrap_Array[id]);
-	delete JOBAD_safeWrap_Array[id];
-
-	return wrappers.each(function(){
-		if(!JOBAD.refs.$.nodeName(this, "body")){
-			JOBAD.refs.$(this).replaceWith(JOBAD.refs.$(this).children());
-		}
-	})
 };
 
 /*
@@ -401,6 +371,7 @@ JOBAD.util.lAnd = function(){
 */
 JOBAD.util.containsAll = function(container, contained, includeSelf){
 	var container = JOBAD.refs.$(container); 
+	var includeSelf = JOBAD.util.forceBool(includeSelf, false); 
 	return JOBAD.util.lAnd(
 		JOBAD.refs.$(contained).map(function(){
 			return container.is(contained) || (includeSelf && container.find(contained).length > 0); 

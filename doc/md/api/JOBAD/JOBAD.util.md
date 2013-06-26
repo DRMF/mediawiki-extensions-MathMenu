@@ -41,4 +41,24 @@ In addition to these functions, JOBAD.util also contains all underscore (version
 	* **jQuery** `element` Element to check
 * **Function** `JOBAD.util.isHidden(element)` - Checks if an element is hidden
 	* **jQuery** `element` Element to check
-* missing several newer functions
+* **Function** `JOBAD.util.defined(obj)` - Checks if `obj` is defined and returns it if so. Otherwise returns an empty JSON-object
+	* **Object** `obj` Object to check
+* **Function** `JOBAD.util.forceBool(obj, def)` - Forces `obj` to be of type boolean
+	* **Object** `obj` Object to check
+	* **Object** `def` Optional. Default to use. If undefined, obj will be forced into a boolean. 
+* **Function** `JOBAD.util.forceFunction(obj, def)` - Forces `obj` to be a function
+	* **Object** `obj` Object to check
+	* **Object** `def` Optional. Default function to use. If not a function, will return a function which retruns def. If omitetd will use `obj` as `def`
+* **Function** `JOBAD.util.ifType(obj, type, def)` - If `obj` is not of type `type`, will return `def`, otherwise return `obj`
+* **Function** `JOBAD.util.equalsIgnoreCase(a, b)` - Checks if two strings are equal, ignoring case. 
+* **Function** `JOBAD.util.orderTree(element)` - Return an order jQuery collection of element, where they are sorted by depth (deepest first)
+	* **jQuery** `element` Elements to sort
+* **Function** `JOBAD.util.isUrl(url)` - Checks if string is a valid url. Includes data urls. 
+	* **String** `url` String to check. 
+* **Function** `JOBAD.util.startsWith(str, start)` - Checks if the string `str` starts with the string `start`. 
+* **Function** `JOBAD.util.lOr()` - Performs a logical or on all arguments given to it. Note: This method flattens all arguments. 
+* **Function** `JOBAD.util.lAnd()` - Performs a logical and on all arguments given to it. Note: This method flattens all arguments. 
+* **Function** `JOBAD.util.containsAll(container, contained, includeSelf)` - Checks if all elements in `contained` are contained somewhere in `container`. 
+	* **jQuery** `container` Container to look in. 
+	* **jQuery** `contained` Contained elements to look for. 
+	* **Boolean** `includeSelf` Optional. Include the container element iteself in the search. Default: False. 

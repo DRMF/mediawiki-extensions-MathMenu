@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 25 Jun 2013 16:43:56 +0200
+	built: Wed, 26 Jun 2013 13:35:48 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1662,6 +1662,8 @@ JOBAD.util.isHidden = function(element){
 	}
 };
 
+/* Other utility functions */
+
 /*
 	Checks if object is defined and return obj, otherwise an empty Object. 
 	@param	obj	Object to check. 
@@ -1717,38 +1719,6 @@ JOBAD.util.equalsIgnoreCase = function(a, b){
 	var b = String(b);
 
 	return (a.toLowerCase() == b.toLowerCase())
-};
-
-//contains all the safewraps
-var JOBAD_safeWrap_Array = {};
-
-JOBAD.util.safeWrap = function(element, wrapper){
-	//wraps an element safely. 
-	var id = JOBAD.util.UID();
-
-	JOBAD_safeWrap_Array[id] = JOBAD.refs.$(element).map(function(e){
-		var me = JOBAD.refs.$(this);
-		me.wrap(wrapper);
-		return me.parent();
-	});
-
-	return id;
-};
-
-JOBAD.util.getWrapper = function(id){
-	return JOBAD_safeWrap_Array[id];
-}
-
-JOBAD.util.safeUnWrap = function(id){
-	//unwraps an element with the given id safely
-	var wrappers = JOBAD.refs.$(JOBAD_safeWrap_Array[id]);
-	delete JOBAD_safeWrap_Array[id];
-
-	return wrappers.each(function(){
-		if(!JOBAD.refs.$.nodeName(this, "body")){
-			JOBAD.refs.$(this).replaceWith(JOBAD.refs.$(this).children());
-		}
-	})
 };
 
 /*
@@ -1830,6 +1800,7 @@ JOBAD.util.lAnd = function(){
 */
 JOBAD.util.containsAll = function(container, contained, includeSelf){
 	var container = JOBAD.refs.$(container); 
+	var includeSelf = JOBAD.util.forceBool(includeSelf, false); 
 	return JOBAD.util.lAnd(
 		JOBAD.refs.$(contained).map(function(){
 			return container.is(contained) || (includeSelf && container.find(contained).length > 0); 
@@ -2961,34 +2932,49 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 			return !block; 
 		}
 
+
+		//trigger the open callback
 		onOpen(element);
 
+		//get the type of the menu
+		var menuType = typeFunction(targetElement, orgElement);
+		if(typeof menuType == "undefined"){
+			menuType = 0;
+		}
+
+		//create the context menu element
 		var menuBuild = JOBAD.refs.$("<div>").addClass("ui-front"); //we want to be in front. 
 
+
+		//a handler for closing
 		var closeHandler = function(e){
 			menuBuild
 			.remove();
 			onClose(element);
 		};
 		
-		var menuType = typeFunction(targetElement, orgElement);
 
-		if(typeof menuType == "undefined"){
-			menuType = 0;
-		}
-		
+		//switch between menu types
 		if(menuType == 0 || JOBAD.util.equalsIgnoreCase(menuType, 'standard')){
+			//build the standard menu
 			menuBuild
 			.append(
-				JOBAD.UI.ContextMenu.buildContextMenuList(result, JOBAD.util.ifType(config.callBackTarget, JOBAD.refs.$, targetElement), JOBAD.util.ifType(config.callBackOrg, JOBAD.refs.$, orgElement), onCallBack)
+				JOBAD.UI.ContextMenu.buildContextMenuList(
+					result, 
+					JOBAD.util.ifType(config.callBackTarget, JOBAD.refs.$, targetElement), 
+					JOBAD.util.ifType(config.callBackOrg, JOBAD.refs.$, orgElement), 
+				onCallBack)
 				.menu()
 			).on('contextmenu', function(e){
 				return (e.ctrlKey);
 			}).css({
-				"top":  Math.min(mouseCoords[1], window.innerHeight-menuBuild.outerHeight(true)-JOBAD.UI.ContextMenu.config.margin),
-				"left": Math.min(mouseCoords[0], window.innerWidth-menuBuild.outerWidth(true)-JOBAD.UI.ContextMenu.config.margin)
+				"left": Math.min(mouseCoords[0], window.innerWidth-menuBuild.outerWidth(true)-JOBAD.UI.ContextMenu.config.margin), 
+				"top":  Math.min(mouseCoords[1], window.innerHeight-menuBuild.outerHeight(true)-JOBAD.UI.ContextMenu.config.margin)
 			});
 		} else if(menuType == 1 || JOBAD.util.equalsIgnoreCase(menuType, 'radial')){
+
+			//build the radial menu
+
 			var eventDispatcher = JOBAD.refs.$("<span>");
 
 			JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind'); //close all other menus
@@ -2999,8 +2985,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 					JOBAD.util.ifType(config.callBackTarget, JOBAD.refs.$, targetElement), 
 					JOBAD.util.ifType(config.callBackOrg, JOBAD.refs.$, orgElement), 
 					onCallBack,
-					mouseCoords[1],
-					mouseCoords[0]
+					mouseCoords[0],
+					mouseCoords[1]
 				)
 				.find("div")
 				.click(function(){
@@ -3014,7 +3000,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 				return JOBAD.refs.$(e).closest("div").data("JOBAD.UI.ContextMenu.subMenuData");
 			}, {
 				"type": 0,
-				"parents": menuBuild,
+				"parents": parents.add(menuBuild),
 				"callBackTarget": targetElement,
 				"callBackOrg": orgElement,
 				"unbindListener": eventDispatcher,
@@ -3033,6 +3019,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		}
 		
 	
+		//set its css and append it to the body
 
 		menuBuild
 		.css({
@@ -3044,6 +3031,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		})
 		.appendTo(JOBAD.refs.$("body"))
 
+
+		//unbind listener
 		JOBAD.refs.$(document).add(config.unbindListener).add(menuBuild).on('JOBAD.UI.ContextMenu.unbind', function(e){
 				closeHandler();
 				JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBAD.UI.ContextMenu.unbind');
@@ -3055,6 +3044,7 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 			JOBAD.UI.ContextMenu.clear(); 
 		});
 
+		//add to all ContextMenus
 		ContextMenus = ContextMenus.add(menuBuild);
 		
 		return false;
@@ -3074,6 +3064,10 @@ JOBAD.UI.ContextMenu.disable = function(element){
 	return element;
 };
 
+/*
+	Clears all context menus. 
+	@param	keep	Menus to keep open. 
+*/
 JOBAD.UI.ContextMenu.clear = function(keep){
 	var keepers = ContextMenus.filter(keep);
 	var clearers = ContextMenus.not(keep).trigger("JOBAD.UI.ContextMenu.unbind").remove();
@@ -3144,15 +3138,37 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 	@param orgElement The element the context menu call originates from. 
 	@returns the menu element. 
 */
-JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, callback, x, y){
+JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, callback, mouseX, mouseY){
 	//get callback
 	var cb = JOBAD.util.forceFunction(callback, function(){});
 
 	//position statics
 	
 	var r = JOBAD.UI.ContextMenu.config.radius;
-	var R =  items.length*(r+JOBAD.UI.ContextMenu.config.radiusConst)/(2*Math.PI);
 	var n = items.length;
+	var R = n*(r+JOBAD.UI.ContextMenu.config.radiusConst)/(2*Math.PI);
+	
+
+	//minimal border allowed
+	var minBorder = R+r+JOBAD.UI.ContextMenu.config.margin;
+
+	//get the reight positions
+	var x = mouseX; 
+	if(x < minBorder){
+		x = minBorder;
+	} else if(x > window.innerWidth - minBorder){
+		x = window.innerWidth - minBorder; 
+	}
+
+	var y = mouseY;
+	if(y < minBorder){
+		y = minBorder;
+	} else if(y > window.innerHeight - minBorder){
+		var y = window.innerHeight - minBorder; 
+	}
+
+
+
 	//create a container
 	var $container = JOBAD.refs.$("<div class='JOBAD JOBAD_Contextmenu JOBAD_ContextMenu_Radial'>");
 	for(var i=0;i<items.length;i++){
@@ -3160,21 +3176,21 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 		
 		//compute position
 		var t = (2*(n-i)*Math.PI) / items.length;
-		var X = R*Math.cos(t)-r+x;
-		var Y = R*Math.sin(t)-r+y;
+		var X = R*Math.sin(t)-r+x;
+		var Y = R*Math.cos(t)-r+y;
 
 		//create item and position
 		var $item = JOBAD.refs.$("<div>").appendTo($container)
 		.css({
-			"top": x-r,
-			"left": y-r,
+			"top": y-r,
+			"left": x-r,
 			"height": 2*r,
 			"width": 2*r
 		}).addClass("JOBAD JOBAD_Contextmenu JOBAD_ContextMenu_Radial JOBAD_ContextMenu_RadialItem")
 
 		$item.animate({
-			"top": X,
-			"left": Y
+			"top": Y,
+			"left": X
 		}, 400);
 
 		$item.append(
@@ -3328,10 +3344,13 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
             me(e, align);
         });
     }
-	
+
+    //get alignement and sidebar css class
 	var sbar_align = (align === 'left')?'left':'right';
 	var sbar_class = "JOBAD_Sidebar_"+(sbar_align);
 
+
+	//wrap the original element
 	var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
 	var sideBarElement = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Container'>").css({
@@ -3340,14 +3359,10 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 
 	var container = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Wrapper'>");
 
-
-	var orgWrapId = JOBAD.util.safeWrap(org, orgWrapper);
 	org.wrap(orgWrapper);
-
 	orgWrapper = org.parent();
 
 	orgWrapper.wrap(container);
-
 	container = orgWrapper.parent();
 
 	container.prepend(sideBarElement);
@@ -4140,6 +4155,8 @@ JOBAD.UI.Folding.enable = function(e, c){
                 //adjust placeholder height
                 placeHolder.height(config.height)
                 .show()
+
+                JOBAD.util.markHidden(placeHolder); //hide it from JOBAD
 
                 //append stuff to the placeholder
                 placeHolder.empty().append(

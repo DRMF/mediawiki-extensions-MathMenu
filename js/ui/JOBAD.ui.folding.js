@@ -203,6 +203,8 @@ JOBAD.UI.Folding.enable = function(e, c){
                 placeHolder.height(config.height)
                 .show()
 
+                JOBAD.util.markHidden(placeHolder); //hide it from JOBAD
+
                 //append stuff to the placeholder
                 placeHolder.empty().append(
                     config.preview(element)

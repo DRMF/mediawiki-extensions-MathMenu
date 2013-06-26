@@ -44,10 +44,13 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
             me(e, align);
         });
     }
-	
+
+    //get alignement and sidebar css class
 	var sbar_align = (align === 'left')?'left':'right';
 	var sbar_class = "JOBAD_Sidebar_"+(sbar_align);
 
+
+	//wrap the original element
 	var orgWrapper = JOBAD.refs.$("<div>").css({"overflow": "hidden"});
 
 	var sideBarElement = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Container'>").css({
@@ -56,14 +59,10 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 
 	var container = JOBAD.refs.$("<div class='JOBAD "+sbar_class+" JOBAD_Sidebar_Wrapper'>");
 
-
-	var orgWrapId = JOBAD.util.safeWrap(org, orgWrapper);
 	org.wrap(orgWrapper);
-
 	orgWrapper = org.parent();
 
 	orgWrapper.wrap(container);
-
 	container = orgWrapper.parent();
 
 	container.prepend(sideBarElement);
