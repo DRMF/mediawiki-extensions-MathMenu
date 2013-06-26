@@ -22,8 +22,8 @@
 (function($){
 	JOBAD.modules.register({
 		info:{
-			'identifier':	'test.color.hover',
-			'title':	'Test Module: Colors Hover',
+			'identifier':	'test.hover',
+			'title':	'Hover Test menu',
 			'author':	'Tom Wiesing',
 			'description':	'Counts the words in a p element. ',
 		},
@@ -32,9 +32,6 @@
 				var wordCount = (target.text().split(" ").length+1).toString()
 				return "I am a p element which contains "+wordCount+" words. ";
 			}
-		},
-		dblClick: function(){
-			alert("Double Click");
 		}
 	});
 })(JOBAD.refs.$);

@@ -22,8 +22,8 @@
 (function($){
 	JOBAD.modules.register({
 		info:{
-			'identifier':	'test.color.click',
-			'title':	'Test Module: Colors Click',
+			'identifier':	'test.click',
+			'title':	'Click testing module',
 			'author':	'Tom Wiesing',
 			'description':	'A Testing module, colors <p>s in the color given as first parameter. ',
 			'hasCleanNamespace': false

@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Wed, 26 Jun 2013 13:35:50 +0200
+	built: Wed, 26 Jun 2013 14:18:53 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -345,6 +345,10 @@
 .JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_ModEntry {
 	/* Module entries */
 	vertical-align: top; 
+}
+
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_ModEntry td {
+	border-top: 1px solid black;
 }
 
 

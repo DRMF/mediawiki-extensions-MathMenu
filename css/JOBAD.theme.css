@@ -158,6 +158,10 @@
 	vertical-align: top; 
 }
 
+.JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_ModEntry td {
+	border-top: 1px solid black;
+}
+
 
 .JOBAD.JOBAD_ConfigUI.JOBAD_ConfigUI_MetaConfigTitle {
 	/* Title of module in about box */

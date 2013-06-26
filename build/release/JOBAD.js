@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 26 Jun 2013 13:35:48 +0200
+	built: Wed, 26 Jun 2013 14:18:51 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2641,8 +2641,6 @@ JOBAD.ifaces.push(function(me, args){
 
 		}	
 	}
-	
-	//defer disable event
 	
 });
 

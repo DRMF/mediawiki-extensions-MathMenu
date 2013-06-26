@@ -25,18 +25,12 @@
 	JOBAD.modules.register({
 		info:{
 			'identifier':	'test.sidebar',
-			'title':	'Test Module: Sidebar',
+			'title':	'Sidebar Test',
 			'author':	'Tom Wiesing',
 			'description':	'Displays the number of characters next to every p and clicking it trigger the original p. '
 		},
-		config: {
-			"test": ["string", function(x){return x[0] == "d";}, "default-value-goes-here", ["String", "Has to start with d"]],
-			"bool": ["bool", false, ["Boolean", "Another awesome setting. "]],
-			"num": ["number", [-10, 10], 0, ["Number", "An awesome number between -10 and 10. "]],
-			"int": ["integer", [-10, 10], 0, ["Integer", "An awesome integer between -10 and 10. "]],
-			"alist": ["list", [1, 2, 3, 4], 1, ["Select an option", "Auto", "Yes", "No", "Perhaps"]]
-		},
 		init: function(JOBADInstance){
+			//add a bunch of notifications
 			var classes = ["info", "warning", "error"];
 			JOBADInstance.element.find("p")
 			.each(function(i, target){
@@ -54,8 +48,7 @@
 				});
 				JOBADInstance.Sidebar.registerNotification($target, {
 					"text": "A second something. ",
-					"trace": true, 
-					"hide": true,
+					"trace": true,
 					"class": classes[(i+1) % 3],
 					"click": function(){
 							JOBADInstance.Event.leftClick.trigger($target);

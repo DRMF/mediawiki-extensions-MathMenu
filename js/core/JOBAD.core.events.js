@@ -152,8 +152,6 @@ JOBAD.ifaces.push(function(me, args){
 		}	
 	}
 	
-	//defer disable event
-	
 });
 
 
