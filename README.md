@@ -1,8 +1,8 @@
 # JOBAD
 
-Current Version: 3.1.0
+Current Version: 3.2.0
 
-Current Stable Version: 3.0.1
+Current Stable Version: 3.1.0
 
 Development Branch. 
 
@@ -45,4 +45,3 @@ This project includes Underscore 1.4.4, which is licensed under [MIT License](ht
 
 ## Documentation
 Please refer to [the Documentation](doc/md/index.md) or to the html version in doc/html/index.html. 
-

@@ -15,7 +15,9 @@ It is known not to be compatible with:
 The official JOBAD repository is located at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
 
 ## Changelog
-### Version 3.1 (In Development)
+### Version 3.2 (In Development)
+* nothing yet
+### Version 3.1 (Stable)
 
 * improved Sidebar
 	* added sidebar postions: left, right and bound to element. 
@@ -41,7 +43,7 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * updated jQuery to version 2.0.2
 * updated the documentation (a lot)
 
-### Version 3.0 (Stable)
+### Version 3.0
 
 * Initial stable release
 
