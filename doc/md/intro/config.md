@@ -86,3 +86,15 @@ The `meta-data` is a string giving a name of the setting. Additionally it can be
 For the `list` type it has to give names to all possible values in the array after the name of the setting. May not be used for the `none` type. 
 
 To show a nice Configuration UI, you can use the method `.showConfigUI()` of any JOBADInstance. You can get UserConfig from within a loadedModule by calling `loadedModule.UserConfig.get("name")`. 
+
+## Storage of UserConfig Settings
+`UserConfig` Settings are global, that means the same module has the same settings in every instance. Therfore the conecpt of `stargateBackend` is introduced. It allows the programmers to store the settings related to JOBAD modules in some custom way. When a module is loaded, the settings are loaded automatically, when they are changed, they will be stored automatically. A `storageBackend` is an array consisting out of two simple functions, a `get(key)` and `set(key, value)` function: 
+
+```js
+var get = function(key){/* get the key here */};
+var set = function(key, value){/* set the key here*/ };
+JOBAD.storageBackend.engines["myBackend"] = [get, set]; //create a new storageBackend
+JOBAD.config.storageBackend = "myBackend"; //set it as default storage backend
+```
+
+This interface allows for custom storing of values. If you wish to disable this functionality, use the storageBackend "none" (enabled by default). Also, a storageBackend "cookie" is built in which stores all settings in a cookie. 

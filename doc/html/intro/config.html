@@ -569,5 +569,17 @@ For the <code>list</code> type it has to give names to all possible values in th
 
 <p>To show a nice Configuration UI, you can use the method <code>.showConfigUI()</code> of any JOBADInstance. You can get UserConfig from within a loadedModule by calling <code>loadedModule.UserConfig.get("name")</code>. </p>
 
+<h2>Storage of UserConfig Settings</h2>
+
+<p><code>UserConfig</code> Settings are global, that means the same module has the same settings in every instance. Therfore the conecpt of <code>stargateBackend</code> is introduced. It allows the programmers to store the settings related to JOBAD modules in some custom way. When a module is loaded, the settings are loaded automatically, when they are changed, they will be stored automatically. A <code>storageBackend</code> is an array consisting out of two simple functions, a <code>get(key)</code> and <code>set(key, value)</code> function: </p>
+
+<div class="codehilite"><pre><code><span class="kd">var</span> <span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">){</span><span class="cm">/* get the key here */</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">set</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span><span class="cm">/* set the key here*/</span> <span class="p">};</span>
+<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">storageBackend</span><span class="p">.</span><span class="nx">engines</span><span class="p">[</span><span class="s2">&quot;myBackend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">get</span><span class="p">,</span> <span class="nx">set</span><span class="p">];</span> <span class="c1">//create a new storageBackend</span>
+<span class="nx">JOBAD</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">storageBackend</span> <span class="o">=</span> <span class="s2">&quot;myBackend&quot;</span><span class="p">;</span> <span class="c1">//set it as default storage backend</span>
+</code></pre></div>
+
+<p>This interface allows for custom storing of values. If you wish to disable this functionality, use the storageBackend "none" (enabled by default). Also, a storageBackend "cookie" is built in which stores all settings in a cookie. </p>
+
 	</body>
 </html>

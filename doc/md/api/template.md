@@ -4,7 +4,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 
 * **Object** `template.info` Module information namespace. 
 * **String** `template.info.identifier` A unique identifier for the module. 
-* **String** `template.info.title` Module title
+* **String** `template.info.title` Module title. 
 * **String** `template.info.author` The module author. 
 * **String** `template.info.description` A human readable description of the module. 
 * **String** `template.info.version` String containing the version number. May be omitted. 

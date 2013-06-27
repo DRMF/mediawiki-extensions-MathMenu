@@ -99,26 +99,41 @@
 /*
 	JOBAD Folding
 */
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_folded,
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_unfolded,
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_folded,
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_unfolded{
+	width: 3px;
+	box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+/* on hover */
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_folded:hover,
+.JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_unfolded:hover,
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_folded:hover,
+.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_unfolded:hover{
+	background-color: #C0C0C0;
+}
+
+
+
 
 .JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_folded {
 	/* Right Folding Bracket */
-	width: 3px;
 	border-right: 1px solid black;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
 }
 
 .JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_folded {
 	/* Left Folding Bracket */
-	width: 3px;
 	border-left: 1px solid black;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
 }
 
 .JOBAD.JOBAD_Folding_right.JOBAD_Folding_Container.JOBAD_Folding_unfolded {
 	/* Right Folding Bracket */
-	width: 3px;
 	border-right: 1px solid gray;
 	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;
@@ -126,7 +141,6 @@
 
 .JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container.JOBAD_Folding_unfolded {
 	/* Left Folding Bracket */
-	width: 3px;
 	border-left: 1px solid gray;
 	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;

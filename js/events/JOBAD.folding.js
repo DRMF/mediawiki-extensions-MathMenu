@@ -50,7 +50,7 @@ JOBAD.ifaces.push(function(){
 			} else {
 				this.element.wrapInner(JOBAD.refs.$("<div></div>"));
 				element = this.element.children().get(0);
-				this.element.data("JOBAD.UI.Folding.virtualFolding", element)
+				this.element.data("JOBAD.UI.Folding.virtualFolding", JOBAD.refs.$(element));
 			}
 			
 		}
@@ -100,9 +100,9 @@ JOBAD.ifaces.push(function(){
 		var element = JOBAD.refs.$(element);
 
 		if(element.data("JOBAD.UI.Folding.virtualFolding")){
-			return element.data("JOBAD.UI.Folding.virtualFolding").data("JOABD.UI.Folding.enabled")?true:false;
+			return element.data("JOBAD.UI.Folding.virtualFolding").data("JOBAD.UI.Folding.enabled")?true:false;
 		} else {
-			return element.data("JOABD.UI.Folding.enabled")?true:false;
+			return element.data("JOBAD.UI.Folding.enabled")?true:false;
 		}
 	};
 
