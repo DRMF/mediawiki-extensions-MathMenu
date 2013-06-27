@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 27 Jun 2013 10:37:35 +0200
+	built: Thu, 27 Jun 2013 11:14:35 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -4723,7 +4723,7 @@ JOBAD.ifaces.push(function(){
 			} else {
 				this.element.wrapInner(JOBAD.refs.$("<div></div>"));
 				element = this.element.children().get(0);
-				this.element.data("JOBAD.UI.Folding.virtualFolding", element)
+				this.element.data("JOBAD.UI.Folding.virtualFolding", JOBAD.refs.$(element));
 			}
 			
 		}
@@ -4773,9 +4773,9 @@ JOBAD.ifaces.push(function(){
 		var element = JOBAD.refs.$(element);
 
 		if(element.data("JOBAD.UI.Folding.virtualFolding")){
-			return element.data("JOBAD.UI.Folding.virtualFolding").data("JOABD.UI.Folding.enabled")?true:false;
+			return element.data("JOBAD.UI.Folding.virtualFolding").data("JOBAD.UI.Folding.enabled")?true:false;
 		} else {
-			return element.data("JOABD.UI.Folding.enabled")?true:false;
+			return element.data("JOBAD.UI.Folding.enabled")?true:false;
 		}
 	};
 
