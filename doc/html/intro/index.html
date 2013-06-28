@@ -504,9 +504,13 @@
     <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#jobad_area&quot;</span><span class="p">);</span> <span class="c1">// some area of the page to bind JOBAD to. Warning: Never bind to &quot;body&quot; or &quot;document&quot; directly. </span>
     <span class="kd">var</span> <span class="nx">myJOBADInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">JOBAD</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="c1">//create a new jobad instance. </span>
     <span class="c1">//load the module some.awesome.module.name</span>
-    <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">,</span> <span class="p">[]);</span> <span class="c1">//the second parameter is options to pass to the module. </span>
-    <span class="c1">//setup jobad (start it)</span>
-    <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">Setup</span><span class="p">();</span> 
+    <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">modules</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span>
+        <span class="s1">&#39;some.awesome.module.name&#39;</span><span class="p">,</span> 
+        <span class="p">[],</span> <span class="c1">//the second parameter is options to pass to the module. </span>
+        <span class="kd">function</span><span class="p">(){</span> <span class="c1">//a  callback once everythign is loaded</span>
+            <span class="nx">myJOBADInstance</span><span class="p">.</span><span class="nx">Setup</span><span class="p">();</span> <span class="c1">//setup jobad (start it)</span>
+        <span class="p">}</span>
+    <span class="p">);</span> 
 <span class="p">});</span>
 </code></pre></div>
 

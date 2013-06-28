@@ -256,6 +256,24 @@ JOBAD.util.forceBool = function(obj, def){
 };
 
 /*
+	Forces an object to be an array. 
+*/
+JOBAD.util.forceArray = function(obj, def){
+	var def = def; 
+	if(typeof def == "undefined"){
+		if(typeof obj == "undefined"){
+			def =  []; 
+		} else {
+			def = [obj];
+		}
+	}
+	if(!JOBAD.util.isArray(def)){
+		def = [def]; 
+	}
+	return JOBAD.util.isArray(obj)?obj:def; 
+}
+
+/*
 	Forces obj to be a function. 
 	@param func	Function to check. 
 	@param def	Optional. Default to use instead. 

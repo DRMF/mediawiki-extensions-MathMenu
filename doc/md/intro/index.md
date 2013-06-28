@@ -23,9 +23,13 @@ $(function(){ //run this code once the DOM is ready
     var element = $("#jobad_area"); // some area of the page to bind JOBAD to. Warning: Never bind to "body" or "document" directly. 
     var myJOBADInstance = new JOBAD(element) //create a new jobad instance. 
     //load the module some.awesome.module.name
-    myJOBADInstance.modules.load('some.awesome.module.name', []); //the second parameter is options to pass to the module. 
-    //setup jobad (start it)
-    myJOBADInstance.Setup(); 
+    myJOBADInstance.modules.load(
+        'some.awesome.module.name', 
+        [], //the second parameter is options to pass to the module. 
+        function(){ //a  callback once everythign is loaded
+            myJOBADInstance.Setup(); //setup jobad (start it)
+        }
+    ); 
 });
 ```
 

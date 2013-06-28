@@ -33,23 +33,27 @@ ${CSS_INCLUDE}
 				JOBAD1 = new JOBAD(jQuery("#1"));
 				JOBAD2 = new JOBAD(jQuery("#2"));
 
-				JOBAD1.modules.load('test.click', ['green']);
-				JOBAD1.modules.load('test.menu1', []);
-				JOBAD1.modules.load('test.menu2', []);
-				JOBAD1.modules.load('test.hover', []);
-				JOBAD1.modules.load('test.config', []);
+				JOBAD1.modules.load([
+					['test.click', ['green']],
+					"test.menu1",
+					"test.menu2",
+					"test.hover",
+					"test.config"
+				], function(mod, state){
+					this.Setup();
+				});
 
-				
-				JOBAD2.modules.load('test.click', ['blue']);
-				JOBAD2.modules.load('test.menu1', []);
-				JOBAD2.modules.load('test.menu2', []);
-				JOBAD2.modules.load('test.hover', []);
-				JOBAD2.modules.load('test.sidebar', []);
-				JOBAD2.modules.load('test.folding', []);
-				JOBAD2.modules.load('test.config', []);
-
-				JOBAD1.Setup();
-				JOBAD2.Setup();
+				JOBAD2.modules.load([
+					['test.click', ['blue']],
+					"test.menu1",
+					"test.menu2",
+					"test.hover",
+					"test.sidebar",
+					"test.folding",
+					"test.config"
+				], function(mod, state){
+					this.Setup();
+				});
 			})		
 		</script>
 	</head>
