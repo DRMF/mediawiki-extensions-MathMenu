@@ -10,6 +10,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 * **String** `template.info.version` String containing the version number. May be omitted. 
 * **String** `template.info.hasCleanNamespace` Booelan indicating if the namespace of this moudle contains other, custom, properties which should be copied over. If so, they will be copied to any module instance and `this` inside of any of the functions can refer to it. Note that this may be shared among different instances of the module since javascript creates references to JSON-style objects. Can also be disabled globally by configuration in which case non-clean modules will not load. Property may be omitted in which case it is assumed to be true. 
 * **Array[String]** `template.info.dependencies` Array of module dependencies. If ommited, assumed to have no dependencies. 
+* **Array[String]** `template.info.externals` Array of script urls which are external dependencies of the module. 
 
 * **Object** `template.config` Specification of user configurable objects. A map containing (`name`, `spec`) values. The `spec` object looks like the following:
 	* **Array[3|4]** `spec` Contains the specification. 

@@ -44,6 +44,8 @@
 		<script src="./../../../modules/example6.js"></script>
 		<script src="./../../../modules/example7.js"></script>
 
+		<script src="./../../../modules/mathjax.js"></script>
+
 		<script type="text/javascript">
 			var JOBAD1, JOBAD2;
 
@@ -68,7 +70,8 @@
 					"test.hover",
 					"test.sidebar",
 					"test.folding",
-					"test.config"
+					"test.config",
+					"mathjax.mathjax"
 				], function(mod, state){
 					this.Setup();
 				});
@@ -102,6 +105,39 @@
 		<div id='2'>
 			<p>
 				Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.Aenean porta porttitor enim, ut tristique turpis vestibulum nec. Mauris volutpat consectetur sem at ornare. Morbi id lorem eu nunc dapibus faucibus eget malesuada erat. Ut in ligula turpis. Proin cursus consequat imperdiet. Cras vitae nisl massa, eu rhoncus eros. Suspendisse lacinia libero vitae ante euismod sit amet volutpat ante gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae eros dui, sed ultrices diam.
+			</p>
+			<p>
+				Some math: 
+<math mode="display" xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <mi>x</mi>
+    <mo>=</mo>
+    <mfrac>
+      <mrow>
+        <mo form="prefix">&#x2212;<!-- − --></mo>
+        <mi>b</mi>
+        <mo>&#x00B1;<!-- &PlusMinus; --></mo>
+        <msqrt>
+          <msup>
+            <mi>b</mi>
+            <mn>2</mn>
+          </msup>
+          <mo>&#x2212;<!-- − --></mo>
+          <mn>4</mn>
+          <mo>&#x2062;<!-- &InvisibleTimes; --></mo>
+          <mi>a</mi>
+          <mo>&#x2062;<!-- &InvisibleTimes; --></mo>
+          <mi>c</mi>
+        </msqrt>
+      </mrow>
+      <mrow>
+        <mn>2</mn>
+        <mo>&#x2062;<!-- &InvisibleTimes; --></mo>
+        <mi>a</mi>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
 			</p>
 			<p>
 				Donec cursus neque quis eros tristique facilisis molestie sem consectetur. Pellentesque ut tortor erat, non semper nunc. Phasellus et nibh leo, a posuere ante. In laoreet purus vel nulla mattis id placerat enim rhoncus. Duis quam mi, laoreet quis ullamcorper eu, dignissim sit amet odio. Fusce accumsan mollis augue, facilisis vestibulum mi sodales ut. Nullam ligula libero, tempus ut tempus non, vestibulum ac urna. Phasellus faucibus imperdiet urna, et ullamcorper nisi ultrices vel. Etiam mollis est nibh.

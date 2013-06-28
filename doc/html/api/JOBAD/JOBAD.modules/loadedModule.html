@@ -482,11 +482,12 @@
 <h1>JOBAD.modules.loadedModule</h1>
 
 <ul>
-<li><strong>Function</strong> <code>JOBAD.modules.loadedModule(name, args, JOBADInstance)</code> Loads a module, assuming the dependencies are already available. 
+<li><strong>Function</strong> <code>JOBAD.modules.loadedModule(name, args, JOBADInstance, callback)</code> Loads a module, assuming the dependencies are already available. 
 <ul>
 <li><strong>String</strong> <code>name</code> Module to load.</li>
 <li><strong>Array[Mixed]</strong> Arguments to pass to this module instance. </li>
 <li><strong>Instance[ <a href="../JOBADInstance/index.html">JOBAD</a> ]</strong> <code>JOBADInstance</code> The instance of JOBAD the module is initiated on. </li>
+<li><strong>Function</strong> <code>callback(state)</code> Callback. Will be called when the module has finsihed loading or fails to do so. </li>
 <li><strong>returns</strong> a new <code>JOBAD.modules.loadedModule</code> instance. </li>
 </ul></li>
 </ul>

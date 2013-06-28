@@ -88,21 +88,30 @@ JOBAD.ifaces.push(function(me, args){
 	var doLoad = function(module, options){
 		var auto_activate = loadQuenueAutoActivate.indexOf(module) != -1; //TODO: Add option somewhere
 		try{
-			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me);
-			disabledModules.push(module); //we are disabled by default
+			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me, function(suc){
+				if(!suc){
+					markLoadAsFailed(module);
+				} else {
+					disabledModules.push(module); //we are disabled by default
 
-			if(auto_activate){
-				me.modules.activate(module);
-			}
+					if(auto_activate){
+						me.modules.activate(module);
+					}
+				}
+				runFinishQuenue(runLoadQuenue);
+				
+			});
 		} catch(e){
 			markLoadAsFailed(module);
+			runFinishQuenue(runLoadQuenue);
 		}
-
-		window.setTimeout(function(){runFinishQuenue(runLoadQuenue); }, 0); //do the callback
 	 };
 
 	var markLoadAsFailed = function(module){
 		loadFail.push(module);
+		try{
+			delete InstanceModules[module];
+		} catch(e){}
 	};
 
 	var properLoadObj = function(obj){
@@ -464,6 +473,7 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 	if(!JOBAD.util.isObject(ModuleObject)){
 		return false;
 	}
+
 	var properObject = 
 	{
 		"globalinit": function(){},
@@ -494,6 +504,16 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 				return false;			
 			}
 			properObject.info['version'] = info['version'];
+		}
+
+		if(info.hasOwnProperty('externals')){
+			if(JOBAD.util.isArray(info["externals"])){
+				properObject.info.externals = info["externals"];
+			} else {
+				return false;
+			}
+		} else {
+			properObject.info.externals = [];
 		}
 
 		if(info.hasOwnProperty('hasCleanNamespace')){
@@ -618,7 +638,10 @@ JOBAD.modules.getDependencyList = function(name){
 	@param args Arguments to pass to the module. 
 	@returns new JOBAD.modules.loadedModule instance. 
 */
-JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
+JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
+
+	var me = this;
+	var next = JOBAD.util.forceFunction(next, function(){});
 
 	if(!JOBAD.modules.available(name)){
 		JOBAD.error("Module is not available and cant be loaded. ");	
@@ -627,6 +650,8 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	if(!JOBAD.util.isArray(args)){
 		var args = []; //we force arguments
 	}
+
+
 
 	/*
 		Storage shared accross all module instances. 
@@ -700,20 +725,6 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 		return JOBADInstance.modules.isActive(this.info().identifier);
 	}
 
-	//Initilisation
-
-	if(!moduleStorage[name]["init"]){
-		moduleStorage[name]["init"] = true;
-		ServiceObject.globalinit.apply(undefined, []);
-		for(var key in JOBAD.modules.extensions){
-			var mod = JOBAD.modules.extensions[key];
-			var val = ServiceObject[key];
-			if(typeof mod["onFirstLoad"] == 'function'){
-				mod.onFirstLoad(this.globalStore);
-			}
-		}
-	}
-
 	//add JOBADINstance
 	var params = args.slice(0);
 	params.unshift(JOBADInstance);
@@ -757,6 +768,35 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance){
 	this.deactivate = function(){
 		return JOBADInstance.modules.deactivate(this.info().identifier);
 	}
+
+	var do_next = function(){
+		ServiceObject.init.apply(me, params); 
+		next(true);
+	};
+
+	if(!moduleStorage[name]["init"]){
+		moduleStorage[name]["init"] = true;
+
+		for(var key in JOBAD.modules.extensions){
+			var mod = JOBAD.modules.extensions[key];
+			var val = ServiceObject[key];
+			if(typeof mod["onFirstLoad"] == 'function'){
+				mod.onFirstLoad(me.globalStore);
+			}
+		}
+
+		JOBAD.util.loadExternalJS(ServiceObject.info.externals, function(urls, suc){
+			if(!suc){
+				next(false); 
+			} else {
+				ServiceObject.globalinit.apply(undefined, []);
+				do_next();
+			}
+			
+		});
+	} else {
+		do_next();
+	}
 	
-	ServiceObject.init.apply(this, params);		
+	
 };

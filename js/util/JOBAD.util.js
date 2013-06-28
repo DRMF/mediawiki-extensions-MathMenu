@@ -397,6 +397,84 @@ JOBAD.util.containsAll = function(container, contained, includeSelf){
 	);
 };
 
+/*
+	Loads an external javascript file. 
+	@param url	Url(s) of script(s) to load. 
+	@param	callback	Callback of script to load. 
+	@param	scope	Scope of callback. 
+*/
+JOBAD.util.loadExternalJS = function(url, callback, scope){
+	var TIMEOUT_CONST = 15000; //timeout for bad links
+	var has_called = false; 
+
+	var do_call = function(suc){
+		if(has_called){
+			return;
+		}
+		has_called = true;
+
+		var func = JOBAD.util.forceFunction(callback, function(){});
+		var scope = (typeof scope == "undefined")?window:scope;
+
+		func.call(scope, url, suc);
+		
+	}
+
+	
+	if(JOBAD.util.isArray(url)){
+		var i=0;
+		var next = function(urls, suc){
+			if(i>=url.length || !suc){
+				window.setTimeout(function(){
+					do_call(suc);
+				}, 0);
+			} else {
+				JOBAD.util.loadExternalJS(url[i], function(urls, suc){
+					i++;
+					next(urls, suc);
+				});
+			}
+		}
+
+		window.setTimeout(function(){
+			next("", true);
+		}, 0);
+
+		return url.length;
+	} else {
+		//adapted from: http://www.nczonline.net/blog/2009/07/28/the-best-way-to-load-external-javascript/
+		var script = document.createElement("script")
+	    script.type = "text/javascript";
+
+	    if (script.readyState){  //IE
+	        script.onreadystatechange = function(){
+	            if (script.readyState == "loaded" ||
+	                    script.readyState == "complete"){
+	                script.onreadystatechange = null;
+	                window.setTimeout(function(){
+						do_call(true);
+					}, 0);
+	            }
+	        };
+	    } else {  //Others
+	        script.onload = function(){
+	            window.setTimeout(function(){
+					do_call(true);
+				}, 0);
+	        };
+	    }
+
+	    script.src = url;
+	    document.getElementsByTagName("head")[0].appendChild(script);
+
+	    window.setTimeout(function(){
+	    	do_call(false);
+	    }, TIMEOUT_CONST);
+	    return 1;
+	}
+    
+}
+
 
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);

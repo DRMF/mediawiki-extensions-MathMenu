@@ -41,8 +41,7 @@ JOBAD.ifaces.push(function(me, args){
 			return me.Setup.enable();
 		}
 	}
-
-
+	
 	/*
 		Checks if this Instance is enabled. 
 	*/

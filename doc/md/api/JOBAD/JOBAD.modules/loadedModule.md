@@ -1,9 +1,10 @@
 # JOBAD.modules.loadedModule
 
-* **Function** `JOBAD.modules.loadedModule(name, args, JOBADInstance)` Loads a module, assuming the dependencies are already available. 
+* **Function** `JOBAD.modules.loadedModule(name, args, JOBADInstance, callback)` Loads a module, assuming the dependencies are already available. 
 	* **String** `name` Module to load.
 	* **Array[Mixed]** Arguments to pass to this module instance. 
 	* **Instance[ [JOBAD](../JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
+	* **Function** `callback(state)` Callback. Will be called when the module has finsihed loading or fails to do so. 
 	* **returns** a new `JOBAD.modules.loadedModule` instance. 
 
 ## Instance Functions

@@ -17,6 +17,9 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 ## Changelog
 ### Version 3.2 (In Development)
 * made module loading asynchronous 
+* added "externals" to module info
+	* allows to load external scripts as dependencies
+	* added a MathJax module which uses this
 ### Version 3.1 (Stable)
 
 * improved Sidebar

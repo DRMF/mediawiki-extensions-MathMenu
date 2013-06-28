@@ -12,6 +12,7 @@ var template = {
 		'description':	'A template you may use as a starting point for writing other modules. ', //A human readable description of the module. 
 		'version':	'1.0', //string containing the version number. May be omitted. 
 		'dependencies':	[], //Array of module dependencies. If ommited, assumed to have no dependencies. 
+		'externals': [], //external scripts this module depends on
 		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},
 	// Contains configuration which can be set by the user. May be omitted. 

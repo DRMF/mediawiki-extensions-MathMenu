@@ -69,7 +69,6 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 	var block = JOBAD.util.forceBool(config.block, false);
 
 	element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
-
 		//control overrides
 
 		if(e.ctrlKey){
