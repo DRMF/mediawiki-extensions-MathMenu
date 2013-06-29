@@ -493,6 +493,7 @@
         <span class="s1">&#39;version&#39;</span><span class="o">:</span>  <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="c1">//string containing the version number. May be omitted. </span>
         <span class="s1">&#39;dependencies&#39;</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">//Array of module dependencies. If ommited, assumed to have no dependencies. </span>
         <span class="s1">&#39;externals&#39;</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">//external scripts this module depends on</span>
+        <span class="s1">&#39;async&#39;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">//should globalinit be async</span>
         <span class="s1">&#39;hasCleanNamespace&#39;</span><span class="o">:</span> <span class="kc">true</span> <span class="c1">// Does this module contain only standard functions?</span>
     <span class="p">},</span>
     <span class="c1">// Contains configuration which can be set by the user. May be omitted. </span>
@@ -504,12 +505,14 @@
         <span class="s2">&quot;a_list&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Select an option&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]]</span>
     <span class="p">}</span>
     <span class="cm">/* Init handlers */</span>
-    <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">globalinit</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
         <span class="cm">/* </span>
 <span class="cm">            Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. </span>
-<span class="cm">            @this undefined. </span>
+<span class="cm">            @param next Callback if info.async is true. Should be called as a callback. </span>
+<span class="cm">            @this special object which has access to this.info, this.globalStore, this.UserConfig and non-clean functions</span>
 <span class="cm">            @returns nothing</span>
 <span class="cm">        */</span>
+        <span class="c1">//next(); //only if async is true </span>
     <span class="p">},</span>
     <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">JOBADInstance</span><span class="p">,</span> <span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">,</span> <span class="nx">param3</span> <span class="cm">/*, ... */</span><span class="p">){</span>
         <span class="cm">/*  </span>

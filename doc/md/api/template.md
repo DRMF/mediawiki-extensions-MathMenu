@@ -11,6 +11,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 * **String** `template.info.hasCleanNamespace` Booelan indicating if the namespace of this moudle contains other, custom, properties which should be copied over. If so, they will be copied to any module instance and `this` inside of any of the functions can refer to it. Note that this may be shared among different instances of the module since javascript creates references to JSON-style objects. Can also be disabled globally by configuration in which case non-clean modules will not load. Property may be omitted in which case it is assumed to be true. 
 * **Array[String]** `template.info.dependencies` Array of module dependencies. If ommited, assumed to have no dependencies. 
 * **Array[String]** `template.info.externals` Array of script urls which are external dependencies of the module. 
+* **Array[String]** `template.info.async` Determines if the globalinit function is async, i. e. if it gets a function as callback. 
 
 * **Object** `template.config` Specification of user configurable objects. A map containing (`name`, `spec`) values. The `spec` object looks like the following:
 	* **Array[3|4]** `spec` Contains the specification. 
@@ -31,8 +32,12 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 	* **Instance[ [JOBAD](JOBAD/JOBADInstance/index.md) ]** `JOBADInstance` The instance of JOBAD the module is initiated on. 
 	* **Mixed** `key` The configuration setting that was updated. 
 
-* **Function** `template.globalinit()` Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
-	* **Undefined** `this`
+* **Function** `template.globalinit(next)` Called exactly once GLOBALLY. Can be used to initialise global module ids, etc. May be ommitted. Will be called once a module is loaded. 
+	* **Object** `this` Special Object which contains all additional functions of the module object and the following properties of a loadedModule Object: 
+		* `info`
+		* `globalStore`
+		* ``
+	* **Function** `next()` Only given if `info.async` is true. Callback this function should call once ready. 
 
 * **Function** `template.init(JOBADInstance, param1, param2, param3 /*, ... */)` Called to intialise a new instance of this module. 
 	* **Instance[ [JOBAD.modules.loadedModule](JOBAD/JOBAD.modules/loadedModule.md) ]** `this` The current module instance. 

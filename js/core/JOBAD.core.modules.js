@@ -516,6 +516,21 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			properObject.info.externals = [];
 		}
 
+		if(info.hasOwnProperty('async')){
+			properObject.info.async = JOBAD.util.forceBool(info.async);
+		} else {
+			properObject.info.async = false;
+		}
+
+		if(!properObject.info.async){
+			var sync_init = properObject.globalinit;
+			properObject.globalinit = function(next){
+				sync_init(); 
+				window.setTimeout(next, 0);
+			}
+		}
+		
+
 		if(info.hasOwnProperty('hasCleanNamespace')){
 			if(info['hasCleanNamespace'] == false){
 				properObject.info.hasCleanNamespace = false;
@@ -729,15 +744,22 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 	var params = args.slice(0);
 	params.unshift(JOBADInstance);
 
+	var limited = {}; //limited this for globalinit
+	limited.info = ServiceObject.info;
+	limited.globalStore = this.globalStore;
+
 	if(JOBAD.config.cleanModuleNamespace){
 		if(!ServiceObject.info.hasCleanNamespace){
 			JOBAD.console.warn("Warning: Module '"+name+"' may have unclean namespace, but JOBAD.config.cleanModuleNamespace is true. ");		
 		}
+
 	} else {
 		var orgClone = JOBAD.util.clone(ServiceObject.namespace);
+		
 		for(var key in orgClone){
 			if(!JOBAD.modules.cleanProperties.hasOwnProperty(key) && orgClone.hasOwnProperty(key)){
 				this[key] = orgClone[key];
+				limited[key] = orgClone[key];
 			}
 		};
 	}
@@ -748,6 +770,12 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 		var val = ServiceObject[key];
 		if(typeof mod["onLoad"] == 'function'){
 			mod.onLoad.call(this, val, ServiceObject, this);
+		}
+		if(JOBAD.util.isArray(mod["globalProperties"])){
+			for(var i=0;i<mod["globalProperties"].length;i++){
+				var prop = mod["globalProperties"][i];
+				limited[prop] = this[prop];
+			}
 		}
 	}
 	
@@ -789,8 +817,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 			if(!suc){
 				next(false); 
 			} else {
-				ServiceObject.globalinit.apply(undefined, []);
-				do_next();
+				ServiceObject.globalinit.call(limited, do_next);
 			}
 			
 		});

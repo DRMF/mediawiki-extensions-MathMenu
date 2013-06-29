@@ -20,8 +20,9 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * added "externals" to module info
 	* allows to load external scripts as dependencies
 	* added a MathJax module which uses this
-### Version 3.1 (Stable)
+	* allowing globalinit functions to be async if a module info peropety `async` is set to true. 
 
+### Version 3.1 (Stable
 * improved Sidebar
 	* added sidebar postions: left, right and bound to element. 
 	* default width reduced to 50px. 

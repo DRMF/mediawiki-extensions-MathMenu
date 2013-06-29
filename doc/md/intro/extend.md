@@ -52,3 +52,4 @@ The JOBAD Core is written in such a way that it can be modified very easily with
 	* **Object** `value` Value of the property to be added. 
 	* **Object** `properObject` The proper Module Object. 
 	* **Instance[JOBAD.modules.loadedModule]** `this`, `moduleObject` The currently loaded module object
+* **Array** `JOBAD.modules.extensions.[name].globalProperties` Optional. Array of properties exposed to globalInit functions. 

@@ -24,17 +24,39 @@
 			'identifier':	'mathjax.mathjax',
 			'title':	'MathJax',
 			'author':	'Tom Wiesing',
-			'description':	'A MathJax Module to use MathJax on the current page. ',
-			'externals': ["http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"] //load MathJax as an external
+			'description':	'Loads MathJax is MATHML is not supported by the current browser. ',
+			'async': true //we are async
 		},
-		globalinit: function(){
-			//setup mathjax with the right options
-			MathJax.Hub.Config({
-			  menuSettings: { context: "Browser" }, //use JOABD COntextMenu not the one from MathJax
-			  skipStartupTypeset: true
+		globalinit: function(next){
+			var agent = navigator.userAgent;
+			var canMathML = ((agent.indexOf('Gecko') > -1) && (agent.indexOf('KHTML') === -1)
+					 || agent.match(/MathPlayer/) );
+
+			this.globalStore.set("canMathML", canMathML); //can the browser do MathML?
+
+			if(canMathML){ //WE can, no need for mathjAX
+				this.info.description += '(MathML is currently used to render Math. )';
+				return next();
+			}
+			
+			this.info.description += '(MathJax is currently used to render Math. )';
+
+			JOBAD.util.loadExternalJS("http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML", function(){
+				//setup mathjax with the right options
+				MathJax.Hub.Config({
+				  jax: ["input/MathML", "output/HTML-CSS","output/NativeMML"],
+				  menuSettings: { context: "Browser" }, //use JOABD ContatMenu not the one from MathJax
+				  skipStartupTypeset: true
+				});
+
+				next();
 			});
 		},
 		activate: function(JOBADInstance){
+			if(this.globalStore.get("canMathML")){ //we can do mathml, we dont need to do stuff
+				return;
+			}
+
 			JOBADInstance.element.each(function(){
 				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this]);
 			});
@@ -44,6 +66,11 @@
 			}]);
 		}, 
 		deactivate: function(JOBADInstance){
+			if(this.globalStore.get("canMathML")){ //we can do mathml, we dont need to do stuff
+				return;
+			}
+
+			//disable it for every rendered thing. 
 			JOBADInstance.element.each(function(){
 				var allMath = MathJax.Hub.getAllJax(this);
 

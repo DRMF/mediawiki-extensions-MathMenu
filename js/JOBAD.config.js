@@ -430,7 +430,7 @@ JOBAD.modules.extensions.config = {
 	"init": function(available, value, originalObject, properObject){
 		return JOBAD.modules.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
 	},
-	
+	"globalProperties": ["UserConfig"],
 	"onLoad": function(value, properObject, loadedModule){
 		var id = properObject.info.identifier;
 		
@@ -730,7 +730,8 @@ JOBAD.ifaces.push(function(){
 	
 		var me = this;
 	
-		var $Div = JOBAD.refs.$("<div>");
+		var $Div = JOBAD.refs.$("<div>")
+		.on("mousemove", JOBAD.UI.hover.disable);
 		
 		$Div.attr("title", "JOBAD Configuration Utility");
 
