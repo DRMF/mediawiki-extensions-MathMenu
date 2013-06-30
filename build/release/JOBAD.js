@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Sat, 29 Jun 2013 16:01:08 +0200
+	built: Sun, 30 Jun 2013 14:11:35 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -106,7 +106,7 @@ var JOBAD = function(element){
 JOBAD.ifaces = []; //JOBAD interfaces
 
 /* JOBAD Version */
-JOBAD.version = "3.2.0"; 
+JOBAD.version = "3.1.5"; 
 
 /*
 	JOBAD.toString
@@ -2045,8 +2045,8 @@ JOBAD.ifaces.push(function(me, args){
 	//modules namespace
 	this.modules = {};
 
-	var InstanceModules = {};
-	var disabledModules = [];
+	var InstanceModules = {}; //Modules loaded
+	var disabledModules = []; //Modules disabled
 
 	var loadQuenue = []; //the quenue of things to load
 	var loadQuenueIndex = -1; //the loadQuenueIndex
@@ -2108,9 +2108,9 @@ JOBAD.ifaces.push(function(me, args){
 	var doLoad = function(module, options){
 		var auto_activate = loadQuenueAutoActivate.indexOf(module) != -1; //TODO: Add option somewhere
 		try{
-			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me, function(suc){
+			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me, function(suc, msg){
 				if(!suc){
-					markLoadAsFailed(module);
+					markLoadAsFailed(module, msg);
 				} else {
 					disabledModules.push(module); //we are disabled by default
 
@@ -2122,16 +2122,18 @@ JOBAD.ifaces.push(function(me, args){
 				
 			});
 		} catch(e){
-			markLoadAsFailed(module);
+			markLoadAsFailed(module, String(e));
 			runFinishQuenue(runLoadQuenue);
 		}
 	 };
 
-	var markLoadAsFailed = function(module){
+	var markLoadAsFailed = function(module, message){
 		loadFail.push(module);
 		try{
 			delete InstanceModules[module];
 		} catch(e){}
+
+		JOBAD.console.error("Warning: Failed to load module '"+module+"': "+String(message));
 	};
 
 	var properLoadObj = function(obj){
@@ -2612,6 +2614,10 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 			
 			properObject[key] = mod.init(av, prop, ModuleObject, properObject);
+
+			if(typeof mod["onRegister"] == "function"){
+				mod.onRegister(properObject[key], properObject, ModuleObject);
+			}
 		}
 		
 		for(var i=0;i<JOBAD.modules.ifaces.length;i++){
@@ -2668,6 +2674,74 @@ JOBAD.modules.getDependencyList = function(name){
 };
 
 /*
+	Storage shared accross all module instances. 
+*/
+JOBAD.modules.globalStore = 
+{
+	"get": function(name, prop){
+		if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+			var prop = JOBAD.util.keys(prop);
+		}
+
+		if(JOBAD.util.isArray(prop)){
+			var res = {};
+
+			JOBAD.util.map(prop, function(key){
+				res[key] = JOBAD.modules.globalStore.get(name, key); 
+			});
+
+			return res;
+		}
+
+		return  moduleStorage[name][prop+"_"];
+	},
+	"set": function(name, prop, val){
+		if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+			var prop = JOBAD.util.keys(prop);
+		}
+
+		if(JOBAD.util.isArray(prop)){
+
+			return JOBAD.util.map(prop, function(key){
+				return JOBAD.modules.globalStore.set(name, key, prop[key]); 
+			});
+		}
+
+		moduleStorage[name][prop+"_"] = val;
+
+		return prop;
+	},
+	"delete": function(name, prop){
+		delete moduleStorage[name][prop+"_"];
+	},
+	"keys": function(name){
+		var keys = [];
+		for(var key in moduleStorage[name]){
+			if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
+				keys.push(key.substr(0, key.length-1));
+			}
+		}
+		return keys;
+	},
+	"getFor": function(name){
+		return {
+			"get": function(prop){
+				return JOBAD.modules.globalStore.get(name, prop);	
+			},
+			"set": function(prop, val){
+				return JOBAD.modules.globalStore.set(name, prop, val);	
+			},
+			"delete": function(prop){
+				return JOBAD.modules.globalStore["delete"](name, prop);	
+			},
+			"keys": function(){
+				JOBAD.modules.globalStore.keys(name);	
+			}
+		};
+	}
+};
+
+/*
 	Loads a module, assuming the dependencies are already available. 
 	@param name Module to loads
 	@param args Arguments to pass to the module. 
@@ -2686,32 +2760,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 		var args = []; //we force arguments
 	}
 
-
-
-	/*
-		Storage shared accross all module instances. 
-	*/
-	this.globalStore = 
-	{
-		"get": function(prop){
-			return  moduleStorage[name][prop+"_"];		
-		},
-		"set": function(prop, val){
-			moduleStorage[name][prop+"_"] = val;
-		},
-		"delete": function(prop){
-			delete moduleStorage[name][prop+"_"];
-		},
-		"keys": function(){
-			var keys = [];
-			for(var key in moduleStorage[name]){
-				if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
-					keys.push(key.substr(0, key.length-1));
-				}
-			}
-			return keys;
-		}
-	}
+	this.globalStore = JOBAD.modules.globalStore.getFor(name);
 	
 	var storage = {};
 	/*
@@ -2720,10 +2769,36 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 	this.localStore = 
 	{
 		"get": function(prop){
+			if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+				var prop = JOBAD.util.keys(prop);
+			}
+
+			if(JOBAD.util.isArray(prop)){
+				var res = {};
+
+				JOBAD.util.map(prop, function(key){
+					res[key] = storage[key];
+				});
+
+				return res;
+			}
 			return  storage[prop];		
 		},
 		"set": function(prop, val){
+			if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+				var prop = JOBAD.util.keys(prop);
+			}
+
+			if(JOBAD.util.isArray(prop)){
+
+				return JOBAD.util.map(prop, function(key){
+					storage[key] = prop[key];
+				});
+
+			}
+
 			storage[prop] = val;
+			return prop;
 		},
 		"delete": function(prop){
 			delete storage[name];
@@ -2835,7 +2910,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 
 		JOBAD.util.loadExternalJS(ServiceObject.info.externals, function(urls, suc){
 			if(!suc){
-				next(false); 
+				next(false, "Can't load external dependencies: Timeout. "); 
 			} else {
 				ServiceObject.globalinit.call(limited, do_next);
 			}
@@ -5923,7 +5998,152 @@ JOBAD.modules.getDefaultConfigSetting = function(obj, key){
 };
 
 //Config Settings - module
-var configCache = {};
+var configCache = {}; //cache of set values
+var configSpec = {};
+
+
+JOBAD.UserConfig = {};
+
+/*
+	Sets a user configuration. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to set
+	@param val	Value to set. 
+*/
+JOBAD.UserConfig.set = function(id, prop, val){
+	var value = JOBAD.UserConfig.getTypes(id);
+
+	if(JOBAD.util.isObject(prop)){
+		var keys = JOBAD.util.keys(prop);
+		return JOBAD.util.map(keys, function(key){
+			return JOBAD.UserConfig.set(id, key, prop[key]);
+		});
+	}
+
+	if(JOBAD.UserConfig.canSet(id, prop, val)){
+		if(JOBAD.util.objectEquals(val, JOBAD.UserConfig.get(id, prop))){
+			return; //we have it already; no change neccessary. 
+		}
+		configCache[id][prop] = val;
+		
+	} else {
+		JOBAD.console.warn("Can not set user config '"+prop+"' of module '"+id+"': Validation failure. ");
+		return; 
+	}
+	JOBAD.storageBackend.setKey(id, configCache[id]);
+	JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, id]);
+
+	return prop;
+};
+
+/*
+	Checks if a user configuration can be set. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to set
+	@param val	Value to set. 
+*/
+JOBAD.UserConfig.canSet = function(id, prop, val){
+	var value = JOBAD.UserConfig.getTypes(id);
+	if(JOBAD.util.isObject(prop)){
+		var keys = JOBAD.util.keys(prop);
+		return JOBAD.util.lAnd(JOBAD.util.map(keys, function(key){
+			return JOBAD.modules.validateConfigSetting(value, key, prop[key]);
+		}));
+	} else {
+		return JOBAD.modules.validateConfigSetting(value, prop, val);
+	}
+};
+
+/*
+	Retrieves a user configuration setting. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to get
+	@param val	Value to get. 
+*/
+JOBAD.UserConfig.get = function(id, prop){
+	var value = JOBAD.UserConfig.getTypes(id);
+
+	if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+		var prop = JOBAD.util.keys(prop);
+	}
+	if(JOBAD.util.isArray(prop)){
+		var res = {};
+
+		JOBAD.util.map(prop, function(key){
+			res[key] = JOBAD.UserConfig.get(id, key);
+		});
+
+		return res;
+	}
+
+	var res = configCache[id][prop];
+	if(JOBAD.modules.validateConfigSetting(value, prop, res)){
+		return res;
+	} else {
+		JOBAD.console.log("Failed to access user setting '"+prop+"'");
+		return;
+	}
+};
+
+/*
+	Gets the user configuration types. 
+	@param id   Id of module to use UserConfig from. 
+*/
+JOBAD.UserConfig.getTypes = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+	return configSpec[id];
+}
+
+/*
+	Resets the user configuration. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop Optional. Property to reset. 
+*/
+JOBAD.UserConfig.reset = function(id, prop){
+	var value = JOBAD.UserConfig.getTypes(id);
+	configCache[id] = JOBAD.storageBackend.getKey(id);
+	if(typeof configCache[id] == "undefined"){
+		configCache[id] = {};
+		for(var key in value){
+			configCache[id][key] = JOBAD.modules.getDefaultConfigSetting(value, key);
+			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, id]);
+		}
+	}
+};
+
+/*
+	Gets a UserConfig Object for the sepecefied module id. 
+	@param id	Identifier of module to get UserConfig for. 
+*/
+JOBAD.UserConfig.getFor = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+
+	return {
+		"set": function(prop, val){
+			return JOBAD.UserConfig.set(id, prop, val);
+		},
+		"get": function(prop){
+			return JOBAD.UserConfig.get(id, prop);
+		},
+		"canSet": function(prop, val){
+			return JOBAD.UserConfig.canSet(id, prop, val);
+		},
+		"getTypes": function(){
+			return JOBAD.UserConfig.getTypes(id);
+		},
+		"reset": function(prop){
+			return JOBAD.UserConfig.reset(id, prop);
+		}
+	};
+};
+
+
 
 JOBAD.modules.extensions.config = {
 	"required": false, //not required
@@ -5933,83 +6153,18 @@ JOBAD.modules.extensions.config = {
 	"init": function(available, value, originalObject, properObject){
 		return JOBAD.modules.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
 	},
-	"globalProperties": ["UserConfig"],
-	"onLoad": function(value, properObject, loadedModule){
+	"globalProperties": ["UserConfig", "Config"],
+	"onRegister": function(value, properObject, moduleObject){
 		var id = properObject.info.identifier;
-		
-		//User Configuration Namespace
-		this.UserConfig = {};
-		
-		
-		/*
-			Sets a user configuration. 
-			@param prop	Property to set
-			@param val	Value to set. 
-		*/
-		this.UserConfig.set = function(prop, val){
-			if(this.UserConfig.canSet(prop, val)){
-				if(JOBAD.util.objectEquals(val, this.UserConfig.get(prop))){
-					return; //we have it already; no change neccessary. 
-				}
-				configCache[id][prop] = val;
-				
-			} else {
-				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
-				return; 
-			}
-			JOBAD.storageBackend.setKey(id, configCache[id]);
-			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, this.info().identifier]);
-		};
-		
-		/*
-			Checks if a user configuration can be set. 
-			@param prop	Property to set
-			@param val	Value to set. 
-		*/
-		this.UserConfig.canSet = function(prop, val){
-			return JOBAD.modules.validateConfigSetting(value, prop, val);
-		};
-		
-		/*
-			Retrieves a user configuration setting. 
-			@param prop	Property to get
-			@param val	Value to get. 
-		*/
-		this.UserConfig.get = function(prop){
-			var res = configCache[id][prop];
-			if(JOBAD.modules.validateConfigSetting(value, prop, res)){
-				return res;
-			} else {
-				JOBAD.console.log("Failed to access user setting '"+prop+"'");
-			}
-		};
-		
-		/*
-			Gets the user configuration types. 
-		*/
-		this.UserConfig.getTypes = function(){
-			return JOBAD.util.clone(value); 
+
+		configSpec[id] = value; //store the specification in the cache; it is now open. 
+
+		if(!configCache.hasOwnProperty()){
+			JOBAD.UserConfig.reset(properObject.info.identifier);
 		}
-		
-		/*
-			Resets the user configuration. 
-		*/
-		this.UserConfig.reset = function(prop){
-			configCache[id] = JOBAD.storageBackend.getKey(id);
-			if(typeof configCache[id] == "undefined"){
-				configCache[id] = {};
-				for(var key in value){
-					configCache[id][key] = JOBAD.modules.getDefaultConfigSetting(value, key);
-					JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, this.info().identifier]);
-				}
-			}
-		};
-		
-		this.UserConfig = JOBAD.util.bindEverything(this.UserConfig, this);
-		
-		if(!configCache.hasOwnProperty(id)){//not yet loaded by some other JOBAD
-			this.UserConfig.reset();
-		}
+	},
+	"onLoad": function(value, properObject, loadedModule){
+		this.UserConfig = JOBAD.UserConfig.getFor(properObject.info.identifier);		
 	}
 }
 

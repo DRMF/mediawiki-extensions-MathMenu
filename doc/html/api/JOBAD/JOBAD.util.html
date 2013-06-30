@@ -580,6 +580,16 @@
 <li><strong>jQuery</strong> <code>contained</code> Contained elements to look for. </li>
 <li><strong>Boolean</strong> <code>includeSelf</code> Optional. Include the container element iteself in the search. Default: False. </li>
 </ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.loadExternalJS(names, callback, scope)</code> - Loads one or more external JavaScript files. 
+<ul>
+<li><strong>Array|String</strong> <code>names</code> Name (URL) of file to load or array of file names. </li>
+<li><strong>Function</strong> <code>callback(urls, success)</code> Callback once files have loaded
+<ul>
+<li><strong>this</strong> <code>scope</code></li>
+<li><strong>Array</strong> <code>urls</code> Originally given urls. </li>
+<li><strong>Boolean</strong> <code>success</code> Have the files been loaded or has there been a timeout?</li>
+</ul></li>
+</ul></li>
 </ul>
 
 	</body>

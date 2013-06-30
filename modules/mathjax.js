@@ -27,14 +27,18 @@
 			'description':	'Loads MathJax is MATHML is not supported by the current browser. ',
 			'async': true //we are async
 		},
+		// to force the use of mathjax do 
+		//JOBAD.globalStore.set("mathjax.mathjax", "forceMathJax", true); 
+		//before loading the module
 		globalinit: function(next){
+
 			var agent = navigator.userAgent;
 			var canMathML = ((agent.indexOf('Gecko') > -1) && (agent.indexOf('KHTML') === -1)
 					 || agent.match(/MathPlayer/) );
 
-			this.globalStore.set("canMathML", canMathML); //can the browser do MathML?
+			this.globalStore.set("canMathML", canMathML?true:false); //can the browser do MathML?
 
-			if(canMathML){ //WE can, no need for mathjAX
+			if(canMathML && !this.globalStore.get("forceMathJax")){ //WE can, no need for mathjAX
 				this.info.description += '(MathML is currently used to render Math. )';
 				return next();
 			}
@@ -53,7 +57,7 @@
 			});
 		},
 		activate: function(JOBADInstance){
-			if(this.globalStore.get("canMathML")){ //we can do mathml, we dont need to do stuff
+			if(this.globalStore.get("canMathML") && !this.globalStore.get("forceMathJax")){ //we can do mathml, we dont need to do stuff
 				return;
 			}
 
@@ -66,7 +70,7 @@
 			}]);
 		}, 
 		deactivate: function(JOBADInstance){
-			if(this.globalStore.get("canMathML")){ //we can do mathml, we dont need to do stuff
+			if(this.globalStore.get("canMathML") && !this.globalStore.get("math.useMathJax")){ //we can do mathml, we dont need to do stuff
 				return;
 			}
 

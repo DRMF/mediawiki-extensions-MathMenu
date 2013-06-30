@@ -536,6 +536,34 @@
 <li><strong>Object</strong> <code>value</code> Value to vaildate. </li>
 <li><strong>returns</strong> boolean. </li>
 </ul></li>
+<li><p><strong>Object</strong> <code>JOBAD.modules.globalStore</code> Namespace to store variables shared among instances of modules. </p></li>
+<li><strong>Function</strong> <code>JOBAD.modules.globalStore.get(id, key)</code> - Gets a global variable for the specefied module. 
+<ul>
+<li><strong>String</strong> <code>id</code> Identifier of module to access. </li>
+<li><strong>String</strong> <code>key</code> Name of variable to get. </li>
+<li><strong>returns</strong> the variable or undefined. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.globalStore.set(id, key, value)</code> - Sets a global variable for the specefied module. 
+<ul>
+<li><strong>String</strong> <code>id</code> Identifier of module to access. </li>
+<li><strong>String</strong> <code>key</code> Name of variable to get. </li>
+<li><strong>Mixed</strong> <code>value</code> Value to set the variable to. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.globalStore.delete(id, key)</code> - Deletes a global variable for the specefied module. 
+<ul>
+<li><strong>String</strong> <code>id</code> Identifier of module to access. </li>
+<li><strong>String</strong> <code>key</code> Key to delete. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.globalStore.keys(id)</code> - Gets all available keys for the specefied module. 
+<ul>
+<li><strong>String</strong> <code>id</code> Identifier of module to access. 
+<strong>returns</strong> Array of key names. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.modules.globalStore.getFor(id)</code> - Gets the globalStore Instance for the specefied module. 
+<ul>
+<li><strong>String</strong> <code>id</code> Identifier of module to access. </li>
+<li><strong>returns</strong> globalStore instance. </li>
+</ul></li>
 </ul>
 
 	</body>

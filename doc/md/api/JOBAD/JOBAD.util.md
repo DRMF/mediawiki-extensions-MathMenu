@@ -62,3 +62,9 @@ In addition to these functions, JOBAD.util also contains all underscore (version
 	* **jQuery** `container` Container to look in. 
 	* **jQuery** `contained` Contained elements to look for. 
 	* **Boolean** `includeSelf` Optional. Include the container element iteself in the search. Default: False. 
+* **Function** `JOBAD.util.loadExternalJS(names, callback, scope)` - Loads one or more external JavaScript files. 
+	*  **Array|String** `names` Name (URL) of file to load or array of file names. 
+	* **Function** `callback(urls, success)` Callback once files have loaded
+		* **this** `scope`
+		* **Array** `urls` Originally given urls. 
+		* **Boolean** `success` Have the files been loaded or has there been a timeout?

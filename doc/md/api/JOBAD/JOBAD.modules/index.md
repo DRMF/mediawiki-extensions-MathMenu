@@ -37,3 +37,23 @@
 	* **String** `key` Key to validate. 
 	* **Object** `value` Value to vaildate. 
 	* **returns** boolean. 
+
+
+* **Object** `JOBAD.modules.globalStore` Namespace to store variables shared among instances of modules. 
+* **Function** `JOBAD.modules.globalStore.get(id, key)` - Gets a global variable for the specefied module. 
+	* **String** `id` Identifier of module to access. 
+	* **String** `key` Name of variable to get. 
+	* **returns** the variable or undefined. 
+* **Function** `JOBAD.modules.globalStore.set(id, key, value)` - Sets a global variable for the specefied module. 
+	* **String** `id` Identifier of module to access. 
+	* **String** `key` Name of variable to get. 
+	* **Mixed** `value` Value to set the variable to. 
+* **Function** `JOBAD.modules.globalStore.delete(id, key)` - Deletes a global variable for the specefied module. 
+	* **String** `id` Identifier of module to access. 
+	* **String** `key` Key to delete. 
+* **Function** `JOBAD.modules.globalStore.keys(id)` - Gets all available keys for the specefied module. 
+	* **String** `id` Identifier of module to access. 
+	**returns** Array of key names. 
+* **Function** `JOBAD.modules.globalStore.getFor(id)` - Gets the globalStore Instance for the specefied module. 
+	* **String** `id` Identifier of module to access. 
+	* **returns** globalStore instance. 

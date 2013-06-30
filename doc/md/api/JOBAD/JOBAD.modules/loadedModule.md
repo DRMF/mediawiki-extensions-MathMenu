@@ -72,6 +72,7 @@ These functions represent event handlers. If an event is globally disabled (via 
 	* **Mixed** `value` Value to set the variable to. 
 * **Function** `.localStore.delete(key)` Deletes a local variable. 
 	* **String** `key` Key to delete. 
+* **Function** `.localStore.keys()` Gets all available keys. 
 	
 ## .globalStore
 * **Object** `.globalStore` Namespace to store variables shared among instances of this variable. 
@@ -83,6 +84,7 @@ These functions represent event handlers. If an event is globally disabled (via 
 	* **Mixed** `value` Value to set the variable to. 
 * **Function** `.globalStore.delete(key)` Deletes a global variable. 
 	* **String** `key` Key to delete. 
+* **Function** `.globalStore.keys()` Gets all available keys. 
 
 ## Further members
 A `JOBAD.modules.loadedModule` instance also contains all non-standard properties of the original Module object. Note

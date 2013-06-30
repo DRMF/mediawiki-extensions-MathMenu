@@ -25,8 +25,8 @@ JOBAD.ifaces.push(function(me, args){
 	//modules namespace
 	this.modules = {};
 
-	var InstanceModules = {};
-	var disabledModules = [];
+	var InstanceModules = {}; //Modules loaded
+	var disabledModules = []; //Modules disabled
 
 	var loadQuenue = []; //the quenue of things to load
 	var loadQuenueIndex = -1; //the loadQuenueIndex
@@ -88,9 +88,9 @@ JOBAD.ifaces.push(function(me, args){
 	var doLoad = function(module, options){
 		var auto_activate = loadQuenueAutoActivate.indexOf(module) != -1; //TODO: Add option somewhere
 		try{
-			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me, function(suc){
+			InstanceModules[module] = new JOBAD.modules.loadedModule(module, options, me, function(suc, msg){
 				if(!suc){
-					markLoadAsFailed(module);
+					markLoadAsFailed(module, msg);
 				} else {
 					disabledModules.push(module); //we are disabled by default
 
@@ -102,16 +102,18 @@ JOBAD.ifaces.push(function(me, args){
 				
 			});
 		} catch(e){
-			markLoadAsFailed(module);
+			markLoadAsFailed(module, String(e));
 			runFinishQuenue(runLoadQuenue);
 		}
 	 };
 
-	var markLoadAsFailed = function(module){
+	var markLoadAsFailed = function(module, message){
 		loadFail.push(module);
 		try{
 			delete InstanceModules[module];
 		} catch(e){}
+
+		JOBAD.console.error("Warning: Failed to load module '"+module+"': "+String(message));
 	};
 
 	var properLoadObj = function(obj){
@@ -592,6 +594,10 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			}
 			
 			properObject[key] = mod.init(av, prop, ModuleObject, properObject);
+
+			if(typeof mod["onRegister"] == "function"){
+				mod.onRegister(properObject[key], properObject, ModuleObject);
+			}
 		}
 		
 		for(var i=0;i<JOBAD.modules.ifaces.length;i++){
@@ -648,6 +654,74 @@ JOBAD.modules.getDependencyList = function(name){
 };
 
 /*
+	Storage shared accross all module instances. 
+*/
+JOBAD.modules.globalStore = 
+{
+	"get": function(name, prop){
+		if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+			var prop = JOBAD.util.keys(prop);
+		}
+
+		if(JOBAD.util.isArray(prop)){
+			var res = {};
+
+			JOBAD.util.map(prop, function(key){
+				res[key] = JOBAD.modules.globalStore.get(name, key); 
+			});
+
+			return res;
+		}
+
+		return  moduleStorage[name][prop+"_"];
+	},
+	"set": function(name, prop, val){
+		if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+			var prop = JOBAD.util.keys(prop);
+		}
+
+		if(JOBAD.util.isArray(prop)){
+
+			return JOBAD.util.map(prop, function(key){
+				return JOBAD.modules.globalStore.set(name, key, prop[key]); 
+			});
+		}
+
+		moduleStorage[name][prop+"_"] = val;
+
+		return prop;
+	},
+	"delete": function(name, prop){
+		delete moduleStorage[name][prop+"_"];
+	},
+	"keys": function(name){
+		var keys = [];
+		for(var key in moduleStorage[name]){
+			if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
+				keys.push(key.substr(0, key.length-1));
+			}
+		}
+		return keys;
+	},
+	"getFor": function(name){
+		return {
+			"get": function(prop){
+				return JOBAD.modules.globalStore.get(name, prop);	
+			},
+			"set": function(prop, val){
+				return JOBAD.modules.globalStore.set(name, prop, val);	
+			},
+			"delete": function(prop){
+				return JOBAD.modules.globalStore["delete"](name, prop);	
+			},
+			"keys": function(){
+				JOBAD.modules.globalStore.keys(name);	
+			}
+		};
+	}
+};
+
+/*
 	Loads a module, assuming the dependencies are already available. 
 	@param name Module to loads
 	@param args Arguments to pass to the module. 
@@ -666,32 +740,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 		var args = []; //we force arguments
 	}
 
-
-
-	/*
-		Storage shared accross all module instances. 
-	*/
-	this.globalStore = 
-	{
-		"get": function(prop){
-			return  moduleStorage[name][prop+"_"];		
-		},
-		"set": function(prop, val){
-			moduleStorage[name][prop+"_"] = val;
-		},
-		"delete": function(prop){
-			delete moduleStorage[name][prop+"_"];
-		},
-		"keys": function(){
-			var keys = [];
-			for(var key in moduleStorage[name]){
-				if(moduleStorage[name].hasOwnProperty(key) && key[key.length-1] == "_"){
-					keys.push(key.substr(0, key.length-1));
-				}
-			}
-			return keys;
-		}
-	}
+	this.globalStore = JOBAD.modules.globalStore.getFor(name);
 	
 	var storage = {};
 	/*
@@ -700,10 +749,36 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 	this.localStore = 
 	{
 		"get": function(prop){
+			if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+				var prop = JOBAD.util.keys(prop);
+			}
+
+			if(JOBAD.util.isArray(prop)){
+				var res = {};
+
+				JOBAD.util.map(prop, function(key){
+					res[key] = storage[key];
+				});
+
+				return res;
+			}
 			return  storage[prop];		
 		},
 		"set": function(prop, val){
+			if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+				var prop = JOBAD.util.keys(prop);
+			}
+
+			if(JOBAD.util.isArray(prop)){
+
+				return JOBAD.util.map(prop, function(key){
+					storage[key] = prop[key];
+				});
+
+			}
+
 			storage[prop] = val;
+			return prop;
 		},
 		"delete": function(prop){
 			delete storage[name];
@@ -815,7 +890,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 
 		JOBAD.util.loadExternalJS(ServiceObject.info.externals, function(urls, suc){
 			if(!suc){
-				next(false); 
+				next(false, "Can't load external dependencies: Timeout. "); 
 			} else {
 				ServiceObject.globalinit.call(limited, do_next);
 			}

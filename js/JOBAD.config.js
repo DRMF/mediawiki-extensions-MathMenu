@@ -420,7 +420,152 @@ JOBAD.modules.getDefaultConfigSetting = function(obj, key){
 };
 
 //Config Settings - module
-var configCache = {};
+var configCache = {}; //cache of set values
+var configSpec = {};
+
+
+JOBAD.UserConfig = {};
+
+/*
+	Sets a user configuration. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to set
+	@param val	Value to set. 
+*/
+JOBAD.UserConfig.set = function(id, prop, val){
+	var value = JOBAD.UserConfig.getTypes(id);
+
+	if(JOBAD.util.isObject(prop)){
+		var keys = JOBAD.util.keys(prop);
+		return JOBAD.util.map(keys, function(key){
+			return JOBAD.UserConfig.set(id, key, prop[key]);
+		});
+	}
+
+	if(JOBAD.UserConfig.canSet(id, prop, val)){
+		if(JOBAD.util.objectEquals(val, JOBAD.UserConfig.get(id, prop))){
+			return; //we have it already; no change neccessary. 
+		}
+		configCache[id][prop] = val;
+		
+	} else {
+		JOBAD.console.warn("Can not set user config '"+prop+"' of module '"+id+"': Validation failure. ");
+		return; 
+	}
+	JOBAD.storageBackend.setKey(id, configCache[id]);
+	JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, id]);
+
+	return prop;
+};
+
+/*
+	Checks if a user configuration can be set. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to set
+	@param val	Value to set. 
+*/
+JOBAD.UserConfig.canSet = function(id, prop, val){
+	var value = JOBAD.UserConfig.getTypes(id);
+	if(JOBAD.util.isObject(prop)){
+		var keys = JOBAD.util.keys(prop);
+		return JOBAD.util.lAnd(JOBAD.util.map(keys, function(key){
+			return JOBAD.modules.validateConfigSetting(value, key, prop[key]);
+		}));
+	} else {
+		return JOBAD.modules.validateConfigSetting(value, prop, val);
+	}
+};
+
+/*
+	Retrieves a user configuration setting. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop	Property to get
+	@param val	Value to get. 
+*/
+JOBAD.UserConfig.get = function(id, prop){
+	var value = JOBAD.UserConfig.getTypes(id);
+
+	if(JOBAD.util.isObject(prop) && !JOBAD.util.isArray(prop)){
+		var prop = JOBAD.util.keys(prop);
+	}
+	if(JOBAD.util.isArray(prop)){
+		var res = {};
+
+		JOBAD.util.map(prop, function(key){
+			res[key] = JOBAD.UserConfig.get(id, key);
+		});
+
+		return res;
+	}
+
+	var res = configCache[id][prop];
+	if(JOBAD.modules.validateConfigSetting(value, prop, res)){
+		return res;
+	} else {
+		JOBAD.console.log("Failed to access user setting '"+prop+"'");
+		return;
+	}
+};
+
+/*
+	Gets the user configuration types. 
+	@param id   Id of module to use UserConfig from. 
+*/
+JOBAD.UserConfig.getTypes = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+	return configSpec[id];
+}
+
+/*
+	Resets the user configuration. 
+	@param id   Id of module to use UserConfig from. 
+	@param prop Optional. Property to reset. 
+*/
+JOBAD.UserConfig.reset = function(id, prop){
+	var value = JOBAD.UserConfig.getTypes(id);
+	configCache[id] = JOBAD.storageBackend.getKey(id);
+	if(typeof configCache[id] == "undefined"){
+		configCache[id] = {};
+		for(var key in value){
+			configCache[id][key] = JOBAD.modules.getDefaultConfigSetting(value, key);
+			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, id]);
+		}
+	}
+};
+
+/*
+	Gets a UserConfig Object for the sepecefied module id. 
+	@param id	Identifier of module to get UserConfig for. 
+*/
+JOBAD.UserConfig.getFor = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+
+	return {
+		"set": function(prop, val){
+			return JOBAD.UserConfig.set(id, prop, val);
+		},
+		"get": function(prop){
+			return JOBAD.UserConfig.get(id, prop);
+		},
+		"canSet": function(prop, val){
+			return JOBAD.UserConfig.canSet(id, prop, val);
+		},
+		"getTypes": function(){
+			return JOBAD.UserConfig.getTypes(id);
+		},
+		"reset": function(prop){
+			return JOBAD.UserConfig.reset(id, prop);
+		}
+	};
+};
+
+
 
 JOBAD.modules.extensions.config = {
 	"required": false, //not required
@@ -430,83 +575,18 @@ JOBAD.modules.extensions.config = {
 	"init": function(available, value, originalObject, properObject){
 		return JOBAD.modules.createProperUserSettingsObject(available ? value : {}, properObject.info.identifier);
 	},
-	"globalProperties": ["UserConfig"],
-	"onLoad": function(value, properObject, loadedModule){
+	"globalProperties": ["UserConfig", "Config"],
+	"onRegister": function(value, properObject, moduleObject){
 		var id = properObject.info.identifier;
-		
-		//User Configuration Namespace
-		this.UserConfig = {};
-		
-		
-		/*
-			Sets a user configuration. 
-			@param prop	Property to set
-			@param val	Value to set. 
-		*/
-		this.UserConfig.set = function(prop, val){
-			if(this.UserConfig.canSet(prop, val)){
-				if(JOBAD.util.objectEquals(val, this.UserConfig.get(prop))){
-					return; //we have it already; no change neccessary. 
-				}
-				configCache[id][prop] = val;
-				
-			} else {
-				JOBAD.console.warn("Can not set user config '"+prop+"': Validation failure. ");
-				return; 
-			}
-			JOBAD.storageBackend.setKey(id, configCache[id]);
-			JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [prop, this.info().identifier]);
-		};
-		
-		/*
-			Checks if a user configuration can be set. 
-			@param prop	Property to set
-			@param val	Value to set. 
-		*/
-		this.UserConfig.canSet = function(prop, val){
-			return JOBAD.modules.validateConfigSetting(value, prop, val);
-		};
-		
-		/*
-			Retrieves a user configuration setting. 
-			@param prop	Property to get
-			@param val	Value to get. 
-		*/
-		this.UserConfig.get = function(prop){
-			var res = configCache[id][prop];
-			if(JOBAD.modules.validateConfigSetting(value, prop, res)){
-				return res;
-			} else {
-				JOBAD.console.log("Failed to access user setting '"+prop+"'");
-			}
-		};
-		
-		/*
-			Gets the user configuration types. 
-		*/
-		this.UserConfig.getTypes = function(){
-			return JOBAD.util.clone(value); 
+
+		configSpec[id] = value; //store the specification in the cache; it is now open. 
+
+		if(!configCache.hasOwnProperty()){
+			JOBAD.UserConfig.reset(properObject.info.identifier);
 		}
-		
-		/*
-			Resets the user configuration. 
-		*/
-		this.UserConfig.reset = function(prop){
-			configCache[id] = JOBAD.storageBackend.getKey(id);
-			if(typeof configCache[id] == "undefined"){
-				configCache[id] = {};
-				for(var key in value){
-					configCache[id][key] = JOBAD.modules.getDefaultConfigSetting(value, key);
-					JOBAD.refs.$("body").trigger("JOBAD.ConfigUpdateEvent", [key, this.info().identifier]);
-				}
-			}
-		};
-		
-		this.UserConfig = JOBAD.util.bindEverything(this.UserConfig, this);
-		
-		if(!configCache.hasOwnProperty(id)){//not yet loaded by some other JOBAD
-			this.UserConfig.reset();
-		}
+	},
+	"onLoad": function(value, properObject, loadedModule){
+		this.UserConfig = JOBAD.UserConfig.getFor(properObject.info.identifier);		
 	}
 }
 

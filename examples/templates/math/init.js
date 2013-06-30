@@ -3,6 +3,8 @@ var myJOBAD;
 $(function(){
 	myJOBAD = new JOBAD($(".ltx_page_main"));
 
+	JOBAD.modules.globalStore.set("mathjax.mathjax", "math.useMathJax", true); //always use mathjax
+
 	myJOBAD.modules.load("mathjax.mathjax", function(suc){
 		myJOBAD.Setup.enable();
 
