@@ -44,6 +44,7 @@ If you want to include the unbuilt js files use this code:
 	<script src='js/util/underscore.js'></script>
 	<script src='js/util/JOBAD.util.js'></script>
 	<script src='js/JOBAD.resources.js'></script>
+	<script src='js/JOBAD.repo.js'></script>
 	<script src='js/core/JOBAD.core.modules.js'></script>
 	<script src='js/core/JOBAD.core.events.js'></script>
 	<script src='js/ui/JOBAD.ui.js'></script>

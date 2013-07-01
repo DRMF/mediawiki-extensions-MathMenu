@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Sun, 30 Jun 2013 14:11:35 +0200
+	built: Mon, 01 Jul 2013 16:18:32 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1904,6 +1904,24 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
     
 }
 
+/*
+	escapes a string for HTML
+	@param	str	String to escape
+*/
+JOBAD.util.escapeHTML = function(s){
+	return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
+}
+
+/*
+	Resolves a relative url
+	@param url	Url to resolve
+*/
+JOBAD.util.resolve = function(url){
+    var el= document.createElement('div');
+    el.innerHTML= '<a href="'+JOBAD.util.escapeHTML(url)+'">x</a>';
+    return el.firstChild.href;
+}
+
 
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);
@@ -2017,6 +2035,449 @@ JOBAD.resources.provide("icon", {
 	"open": "data:image/png;base64,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",
 	"close": "data:image/png;base64,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"
 });/* end   <JOBAD.resources.js> */
+/* start <JOBAD.repo.js> */
+/*
+	JOBAD.repo.js - Contains the JOBAD repo implementation
+	
+	Copyright (C) 2013 KWARC Group <kwarc.info>
+	
+	This file is part of JOBAD.
+	
+	JOBAD is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	JOBAD is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+var JOBAD_Repo_Urls = {}; //urls per repo
+var JOBAD_Repo_Mods = {}; //primary modules
+
+
+/*
+	Marks the current page as a repository page and generates a repository about page. 
+*/
+JOBAD.repo = function(){
+
+	var body = JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Body'>").appendTo(JOBAD.refs.$("body").empty());
+
+	var msgBox = JOBAD.refs.$("<div>");
+
+	msgBox.wrap("<div class='JOBAD JOBAD_Repo JOBAD_Repo_MsgBox'>").parent().appendTo(body); 
+
+	var label = JOBAD.refs.$("<div class='progress-label'>").text("Loading Repository, please wait ...").appendTo(msgBox);
+	
+	msgBox.progressbar({
+		value: 0
+	})
+
+	var baseUrl = JOBAD.util.resolve("./");
+	baseUrl = baseUrl.substring(0, baseUrl.length - 1); // no slash at the end
+
+	JOBAD.repo.init(baseUrl, function(suc, cache){
+		msgBox.progressbar("option", "value", 25); 
+		if(!suc){
+			label.text("Repository loading failed: "+cache);
+			return; 
+		}
+
+		var title = cache.name; 
+		var desc = cache.description; 
+
+		body.append(
+			JOBAD.refs.$("<h1 class='JOBAD JOBAD_Repo JOBAD_Repo_Title'>").text(title),
+			JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Desc'>").text(desc)
+		)
+
+
+		var table = JOBAD.refs.$("<table class='JOBAD JOBAD_Repo JOBAD_Repo_Table'>").appendTo("body");
+
+		table.append(
+			JOBAD.refs.$("<tr>")
+			.append(
+				JOBAD.refs.$("<th>").text("Identifier"),
+				JOBAD.refs.$("<th>").text("Name"),
+				JOBAD.refs.$("<th>").text("Author"),
+				JOBAD.refs.$("<th>").text("Version"),
+				JOBAD.refs.$("<th>").text("Homepage"),
+				JOBAD.refs.$("<th>").text("Description"),
+				JOBAD.refs.$("<th>").text("Module Dependencies"),
+				JOBAD.refs.$("<th>").text("External Dependencies")
+			)
+		);
+
+		label.text("Loading module information ...")
+
+		var modules = JOBAD.util.keys(JOBAD_Repo_Urls[baseUrl]);
+		var count = modules.length; 
+
+		var i=0;
+
+
+		var next = function(){
+
+			msgBox.progressbar("option", "value", 25+75*((i+1)/(modules.length))); 
+
+			var name = modules[i]; 
+
+			if(i >= modules.length){
+				label.text("Finished. ");
+				msgBox.fadeOut(1000);
+				return;
+			}
+
+			label.text("Loading module information ["+(i+1)+"/"+count+"]: \""+name+"\"");
+
+			JOBAD.repo.loadFrom(baseUrl, modules[i], function(suc){
+
+				if(!suc){
+					table.append(
+						JOBAD.refs.$("<tr>")
+						.append(
+							JOBAD.refs.$("<td></td>").text(name),
+							"<td colspan='7'>Loading failed: Timeout</td>"
+						).css("color", "red")
+					);
+				} else if(typeof moduleList[name] == "undefined"){
+					table.append(
+						JOBAD.refs.$("<tr>")
+						.append(
+							JOBAD.refs.$("<td></td>").text(name),
+							"<td colspan='7'>Loading failed: Module specification incorrect. </td>"
+						).css("color", "red")
+					);
+				} else {
+					var info = moduleList[name].info;
+
+					var row = JOBAD.refs.$("<tr>").appendTo(table); 
+					
+					//id
+					JOBAD.refs.$("<td></td>").text(info.identifier).appendTo(row);
+					
+					//name
+					JOBAD.refs.$("<td></td>").text(info.title).appendTo(row);
+					
+					//author
+					JOBAD.refs.$("<td></td>").text(info.author).appendTo(row);
+					
+					//version
+					if(info.version !== ""){
+						JOBAD.refs.$("<td></td>").text(info.version).appendTo(row);
+					} else {
+						JOBAD.refs.$("<td><span class='JOBAD JOBAD_Repo JOBAD_Repo_NA'></span></td>").appendTo(row); 
+					}
+
+					//homepage
+					if(typeof info.url == "string"){
+						JOBAD.refs.$("<td></td>").append(
+							JOBAD.refs.$("<a>").text(info.url).attr("href", info.url).attr("target", "_blank").button()
+						).appendTo(row); 
+					} else {
+						JOBAD.refs.$("<td><span class='JOBAD JOBAD_Repo JOBAD_Repo_NA'></span></td>").appendTo(row); 
+					}
+
+					//description
+					JOBAD.refs.$("<td></td>").text(info.description).appendTo(row);
+
+
+					//dependencies (internal)
+					var deps = info.dependencies;
+
+					if(deps.length == 0){
+						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
+					} else {
+						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
+						for(var j=0;j<deps.length;j++){
+							cell.append("\"");
+							if(JOBAD.util.indexOf(modules, deps[j]) == -1){
+								cell.append(
+									JOBAD.refs.$("<span>").addClass("JOBAD JOBAD_Repo JOBAD_Repo_Dependency JOBAD_Repo_Dependency_NotFound")
+									.text("\""+deps[j]+"\"")
+								)
+							} else {
+								cell.append(
+									JOBAD.refs.$("<span>").addClass("JOBAD JOBAD_Repo JOBAD_Repo_Dependency JOBAD_Repo_Dependency_Found")
+									.text(deps[j])
+								)
+							}
+							cell.append("\"");
+							if(j != deps.length - 1 ){
+								cell.append(" , "); 
+							}
+						}
+					}
+
+					var edeps = info.externals;
+
+					if(edeps.length == 0){
+						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
+					} else {
+						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
+						for(var j=0;j<edps.length;j++){
+							cell.append(
+								"\"", 
+								JOBAD.refs.$("<span>")
+									.addClass("JOBAD JOBAD_Repo JOBAD_Repo_External_Dependency")
+									.text(edeps[j]),
+								"\""
+							);
+
+							if(j != edeps.length - 1 ){
+								cell.append(" , "); 
+							}
+						}
+					}
+
+				}
+
+				delete moduleList[name];
+				i++;
+				next(); 
+			})
+		};
+		
+		next(); 
+	})
+}
+
+var repo_is_initing = false; 
+
+/*
+	Register a given set of repositories
+	@param baseUrl	Base urls of the repositories
+	@param callback	Callback on success / failure
+*/
+JOBAD.repo.init = function(baseUrl, callback){
+
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
+
+	if(JOBAD.util.isArray(baseUrl)){
+		if(baseUrl.length == 0){
+			return callback(); 
+		} else {
+			var now = baseUrl[0];
+			var next = baseUrl.slice(1);
+
+			return JOBAD.repo.init(now, function(){
+				JOBAD.repo.init(next, callback)
+			})
+		}
+	}
+
+	if(JOBAD.repo.hasInit(baseUrl)){
+		return callback(true);  //we already have init
+	}
+
+	//we have a single item
+	if(repo_is_initing){
+		return false; 
+	}
+	repo_is_initing = true; 
+
+	var baseUrl = JOBAD.util.resolve(baseUrl); 
+
+	var repo_cache; 
+
+	JOBAD.repo.config = function(obj){
+		repo_cache = obj; //cache it
+	}
+
+	JOBAD.util.loadExternalJS(baseUrl+"/__jobad_repo__.js", function(s){
+
+		delete JOBAD.repo.config; //delete the function again
+
+		if(!s){
+			callback(false, "Repository Main File Timeout"); 
+			repo_is_initing = false; 
+			return; 
+		}
+
+		//parse it
+
+		if(!JOBAD.util.isObject(repo_cache)){
+			callback(false, "Repository in wrong Format: Not an object"); 
+			repo_is_initing = false; 
+			return; 
+		}
+
+		if(!JOBAD.util.isArray(repo_cache.versions)){
+			callback(false, "Repository Spec in wrong Format: Versions missing or not an array. "); 
+			repo_is_initing = false; 
+			return; 
+		}
+
+
+		if(JOBAD.util.indexOf(repo_cache.versions, JOBAD.version) == -1){
+			callback(false, "Repository incompatible with this version of JOBAD. "); 
+			repo_is_initing = false; 
+			return; 
+		}
+
+		if(!JOBAD.util.isArray(repo_cache.provides)){
+			callback(false, "Repository Spec in wrong Format: Modules missing or not an array. "); 
+			repo_is_initing = false; 
+			return; 
+		}
+
+
+		var overrides = {};
+
+		if(JOBAD.util.isObject(repo_cache.at)){
+			overrides = repo_cache.at; 
+		}
+
+		var modules = repo_cache.provides.slice(0); //available modules
+		
+		JOBAD_Repo_Urls[baseUrl] = {}; //Create a new cache object
+
+		for(var i=0;i<modules.length;i++){
+			var key = modules[i]; 
+			//is the url set manually
+			if(overrides.hasOwnProperty(key)){
+				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+overrides[key]; 
+			} else {
+				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+key+".js"; 
+			}
+
+
+			//register the repo with the modules stuff
+			if(JOBAD_Repo_Mods.hasOwnProperty(key)){
+				JOBAD_Repo_Mods[key].push(baseUrl);
+			} else {
+				JOBAD_Repo_Mods[key] = [baseUrl]; 
+			}
+		}
+
+		repo_is_initing = false;  //we are done
+		callback(true, repo_cache); 
+	});
+
+}
+
+/*
+	Checks if a repository has been initialised
+	@param	baseUrl	Repository to check. 
+*/
+JOBAD.repo.hasInit = function(baseUrl){
+	return JOBAD_Repo_Urls.hasOwnProperty(baseUrl); 
+}
+
+/*
+	Loads modules from a repository
+	@param	repo	Repository to load module from. 
+	@param	modules	Module to load
+	@param	callback	Callback once finished. 
+*/
+JOBAD.repo.loadFrom = function(repo, modules, callback){
+
+	var modules = JOBAD.util.forceArray(modules); 
+
+	var repo = JOBAD.util.resolve(repo);
+
+	JOBAD.repo.init(repo, function(res, msg){
+
+		//we failed to initialise it
+		if(!res){
+			return callback(false, "Repo init failed: "+msg);
+		}
+
+		if(!JOBAD.repo.provides(repo, modules)){
+			return callback(false, "Modules are not provided by repo. ");
+		}
+
+		var m2 = JOBAD.util.map(modules, function(mod){
+			return JOBAD_Repo_Urls[repo][mod]; 
+		});
+
+
+		JOBAD.util.loadExternalJS(m2, function(suc){
+			if(suc){
+				callback(true)
+			} else {
+				callback(false, "Failed to load one or more Modules: Timeout")
+			}
+		});
+	});
+}
+
+JOBAD.repo.loadAllFrom = function(repo, callback){
+	var repo = JOBAD.util.resolve(repo);
+
+	JOBAD.repo.init(repo, function(res, msg){
+
+		//we failed to initialise it
+		if(!res){
+			return callback(false, "Repo init failed: "+msg);
+		}
+
+		JOBAD.repo.loadFrom(repo, JOBAD.util.keys(JOBAD_Repo_Urls[repo]), callback); 
+	});
+}
+
+/*
+	Check if repo provides module
+	@param	repo	Repositorie(s) to look in. Optional. 
+	@param	module	Module(s) to look for. 
+*/
+JOBAD.repo.provides = function(repo, module){
+
+	var Repos = JOBAD.util.forceArray(repo); 
+	var Modules = JOBAD.util.forceArray(module); 
+	
+	if(typeof module == "undefined"){
+		Modules = Repos; 
+		Repos = JOBAD.util.keys(JOBAD_Repo_Urls); 
+	}
+
+	return JOBAD.util.lAnd(JOBAD.util.map(Modules, function(mod){
+		return JOBAD.util.lOr(JOBAD.util.map(Repos, function(rep){
+			//check repo for module safely
+			var rep = JOBAD.util.resolve(rep);
+
+			return JOBAD.util.indexOf(JOBAD_Repo_Mods[mod], rep) != -1; 
+		}));
+	}));
+
+}
+
+/*
+	Provide a module
+	@param	modules	Modules to provide. 
+	@param	callback	Callback to use. 
+*/
+JOBAD.repo.provide = function(modules, callback){
+	if(!JOBAD.repo.provides(modules)){
+		return callback(false, "Modules are not provided by any repo");
+	}
+
+	var modules = JOBAD.util.forceArray(modules);
+	var i = 0;
+
+	var load_next = function(){
+		if(i >= modules.length){
+			return callback(true); 
+		}
+		var mod = modules[i]; 
+		var repo = JOBAD_Repo_Mods[mod][0]; //take the first provider
+		JOBAD.repo.loadFrom(repo, mod, function(suc, msg){
+			if(!suc){
+				callback(false, msg); 
+			} else {
+				i++; 
+				load_next(); 
+			}
+		})
+	}
+
+	load_next(); 
+}/* end   <JOBAD.repo.js> */
 /* start <core/JOBAD.core.modules.js> */
 /*
 	JOBAD Core Module logic
@@ -2180,6 +2641,7 @@ JOBAD.ifaces.push(function(me, args){
 		config = (typeof config == "function")?{"ready": config}:config; 
 		config = (typeof config == "booelan")?{"activate": config}:config; 
 
+
 		var ready = JOBAD.util.forceFunction(config.ready, function(){});
 		var load = JOBAD.util.forceFunction(config.load, function(){});
 
@@ -2322,18 +2784,16 @@ JOBAD.ifaces.push(function(me, args){
 			if(me.modules.isActive(module)){
 				return; 	
 			}
+
 			disabledModules = JOBAD.util.without(disabledModules, module);
 
-			var deps = JOBAD.modules.getDependencyList(module);
-			
-					
+			var deps = JOBAD.modules.getDependencyList(module);		
 			for(var i=0;i<deps.length-1;i++){
-				me.modules.activate(deps[i]);
+				me.modules.activate(deps[i]); // i am last
 			}
 			
 
 			InstanceModules[module].onActivate(me);
-			
 			me.element.trigger('JOBAD.Event', ['activate', module]);
 		}
 
@@ -2571,6 +3031,15 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			properObject.info['dependencies'] = arr;
 		}
 
+		if(info.hasOwnProperty('url')){
+			if(!JOBAD.util.isUrl(info.url)){
+				return false;			
+			}
+			properObject.info['url'] = info.url;
+		} else {
+			info.url = false; 
+		}
+
 		try{
 			JOBAD.util.map(['identifier', 'title', 'author', 'description'], function(key){
 				if(info.hasOwnProperty(key)){
@@ -2670,6 +3139,9 @@ JOBAD.modules.getDependencyList = function(name){
 	for(var i=deps.length-1;i>=0;i--){
 		depArray = JOBAD.util.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
+
+	depArray.reverse(); //reverse it
+
 	return depArray;
 };
 
@@ -6001,6 +6473,8 @@ JOBAD.modules.getDefaultConfigSetting = function(obj, key){
 var configCache = {}; //cache of set values
 var configSpec = {};
 
+var userConfigMessages = {}; //messages for userconfig
+
 
 JOBAD.UserConfig = {};
 
@@ -6114,6 +6588,36 @@ JOBAD.UserConfig.reset = function(id, prop){
 	}
 };
 
+
+/*
+	Gets the current message set by the module. 
+	@param	id	Id of module to use. 
+*/
+JOBAD.UserConfig.getMessage = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+
+	var msg = userConfigMessages[id];
+
+	return (typeof msg == "undefined"?"":msg); 
+}
+
+/*
+	Sets the current message set by the module. 
+	@param	id	Id of module to use. 
+	@param	msg	New message
+*/
+JOBAD.UserConfig.setMessage = function(id, msg){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+	userConfigMessages[id] = msg;
+	return msg;
+}
+
 /*
 	Gets a UserConfig Object for the sepecefied module id. 
 	@param id	Identifier of module to get UserConfig for. 
@@ -6128,8 +6632,14 @@ JOBAD.UserConfig.getFor = function(id){
 		"set": function(prop, val){
 			return JOBAD.UserConfig.set(id, prop, val);
 		},
+		"setMessage": function(msg){
+			return JOBAD.UserConfig.setMessage(id, msg);
+		},
 		"get": function(prop){
 			return JOBAD.UserConfig.get(id, prop);
+		},
+		"getMessage": function(){
+			return JOBAD.UserConfig.getMessage(id);
 		},
 		"canSet": function(prop, val){
 			return JOBAD.UserConfig.canSet(id, prop, val);
@@ -6506,8 +7016,17 @@ JOBAD.ifaces.push(function(){
 				JOBAD.refs.$("<span>").css("text-decoration", "italic").text(info.author),
 				"<br />",
 				OnOff,
+				"<br />")
+			if(typeof info.url == "string"){
+				$info.append(
+					JOBAD.refs.$("<a>").text(info.url).attr("href", info.url).attr("target", "_blank").button(),
+					"<br />"
+				);
+			}
+			$info.append(
+				JOBAD.refs.$("<span>").text(info.description),
 				"<br />",
-				JOBAD.refs.$("<span>").text(info.description)
+				JOBAD.refs.$("<span>").text(JOBAD.UserConfig.getMessage(info.identifier))
 			);
 			
 			//Config

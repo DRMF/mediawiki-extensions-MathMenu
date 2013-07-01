@@ -198,6 +198,89 @@
 	background-color: #FFFFD0;
 }
 
+/*
+	JOBAD Repo
+*/
+.JOBAD.JOBAD_Repo.JOBAD_Repo_MsgBox {
+	/* The message box */
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	margin-left: -200px;
+	width: 400px;
+	height: 20px;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Title {
+	/* Repository title */
+	text-align: center;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Desc {
+	/* Respoitory description */
+	text-align: center;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Table {
+	border-collapse:collapse;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Table th, 
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Table td
+{
+	/* Module Table Borders */
+	border: 1px solid gray;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Table th{
+	/* Table Head */
+	font-weight: bold;
+	border-bottom: 3px solid black;
+}
+
+/* Not available text */
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_NA:before {
+  content: "n/a";
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_NA {
+	color: gray;
+}
+
+
+/* Dependencies */
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Dependency {
+	color: black; 
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Dependency.JOBAD_Repo_Dependency_Found:hover{
+	/* Found */
+	color: green;
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Dependency.JOBAD_Repo_Dependency_NotFound:hover{
+	/* Not Found */
+	color: red;
+}
+
+/*
+	Progress Bar
+*/
+.ui-progressbar {
+	position: relative;
+
+}
+.progress-label {
+	position: absolute;
+	width: 400px;
+	text-align: center;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
+}
+
+
 
 /*
 	JOBAD jQuery UI CSS compatibility fixes

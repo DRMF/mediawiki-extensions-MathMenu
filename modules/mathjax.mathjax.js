@@ -27,23 +27,21 @@
 			'description':	'Loads MathJax is MATHML is not supported by the current browser. ',
 			'async': true //we are async
 		},
-		// to force the use of mathjax do 
-		//JOBAD.globalStore.set("mathjax.mathjax", "forceMathJax", true); 
-		//before loading the module
 		globalinit: function(next){
+			if(typeof this.globalStore.get("useMathML") != "boolean"){
+				var agent = navigator.userAgent;
+				var canMathML = ((agent.indexOf('Gecko') > -1) && (agent.indexOf('KHTML') === -1)
+						 || agent.match(/MathPlayer/) );
 
-			var agent = navigator.userAgent;
-			var canMathML = ((agent.indexOf('Gecko') > -1) && (agent.indexOf('KHTML') === -1)
-					 || agent.match(/MathPlayer/) );
+				this.globalStore.set("useMathML", canMathML?false:true); //can the browser do MathML?
+			}			
 
-			this.globalStore.set("canMathML", canMathML?true:false); //can the browser do MathML?
-
-			if(canMathML && !this.globalStore.get("forceMathJax")){ //WE can, no need for mathjAX
-				this.info.description += '(MathML is currently used to render Math. )';
+			if(!this.globalStore.get("useMathML")){ //we can do mathml, we dont need to do stuff
+				this.UserConfig.setMessage("MathML is currently used to render Math. "); //set a nice message in the config UI
 				return next();
 			}
 			
-			this.info.description += '(MathJax is currently used to render Math. )';
+			this.UserConfig.setMessage("MathJax is currently used to render Math. "); //set a nice message in the config UI
 
 			JOBAD.util.loadExternalJS("http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML", function(){
 				//setup mathjax with the right options
@@ -57,7 +55,7 @@
 			});
 		},
 		activate: function(JOBADInstance){
-			if(this.globalStore.get("canMathML") && !this.globalStore.get("forceMathJax")){ //we can do mathml, we dont need to do stuff
+			if(!this.globalStore.get("useMathML")){ //we can do mathml, we dont need to do stuff
 				return;
 			}
 
@@ -70,7 +68,7 @@
 			}]);
 		}, 
 		deactivate: function(JOBADInstance){
-			if(this.globalStore.get("canMathML") && !this.globalStore.get("math.useMathJax")){ //we can do mathml, we dont need to do stuff
+			if(!this.globalStore.get("useMathML")){ //we can do mathml, we dont need to do stuff
 				return;
 			}
 

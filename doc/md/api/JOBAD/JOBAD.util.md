@@ -68,3 +68,7 @@ In addition to these functions, JOBAD.util also contains all underscore (version
 		* **this** `scope`
 		* **Array** `urls` Originally given urls. 
 		* **Boolean** `success` Have the files been loaded or has there been a timeout?
+* **Function** `JOBAD.util.escapeHTML(str)` - Escapes a string for use within html. 
+	* **String** `str` String to escape
+* **Function** `JOBAD.util.resolve(url)` - Resolves a url. 
+	* **String** `url` Url to resolve. 

@@ -31,6 +31,11 @@
 	* **String** `prop` Property to get. 
 	* **returns** value. 
 
+* **Function** `.UserConfig.setMessage(msg)` Sets the current message (displayed in config UI). 
+	* **String** `msg` Message to set. 
+* **Function** `.UserConfig.getMessage()` Gets the current message (displayed in config UI). 
+
+
 * **Function** `.UserConfig.reset()` Resets the user configuration. 
 * **Function** `.UserConfig.getTypes()` Gets the user configuration types. 
 

@@ -8,57 +8,42 @@
 		<script src="./../../../js/deps/jquery/jquery-ui-1.10.3.js"></script>
 		<link href="./../../../css/jquery-ui.css" rel="stylesheet">
 
-
-		
-
-
 		<!-- Include JOBAD -->
 <script src='./../../../build/release/JOBAD.min.js'></script>
 
 <link rel='stylesheet' type='text/css' href='./../../../build/release/JOBAD.css'>
 
-		<!-- Load all the modules -->
-
-		<script src="./../../../modules/example1.js"></script>
-		<script src="./../../../modules/example2.js"></script>
-		<script src="./../../../modules/example3.js"></script>
-		<script src="./../../../modules/example4.js"></script>
-		<script src="./../../../modules/example5.js"></script>
-		<script src="./../../../modules/example6.js"></script>
-		<script src="./../../../modules/example7.js"></script>
-
-		<script src="./../../../modules/mathjax.js"></script>
-
 		<script type="text/javascript">
 			var JOBAD1, JOBAD2;
 
-			jQuery(function(){	
-				JOBAD1 = new JOBAD(jQuery("#1"));
-				JOBAD2 = new JOBAD(jQuery("#2"));
+			JOBAD.repo.loadAllFrom("../../../modules", function(){ //Load all from the repo
+				jQuery(function(){	
+					JOBAD1 = new JOBAD(jQuery("#1"));
+					JOBAD2 = new JOBAD(jQuery("#2"));
 
-				JOBAD1.modules.load([
-					['test.click', ['green']],
-					"test.menu1",
-					"test.menu2",
-					"test.hover",
-					"test.config"
-				], function(mod, state){
-					this.Setup();
-				});
+					JOBAD1.modules.load([
+						['test.click', ['green']],
+						"test.menu1",
+						"test.menu2",
+						"test.hover",
+						"jobad.debug"
+					], function(mod, state){
+						this.Setup();
+					});
 
-				JOBAD2.modules.load([
-					['test.click', ['blue']],
-					"test.menu1",
-					"test.menu2",
-					"test.hover",
-					"test.sidebar",
-					"test.folding",
-					"test.config",
-					"mathjax.mathjax"
-				], function(mod, state){
-					this.Setup();
-				});
-			})		
+					JOBAD2.modules.load([
+						['test.click', ['blue']],
+						"test.menu1",
+						"test.menu2",
+						"test.hover",
+						"test.sidebar",
+						"jobad.debug",
+						"mathjax.mathjax"
+					], function(mod, state){
+						this.Setup();
+					});
+				})	
+			});	
 		</script>
 	</head>
 	<body>
@@ -79,8 +64,8 @@
 			<p>
 				<b>A menu and a tooltip. </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque id massa eget elit condimentum fringilla. Nam malesuada odio eu tortor condimentum id aliquam elit tincidunt. Sed sit amet dolor non lorem interdum interdum eget id dolor. Maecenas congue lectus quis purus ultrices ut interdum enim consectetur. Nunc venenatis neque vitae lacus fringilla mollis. Morbi augue felis, dapibus at ultricies et, tincidunt vel velit. Morbi nisi purus, bibendum eget dapibus elementum, dictum nec diam. Proin ac elit massa, non sollicitudin justo. Etiam id risus mi, at interdum mi. Pellentesque et malesuada enim. Aliquam eros massa, eleifend aliquam feugiat ut, tincidunt quis urna. Vestibulum vehicula dolor eu augue lobortis cursus. Cras vitae urna nulla. Duis placerat orci et dolor egestas vulputate. Donec sed orci augue.
 			</p>
-			<p id='nomenu'>
-				<b>No menu at all. </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque id massa eget elit condimentum fringilla. Nam malesuada odio eu tortor condimentum id aliquam elit tincidunt. Sed sit amet dolor non lorem interdum interdum eget id dolor. Maecenas congue lectus quis purus ultrices ut interdum enim consectetur. Nunc venenatis neque vitae lacus fringilla mollis. Morbi augue felis, dapibus at ultricies et, tincidunt vel velit. Morbi nisi purus, bibendum eget dapibus elementum, dictum nec diam. Proin ac elit massa, non sollicitudin justo. Etiam id risus mi, at interdum mi. Pellentesque et malesuada enim. Aliquam eros massa, eleifend aliquam feugiat ut, tincidunt quis urna. Vestibulum vehicula dolor eu augue lobortis cursus. Cras vitae urna nulla. Duis placerat orci et dolor egestas vulputate. Donec sed orci augue.
+			<p class='JOBAD_Ignore'>
+				<b>Nothing here</b>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque id massa eget elit condimentum fringilla. Nam malesuada odio eu tortor condimentum id aliquam elit tincidunt. Sed sit amet dolor non lorem interdum interdum eget id dolor. Maecenas congue lectus quis purus ultrices ut interdum enim consectetur. Nunc venenatis neque vitae lacus fringilla mollis. Morbi augue felis, dapibus at ultricies et, tincidunt vel velit. Morbi nisi purus, bibendum eget dapibus elementum, dictum nec diam. Proin ac elit massa, non sollicitudin justo. Etiam id risus mi, at interdum mi. Pellentesque et malesuada enim. Aliquam eros massa, eleifend aliquam feugiat ut, tincidunt quis urna. Vestibulum vehicula dolor eu augue lobortis cursus. Cras vitae urna nulla. Duis placerat orci et dolor egestas vulputate. Donec sed orci augue.
 			</p>
 		</div>
 		<h1>JOBAD (Instance 2)</h1>

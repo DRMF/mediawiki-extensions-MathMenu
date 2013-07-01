@@ -16,6 +16,12 @@
 	* **String** `prop` Property(s) to get. May be an array. 
 	* **returns** value or map of values. 
 
+* **Function** `.UserConfig.setMessage(id, msg)` Sets the current message (displayed in config UI). 
+	* **String** `id` Identifier of module to access. 
+	* **String** `msg` Message to set. 
+* **Function** `.UserConfig.getMessage(id)` Gets the current message (displayed in config UI). 
+	* **String** `id` Identifier of module to access. 
+
 * **Function** `JOBAD.UserConfig.reset(id)` Resets the user configuration. 
 	* **String** `id` Identifier of module to access. 
 * **Function** `JOBAD.UserConfig.getTypes(id)` Gets the user configuration types. 

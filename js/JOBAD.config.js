@@ -423,6 +423,8 @@ JOBAD.modules.getDefaultConfigSetting = function(obj, key){
 var configCache = {}; //cache of set values
 var configSpec = {};
 
+var userConfigMessages = {}; //messages for userconfig
+
 
 JOBAD.UserConfig = {};
 
@@ -536,6 +538,36 @@ JOBAD.UserConfig.reset = function(id, prop){
 	}
 };
 
+
+/*
+	Gets the current message set by the module. 
+	@param	id	Id of module to use. 
+*/
+JOBAD.UserConfig.getMessage = function(id){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+
+	var msg = userConfigMessages[id];
+
+	return (typeof msg == "undefined"?"":msg); 
+}
+
+/*
+	Sets the current message set by the module. 
+	@param	id	Id of module to use. 
+	@param	msg	New message
+*/
+JOBAD.UserConfig.setMessage = function(id, msg){
+	if(!configSpec.hasOwnProperty(id)){
+		JOBAD.error("Can't access UserConfig for module '"+id+"': Module not found (is it registered yet? )");
+		return; 
+	}
+	userConfigMessages[id] = msg;
+	return msg;
+}
+
 /*
 	Gets a UserConfig Object for the sepecefied module id. 
 	@param id	Identifier of module to get UserConfig for. 
@@ -550,8 +582,14 @@ JOBAD.UserConfig.getFor = function(id){
 		"set": function(prop, val){
 			return JOBAD.UserConfig.set(id, prop, val);
 		},
+		"setMessage": function(msg){
+			return JOBAD.UserConfig.setMessage(id, msg);
+		},
 		"get": function(prop){
 			return JOBAD.UserConfig.get(id, prop);
+		},
+		"getMessage": function(){
+			return JOBAD.UserConfig.getMessage(id);
 		},
 		"canSet": function(prop, val){
 			return JOBAD.UserConfig.canSet(id, prop, val);
@@ -928,8 +966,17 @@ JOBAD.ifaces.push(function(){
 				JOBAD.refs.$("<span>").css("text-decoration", "italic").text(info.author),
 				"<br />",
 				OnOff,
+				"<br />")
+			if(typeof info.url == "string"){
+				$info.append(
+					JOBAD.refs.$("<a>").text(info.url).attr("href", info.url).attr("target", "_blank").button(),
+					"<br />"
+				);
+			}
+			$info.append(
+				JOBAD.refs.$("<span>").text(info.description),
 				"<br />",
-				JOBAD.refs.$("<span>").text(info.description)
+				JOBAD.refs.$("<span>").text(JOBAD.UserConfig.getMessage(info.identifier))
 			);
 			
 			//Config

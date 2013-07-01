@@ -7,6 +7,7 @@ This object can be used as a termplate for module objects. **Note:** The code fo
 * **String** `template.info.title` Module title. 
 * **String** `template.info.author` The module author. 
 * **String** `template.info.description` A human readable description of the module. 
+* **String** `template.info.url` Website URL of module if available, otherwise false. 
 * **String** `template.info.version` String containing the version number. May be omitted. 
 * **String** `template.info.hasCleanNamespace` Booelan indicating if the namespace of this moudle contains other, custom, properties which should be copied over. If so, they will be copied to any module instance and `this` inside of any of the functions can refer to it. Note that this may be shared among different instances of the module since javascript creates references to JSON-style objects. Can also be disabled globally by configuration in which case non-clean modules will not load. Property may be omitted in which case it is assumed to be true. 
 * **Array[String]** `template.info.dependencies` Array of module dependencies. If ommited, assumed to have no dependencies. 

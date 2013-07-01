@@ -160,6 +160,7 @@ JOBAD.ifaces.push(function(me, args){
 		config = (typeof config == "function")?{"ready": config}:config; 
 		config = (typeof config == "booelan")?{"activate": config}:config; 
 
+
 		var ready = JOBAD.util.forceFunction(config.ready, function(){});
 		var load = JOBAD.util.forceFunction(config.load, function(){});
 
@@ -302,18 +303,16 @@ JOBAD.ifaces.push(function(me, args){
 			if(me.modules.isActive(module)){
 				return; 	
 			}
+
 			disabledModules = JOBAD.util.without(disabledModules, module);
 
-			var deps = JOBAD.modules.getDependencyList(module);
-			
-					
+			var deps = JOBAD.modules.getDependencyList(module);		
 			for(var i=0;i<deps.length-1;i++){
-				me.modules.activate(deps[i]);
+				me.modules.activate(deps[i]); // i am last
 			}
 			
 
 			InstanceModules[module].onActivate(me);
-			
 			me.element.trigger('JOBAD.Event', ['activate', module]);
 		}
 
@@ -551,6 +550,15 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 			properObject.info['dependencies'] = arr;
 		}
 
+		if(info.hasOwnProperty('url')){
+			if(!JOBAD.util.isUrl(info.url)){
+				return false;			
+			}
+			properObject.info['url'] = info.url;
+		} else {
+			info.url = false; 
+		}
+
 		try{
 			JOBAD.util.map(['identifier', 'title', 'author', 'description'], function(key){
 				if(info.hasOwnProperty(key)){
@@ -650,6 +658,9 @@ JOBAD.modules.getDependencyList = function(name){
 	for(var i=deps.length-1;i>=0;i--){
 		depArray = JOBAD.util.union(depArray, JOBAD.modules.getDependencyList(deps[i]));
 	}
+
+	depArray.reverse(); //reverse it
+
 	return depArray;
 };
 

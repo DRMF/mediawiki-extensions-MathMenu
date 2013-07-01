@@ -69,5 +69,6 @@ For more information on what you can do with JOBADInstances, please refer to the
     * [Folding](folding.md) - Folding the DOM
     * [Configuration Options](config.md) - How can I configure JOBAD modules?
     * [Module examples](example_modules.md) - Example Modules
+* [Repositories](repos.md) - What are module repositories? How can they be provided? 
 * [Building](build.md) - Information on how to build JOBAD
 * [Extending the Core](extend.md) - How to extend the JOBAD Core

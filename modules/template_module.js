@@ -26,6 +26,7 @@ var template = {
 		'title':	'Template Module', //Human Readable title of the module. 
 		'author':	'Template Author', //Author
 		'description':	'A template you may use as a starting point for writing other modules. ', //A human readable description of the module. 
+		'url': 'http://example.com', //website url (if available)
 		'version':	'1.0', //string containing the version number. May be omitted. 
 		'dependencies':	[], //Array of module dependencies. If ommited, assumed to have no dependencies. 
 		'externals': [], //external scripts this module depends on
@@ -39,7 +40,7 @@ var template = {
 		"a_num": ["number", [-10, 10], 0, ["Number", "An awesome number between -10 and 10 "]],
 		"an_int": ["integer", [-10, 10], 0, ["Integer", "An awesome integer between -10 and 10. "]],
 		"a_list": ["list", [1, 2, 3, 4], 1, ["Select an option", "A", "B", "C", "D"]]
-	}
+	},
 	/* Init handlers */
     globalinit: function(next){
 		/* 

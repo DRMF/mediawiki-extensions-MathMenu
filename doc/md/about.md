@@ -24,6 +24,7 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * improved globalStore, localStore and UserConfig
 	* you can now get and set multiple values at once
 	* UserConfig and globalStore now accessible outside of loadedModule Instances (via JOBAD.modules.globalStore and JOBAD.UserConfig)
+* added `.UserConfig.setMessage` and `.UserConfig.getMessage`
 
 ### Version 3.1.0 (Stable)
 * improved Sidebar

@@ -475,6 +475,24 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
     
 }
 
+/*
+	escapes a string for HTML
+	@param	str	String to escape
+*/
+JOBAD.util.escapeHTML = function(s){
+	return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
+}
+
+/*
+	Resolves a relative url
+	@param url	Url to resolve
+*/
+JOBAD.util.resolve = function(url){
+    var el= document.createElement('div');
+    el.innerHTML= '<a href="'+JOBAD.util.escapeHTML(url)+'">x</a>';
+    return el.firstChild.href;
+}
+
 
 //Merge underscore and JOBAD.util namespace
 _.mixin(JOBAD.util);
