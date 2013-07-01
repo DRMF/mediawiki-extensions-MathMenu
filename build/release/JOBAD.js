@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 01 Jul 2013 16:18:32 +0200
+	built: Mon, 01 Jul 2013 16:27:44 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2289,7 +2289,7 @@ JOBAD.repo.init = function(baseUrl, callback){
 		repo_cache = obj; //cache it
 	}
 
-	JOBAD.util.loadExternalJS(baseUrl+"/__jobad_repo__.js", function(s){
+	JOBAD.util.loadExternalJS(baseUrl+"/jobad_repo.js", function(s){
 
 		delete JOBAD.repo.config; //delete the function again
 

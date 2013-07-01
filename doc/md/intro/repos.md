@@ -16,7 +16,7 @@ JOBAD.repo.loadFrom("/path/to/repo", ["a.sample.module"], function(s, msg){
 To provide your own repository, all you need is a static WebServer. Each repository is in its own directory. It contains three types of files: 
 
 * `index.html` - An index pages which automatically provides some information about the contained modules. 
-* `__jobad_repo__.js` - A file containing general joabd repository information. 
+* `jobad_repo.js` - A file containing general joabd repository information. 
 * Module files, named `[id_of_module].js`
 
 A sample repository can be found in the [`modules`](../../../modules/index.html) folder of the main repository. It can be used as a template. 

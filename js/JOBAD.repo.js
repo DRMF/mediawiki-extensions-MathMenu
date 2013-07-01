@@ -251,7 +251,7 @@ JOBAD.repo.init = function(baseUrl, callback){
 		repo_cache = obj; //cache it
 	}
 
-	JOBAD.util.loadExternalJS(baseUrl+"/__jobad_repo__.js", function(s){
+	JOBAD.util.loadExternalJS(baseUrl+"/jobad_repo.js", function(s){
 
 		delete JOBAD.repo.config; //delete the function again
 

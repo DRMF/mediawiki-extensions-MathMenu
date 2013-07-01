@@ -1,5 +1,5 @@
 /*
-	__jobad_repo__.js
+	jobad_repo.js
 	JOBAD Sample Repository.  
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
