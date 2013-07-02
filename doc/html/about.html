@@ -505,18 +505,27 @@
 
 <ul>
 <li>made module loading asynchronous </li>
+<li>added repositories
+<ul>
+<li>a nice way to store modules in</li>
+<li>can be loaded dynamically loaded from code</li>
+</ul></li>
 <li>added "externals" to module info
 <ul>
 <li>allows to load external scripts as dependencies</li>
 <li>added a MathJax module which uses this</li>
 <li>allowing globalinit functions to be async if a module info peropety <code>async</code> is set to true. </li>
 </ul></li>
+<li>added <code>url</code> to module info, to provide a module homepage</li>
 <li>improved globalStore, localStore and UserConfig
 <ul>
 <li>you can now get and set multiple values at once</li>
 <li>UserConfig and globalStore now accessible outside of loadedModule Instances (via JOBAD.modules.globalStore and JOBAD.UserConfig)</li>
 </ul></li>
 <li>added <code>.UserConfig.setMessage</code> and <code>.UserConfig.getMessage</code></li>
+<li>improved ToolBar, now supports icons</li>
+<li>minor CSS fixes</li>
+<li>more doc updates</li>
 </ul>
 
 <h3>Version 3.1.0 (Stable)</h3>

@@ -17,14 +17,21 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 ## Changelog
 ### Version 3.1.5 (In Development)
 * made module loading asynchronous 
+* added repositories
+	* a nice way to store modules in
+	* can be loaded dynamically loaded from code
 * added "externals" to module info
 	* allows to load external scripts as dependencies
 	* added a MathJax module which uses this
 	* allowing globalinit functions to be async if a module info peropety `async` is set to true. 
+* added `url` to module info, to provide a module homepage
 * improved globalStore, localStore and UserConfig
 	* you can now get and set multiple values at once
 	* UserConfig and globalStore now accessible outside of loadedModule Instances (via JOBAD.modules.globalStore and JOBAD.UserConfig)
 * added `.UserConfig.setMessage` and `.UserConfig.getMessage`
+* improved ToolBar, now supports icons
+* minor CSS fixes
+* more doc updates
 
 ### Version 3.1.0 (Stable)
 * improved Sidebar
