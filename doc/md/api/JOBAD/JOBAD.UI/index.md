@@ -12,3 +12,11 @@ This object contains the JOBAD User interface
 	* **String** `color` Optional. Color to use. 
 * **Function** `JOBAD.UI.unhighlight(element)` Reverts an element to its normal state. 
 	* **jQuery** `element` Element to unhighlight. 
+* **Function** `JOBAD.UI.sortTableBy(element, sortFunction, callback)` - Sorts a table
+    * **jQuery** `element` A th in the header of the table representing by which column to sort by. 
+    * **String|Function** `sortFunction(a, b)` A string-based sorting function which sorts the table. Can also be a string: 
+        * `ascending` - Sort ascending
+        * `descending`- Sort descending
+        * `reset` - Go back to the original state
+        * `rotate` - Rotate through the above. 
+    * **Function** `callback(state)` Optional. If `sortFunction == 'rotate'`,  this function will be called with the current (new) state. (0 = 'reset', 1=`ascending`, 2=`descending`)

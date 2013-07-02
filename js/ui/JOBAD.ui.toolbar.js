@@ -56,8 +56,6 @@ JOBAD.UI.Toolbar.clear = function(element){
 */
 JOBAD.UI.Toolbar.update = function(element){
 
-	//TODO: Group elements (like in sidebar. )
-
 	var element = JOBAD.refs.$(element);
 
 	if(element.length > 1){
@@ -74,7 +72,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		var position = /*JOBAD.util.closest(element, function(e){
 				//check if an element is visible
 				return !JOBAD.util.isHidden(e);
-		}).*/element.offset(); //TODO: Make this element wise. 
+		}).*/element.offset();
 		
 		toolbar.css({
 			"position": "absolute",
@@ -99,8 +97,8 @@ JOBAD.UI.Toolbar.update = function(element){
 	adds an items to the toolbar. 
 	@param element The element the toolbar belongs to. 
 	@param config Configuration of new item. Eitehr an object or a string tobe used as text.  
-		config.class:	Notificaton class. Default: none.  TBD
-		config.icon:	Icon (Default: Based on notification class. TBD 
+		config.class:	Notificaton class. Default: none.
+		config.icon:	Icon
 		config.text:	Text
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
@@ -132,7 +130,7 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 			}, function(){
 				JOBAD.refs.$(this).stop().fadeTo(300, 0.5);
 			}).fadeTo(0, 0.5)
-			.bind("contextmenu", function(){return false;})
+			.bind("contextmenu", function(e){return e.ctrlKey;})
 		);
 		
 		var cb = function(){
@@ -156,7 +154,20 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	} else if(typeof config == "undefined"){
 		var config = {}
 	}
+
+	var icon = "none";  
 	
+	//get icon and class
+	if(typeof config["class"] == 'string'){	
+		var notClass = config["class"];	
+		if(JOBAD.resources.available("icon", notClass)){
+			icon = notClass;
+		}
+	}
+
+	if(typeof config.icon == "string"){
+		icon = config.icon; 
+	}
 	
 	//new Item
 
@@ -182,17 +193,31 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		});
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
 	}
-	
-	
-	
-	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button()
+
+	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button();
+
+	//icon
+	if(icon != "none"){
+		icon = JOBAD.resources.getIconResource(icon); //get icon url
+		JOBAD.refs.$("<span class='JOBAD JOBAD_InlineIcon'>")
+		.css({
+			"position": "absolute",
+			"top": "50%",
+			"margin-top": "-8px",
+			"left": ".5em",
+			"background-image": "url('"+icon+"')"
+		}).prependTo(newItem); 
+
+		newItem.find(".ui-button-text").css({
+			"padding": ".4em 1em .4em 2.1em"
+		}) 
+	}
 	
 	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
 	//store the data
 	element
 	.data("JOBAD.UI.Toolbar.active", true)
-	//.data("JOBAD.UI.Toolbar.hide", typeof(config.hide=='boolean')?true:false); //TODO: Make this element wise. 
 	
 	
 	JOBAD.UI.Toolbar.update(element);

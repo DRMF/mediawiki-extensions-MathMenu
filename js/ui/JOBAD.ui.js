@@ -64,3 +64,64 @@ JOBAD.UI.unhighlight = function(element){
 		}
 	}, 1000);		
 };
+
+/*
+	Sorts a table. 
+	@param	el	Table Row Head to sort. 
+	@param sortFunction	A function, `ascending`, `descending`, `reset` or `rotate`
+	@param callback(state) Callback only for rotate state. 0 = originial, 1=ascend, 2=descend
+*/
+JOBAD.UI.sortTableBy = function(el, sortFunction, callback){
+	//get the table
+	var el = JOBAD.refs.$(el); 
+	var table = el.closest("table"); //the table
+	var rows = JOBAD.refs.$("tbody > tr", table); //find the rows
+	var colIndex = el.parents().children().index(el); //colIndex
+
+	if(!table.data("JOBAD.UI.TableSort.OrgOrder")){
+		table.data("JOBAD.UI.TableSort.OrgOrder", rows); 
+	}
+
+	if(typeof sortFunction == "undefined"){
+		sortFunction = "rotate"; 
+	}
+	if(typeof sortFunction == "string"){
+		if(sortFunction == "rotate"){
+			var now = el.data("JOBAD.UI.TableSort.rotationIndex");
+			if(typeof now != "number"){
+				now = 0;
+			}
+			
+			now = (now+1) % 3; 
+
+			sortFunction = ["reset", "ascending", "descending"][now]; 
+
+			el.data("JOBAD.UI.TableSort.rotationIndex", now); 
+
+			callback.call(el, now); 
+		}
+
+		if(sortFunction == "ascending"){
+			var sortFunction = function(a, b){return (a>b)?1:0; };
+		} else if(sortFunction == "descending"){
+			var sortFunction = function(a, b){return (a<b)?1:0; };
+		} else if(sortFunction == "reset"){
+			table.data("JOBAD.UI.TableSort.OrgOrder").each(function(){
+				var row = JOBAD.refs.$(this); 
+				row.detach().appendTo(table); 
+			});
+			return el;  
+		}
+	}
+
+	rows.sort(function(a, b){
+		var textA = JOBAD.refs.$("td", a).eq(colIndex).text();
+		var textB = JOBAD.refs.$("td", b).eq(colIndex).text();
+		return sortFunction(textA, textB); 
+	}).each(function(i){
+		var row = JOBAD.refs.$(this); 
+		row.detach().appendTo(table); 
+	})
+
+	return el; 
+}

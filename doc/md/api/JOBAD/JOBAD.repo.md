@@ -34,3 +34,8 @@
     * **Function** `callback(success, message)` - Callback. 
         * **Boolean** `success` Was loading successfull?
         * **String** `message` If `success == false` then a message why it failed. 
+* **Function** `JOBAD.repo.buildPage(element, repo, callback)` - Builds a JOBAD repo page. 
+    * **jQuery** `element` Element to build page in. 
+    * **String** `repo` Repository to build page about. 
+    * **Function** `callback(element)` Optional. Callback once the page has finsihed loading. 
+        * `element` The built page element. 

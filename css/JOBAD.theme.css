@@ -25,6 +25,14 @@
 	/* applied to all JOBAD related elements */
 }
 
+/* inline icon */
+
+.JOBAD.JOBAD_InlineIcon{
+	background-size:18px 18px; 
+	width: 18px;
+	height: 18px;
+}
+
 /* 
 	HoverText
 */
@@ -44,12 +52,6 @@
 
 .JOBAD.JOBAD_Contextmenu {
 	/* applied to the context menu */
-}
-
-.JOBAD.JOBAD_Contextmenu.JOBAD_Contextmenu_Icon{
-	background-size:18px 18px; 
-	width: 18px;
-	height: 18px;
 }
 
 .JOBAD.JOBAD_Contextmenu.JOBAD_ContextMenu_Radial.JOBAD_ContextMenu_RadialItem{
@@ -198,6 +200,10 @@
 	background-color: #FFFFD0;
 }
 
+.JOBAD.JOBAD_Repo.JOBAD_Repo_Body{
+	margin: auto; 
+}
+
 /*
 	JOBAD Repo
 */
@@ -223,6 +229,7 @@
 
 .JOBAD.JOBAD_Repo.JOBAD_Repo_Table {
 	border-collapse:collapse;
+	width: 100%;
 }
 
 .JOBAD.JOBAD_Repo.JOBAD_Repo_Table th, 
@@ -265,12 +272,36 @@
 }
 
 /*
-	Progress Bar
+	Sorting
 */
+
+/* ascending */
+.JOBAD.JOBAD_Repo.JOBAD_Sort_Ascend:before {
+	content: "+";
+}
+
+/* descending */
+.JOBAD.JOBAD_Repo.JOBAD_Sort_Descend:before {
+	content: "-";
+}
+
+.JOBAD.JOBAD_Repo.JOBAD_Sort_Ascend, 
+.JOBAD.JOBAD_Repo.JOBAD_Sort_Descend {
+	color: gray;
+}
+
+
+
+
+/*
+	JOBAD jQuery UI CSS compatibility fixes
+*/
+
+/* Progress Bar */
 .ui-progressbar {
 	position: relative;
-
 }
+
 .progress-label {
 	position: absolute;
 	width: 400px;
@@ -279,12 +310,6 @@
 	font-weight: bold;
 	text-shadow: 1px 1px 0 #fff;
 }
-
-
-
-/*
-	JOBAD jQuery UI CSS compatibility fixes
-*/
 
 /* fix for bad size */
 .ui-widget { font-size: 70%; }

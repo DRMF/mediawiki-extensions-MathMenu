@@ -22,13 +22,25 @@
 var JOBAD_Repo_Urls = {}; //urls per repo
 var JOBAD_Repo_Mods = {}; //primary modules
 
-
 /*
 	Marks the current page as a repository page and generates a repository about page. 
 */
 JOBAD.repo = function(){
+	JOBAD.repo.buildPage("body", "./");
+}
 
-	var body = JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Body'>").appendTo(JOBAD.refs.$("body").empty());
+/*
+	Builds an information page about a repository. 
+	@param	element	Element to generate page info in. 
+	@param	repo	Repository to build page about. 
+	@param	callback	A Callback; 
+	
+*/
+JOBAD.repo.buildPage = function(element, repo, callback){
+
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
+
+	var body = JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Body'>").appendTo(JOBAD.refs.$(element).empty());
 
 	var msgBox = JOBAD.refs.$("<div>");
 
@@ -40,7 +52,7 @@ JOBAD.repo = function(){
 		value: 0
 	})
 
-	var baseUrl = JOBAD.util.resolve("./");
+	var baseUrl = JOBAD.util.resolve(repo);
 	baseUrl = baseUrl.substring(0, baseUrl.length - 1); // no slash at the end
 
 	JOBAD.repo.init(baseUrl, function(suc, cache){
@@ -59,21 +71,35 @@ JOBAD.repo = function(){
 		)
 
 
-		var table = JOBAD.refs.$("<table class='JOBAD JOBAD_Repo JOBAD_Repo_Table'>").appendTo("body");
+		var table = JOBAD.refs.$("<table class='JOBAD JOBAD_Repo JOBAD_Repo_Table'>").appendTo(body);
 
 		table.append(
-			JOBAD.refs.$("<tr>")
-			.append(
-				JOBAD.refs.$("<th>").text("Identifier"),
-				JOBAD.refs.$("<th>").text("Name"),
-				JOBAD.refs.$("<th>").text("Author"),
-				JOBAD.refs.$("<th>").text("Version"),
-				JOBAD.refs.$("<th>").text("Homepage"),
-				JOBAD.refs.$("<th>").text("Description"),
-				JOBAD.refs.$("<th>").text("Module Dependencies"),
-				JOBAD.refs.$("<th>").text("External Dependencies")
+			JOBAD.refs.$("<thead>").append(
+				JOBAD.refs.$("<tr>")
+				.append(
+					JOBAD.refs.$("<th>").text("Identifier"),
+					JOBAD.refs.$("<th>").text("Name"),
+					JOBAD.refs.$("<th>").text("Author"),
+					JOBAD.refs.$("<th>").text("Version"),
+					JOBAD.refs.$("<th>").text("Homepage"),
+					JOBAD.refs.$("<th>").text("Description"),
+					JOBAD.refs.$("<th>").text("Module Dependencies"),
+					JOBAD.refs.$("<th>").text("External Dependencies")
+				).children("th").click(function(){
+					JOBAD.UI.sortTableBy(this, "rotate", function(i){
+						this.parent().find("span").remove(); 
+						if(i==1){
+							this.append("<span class='JOBAD JOBAD_Repo JOBAD_Sort_Ascend'>");
+						} else if(i==2){
+							this.append("<span class='JOBAD JOBAD_Repo JOBAD_Sort_Descend'>");
+						}
+					}); 
+					return false; 
+				}).end() 
 			)
 		);
+
+		//Init everything
 
 		label.text("Loading module information ...")
 
@@ -92,6 +118,7 @@ JOBAD.repo = function(){
 			if(i >= modules.length){
 				label.text("Finished. ");
 				msgBox.fadeOut(1000);
+				callback(body); 
 				return;
 			}
 
@@ -339,8 +366,8 @@ JOBAD.repo.hasInit = function(baseUrl){
 */
 JOBAD.repo.loadFrom = function(repo, modules, callback){
 
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 	var modules = JOBAD.util.forceArray(modules); 
-
 	var repo = JOBAD.util.resolve(repo);
 
 	JOBAD.repo.init(repo, function(res, msg){
@@ -370,6 +397,8 @@ JOBAD.repo.loadFrom = function(repo, modules, callback){
 }
 
 JOBAD.repo.loadAllFrom = function(repo, callback){
+
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 	var repo = JOBAD.util.resolve(repo);
 
 	JOBAD.repo.init(repo, function(res, msg){
@@ -415,6 +444,8 @@ JOBAD.repo.provides = function(repo, module){
 	@param	callback	Callback to use. 
 */
 JOBAD.repo.provide = function(modules, callback){
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
+
 	if(!JOBAD.repo.provides(modules)){
 		return callback(false, "Modules are not provided by any repo");
 	}

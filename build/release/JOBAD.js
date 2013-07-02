@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 01 Jul 2013 16:27:44 +0200
+	built: Tue, 02 Jul 2013 12:42:28 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2060,13 +2060,25 @@ JOBAD.resources.provide("icon", {
 var JOBAD_Repo_Urls = {}; //urls per repo
 var JOBAD_Repo_Mods = {}; //primary modules
 
-
 /*
 	Marks the current page as a repository page and generates a repository about page. 
 */
 JOBAD.repo = function(){
+	JOBAD.repo.buildPage("body", "./");
+}
 
-	var body = JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Body'>").appendTo(JOBAD.refs.$("body").empty());
+/*
+	Builds an information page about a repository. 
+	@param	element	Element to generate page info in. 
+	@param	repo	Repository to build page about. 
+	@param	callback	A Callback; 
+	
+*/
+JOBAD.repo.buildPage = function(element, repo, callback){
+
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
+
+	var body = JOBAD.refs.$("<div class='JOBAD JOBAD_Repo JOBAD_Repo_Body'>").appendTo(JOBAD.refs.$(element).empty());
 
 	var msgBox = JOBAD.refs.$("<div>");
 
@@ -2078,7 +2090,7 @@ JOBAD.repo = function(){
 		value: 0
 	})
 
-	var baseUrl = JOBAD.util.resolve("./");
+	var baseUrl = JOBAD.util.resolve(repo);
 	baseUrl = baseUrl.substring(0, baseUrl.length - 1); // no slash at the end
 
 	JOBAD.repo.init(baseUrl, function(suc, cache){
@@ -2097,21 +2109,35 @@ JOBAD.repo = function(){
 		)
 
 
-		var table = JOBAD.refs.$("<table class='JOBAD JOBAD_Repo JOBAD_Repo_Table'>").appendTo("body");
+		var table = JOBAD.refs.$("<table class='JOBAD JOBAD_Repo JOBAD_Repo_Table'>").appendTo(body);
 
 		table.append(
-			JOBAD.refs.$("<tr>")
-			.append(
-				JOBAD.refs.$("<th>").text("Identifier"),
-				JOBAD.refs.$("<th>").text("Name"),
-				JOBAD.refs.$("<th>").text("Author"),
-				JOBAD.refs.$("<th>").text("Version"),
-				JOBAD.refs.$("<th>").text("Homepage"),
-				JOBAD.refs.$("<th>").text("Description"),
-				JOBAD.refs.$("<th>").text("Module Dependencies"),
-				JOBAD.refs.$("<th>").text("External Dependencies")
+			JOBAD.refs.$("<thead>").append(
+				JOBAD.refs.$("<tr>")
+				.append(
+					JOBAD.refs.$("<th>").text("Identifier"),
+					JOBAD.refs.$("<th>").text("Name"),
+					JOBAD.refs.$("<th>").text("Author"),
+					JOBAD.refs.$("<th>").text("Version"),
+					JOBAD.refs.$("<th>").text("Homepage"),
+					JOBAD.refs.$("<th>").text("Description"),
+					JOBAD.refs.$("<th>").text("Module Dependencies"),
+					JOBAD.refs.$("<th>").text("External Dependencies")
+				).children("th").click(function(){
+					JOBAD.UI.sortTableBy(this, "rotate", function(i){
+						this.parent().find("span").remove(); 
+						if(i==1){
+							this.append("<span class='JOBAD JOBAD_Repo JOBAD_Sort_Ascend'>");
+						} else if(i==2){
+							this.append("<span class='JOBAD JOBAD_Repo JOBAD_Sort_Descend'>");
+						}
+					}); 
+					return false; 
+				}).end() 
 			)
 		);
+
+		//Init everything
 
 		label.text("Loading module information ...")
 
@@ -2130,6 +2156,7 @@ JOBAD.repo = function(){
 			if(i >= modules.length){
 				label.text("Finished. ");
 				msgBox.fadeOut(1000);
+				callback(body); 
 				return;
 			}
 
@@ -2377,8 +2404,8 @@ JOBAD.repo.hasInit = function(baseUrl){
 */
 JOBAD.repo.loadFrom = function(repo, modules, callback){
 
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 	var modules = JOBAD.util.forceArray(modules); 
-
 	var repo = JOBAD.util.resolve(repo);
 
 	JOBAD.repo.init(repo, function(res, msg){
@@ -2408,6 +2435,8 @@ JOBAD.repo.loadFrom = function(repo, modules, callback){
 }
 
 JOBAD.repo.loadAllFrom = function(repo, callback){
+
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 	var repo = JOBAD.util.resolve(repo);
 
 	JOBAD.repo.init(repo, function(res, msg){
@@ -2453,6 +2482,8 @@ JOBAD.repo.provides = function(repo, module){
 	@param	callback	Callback to use. 
 */
 JOBAD.repo.provide = function(modules, callback){
+	var callback = JOBAD.util.forceFunction(callback, function(){}); 
+
 	if(!JOBAD.repo.provides(modules)){
 		return callback(false, "Modules are not provided by any repo");
 	}
@@ -3650,7 +3681,68 @@ JOBAD.UI.unhighlight = function(element){
 			element.removeData("JOBAD.UI.highlight.orgColor");
 		}
 	}, 1000);		
-};/* end   <ui/JOBAD.ui.js> */
+};
+
+/*
+	Sorts a table. 
+	@param	el	Table Row Head to sort. 
+	@param sortFunction	A function, `ascending`, `descending`, `reset` or `rotate`
+	@param callback(state) Callback only for rotate state. 0 = originial, 1=ascend, 2=descend
+*/
+JOBAD.UI.sortTableBy = function(el, sortFunction, callback){
+	//get the table
+	var el = JOBAD.refs.$(el); 
+	var table = el.closest("table"); //the table
+	var rows = JOBAD.refs.$("tbody > tr", table); //find the rows
+	var colIndex = el.parents().children().index(el); //colIndex
+
+	if(!table.data("JOBAD.UI.TableSort.OrgOrder")){
+		table.data("JOBAD.UI.TableSort.OrgOrder", rows); 
+	}
+
+	if(typeof sortFunction == "undefined"){
+		sortFunction = "rotate"; 
+	}
+	if(typeof sortFunction == "string"){
+		if(sortFunction == "rotate"){
+			var now = el.data("JOBAD.UI.TableSort.rotationIndex");
+			if(typeof now != "number"){
+				now = 0;
+			}
+			
+			now = (now+1) % 3; 
+
+			sortFunction = ["reset", "ascending", "descending"][now]; 
+
+			el.data("JOBAD.UI.TableSort.rotationIndex", now); 
+
+			callback.call(el, now); 
+		}
+
+		if(sortFunction == "ascending"){
+			var sortFunction = function(a, b){return (a>b)?1:0; };
+		} else if(sortFunction == "descending"){
+			var sortFunction = function(a, b){return (a<b)?1:0; };
+		} else if(sortFunction == "reset"){
+			table.data("JOBAD.UI.TableSort.OrgOrder").each(function(){
+				var row = JOBAD.refs.$(this); 
+				row.detach().appendTo(table); 
+			});
+			return el;  
+		}
+	}
+
+	rows.sort(function(a, b){
+		var textA = JOBAD.refs.$("td", a).eq(colIndex).text();
+		var textB = JOBAD.refs.$("td", b).eq(colIndex).text();
+		return sortFunction(textA, textB); 
+	}).each(function(i){
+		var row = JOBAD.refs.$(this); 
+		row.detach().appendTo(table); 
+	})
+
+	return el; 
+}/* end   <ui/JOBAD.ui.js> */
 /* start <ui/JOBAD.ui.hover.js> */
 /*
 	JOBAD 3 UI Functions - Hover Text
@@ -3759,7 +3851,7 @@ JOBAD.UI.ContextMenu = {}
 JOBAD.UI.ContextMenu.config = {
 	'margin': 20, //margin from page borders
 	'width': 250, //menu width
-	'radiusConst': 25, //Radius spacing constant
+	'radiusConst': 50, //Radius spacing constant
 	'radius': 20 //small radius size
 };
 
@@ -4009,7 +4101,7 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 
 		if(item[2] != "none" ){
 			$a.prepend(
-				JOBAD.refs.$("<span class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon'>")
+				JOBAD.refs.$("<span class='JOBAD JOBAD_InlineIcon'>")
 				.css({
 					"background-image": "url('"+JOBAD.resources.getIconResource(item[2])+"')"
 				})
@@ -4614,8 +4706,6 @@ JOBAD.UI.Toolbar.clear = function(element){
 */
 JOBAD.UI.Toolbar.update = function(element){
 
-	//TODO: Group elements (like in sidebar. )
-
 	var element = JOBAD.refs.$(element);
 
 	if(element.length > 1){
@@ -4632,7 +4722,7 @@ JOBAD.UI.Toolbar.update = function(element){
 		var position = /*JOBAD.util.closest(element, function(e){
 				//check if an element is visible
 				return !JOBAD.util.isHidden(e);
-		}).*/element.offset(); //TODO: Make this element wise. 
+		}).*/element.offset();
 		
 		toolbar.css({
 			"position": "absolute",
@@ -4657,8 +4747,8 @@ JOBAD.UI.Toolbar.update = function(element){
 	adds an items to the toolbar. 
 	@param element The element the toolbar belongs to. 
 	@param config Configuration of new item. Eitehr an object or a string tobe used as text.  
-		config.class:	Notificaton class. Default: none.  TBD
-		config.icon:	Icon (Default: Based on notification class. TBD 
+		config.class:	Notificaton class. Default: none.
+		config.icon:	Icon
 		config.text:	Text
 		config.menu:	Context Menu
 		config.menuThis: This for menu callbacks
@@ -4690,7 +4780,7 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 			}, function(){
 				JOBAD.refs.$(this).stop().fadeTo(300, 0.5);
 			}).fadeTo(0, 0.5)
-			.bind("contextmenu", function(){return false;})
+			.bind("contextmenu", function(e){return e.ctrlKey;})
 		);
 		
 		var cb = function(){
@@ -4714,7 +4804,20 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 	} else if(typeof config == "undefined"){
 		var config = {}
 	}
+
+	var icon = "none";  
 	
+	//get icon and class
+	if(typeof config["class"] == 'string'){	
+		var notClass = config["class"];	
+		if(JOBAD.resources.available("icon", notClass)){
+			icon = notClass;
+		}
+	}
+
+	if(typeof config.icon == "string"){
+		icon = config.icon; 
+	}
 	
 	//new Item
 
@@ -4740,17 +4843,31 @@ JOBAD.UI.Toolbar.addItem = function(element, config){
 		});
 		JOBAD.UI.ContextMenu.enable(newItem, function(){return entries;});
 	}
-	
-	
-	
-	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button()
+
+	newItem.appendTo(element.data("JOBAD.UI.Toolbar.ToolBarElement")).button();
+
+	//icon
+	if(icon != "none"){
+		icon = JOBAD.resources.getIconResource(icon); //get icon url
+		JOBAD.refs.$("<span class='JOBAD JOBAD_InlineIcon'>")
+		.css({
+			"position": "absolute",
+			"top": "50%",
+			"margin-top": "-8px",
+			"left": ".5em",
+			"background-image": "url('"+icon+"')"
+		}).prependTo(newItem); 
+
+		newItem.find(".ui-button-text").css({
+			"padding": ".4em 1em .4em 2.1em"
+		}) 
+	}
 	
 	newItem.data("JOBAD.UI.Toolbar.element", element);
 	
 	//store the data
 	element
 	.data("JOBAD.UI.Toolbar.active", true)
-	//.data("JOBAD.UI.Toolbar.hide", typeof(config.hide=='boolean')?true:false); //TODO: Make this element wise. 
 	
 	
 	JOBAD.UI.Toolbar.update(element);

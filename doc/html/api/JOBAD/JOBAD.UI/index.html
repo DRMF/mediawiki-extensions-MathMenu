@@ -499,6 +499,18 @@
 <ul>
 <li><strong>jQuery</strong> <code>element</code> Element to unhighlight. </li>
 </ul></li>
+<li><strong>Function</strong> <code>JOBAD.UI.sortTableBy(element, sortFunction, callback)</code> - Sorts a table
+<ul>
+<li><strong>jQuery</strong> <code>element</code> A th in the header of the table representing by which column to sort by. </li>
+<li><strong>String|Function</strong> <code>sortFunction(a, b)</code> A string-based sorting function which sorts the table. Can also be a string: 
+<ul>
+<li><code>ascending</code> - Sort ascending</li>
+<li><code>descending</code>- Sort descending</li>
+<li><code>reset</code> - Go back to the original state</li>
+<li><code>rotate</code> - Rotate through the above. </li>
+</ul></li>
+<li><strong>Function</strong> <code>callback(state)</code> Optional. If <code>sortFunction == 'rotate'</code>,  this function will be called with the current (new) state. (0 = 'reset', 1=<code>ascending</code>, 2=<code>descending</code>)</li>
+</ul></li>
 </ul>
 
 	</body>

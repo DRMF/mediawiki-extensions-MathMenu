@@ -26,7 +26,7 @@ JOBAD.UI.ContextMenu = {}
 JOBAD.UI.ContextMenu.config = {
 	'margin': 20, //margin from page borders
 	'width': 250, //menu width
-	'radiusConst': 25, //Radius spacing constant
+	'radiusConst': 50, //Radius spacing constant
 	'radius': 20 //small radius size
 };
 
@@ -276,7 +276,7 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 
 		if(item[2] != "none" ){
 			$a.prepend(
-				JOBAD.refs.$("<span class='JOBAD JOBAD_Contextmenu JOBAD_Contextmenu_Icon'>")
+				JOBAD.refs.$("<span class='JOBAD JOBAD_InlineIcon'>")
 				.css({
 					"background-image": "url('"+JOBAD.resources.getIconResource(item[2])+"')"
 				})
