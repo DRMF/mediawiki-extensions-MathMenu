@@ -15,7 +15,10 @@ It is known not to be compatible with:
 The official JOBAD repository is located at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
 
 ## Changelog
-### Version 3.1.5 (In Development)
+### Version 3.2.0 (In Development)
+* nothing so far
+
+### Version 3.1.5 (Stable)
 * made module loading asynchronous 
 * added repositories
 	* a nice way to store modules in
@@ -33,7 +36,7 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * minor CSS fixes
 * more doc updates
 
-### Version 3.1.0 (Stable)
+### Version 3.1.0
 * improved Sidebar
 	* added sidebar postions: left, right and bound to element. 
 	* default width reduced to 50px. 
@@ -57,8 +60,10 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * a bunch of internal fixes and improvements
 * updated jQuery to version 2.0.2
 * updated the documentation (a lot)
+
 ### Version 3.0.1
 * minor bug fixes
+
 ### Version 3.0.0
 * Initial stable release
 

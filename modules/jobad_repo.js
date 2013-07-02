@@ -36,7 +36,7 @@ JOBAD.repo.config({
 	"at": {
 		"template": "template_module.js" //make a manual override of location of files. 
 	},
-	"versions": ["3.1.5"], //compatible JOBAD versions
+	"versions": ["3.1.5", "3.2.0"], //compatible JOBAD versions
 	"name": "Basic Repo", //name
 	"description": "The basic JOBAD Modules repository. Contains all the modules needed for the demo. " //description
 });
