@@ -15,8 +15,10 @@ It is known not to be compatible with:
 The official JOBAD repository is located at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
 
 ## Changelog
-### Version 3.2.0 (In Development)
-* nothing so far
+### Version 3.1.6 (In Development)
+* improved repository override urls
+* removed build submodules, made them static
+* fixed 'failed to load module: undefined' error messages
 
 ### Version 3.1.5 (Stable)
 * made module loading asynchronous 

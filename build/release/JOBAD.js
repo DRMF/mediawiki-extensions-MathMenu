@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 02 Jul 2013 13:09:59 +0200
+	built: Wed, 03 Jul 2013 13:06:41 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -106,7 +106,7 @@ var JOBAD = function(element){
 JOBAD.ifaces = []; //JOBAD interfaces
 
 /* JOBAD Version */
-JOBAD.version = "3.2.0"; 
+JOBAD.version = "3.1.6"; 
 
 /*
 	JOBAD.toString
@@ -1893,7 +1893,7 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
 	        };
 	    }
 
-	    script.src = url;
+	    script.src = JOBAD.util.resolve(url);
 	    document.getElementsByTagName("head")[0].appendChild(script);
 
 	    window.setTimeout(function(){
@@ -1915,11 +1915,32 @@ JOBAD.util.escapeHTML = function(s){
 /*
 	Resolves a relative url
 	@param url	Url to resolve
+	@param base	Optional. Base url to use. 
+	@param isDir	Optional. If set to true, will return a directory name ending with a slash
 */
-JOBAD.util.resolve = function(url){
+JOBAD.util.resolve = function(url, base, isDir){
+
+	var resolveWithBase = false; 
+	var baseUrl, oldBase, newBase; 
+
+	if(typeof base == "string"){
+		resolveWithBase = true; 
+		baseUrl = JOBAD.util.resolve(base, true); 
+		oldBase = JOBAD.refs.$("base").detach(); 
+		newBase = JOBAD.refs.$("<base>").attr("href", baseUrl).appendTo("head"); 
+	}
+	
     var el= document.createElement('div');
     el.innerHTML= '<a href="'+JOBAD.util.escapeHTML(url)+'">x</a>';
-    return el.firstChild.href;
+    var url = el.firstChild.href;
+   
+    if(resolveWithBase){
+    	newBase.remove(); 
+    	oldBase.appendTo("head"); 
+	}
+
+	if( (base === true || isDir === true ) && url[url.length - 1] != "/"){url = url + "/"; }
+    return url; 
 }
 
 
@@ -2316,7 +2337,7 @@ JOBAD.repo.init = function(baseUrl, callback){
 		repo_cache = obj; //cache it
 	}
 
-	JOBAD.util.loadExternalJS(baseUrl+"/jobad_repo.js", function(s){
+	JOBAD.util.loadExternalJS(JOBAD.util.resolve("jobad_repo.js", baseUrl), function(s){
 
 		delete JOBAD.repo.config; //delete the function again
 
@@ -2368,9 +2389,9 @@ JOBAD.repo.init = function(baseUrl, callback){
 			var key = modules[i]; 
 			//is the url set manually
 			if(overrides.hasOwnProperty(key)){
-				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+overrides[key]; 
+				JOBAD_Repo_Urls[baseUrl][key] = JOBAD.util.resolve(overrides[key], baseUrl); 
 			} else {
-				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+key+".js"; 
+				JOBAD_Repo_Urls[baseUrl][key] = JOBAD.util.resolve(key+".js", baseUrl);
 			}
 
 
@@ -2418,6 +2439,11 @@ JOBAD.repo.loadFrom = function(repo, modules, callback){
 		if(!JOBAD.repo.provides(repo, modules)){
 			return callback(false, "Modules are not provided by repo. ");
 		}
+
+		//only load thigns that we don't already have
+		modules = JOBAD.util.filter(modules, function(mod){
+			return !JOBAD.modules.available(mod, false);
+		});
 
 		var m2 = JOBAD.util.map(modules, function(mod){
 			return JOBAD_Repo_Urls[repo][mod]; 
@@ -2479,9 +2505,11 @@ JOBAD.repo.provides = function(repo, module){
 /*
 	Provide a module
 	@param	modules	Modules to provide. 
+	@param	repos	Additionalöly to repos already available, check these. 
+	@param	provideDependencies	Provide dependencies as well? Default: True. 
 	@param	callback	Callback to use. 
 */
-JOBAD.repo.provide = function(modules, callback){
+JOBAD.repo.provide = function(modules, repos, provideDependencies, callback){
 	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 
 	if(!JOBAD.repo.provides(modules)){
@@ -2490,6 +2518,7 @@ JOBAD.repo.provide = function(modules, callback){
 
 	var modules = JOBAD.util.forceArray(modules);
 	var i = 0;
+	var repos = JOBAD.util.forceArray(repos); //TODo: Implement repos and stuff here
 
 	var load_next = function(){
 		if(i >= modules.length){
@@ -2699,10 +2728,15 @@ JOBAD.ifaces.push(function(me, args){
 				loadQuenueAutoActivate.push(mod); //auto activate
 			}
 
+			if(!JOBAD.modules.available(mod)){
+				markLoadAsFailed(mod, "Module not available. (Did loading fail?)");
+				return [];
+			}
+
 			if(!me.modules.inLoadProcess(mod)){
 				var deps = JOBAD.modules.getDependencyList(mod);
 				if(!deps){
-					markLoadAsFailed(mod);
+					markLoadAsFailed(mod, "Failed to resolve dependencies (Is a dependent module missing? )");
 					return [];
 				} else {
 					return deps;

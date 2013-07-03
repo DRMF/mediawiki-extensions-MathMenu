@@ -1,10 +1,137 @@
-<!DOCTYPE html>
+#/usr/bin/env python
+
+import markdown2, os, sys, shutil, argparse
+from bs4 import BeautifulSoup
+
+#Find the first heading of some html. 
+def find_title(html, alt=''):
+	parsed = BeautifulSoup(html)
+	i = 1
+	while(i<7):
+		h = parsed.findAll("h"+str(i))
+		if(len(h) > 0):
+			return h[0].get_text()
+		i=i+1
+	return alt
+# Render a bunch of code. 
+def md_render(code):
+	return markdown2.markdown(code, extras=["footnotes", "fenced-code-blocks", "code-friendly"])
+
+# Trys to read a file
+def try_read(name):
+	try:
+		f = open(name)
+		in_code = f.read()
+		f.close()
+	except IOError as e:
+		print "[!] FATAL (READ): I/O error({0}): {1}".format(e.errno, e.strerror)
+		sys.exit(1)
+	except:
+		print "[!] FATAL (READ): Unexpected error:", sys.exc_info()[0]
+		sys.exit(1)
+	return in_code
+
+#Trys to write a file. 
+def try_write(output_file, code):
+	try:
+		directory = os.path.dirname("./"+output_file)
+
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+
+		f=open(output_file, 'w+')
+		f.write(code)
+		f.close()
+	except IOError as e:
+		print "[!] FATAL (WRITE): I/O error({0}): {1}".format(e.errno, e.strerror)
+		sys.exit(1)
+	except:
+		print "[!] FATAL (WRITE): Unexpected error:", sys.exc_info()[0]
+		sys.exit(1)
+
+#Creates the output surrounding the actual rendering. 
+def output(render, title, body_only = False, css = True, header = "", prefix = "", suffix = ""):
+	output = ""
+	if not body_only:
+		output += """<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>[JOBAD] - JOBAD Documentation</title>
+		<title>"""
+		output += title
+		output +="""</title>"""
+		if css:
+			output+= """
 		<style type="text/css">
-/* Basic styles https://gist.github.com/cpatuzzo/3331384 */
+"""+get_css()+"""
+		</style>"""
+
+		output += header
+		output += """
+	</head>
+	<body>
+"""
+
+	output += prefix+"\n"
+	output += render
+	output += suffix+"\n"
+
+	if not body_only:
+		output += """
+	</body>
+</html>"""
+
+	return output
+
+#Parse a text either a file or a text. 
+def text_or_file(text):
+	if text == "":
+		return text
+	if os.path.isfile(text):
+		return try_read(text)
+	return text
+
+
+# Main Function running the logic
+def main_run(infile, outfile, title, body, css, header, prefix, suffix):
+	header = text_or_file(header)
+	prefix = text_or_file(prefix)
+	suffix = text_or_file(suffix)
+	render = md_render(try_read(infile))
+	if title == "":
+		title = find_title(render)
+	
+	res = output(render, title, body, css, header, prefix, suffix)
+	if outfile == "":
+		print res
+	else:
+		
+		try_write(outfile, res)
+
+# Main Arg parsing function
+def main(cargs):
+	parser = argparse.ArgumentParser(description='Python Markdown Compiler')
+	parser.add_argument('INPUT_FILE', nargs=1, help='Input file. ')
+	parser.add_argument('-o', nargs=1, default=[""], help="Output File. Defaults to STDOUT. ", metavar="OUTPUT_FILE", dest="OUTPUT_FILE")
+	parser.add_argument('--title', '-t', dest="TITLE", nargs=1, default=[""], metavar="TITLE", help="Use a custom html title. ")
+	parser.add_argument('--no-css','-u', action='store_const', const=False, default=True, dest="MAKE_CSS", help="Do not include stylesheet. ")
+	parser.add_argument('--body-only', '-b', action='store_const', const=True, default=False, dest="BODY_ONLY", help="Generate HTML body only. ")
+	parser.add_argument('--header', '-he', nargs=1, dest="HEADER", metavar="HEADER", help="Include a file or a string in the header. ", default=[""])
+
+	parser.add_argument('--body-prefix', '-pre', nargs=1, dest="BODY_PREFIX", metavar="BODY_PREFIX", help="Include a file or a string before the content in the body. ", default=[""])
+	parser.add_argument('--body-suffix','-suf',  nargs=1, dest="BODY_SUFFIX", metavar="BODY_SUFFIX", help="Include a file or a string after the content in the body. ", default=[""])
+
+	args = parser.parse_args()
+
+	if(os.path.isfile(args.INPUT_FILE[0])):
+		main_run(args.INPUT_FILE[0], args.OUTPUT_FILE[0], args.TITLE[0], args.BODY_ONLY, args.MAKE_CSS, args.HEADER[0], args.BODY_PREFIX[0], args.BODY_SUFFIX[0])
+	else:
+		print "[!] INPUT_FILE is not a file. "
+		
+			
+#CSS code stuff
+def get_css():
+	css_code = """/* Basic styles https://gist.github.com/cpatuzzo/3331384 */
 		body {
 		  font-family: Helvetica, arial, sans-serif;
 		  font-size: 14px;
@@ -457,70 +584,8 @@
 		.vc { color: #008080 } /* Name.Variable.Class */
 		.vg { color: #008080 } /* Name.Variable.Global */
 		.vi { color: #008080 } /* Name.Variable.Instance */
-		.il { color: #009999 } /* Literal.Number.Integer.Long */
-		</style><!--
-	Copyright (C) 2013 KWARC Group <kwarc.info>
-	
-	This file is part of JOBAD.
-	
-	JOBAD is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	
-	JOBAD is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-	
-	You should have received a copy of the GNU General Public License
-	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
--->
-	</head>
-	<body>
-<p><a href="../../index.html">Start</a> &gt; <a href="../index.html">API Documentation</a> &gt; <strong>JOBAD</strong></p>
-<h1>JOBAD</h1>
+		.il { color: #009999 } /* Literal.Number.Integer.Long */"""
+	return css_code
 
-<p>This object is the main JOBAD Namespace. </p>
-
-<ul>
-<li><p><strong>Function</strong> <code>JOBAD(element, config)</code> Creates a new instance of <code>JOBAD</code> bound to <code>element</code> </p>
-
-<ul>
-<li><strong>jQuery</strong> <code>element</code> a jQuery Object to bind this JOBAD INstance to. May not be empty. Collections containing more than one element may cause problems </li>
-<li><strong>Object</strong> <code>config</code> JOBAD Configuration. 
-<ul>
-<li><strong>String</strong> <code>config.sidebar_type</code> Type of sidebar to use: <code>right</code> (default), <code>left</code> or <code>bound</code></li>
-<li><strong>Array</strong> <code>config.restricted_user_config</code> An array of configuration items which can not be changed by the user</li>
-</ul></li>
-<li><strong>returns</strong> a new <a href="JOBADInstance/index.html"><code>JOBAD</code></a> instance</li>
-</ul></li>
-<li><p><strong>String</strong> <code>JOBAD.version</code> - The current JOBAD Version ('3.1.6')</p></li>
-<li><strong>Function</strong> <code>JOBAD.error(msg)</code> - Produces an error message
-<ul>
-<li><strong>String</strong> <code>msg</code> The message to produce</li>
-</ul></li>
-<li><strong>Function</strong> <code>JOBAD.isEventDisabled(name)</code> - Checks if an event is globally disabled
-<ul>
-<li><strong>String</strong> <code>name</code> Name of the event to check</li>
-<li><strong>returns</strong> a boolean</li>
-</ul></li>
-<li><strong>Function</strong> <code>JOBAD.noConflict()</code> - Restores the variable $ created by jQuery to its previous state. 
-<ul>
-<li><strong>returns</strong> a reference to jQuery</li>
-</ul></li>
-<li><strong>Array</strong> <a href="JOBAD.ifaces/index.html"><code>JOBAD.ifaces</code></a> - JOBAD ifaces</li>
-<li><strong>Object</strong> <a href="JOBAD.config.html"><code>JOBAD.config</code></a> - Configuration namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.console.html"><code>JOBAD.console</code></a> - Wraps the native console object if available</li>
-<li><strong>Object</strong> <a href="JOBAD.events/index.html"><code>JOBAD.events</code></a> - Event namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.modules/index.html"><code>JOBAD.modules</code></a> - Module namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.refs.html"><code>JOBAD.refs</code></a> - Contains internal references to  JOBADs dependencies</li>
-<li><strong>Object</strong> <a href="JOBAD.resources.html"><code>JOBAD.resources</code></a> - Text and icon resources namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.Sidebar.html"><code>JOBAD.Sidebar</code></a> - Namespace for the sidebar</li>
-<li><strong>Object</strong> <a href="JOBAD.storageBackend.html"><code>JOBAD.storageBackend</code></a> - Storage Backend namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.UI/index.html"><code>JOBAD.UI</code></a> - UI Namespace</li>
-<li><strong>Object</strong> <a href="JOBAD.util.html"><code>JOBAD.util</code></a> - Contains Utility functions</li>
-</ul>
-
-	</body>
-</html>
+if __name__ == "__main__":
+	main(sys.argv)

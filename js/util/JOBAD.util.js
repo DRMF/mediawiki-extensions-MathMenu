@@ -464,7 +464,7 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
 	        };
 	    }
 
-	    script.src = url;
+	    script.src = JOBAD.util.resolve(url);
 	    document.getElementsByTagName("head")[0].appendChild(script);
 
 	    window.setTimeout(function(){
@@ -486,11 +486,32 @@ JOBAD.util.escapeHTML = function(s){
 /*
 	Resolves a relative url
 	@param url	Url to resolve
+	@param base	Optional. Base url to use. 
+	@param isDir	Optional. If set to true, will return a directory name ending with a slash
 */
-JOBAD.util.resolve = function(url){
+JOBAD.util.resolve = function(url, base, isDir){
+
+	var resolveWithBase = false; 
+	var baseUrl, oldBase, newBase; 
+
+	if(typeof base == "string"){
+		resolveWithBase = true; 
+		baseUrl = JOBAD.util.resolve(base, true); 
+		oldBase = JOBAD.refs.$("base").detach(); 
+		newBase = JOBAD.refs.$("<base>").attr("href", baseUrl).appendTo("head"); 
+	}
+	
     var el= document.createElement('div');
     el.innerHTML= '<a href="'+JOBAD.util.escapeHTML(url)+'">x</a>';
-    return el.firstChild.href;
+    var url = el.firstChild.href;
+   
+    if(resolveWithBase){
+    	newBase.remove(); 
+    	oldBase.appendTo("head"); 
+	}
+
+	if( (base === true || isDir === true ) && url[url.length - 1] != "/"){url = url + "/"; }
+    return url; 
 }
 
 

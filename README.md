@@ -1,8 +1,8 @@
 # JOBAD
 
-Current Version: 3.1.5
+Current Version: 3.1.6
 
-Current Stable Version: 3.1.0
+Current Stable Version: 3.1.5
 
 Development Branch. 
 
@@ -17,12 +17,7 @@ JOBAD (JavaScript API for OMDoc-based Active Documents) is a javascript framewor
 To get the code use 
 
     git clone https://github.com/KWARC/jobad
-    
-If you want to build jobad, please use
 
-    git clone --recursive  https://github.com/KWARC/jobad
-    
-in order to check out the build dependencies. 
 
 ## License
 

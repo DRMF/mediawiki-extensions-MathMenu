@@ -187,10 +187,15 @@ JOBAD.ifaces.push(function(me, args){
 				loadQuenueAutoActivate.push(mod); //auto activate
 			}
 
+			if(!JOBAD.modules.available(mod)){
+				markLoadAsFailed(mod, "Module not available. (Did loading fail?)");
+				return [];
+			}
+
 			if(!me.modules.inLoadProcess(mod)){
 				var deps = JOBAD.modules.getDependencyList(mod);
 				if(!deps){
-					markLoadAsFailed(mod);
+					markLoadAsFailed(mod, "Failed to resolve dependencies (Is a dependent module missing? )");
 					return [];
 				} else {
 					return deps;

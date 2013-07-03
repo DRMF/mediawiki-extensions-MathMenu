@@ -278,7 +278,7 @@ JOBAD.repo.init = function(baseUrl, callback){
 		repo_cache = obj; //cache it
 	}
 
-	JOBAD.util.loadExternalJS(baseUrl+"/jobad_repo.js", function(s){
+	JOBAD.util.loadExternalJS(JOBAD.util.resolve("jobad_repo.js", baseUrl), function(s){
 
 		delete JOBAD.repo.config; //delete the function again
 
@@ -330,9 +330,9 @@ JOBAD.repo.init = function(baseUrl, callback){
 			var key = modules[i]; 
 			//is the url set manually
 			if(overrides.hasOwnProperty(key)){
-				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+overrides[key]; 
+				JOBAD_Repo_Urls[baseUrl][key] = JOBAD.util.resolve(overrides[key], baseUrl); 
 			} else {
-				JOBAD_Repo_Urls[baseUrl][key] = baseUrl+"/"+key+".js"; 
+				JOBAD_Repo_Urls[baseUrl][key] = JOBAD.util.resolve(key+".js", baseUrl);
 			}
 
 
@@ -380,6 +380,11 @@ JOBAD.repo.loadFrom = function(repo, modules, callback){
 		if(!JOBAD.repo.provides(repo, modules)){
 			return callback(false, "Modules are not provided by repo. ");
 		}
+
+		//only load thigns that we don't already have
+		modules = JOBAD.util.filter(modules, function(mod){
+			return !JOBAD.modules.available(mod, false);
+		});
 
 		var m2 = JOBAD.util.map(modules, function(mod){
 			return JOBAD_Repo_Urls[repo][mod]; 
@@ -441,9 +446,11 @@ JOBAD.repo.provides = function(repo, module){
 /*
 	Provide a module
 	@param	modules	Modules to provide. 
+	@param	repos	Additionalöly to repos already available, check these. 
+	@param	provideDependencies	Provide dependencies as well? Default: True. 
 	@param	callback	Callback to use. 
 */
-JOBAD.repo.provide = function(modules, callback){
+JOBAD.repo.provide = function(modules, repos, provideDependencies, callback){
 	var callback = JOBAD.util.forceFunction(callback, function(){}); 
 
 	if(!JOBAD.repo.provides(modules)){
@@ -452,6 +459,7 @@ JOBAD.repo.provide = function(modules, callback){
 
 	var modules = JOBAD.util.forceArray(modules);
 	var i = 0;
+	var repos = JOBAD.util.forceArray(repos); //TODo: Implement repos and stuff here
 
 	var load_next = function(){
 		if(i >= modules.length){
