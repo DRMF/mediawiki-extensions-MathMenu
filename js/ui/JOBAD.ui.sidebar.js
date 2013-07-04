@@ -188,7 +188,7 @@ JOBAD.UI.Sidebar.wrap = function(element, align){
 		}
 	})
 	
-	$(window).on("resize", function(){
+	JOBAD.refs.$(window).on("resize", function(){
 		JOBAD.UI.Sidebar.forceNotificationUpdate();
 	});
 
