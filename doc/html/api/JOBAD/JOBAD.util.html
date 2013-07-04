@@ -600,6 +600,34 @@
 <li><strong>String</strong> <code>base</code> Optional. A Base url. </li>
 <li><strong>Boolean</strong> <code>isDir</code> Assume a directory.  </li>
 </ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.on(query, event, handler)</code> - Adds an event listener to a query. 
+<ul>
+<li><strong>jQuery</strong> <code>query</code> A jQuery element to use as query. </li>
+<li><strong>String</strong> <code>event</code> Event to listen to. </li>
+<li><em>*Function</em> <code>handler(param1, param2, ...)</code> Event listener</li>
+<li><strong>returns</strong> Id of the newly added handler. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.util.once(query, event, handler)</code> - Adds a one-time  event listener to a query. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>query</code> A jQuery element to use as query. </li>
+<li><strong>String</strong> <code>event</code> Event to listen to. </li>
+<li><em>*Function</em> <code>handler(param1, param2, ...)</code> Event listener</li>
+<li><strong>returns</strong> Id of the newly added handler. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.util.off(query, id)</code> - Removes an event listener from a query. </p>
+
+<ul>
+<li><strong>jQuery</strong> <code>query</code> A jQuery element to use as query. </li>
+<li><strong>String</strong> <code>id</code> Id of handler to remove. </li>
+</ul></li>
+<li><strong>Function</strong> <code>JOBAD.util.trigger(query, event, params)</code> - Triggers an event on a query. 
+<ul>
+<li><strong>jQuery</strong> <code>query</code> A jQuery element to use as query. </li>
+<li><strong>String</strong> <code>event</code> Event to trigger. </li>
+<li><strong>Array</strong> <code>params</code> Optional. Array of parameters to pass to event handlers.</li>
+<li><strong>returns</strong> <code>Array of results</code></li>
+</ul></li>
 </ul>
 
 	</body>

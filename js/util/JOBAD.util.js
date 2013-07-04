@@ -513,6 +513,85 @@ JOBAD.util.resolve = function(url, base, isDir){
 	if( (base === true || isDir === true ) && url[url.length - 1] != "/"){url = url + "/"; }
     return url; 
 }
+/*
+	Adds an event listener to a query. 
+	@param	query A jQuery element to use as as query. 
+	@param	event Event to register trigger for. 
+	@param	handler	Handler to add
+	@returns an id for the added handler. 
+*/
+JOBAD.util.on = function(query, event, handler){
+	var query = JOBAD.refs.$(query);
+	var id = JOBAD.util.UID(); 
+	var handler = JOBAD.util.forceFunction(handler, function(){});
+	handler = JOBAD.util.argSlice(handler, 1); 
+
+	query.on(event+".core."+id, function(ev){
+		var result = JOBAD.util.forceArray(ev.result);
+
+		result.push(handler.apply(this, arguments));
+
+		return result; 
+	});
+	return event+".core."+id;
+}
+
+/*
+	Adds a one-time event listener to a query. 
+	@param	query A jQuery element to use as as query. 
+	@param	event Event to register trigger for. 
+	@param	handler	Handler to add
+	@returns an id for the added handler. 
+*/
+JOBAD.util.once = function(query, event, handler){
+	var id;
+
+	id = JOBAD.util.on(query, event, function(){
+		var result = handler.apply(this, arguments); 
+		JOBAD.util.off(query, id); 
+	});
+}
+
+/*
+	Removes an event handler from a query. 
+	@param	query A jQuery element to use as as query. 
+	@param	id	Id of handler to remove. 
+*/
+JOBAD.util.off = function(event, id){
+	var query = JOBAD.refs.$(query);
+	query.off(id); 
+}
+
+/*
+	Triggers an event on a query. 
+	@param	query A jQuery element to use as as query. 
+	@param	event Event to trigger. 
+	@param	params	Parameters to give to the event. 
+*/
+JOBAD.util.trigger = function(query, event, params){
+
+	var query = JOBAD.refs.$(query);
+
+	var result; 
+
+	var params = JOBAD.util.forceArray(params).slice(0);
+	params.unshift(event); 
+
+	
+
+	var id = JOBAD.util.UID(); 
+
+	query.on(event+"."+id, function(ev){
+		result = ev.result; 
+	})
+
+	query.trigger.apply(query, params);
+
+	query.off(event+"."+id);
+
+	return result; 
+
+}
 
 
 //Merge underscore and JOBAD.util namespace
