@@ -1,7 +1,7 @@
 
 var myJOBAD; 
 
-JOBAD.repo.loadFrom("../../../modules", ["jobad.config", "mathjax.mathjax"], function(s, msg){
+JOBAD.repo.provide(["jobad.debug", "mathjax.mathjax"], "../../../modules", function(s, msg){
 	$(function(){
 		myJOBAD = new JOBAD($(".ltx_page_main"));
 
@@ -26,4 +26,4 @@ JOBAD.repo.loadFrom("../../../modules", ["jobad.config", "mathjax.mathjax"], fun
 			});
 		});
 	})
-})
+}, false)

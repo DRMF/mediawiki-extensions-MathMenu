@@ -29,11 +29,13 @@
 * **Function** `JOBAD.repo.provides(repos, modules)` - Checks if all modules are provided by some repository in repos. 
     * **String** `repos` - Optional. Repositories to check. Defaults to all. 
     * **String|Array** `modules` Module(s) to check. 
-* **Function** `JOBAD.repo.provide(modules, callback)` - Loads modules from some repository. 
+* **Function** `JOBAD.repo.provide(modules, repos, callback, provideDepdencies)` - Loads modules from some repository. 
     * **String|Array** `modules` Modules to load. 
+     * **String|Array** `repos` Repositories to provide modules from. Optional. 
     * **Function** `callback(success, message)` - Callback. 
         * **Boolean** `success` Was loading successfull?
         * **String** `message` If `success == false` then a message why it failed. 
+     * **Boolean** `provideDepdencies` Also provide dependencies? Default: true. 
 * **Function** `JOBAD.repo.buildPage(element, repo, callback)` - Builds a JOBAD repo page. 
     * **jQuery** `element` Element to build page in. 
     * **String** `repo` Repository to build page about. 

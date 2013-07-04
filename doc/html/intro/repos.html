@@ -494,6 +494,18 @@ To load some modules from a repository, use: </p>
 <span class="p">});</span>
 </code></pre></div>
 
+<p>Note that using the above method is not recommended as it will not resolve dependencies and only supports loading from one repository. Rather use: </p>
+
+<div class="codehilite"><pre><code><span class="nx">JOBAD</span><span class="p">.</span><span class="nx">repo</span><span class="p">.</span><span class="nx">provide</span><span class="p">([</span><span class="s2">&quot;module.with.dependencies&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;path/to/repo/1&quot;</span><span class="p">,</span> <span class="s2">&quot;path/to/repo/2&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">msg</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">s</span><span class="p">){</span>
+        <span class="c1">//success; modules have been loaded</span>
+        <span class="c1">//all dependencies will be available</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//failed to load modules, msg will contain a reason</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
 <h2>Providing your own repository</h2>
 
 <p>To provide your own repository, all you need is a static WebServer. Each repository is in its own directory. It contains three types of files: </p>

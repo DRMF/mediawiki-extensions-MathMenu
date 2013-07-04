@@ -113,7 +113,7 @@ JOBAD.ifaces.push(function(me, args){
 			delete InstanceModules[module];
 		} catch(e){}
 
-		JOBAD.console.error("Warning: Failed to load module '"+module+"': "+String(message));
+		JOBAD.console.error("Failed to load module '"+module+"': "+String(message));
 	};
 
 	var properLoadObj = function(obj){

@@ -12,6 +12,21 @@ JOBAD.repo.loadFrom("/path/to/repo", ["a.sample.module"], function(s, msg){
     }
 });
 ``` 
+Note that using the above method is not recommended as it will not resolve dependencies and only supports loading from one repository. Rather use: 
+
+```js
+JOBAD.repo.provide(["module.with.dependencies"], ["path/to/repo/1", "path/to/repo/2"], function(s, msg){
+    if(s){
+        //success; modules have been loaded
+        //all dependencies will be available
+    } else {
+        //failed to load modules, msg will contain a reason
+    }
+});
+``` 
+
+
+
 ## Providing your own repository
 To provide your own repository, all you need is a static WebServer. Each repository is in its own directory. It contains three types of files: 
 

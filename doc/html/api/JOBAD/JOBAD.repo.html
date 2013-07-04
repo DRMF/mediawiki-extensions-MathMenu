@@ -531,13 +531,17 @@
 <li><strong>String</strong> <code>repos</code> - Optional. Repositories to check. Defaults to all. </li>
 <li><strong>String|Array</strong> <code>modules</code> Module(s) to check. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.repo.provide(modules, callback)</code> - Loads modules from some repository. 
+<li><strong>Function</strong> <code>JOBAD.repo.provide(modules, repos, callback, provideDepdencies)</code> - Loads modules from some repository. 
 <ul>
-<li><strong>String|Array</strong> <code>modules</code> Modules to load. </li>
+<li><strong>String|Array</strong> <code>modules</code> Modules to load. 
+<ul>
+<li><strong>String|Array</strong> <code>repos</code> Repositories to provide modules from. Optional. </li>
+</ul></li>
 <li><strong>Function</strong> <code>callback(success, message)</code> - Callback. 
 <ul>
 <li><strong>Boolean</strong> <code>success</code> Was loading successfull?</li>
 <li><strong>String</strong> <code>message</code> If <code>success == false</code> then a message why it failed. </li>
+<li><strong>Boolean</strong> <code>provideDepdencies</code> Also provide dependencies? Default: true. </li>
 </ul></li>
 </ul></li>
 <li><strong>Function</strong> <code>JOBAD.repo.buildPage(element, repo, callback)</code> - Builds a JOBAD repo page. 
