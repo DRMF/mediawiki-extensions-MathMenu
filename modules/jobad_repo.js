@@ -54,7 +54,7 @@ JOBAD.repo.config({
 			"test.sidebar": "core/test/test.sidebar.js"
 			
 	},
-	"versions": ["3.1.5", "3.1.6"], //compatible JOBAD versions
+	"versions": ["3.1.7"], //compatible JOBAD versions
 	"name": "Core JOBAD Modules Repository", //name
 	"description": "JOBAD Modules repository from the Core" //description
 });

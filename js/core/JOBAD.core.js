@@ -80,7 +80,7 @@ var JOBAD = function(element){
 JOBAD.ifaces = []; //JOBAD interfaces
 
 /* JOBAD Version */
-JOBAD.version = "3.1.6"; 
+JOBAD.version = "3.1.7"; 
 
 /*
 	JOBAD.toString

@@ -8,7 +8,7 @@ This object is the main JOBAD Namespace.
 		* **Array** `config.restricted_user_config` An array of configuration items which can not be changed by the user
 	* **returns** a new [`JOBAD`](JOBADInstance/index.md) instance
 
-* **String** `JOBAD.version` - The current JOBAD Version ('3.1.6')
+* **String** `JOBAD.version` - The current JOBAD Version ('3.1.7')
 * **Function** `JOBAD.error(msg)` - Produces an error message
     * **String** `msg` The message to produce
 * **Function** `JOBAD.isEventDisabled(name)` - Checks if an event is globally disabled
