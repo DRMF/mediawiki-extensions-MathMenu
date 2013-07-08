@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Thu, 04 Jul 2013 15:40:14 +0200
+	built: Mon, 08 Jul 2013 13:19:41 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -4715,15 +4715,18 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	var class_colors = {
 		"info": "#00FFFF",
 		"error": "#FF0000",
-		"warning": "#FFFF00"
+		"warning": "#FFFF00",
+		"none": "#FFFF00"
 	};
-	
+
+	config["class"] = (typeof config["class"] == "string")?config["class"]:"none";
+		
 	if(typeof config["class"] == 'string'){
 		var notClass = config["class"];
 		
 		if(JOBAD.resources.available("icon", notClass)){
 			icon = JOBAD.resources.getIconResource(notClass);
-		}	
+		}
 		
 		if(class_colors.hasOwnProperty(notClass)){
 			class_color = class_colors[notClass];
@@ -4754,6 +4757,9 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 	if(typeof config.icon == 'string'){
 		icon =  JOBAD.resources.getIconResource(config.icon);
 	}
+	if(typeof icon !== 'string'){
+		icon =  JOBAD.resources.getIconResource("none");
+	}
 	if(typeof icon == 'string'){
 		newGuy.html("<img src='"+icon+"' width='16px' height='16px'>")
 		.hover(function(){
@@ -4761,8 +4767,6 @@ JOBAD.UI.Sidebar.addNotification = function(sidebar, element, config, align){
 		}, function(){
 			JOBAD.UI.hover.disable();
 		});
-	} else {
-		newGuy.addClass("JOBAD_Notification_"+notClass);
 	}
 	
 	return newGuy;

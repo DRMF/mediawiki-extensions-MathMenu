@@ -97,6 +97,11 @@
 	border: 1px solid red;
 }
 
+.JOBAD.JOBAD_Sidebar.JOBAD_Notification_none{
+	background-color: #696969;
+	border: 1px solid #000000;
+}
+
 
 /*
 	JOBAD Folding

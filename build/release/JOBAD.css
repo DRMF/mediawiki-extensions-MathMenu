@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Thu, 04 Jul 2013 15:40:16 +0200
+	built: Mon, 08 Jul 2013 13:19:43 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -284,6 +284,11 @@
 	/* Error */	
 	background-color: red;
 	border: 1px solid red;
+}
+
+.JOBAD.JOBAD_Sidebar.JOBAD_Notification_none{
+	background-color: #696969;
+	border: 1px solid #000000;
 }
 
 
