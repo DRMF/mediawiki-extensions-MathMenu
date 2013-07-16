@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Mon, 08 Jul 2013 13:19:41 +0200
+	built: Tue, 16 Jul 2013 11:39:07 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -4254,7 +4254,9 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
 					callback(element, orgElement);
 					cb(element, orgElement);
-				});		
+				});	
+			} else if(item[1] === false){
+				$a.parent().addClass("ui-state-disabled"); 
 			} else {
 				$li.append(JOBAD.UI.ContextMenu.buildContextMenuList(item[1], element, orgElement, cb));
 			}
@@ -4342,8 +4344,10 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 					callback(element, orgElement);
 					cb(element, orgElement);
 				});		
+			} else if(item[1] === false){
+				$item.addClass("JOBAD_ContextMenu_Radial_Disabled");
 			} else {
-				$item.data("JOBAD.UI.ContextMenu.subMenuData", item[1])
+				$item.data("JOBAD.UI.ContextMenu.subMenuData", item[1]);
 			}
 
 			$item.hover(function(){
@@ -4374,7 +4378,7 @@ JOBAD.UI.ContextMenu.generateMenuList = function(menu){
 			var key = menu[i][0];
 			var val = menu[i][1];
 			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
-			if(typeof val == 'function'){
+			if(typeof val == 'function' || val === false){
 				res.push([key, val, icon]);		
 			} else {
 				res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), icon]);
@@ -4384,11 +4388,11 @@ JOBAD.UI.ContextMenu.generateMenuList = function(menu){
 		for(var key in menu){
 			if(menu.hasOwnProperty(key)){
 				var val = menu[key];
-				if(typeof val == 'function'){
+				if(typeof val == 'function' || val === false){
 					res.push([key, val, DEFAULT_ICON]);	
 				} else if(JOBAD.util.isArray(val)){
 					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
-						if(typeof val[0] == 'function'){
+						if(typeof val[0] == 'function' || val[0] === false){
 							res.push([key, val[0], val[1]]);
 						} else {
 							res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val[0]), val[1]]);

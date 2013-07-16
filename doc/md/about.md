@@ -16,7 +16,9 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 
 ## Changelog
 ### Version 3.1.7 (In Development)
-* nothing yet
+* added disabled menu items (use `false` instead of a callback)
+* better default handling of sidebar icons. 
+* improved styles
 
 ### Version 3.1.6 (Stable)
 * improved repository override urls
