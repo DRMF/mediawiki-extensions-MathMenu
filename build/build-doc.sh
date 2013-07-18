@@ -32,7 +32,7 @@ printf "BeautifulSoup 4 ... "
 python -c "from bs4 import BeautifulSoup" 2> /dev/null
 RETVAL=$?
 [ $RETVAL -eq 0 ] && echo "OK"
-[ $RETVAL -ne 0 ] && echo "FAIL" && echo "Abort: Python module BeautifulSoup 4 not found. " && exit 
+[ $RETVAL -ne 0 ] && echo "FAIL" && echo "Abort: Python module BeautifulSoup 4 not found. " && exit 1
 
 printf "Cleaning up previous build ..."
 rm -r $BASE_PATH/../doc/html

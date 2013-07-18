@@ -19,6 +19,8 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * added disabled menu items (use `false` instead of a callback)
 * better default handling of sidebar icons. 
 * improved styles
+* refactored the build system, now easy with `make`
+* updated underscore to version 1.5.1
 
 ### Version 3.1.6 (Stable)
 * improved repository override urls
@@ -91,7 +93,7 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 	You should have received a copy of the GNU General Public License
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 
-This project includes Underscore 1.4.4, which is licensed under [MIT License](https://github.com/documentcloud/underscore/blob/master/LICENSE). 
+This project includes Underscore 1.5.1, which is licensed under [MIT License](https://github.com/documentcloud/underscore/blob/master/LICENSE). 
 
 ## See also
 

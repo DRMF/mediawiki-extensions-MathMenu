@@ -507,11 +507,12 @@ JOBAD itself depends on: </p>
 <li>a release version which consists of one file with compressed code. It is created by running the development version through the <a href="https://developers.google.com/closure/compiler/">Google Closure Compiler</a>. </li>
 </ul>
 
-<p>The CSS code version of the code exists in two different versions: </p>
+<p>The CSS code version of the code exists in three different versions: </p>
 
 <ul>
 <li>an unbuilt version, which consists of several files. </li>
 <li>a built Version which consists of one file. </li>
+<li>a minfied version which is the built version compressed. </li>
 </ul>
 
 <p>You only need to use one version of the JS code and one version of the CSS code in your page. </p>
@@ -568,6 +569,11 @@ JOBAD itself depends on: </p>
 <p>To use the built CSS version, use this code: </p>
 
 <div class="codehilite"><pre><code>     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>To use the minfied CSS version, use this code: </p>
+
+<div class="codehilite"><pre><code>     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/JOBAD.min.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 
 <p>Afterwards, you can include any modules you might want to use. Then you can use JOBAD on your page: </p>

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#This Script will build the templates
+
 BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 
@@ -37,6 +39,7 @@ jobad_cssdev_full="${jobad_cssdev_full%??}"
 jobad_release="<script src='$jobad_base\/build\/release\/JOBAD.min.js'><\/script>\n"
 jobad_dev="<script src='$jobad_base\/build\/release\/JOBAD.js'><\/script>\n"
 jobad_css="<link rel='stylesheet' type='text/css' href='$jobad_base\/build\/release\/JOBAD.css'>"
+jobad_css_release="<link rel='stylesheet' type='text/css' href='$jobad_base\/build\/release\/JOBAD.min.css'>"
 jobad_templates=""
 
 echo "Building JOBAD templates..."
@@ -60,7 +63,7 @@ do
 	cat "$template_dir/$template.html" | sed \
 		-e "s%\${JOBAD_BASE}%$jobad_base%" \
 		-e "s%\${JS_INCLUDE}%$jobad_release%" \
-		-e "s%\${CSS_INCLUDE}%$jobad_css%" \
+		-e "s%\${CSS_INCLUDE}%$jobad_css_release%" \
 		-e "s%\${BUILD_COMMENTS}%<!-- This file has been generated automatically. Any changes will be overwritten. -->%" \
 	> "$template_build_dir/$template/release.html"
 	echo "Wrote $template/release.html"
@@ -89,4 +92,3 @@ for fname in $(cd $doc_md_source; find -type f); do
 done
 
 echo "Templates build finished. "
-
