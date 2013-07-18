@@ -1,8 +1,8 @@
 # Building JOBAD
 
 Although JOBAD is a javascript library, it is possible to build it. This concatenates all the required files into one and makes it a lot shorter to include JOBAD into the website. 
-Also a minimized version is created by running it through the [Google Closure Compiler](https://developers.google.com/closure/compiler/). 
-Similarly, the JOBAD Templates and Documentation are generated automatically from source files. 
+
+Also a minimized version is created. Similarly, the JOBAD Templates and Documentation are generated automatically from source files. 
 
 Building is currently only supported on linux, **building is not neccessary for the end user**. Building depends on the following software: 
 
@@ -14,6 +14,7 @@ Building is currently only supported on linux, **building is not neccessary for 
 * [GNU Make](https://www.gnu.org/software/make/)
 
 The following depencies will be installed automatically or are available: 
+
 * [markdown2](https://github.com/trentm/python-markdown2)
 * [pygments](http://pygments.org/) - a python syntax highlighter
 * [BeautifulSoup 4](http://www.crummy.com/software/BeautifulSoup/)

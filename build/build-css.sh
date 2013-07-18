@@ -20,6 +20,6 @@ do
 	cat $sourcedirc/$filename >> $buildc
 	echo "/* end   <$filename> */" >> $buildc
 done < "$BASE_PATH/config/css.txt"
-cat $BASE_PATH/config/dev_footer.css | sed -e "s/\${BUILD_TIME}/$(date -R)/" > $buildc
+cat $BASE_PATH/config/dev_footer.css | sed -e "s/\${BUILD_TIME}/$(date -R)/" >> $buildc
 
-printf "OK"
+echo "OK"

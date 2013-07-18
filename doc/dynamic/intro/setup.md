@@ -20,10 +20,11 @@ The javascript side of the JOBAD code exists in three different versions:
 * a development version version which consists of one file with comments and readable version: (`JOBAD.js`)
 * a release version which consists of one file with compressed code. It is created by running the development version through the [Google Closure Compiler](https://developers.google.com/closure/compiler/). 
 
-The CSS code version of the code exists in two different versions: 
+The CSS code version of the code exists in three different versions: 
 
 * an unbuilt version, which consists of several files. 
-* a built Version which consists of one file. 
+* a built Version which consists of one file.
+* a minimised Version which consists of the minimsed built version file.  
 
 You only need to use one version of the JS code and one version of the CSS code in your page. 
 
@@ -33,10 +34,17 @@ Your html `<head>` should look like this:
 <head>
 	<!-- other header tags here -->
 	<!-- Include dependencies -->
-	<script src="js/deps/jquery/jquery-2.0.0.min.js"></script>
-	<script src="js/deps/jquery/jquery-ui-1.10.3.js"></script>
-	<link href="css/jquery-ui.css" rel="stylesheet">
+${JS_LIBS}
+${CSS_LIBS}
 ```
+
+The Libraries are also compiled into one JS and CSS file, which both can be included via: 
+
+```html
+	<script src="build/release/libs/js/libs.js"></script>
+	<link href="build/release/libs/css/libs.css" rel="stylesheet">
+```
+
 If you want to include the unbuilt js files use this code: 
 
 ```html
@@ -65,6 +73,12 @@ To use the built CSS version, use this code:
 
 ```html
 	 <link href="build/release/JOBAD.css" rel="stylesheet">
+```
+
+To use the minimised CSS version, use this code: 
+
+```html
+	 <link href="build/release/JOBAD.min.css" rel="stylesheet">
 ```
 
 Afterwards, you can include any modules you might want to use. Then you can use JOBAD on your page: 

@@ -1,7 +1,7 @@
 # Makefile for JOBAd
 
 # Build everything
-all: deps js css doc templates libs
+all: deps js css libs templates doc
 clean: clean-deps clean-templates clean-doc clean-release
 libs: js-libs css-libs
 
@@ -12,7 +12,7 @@ clean-deps:
 npmdeps:
 	npm install gear gear-lib # To build compressed things
 pipdeps:
-	pip install markdown2 pygments beautifulsoup4 # To pip stuff
+	pip install markdown2 pygments beautifulsoup4 # To build the doc
 
 # Templates
 templates:
@@ -32,21 +32,21 @@ clean-release:
 	rm -rf build/release 
 
 # JavaScript
-js: js-dev js-min
+js: js-dev js-min js-libs
 
 js-dev: 
 	bash build/build-js.sh
 js-min: npmdeps js-dev
 	bash build/build-js-min.sh
 js-libs:
-	echo "Null" # Not yet enabled
+	node build/build-js-libs.js
 
 # CSS
-css: css-dev css-min
+css: css-dev css-min css-libs
 
 css-dev: 
 	bash build/build-css.sh
 css-min: npmdeps css-dev
 	bash build/build-css-min.sh
 css-libs:
-	echo "Null" # Not yet enabled
+	bash build/build-css-libs.sh

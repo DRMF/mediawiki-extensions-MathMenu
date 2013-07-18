@@ -12,7 +12,7 @@ buildmin="$destdir"JOBAD.min.css
 buildtmp="$destdir"JOBAD.min.css.tmp
 
 
-printf "Compiling JS Release Version ..."
+printf "Compiling CSS Release Version ..."
 
 node $BASE_PATH/build-css-min.js
 

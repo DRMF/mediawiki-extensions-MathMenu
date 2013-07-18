@@ -511,8 +511,8 @@ JOBAD itself depends on: </p>
 
 <ul>
 <li>an unbuilt version, which consists of several files. </li>
-<li>a built Version which consists of one file. </li>
-<li>a minfied version which is the built version compressed. </li>
+<li>a built Version which consists of one file.</li>
+<li>a minimised Version which consists of the minimsed built version file.  </li>
 </ul>
 
 <p>You only need to use one version of the JS code and one version of the CSS code in your page. </p>
@@ -522,9 +522,15 @@ JOBAD itself depends on: </p>
 <div class="codehilite"><pre><code><span class="nt">&lt;head&gt;</span>
     <span class="c">&lt;!-- other header tags here --&gt;</span>
     <span class="c">&lt;!-- Include dependencies --&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-2.0.0.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/deps/jquery/jquery-ui-1.10.3.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/jquery-ui.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/deps/jquery/jquery-2.0.2.min.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;js/deps/jquery/jquery-ui-1.10.3.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;css/libs/jquery-ui.css&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>The Libraries are also compiled into one JS and CSS file, which both can be included via: </p>
+
+<div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/release/libs/js/libs.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/libs/css/libs.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 
 <p>If you want to include the unbuilt js files use this code: </p>
@@ -571,7 +577,7 @@ JOBAD itself depends on: </p>
 <div class="codehilite"><pre><code>     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/JOBAD.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 
-<p>To use the minfied CSS version, use this code: </p>
+<p>To use the minimised CSS version, use this code: </p>
 
 <div class="codehilite"><pre><code>     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/JOBAD.min.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
