@@ -850,27 +850,32 @@ JOBAD.ifaces.push(function(){
 	
 		var $Div = JOBAD.refs.$("<div>")
 		.on("mousemove", JOBAD.UI.hover.disable);
-		
-		$Div.attr("title", "JOBAD Configuration Utility");
 
 		var mods = this.modules.getIdentifiers();
 
-		//create the table
-		
-		var $table = JOBAD.refs.$("<table>")
-		.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_tablemain")
-		.append(
-			JOBAD.refs.$("<colgroup>").append(
-				JOBAD.refs.$("<col>").css("width", "10%"), 
-				JOBAD.refs.$("<col>").css("width", "90%")
-			)
-		);
-		
-		var len = mods.length;		
 
-		var $displayer = JOBAD.refs.$("<td>").addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_infobox").attr("rowspan", len+1);
+		var TabNames = []; //Tab Names
+		var Tabs = []; //Tab Content
 
-		var showMain = function(){
+		TabNames.push("JOBAD Core"); 
+		Tabs.push(JOBAD.refs.$("<div>").data("JOBAD.module.core", true));
+
+
+		for(var i=0;i<mods.length;i++){
+			var mod = this.modules.getLoadedModule(mods[i]);
+
+			TabNames.push(mod.info().title); 
+			Tabs.push(
+				JOBAD.refs.$("<div>")
+				.data("JOBAD.module", mod)
+			); 
+
+		}		
+
+		var EventHandler = JOBAD.refs.$("<div>"); //Used as an event Handler
+
+		
+		var showMain = function(tab){
 			var $config = JOBAD.refs.$("<div>");
 			buildjQueryConfig(me.Config.getTypes(), $config, function(key){return me.Config.get(key);})
 		
@@ -884,9 +889,7 @@ JOBAD.ifaces.push(function(){
 					}
 			});
 		
-			$displayer
-			.trigger("JOBAD.modInfoClose")	
-			.html("")
+			tab.empty()
 			.append(
 				JOBAD.util.createTabs(
 					["About JOBAD", "Config", "GPL License", "jQuery", "jQuery UI", "Underscore"], 
@@ -909,10 +912,12 @@ JOBAD.ifaces.push(function(){
 							JOBAD.refs.$("<span>").text("Underscore Version "+JOBAD.util.VERSION),
 							JOBAD.refs.$("<pre>").text(JOBAD.resources.getTextResource("underscore_license"))
 						)
-					], {}, 400
-				).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
-			)
-			.one('JOBAD.modInfoClose', function(){
+					],
+					{"scrollHack": true}
+				)
+			);
+
+			EventHandler.one('JOBAD.modInfoClose', function(){
 				$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
 					var e = JOBAD.refs.$(e);
 					me.Config.set(e.data("JOBAD.config.setting.key"), e.data("JOBAD.config.setting.val"));
@@ -920,10 +925,12 @@ JOBAD.ifaces.push(function(){
 				
 				me.Sidebar.redraw(); //update the sidebar
 			});
+
 			return;
 		};
 
-		var showInfoAbout = function(mod){
+		var showInfoAbout = function(mod, tab){
+
 			//grab mod info
 			var info = mod.info();
 		
@@ -989,17 +996,15 @@ JOBAD.ifaces.push(function(){
 				return mod.UserConfig.get(key);
 			});
 			
-			$displayer
-			.trigger("JOBAD.modInfoClose")
-			.html("")		
-			
-			
+			tab.empty()
 			.append(
 				($config.children().length > 0)?
-					JOBAD.util.createTabs(["About", "Config"], [$info, $config], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+					JOBAD.util.createTabs(["About", "Config"], [$info, $config])
 				:
-					JOBAD.util.createTabs(["About"], [$info], {}, 400).addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_subtabs")
+					JOBAD.util.createTabs(["About"], [$info])
 			)
+
+			EventHandler
 			.one('JOBAD.modInfoClose', function(){
 				//Store all the settings
 				$config.find("div.JOBAD_CONFIG_SETTTING").each(function(i, e){
@@ -1011,49 +1016,37 @@ JOBAD.ifaces.push(function(){
 			return;
 		};
 
+		var displayDiv = JOBAD.refs.$("<div>").addClass("modal hide fade large"); 
+		var header = JOBAD.refs.$("<div>").addClass("modal-header")
+		.append(
+			'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>',
+			'<h3>JOBAD Configuration</h3>'
+		); 
 
-		JOBAD.refs.$("<tr>").append(
-			JOBAD.refs.$("<td>").text("JOBAD Core").click(showMain),
-			$displayer
-		).appendTo($table);
+		var footer = JOBAD.refs.$("<div>").addClass("modal-footer").append('<a href="#" class="btn btn-primary" data-dismiss="modal">Save &amp; Close</a>'); 
 
-		for(var i=0;i<len;i++){
-			var mod = this.modules.getLoadedModule(mods[i]);
-			JOBAD.refs.$("<tr>").append(
-				JOBAD.refs.$("<td>").text(mod.info().title)
-				.data("JOBAD.module", mod)
-				.click(function(){
-					showInfoAbout(JOBAD.refs.$(this).data("JOBAD.module"));
-				})
-			)
-			.addClass("JOBAD JOBAD_ConfigUI JOBAD_ConfigUI_ModEntry")
-			.appendTo($table);					
-		}
-		
-		$Div.append($table);
-		
-
-
-		$Div.dialog({
-			width: 700,
-			height: 600,
-			modal: true,
-			close: function(){
-				$displayer
-				.trigger("JOBAD.modInfoClose")
-			},
-			autoOpen: false
-		});	
-
-		showMain();
-
-		$Div
-		.dialog("open")
-		.parent().css({
-			"position": "fixed",
-			"top": Math.max(0, ((window.innerHeight - $Div.outerHeight()) / 2)),
-			"left": Math.max(0, ((window.innerWidth - $Div.outerWidth()) / 2))
-		}).end();
+		displayDiv.append(
+			header,
+			JOBAD.util.createTabs(TabNames, Tabs, {
+				"type": "tabs-left", 
+				"select": function(tabName, tab){
+					if(tab.data("JOBAD.module.core")){
+						showMain(tab); 
+					} else {
+						showInfoAbout(tab.data("JOBAD.module"), tab); 
+					}
+				},
+				"deselect": function(){
+					EventHandler.trigger("JOBAD.modInfoClose"); 
+				}
+			}).addClass("modal-body"), 
+			footer
+		).appendTo("body")
+		.modal()
+		.on("hidden", function(){
+			EventHandler.trigger("JOBAD.modInfoClose"); 
+			displayDiv.remove(); //We don't need it anymore
+		}); 
 	}
 });
 

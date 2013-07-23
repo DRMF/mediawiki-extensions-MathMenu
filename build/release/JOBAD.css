@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File
-	built: Thu, 18 Jul 2013 14:30:01 +0200
+	built: Tue, 23 Jul 2013 12:04:18 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -185,6 +185,11 @@
 	height: 1px;
 	overflow: hidden;
 	display: block;
+}
+
+.modal.large {
+    width: 80%; /* respsonsive width */
+    margin-left:-40%; /* width/2) */
 }/* end   <JOBAD.css> */
 /* start <JOBAD.theme.css> */
 /*

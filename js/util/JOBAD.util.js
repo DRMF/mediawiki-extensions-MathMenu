@@ -82,33 +82,55 @@ JOBAD.util.createRadio = function(texts, start){
 };
 
 /*
-	Creates tab data compatible with jQuery UI. 
+	Creates tab data compatible with Bootstrap. 
 	@param names	Texts to use. 
-	@param divs	Divs to use as content
-	@üaram height Maximum tab height
-	@param options Options for tabs. 
+	@param divs	Divs to use as content. 
+	@param config Configuration. Optional. 
+		@param config.tabParams	Params for Tab creation. 
+		@param config.type Type of tabs to use. CSS class. 
+		@param config.select Select Hook. function(tabName, tabDiv) To be called on selection of a div. 
+		@param config.unselect Deselect Hook. function(tabName, tabDiv) Top be called on the deselection of a div. 
 */
-JOBAD.util.createTabs = function(names, divs, options, height){
-	var div = JOBAD.refs.$("<div>");
-	var ul = JOBAD.refs.$("<ul>").appendTo(div);
+JOBAD.util.createTabs = function(names, divs, config){
+	var config = JOBAD.util.defined(config); 
+
+	var options = JOBAD.util.defined(config.tabParams); 
+	var tabtype = (typeof config.type == "string")?config.type:"";
+	var enableHook = (typeof config.select == "function")?config.select:function(){}; 
+	var disableHook = (typeof config.unselect == "function")?config.unselect:function(){}; 
+
+	var ids = []; 
+
+	var div = JOBAD.refs.$("<div>").addClass("tabbable "+tabtype);
+	var ul = JOBAD.refs.$("<ul>").appendTo(div).addClass("nav nav-tabs");
+	var cdiv = JOBAD.refs.$("<div>").addClass("tab-content").appendTo(div);
 	for(var i=0;i<names.length;i++){
 		var id = JOBAD.util.UID();
+		ids.push("#"+id); 
 		ul.append(
-			JOBAD.refs.$("<li>").append(JOBAD.refs.$("<a>").attr("href", "#"+id).text(names[i]))
+			JOBAD.refs.$("<li>").append(JOBAD.refs.$("<a>").attr("data-toggle", "tab").attr("href", "#"+id).text(names[i]))
 		);
 		
-		var ndiv = JOBAD.refs.$("<div>").append(divs[i]).attr("id", id);
-		
-		if(typeof height == 'number'){
-			ndiv.css({
-				"height": height, 
-				"overflow": "auto"
-			});
-		}
-		
-		div.append(ndiv);
+		JOBAD.refs.$("<div>").append(divs[i]).attr("id", id).addClass("tab-pane").appendTo(cdiv);
 	}
-	return div.tabs(options);
+	cdiv.children().eq(0).addClass("active"); 
+
+	JOBAD.refs.$('a[data-toggle="tab"]', ul).on("shown", function(e){
+		if(typeof e.relatedTarget != "undefined"){
+			var relatedTarget = JOBAD.refs.$(e.relatedTarget); 
+			var tabId = ids.indexOf(relatedTarget.attr("href")); 
+
+			disableHook(relatedTarget.text(), JOBAD.refs.$(divs[tabId])); 
+		}
+
+		var Target = JOBAD.refs.$(e.target); 
+		var tabId = ids.indexOf(Target.attr("href")); 
+		enableHook(Target.text(), JOBAD.refs.$(divs[tabId]));
+	}); 
+
+	JOBAD.refs.$('a[data-toggle="tab"]', ul).eq(0).tab("show"); 
+
+	return div; 
 };
 
 /*

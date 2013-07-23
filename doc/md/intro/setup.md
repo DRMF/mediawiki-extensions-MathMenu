@@ -35,8 +35,10 @@ Your html `<head>` should look like this:
 	<!-- other header tags here -->
 	<!-- Include dependencies -->
 	<script src='js/deps/jquery/jquery-2.0.2.min.js'></script>
+	<script src='js/deps/bootstrap.js'></script>
 	<script src='js/deps/jquery/jquery-ui-1.10.3.js'></script>
-	<link rel="stylesheet" type="text/css" href="css/libs/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="css/libs/jquery-ui-bs.css">
+	<link rel="stylesheet" type="text/css" href="css/libs/jquery-ui-less.css">
 ```
 
 The Libraries are also compiled into one JS and CSS file, which both can be included via: 

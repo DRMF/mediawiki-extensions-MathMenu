@@ -16,11 +16,15 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 
 ## Changelog
 ### Version 3.1.7 (In Development)
+* added bootstrap compatibility via jQuery Bootstrap
+* refactored the build system, now easy with `make`
+* ported the config dialog to bootstrap
 * added disabled menu items (use `false` instead of a callback)
 * better default handling of sidebar icons. 
 * improved styles
-* refactored the build system, now easy with `make`
+
 * updated underscore to version 1.5.1
+
 
 ### Version 3.1.6 (Stable)
 * improved repository override urls
