@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 23 Jul 2013 12:04:15 +0200
+	built: Tue, 23 Jul 2013 15:40:37 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1848,10 +1848,12 @@ JOBAD.util.containsAll = function(container, contained, includeSelf){
 	@param url	Url(s) of script(s) to load. 
 	@param	callback	Callback of script to load. 
 	@param	scope	Scope of callback. 
+	@param preLoadHack. Function to call before laoding a specific file. 
 */
-JOBAD.util.loadExternalJS = function(url, callback, scope){
+JOBAD.util.loadExternalJS = function(url, callback, scope, preLoadHack){
 	var TIMEOUT_CONST = 15000; //timeout for bad links
 	var has_called = false; 
+	var preLoadHack = JOBAD.util.forceFunction(preLoadHack, function(){}); 
 
 	var do_call = function(suc){
 		if(has_called){
@@ -1878,7 +1880,7 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
 				JOBAD.util.loadExternalJS(url[i], function(urls, suc){
 					i++;
 					next(urls, suc);
-				});
+				}, scope, preLoadHack);
 			}
 		}
 
@@ -1911,12 +1913,132 @@ JOBAD.util.loadExternalJS = function(url, callback, scope){
 	    }
 
 	    script.src = JOBAD.util.resolve(url);
+	    preLoadHack(url); 
 	    document.getElementsByTagName("head")[0].appendChild(script);
 
 	    window.setTimeout(function(){
+	    	document.getElementsByTagName("head")[0].removeChild(script); 
 	    	do_call(false);
 	    }, TIMEOUT_CONST);
 	    return 1;
+	}
+    
+}
+
+/*
+	Loads an external css file. 
+	@param url	Url(s) of css to load. 
+	@param	callback	Callback of css to load. 
+	@param	scope	Scope of callback. 
+	@param preLoadHack. Function to call before laoding a specific file. 
+*/
+JOBAD.util.loadExternalCSS = function(url, callback, scope, preLoadHack){
+	var TIMEOUT_CONST = 15000; //timeout for bad links
+	var has_called = false; 
+	var interval_id, timeout_id; 
+	var preLoadHack = JOBAD.util.forceFunction(preLoadHack, function(){}); 
+
+	var do_call = function(suc){
+		if(has_called){
+			return;
+		}
+		has_called = true;
+		try{
+
+		} catch(e){
+			clearInterval(interval_id); 
+			clearTimeout(timeout_id);
+		}
+
+		var func = JOBAD.util.forceFunction(callback, function(){});
+		var scope = (typeof scope == "undefined")?window:scope;
+
+		func.call(scope, url, suc);
+		
+	}
+
+	
+	if(JOBAD.util.isArray(url)){
+		var i=0;
+		var next = function(urls, suc){
+			if(i>=url.length || !suc){
+				window.setTimeout(function(){
+					do_call(suc);
+				}, 0);
+			} else {
+				JOBAD.util.loadExternalCSS(url[i], function(urls, suc){
+					i++;
+					next(urls, suc);
+				}, scope, preLoadHack);
+			}
+		}
+
+		window.setTimeout(function(){
+			next("", true);
+		}, 0);
+
+		return url.length;
+	} else {
+		//adapted from: http://stackoverflow.com/questions/5537622/dynamically-loading-css-file-using-javascript-with-callback-without-jquery
+		var head = document.getElementsByTagName('head')[0]; 
+		var link = document.createElement('link');
+		link.setAttribute( 'href', url );
+		link.setAttribute( 'rel', 'stylesheet' );
+		link.setAttribute( 'type', 'text/css' ); 
+		var sheet, cssRules;
+
+		interval_id = setInterval(function(){
+			try{
+				if("sheet" in link){
+					if(link.sheet && link.sheet.cssRules.length){
+						clearInterval(interval_id); 
+						clearTimeout(timeout_id); 
+						do_call(true); 
+					}
+				} else {
+					if(link.styleSheet && link.styleSheet.rules.length > 0){
+						clearInterval(interval_id); 
+						clearTimeout(timeout_id); 
+						do_call(true); 
+					}
+				}
+
+				if(link[sheet] && link[sheet][cssRules].length > 0){
+					clearInterval(interval_id); 
+					clearTimeout(timeout_id); 
+
+					do_call(true); 
+				}
+			}catch(e){}
+		}, 1000);
+
+		timeout_id = setTimeout(function(){
+			clearInterval(interval_id); 
+			head.removeChild(link); 
+			do_call(false); 
+		}, TIMEOUT_CONST);
+
+
+		link.onload = function () {
+			do_call(true); 
+		}
+		if (link.addEventListener) {
+			link.addEventListener('load', function() {
+			do_call(true); 
+			}, false);
+		}
+
+	  link.onreadystatechange = function() {
+	    var state = link.readyState;
+	    if (state === 'loaded' || state === 'complete') {
+	      link.onreadystatechange = null;
+	      do_call(true); 
+	    }
+	  };
+
+	  	preLoadHack(url);
+		head.appendChild(link); 
+		return 1;
 	}
     
 }
@@ -1959,6 +2081,8 @@ JOBAD.util.resolve = function(url, base, isDir){
 	if( (base === true || isDir === true ) && url[url.length - 1] != "/"){url = url + "/"; }
     return url; 
 }
+
+
 /*
 	Adds an event listener to a query. 
 	@param	query A jQuery element to use as as query. 
@@ -2037,6 +2161,12 @@ JOBAD.util.trigger = function(query, event, params){
 
 	return result; 
 
+}
+
+JOBAD.util.getCurrentOrigin = function(){
+	var scripts = document.getElementsByTagName('script');
+	var thisScript = scripts[scripts.length-1];
+	return thisScript.src; 
 }
 
 
@@ -2239,7 +2369,8 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 					JOBAD.refs.$("<th>").text("Homepage"),
 					JOBAD.refs.$("<th>").text("Description"),
 					JOBAD.refs.$("<th>").text("Module Dependencies"),
-					JOBAD.refs.$("<th>").text("External Dependencies")
+					JOBAD.refs.$("<th>").text("External JavaScript Dependencies"),
+					JOBAD.refs.$("<th>").text("External CSS Dependencies")
 				).children("th").click(function(){
 					JOBAD.UI.sortTableBy(this, "rotate", function(i){
 						this.parent().find("span").remove(); 
@@ -2358,7 +2489,28 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 						}
 					}
 
-					var edeps = info.externals;
+					var edeps = info.externals.js;
+
+					if(edeps.length == 0){
+						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
+					} else {
+						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
+						for(var j=0;j<edps.length;j++){
+							cell.append(
+								"\"", 
+								JOBAD.refs.$("<span>")
+									.addClass("JOBAD JOBAD_Repo JOBAD_Repo_External_Dependency")
+									.text(edeps[j]),
+								"\""
+							);
+
+							if(j != edeps.length - 1 ){
+								cell.append(" , "); 
+							}
+						}
+					}
+
+					var edeps = info.externals.css;
 
 					if(edeps.length == 0){
 						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
@@ -2545,13 +2697,21 @@ JOBAD.repo.loadFrom = function(repo, modules, callback){
 			return JOBAD_Repo_Urls[repo][mod]; 
 		});
 
+		JOBAD.repo.__currentFile = undefined; 
+		JOBAD.repo.__currentLoad = m2; 
+		JOBAD.repo.__currentRepo = repo; 
 
 		JOBAD.util.loadExternalJS(m2, function(suc){
+			delete JOBAD.repo.__currentFile; 
+			delete JOBAD.repo.__currentLoad; 
+			delete JOBAD.repo.__currentRepo;  
 			if(suc){
 				callback(true)
 			} else {
 				callback(false, "Failed to load one or more Modules: Timeout")
 			}
+		}, undefined, function(u){
+			JOBAD.repo.__currentFile = u; 
 		});
 	});
 }
@@ -2820,7 +2980,6 @@ JOBAD.ifaces.push(function(me, args){
 		config = JOBAD.util.defined(config);
 		config = (typeof config == "function")?{"ready": config}:config; 
 		config = (typeof config == "booelan")?{"activate": config}:config; 
-
 
 		var ready = JOBAD.util.forceFunction(config.ready, function(){});
 		var load = JOBAD.util.forceFunction(config.load, function(){});
@@ -3110,6 +3269,7 @@ JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit",
 
 var moduleList = {};
 var moduleStorage = {};
+var moduleOrigins = {}; 
 
 /* 
 	Registers a new JOBAD module with JOBAD. 
@@ -3118,6 +3278,7 @@ var moduleStorage = {};
 */
 JOBAD.modules.register = function(ModuleObject){
 	var moduleObject = JOBAD.modules.createProperModuleObject(ModuleObject);
+
 	if(!moduleObject){
 		return false;	
 	}
@@ -3125,10 +3286,36 @@ JOBAD.modules.register = function(ModuleObject){
 	if(JOBAD.modules.available(identifier)){
 		return false;	
 	} else {
+		//set the origins
+		if(JOBAD.repo.__currentFile){
+			moduleOrigins[identifier] = [JOBAD.repo.__currentFile, JOBAD.repo.__currentLoad, JOBAD.repo.__currentRepo]; //The current origin
+		} else {
+			moduleOrigins[identifier] = [JOBAD.util.getCurrentOrigin()];
+		}
+
+		//resolving all the relative urls
+		if(moduleObject.info.url){
+			moduleObject.info.url = JOBAD.modules.resolveModuleResourceURL(identifier, moduleObject.info.url); 
+		}
+
+		moduleObject.info.externals.js = JOBAD.util.map(moduleObject.info.externals.js, function(e){
+			return JOBAD.modules.resolveModuleResourceURL(identifier, e); 
+		});
+
+		moduleObject.info.externals.css = JOBAD.util.map(moduleObject.info.externals.css, function(e){
+			return JOBAD.modules.resolveModuleResourceURL(identifier, e); 
+		});
+
 		moduleList[identifier] = moduleObject;
+
+
 		moduleStorage[identifier] = {};
+		
+		
 		return true;
 	}
+
+
 };
 
 /* 
@@ -3175,12 +3362,26 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		if(info.hasOwnProperty('externals')){
 			if(JOBAD.util.isArray(info["externals"])){
-				properObject.info.externals = info["externals"];
+				properObject.info.externals = {"js": info["externals"], "css": []};
+			} else if(JOBAD.util.isObject(info["externals"])){
+				properObject.info.externals = {}
+				if(info["externals"].hasOwnProperty("css")){
+					if(!JOBAD.util.isArray(info["externals"].css)){
+						return false; 
+					}
+					properObject.info.externals.css = info["externals"].css; 
+				}
+				if(info["externals"].hasOwnProperty("js")){
+					if(!JOBAD.util.isArray(info["externals"].js)){
+						return false; 
+					}
+					properObject.info.externals.js = info["externals"].js; 
+				}
 			} else {
 				return false;
 			}
 		} else {
-			properObject.info.externals = [];
+			properObject.info.externals = {"js":[], "css": []};
 		}
 
 		if(info.hasOwnProperty('async')){
@@ -3308,6 +3509,33 @@ JOBAD.modules.available = function(name, checkDeps){
 		return selfAvailable;
 	}
 };
+
+/*
+	Gets the origin of a module. 
+	@param	name Name of module to get origin from. 
+	@param  what what kind of orgin to get. (Optional, "file" or "group", otehrwise "repo"))
+*/
+JOBAD.modules.getOrigin = function(name, what){
+	var origin = moduleOrigins[name]; 
+	if(JOBAD.util.equalsIgnoreCase(what, "file")){
+		return origin[0]; 
+	} else if(JOBAD.util.equalsIgnoreCase(what, "group")){
+		return origin[1] || [origin[0]]; 
+	} else {
+		return origin[2]; 
+	}
+}
+
+/*
+	Resolves a resource URL for the specefied module. 
+	@param	mod	Name of module to resolve url for. 
+	@param	url Url to resolve. 
+*/
+JOBAD.modules.resolveModuleResourceURL = function(mod, url){
+	var origin = JOBAD.modules.getOrigin(mod, "file");
+	origin = origin.substring(0, origin.lastIndexOf('/'));
+	return JOBAD.util.resolve(url, origin); 
+}
 
 /* 
 	Returns an array of dependencies of name including name in such an order, thet they can all be loaded without unresolved dependencies. 
@@ -3487,6 +3715,13 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 		return JOBADInstance;	
 	};
 
+	/*
+		Gets the origin of this module. 
+	*/
+	this.getOrigin = function(what){
+		return JOBAD.modules.getOrigin(name, what); 
+	}
+
 
 	this.isActive = function(){
 		return JOBADInstance.modules.isActive(this.info().identifier);
@@ -3551,7 +3786,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 
 	var do_next = function(){
 		ServiceObject.init.apply(me, params); 
-		next(true);
+		next.call(me, true);
 	};
 
 	if(!moduleStorage[name]["init"]){
@@ -3565,14 +3800,23 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 			}
 		}
 
-		JOBAD.util.loadExternalJS(ServiceObject.info.externals, function(urls, suc){
+		JOBAD.util.loadExternalCSS(ServiceObject.info.externals.css, function(urls, suc){
 			if(!suc){
-				next(false, "Can't load external dependencies: Timeout. "); 
+				next(false, "Can't load external CSS dependencies: Timeout. "); 
 			} else {
-				ServiceObject.globalinit.call(limited, do_next);
+				JOBAD.util.loadExternalJS(ServiceObject.info.externals.js, function(urls, suc){
+					if(!suc){
+						next(false, "Can't load external JavaScript dependencies: Timeout. "); 
+					} else {
+						ServiceObject.globalinit.call(limited, do_next);
+					}
+					
+				});
 			}
 			
 		});
+
+		
 	} else {
 		do_next();
 	}
@@ -6348,6 +6592,7 @@ for(var key in JOBAD.events){
 	You should have received a copy of the GNU General Public License
 	along with JOBAD.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 
 //StorageBackend
 

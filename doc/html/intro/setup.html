@@ -495,9 +495,11 @@ JOBAD itself depends on: </p>
 <ul>
 <li><a href="http://jquery.com">jQuery</a> - tested with version 2.0.2</li>
 <li><a href="http://jqueryui.com/">jQuery UI</a> - tested with version 1.10.3</li>
+<li><a href="http://twitter.github.io/bootstrap/">Bootstrap</a> - tested with version v2.3.2</li>
+<li><a href="http://addyosmani.github.io/jquery-ui-bootstrap/">jQuery UI Bootstrap</a></li>
 </ul>
 
-<p>Both dependencies are bundled with JOBAD. </p>
+<p>All dependencies are bundled with JOBAD. </p>
 
 <p>The javascript side of the JOBAD code exists in three different versions: </p>
 
@@ -529,7 +531,7 @@ JOBAD itself depends on: </p>
     <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;css/libs/jquery-ui-less.css&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 
-<p>The Libraries are also compiled into one JS and CSS file, which both can be included via: </p>
+<p>The Libraries are also compiled into one JS and CSS file, which both can be included via the following code snippet. This is the recommended method for including the depencies: </p>
 
 <div class="codehilite"><pre><code>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/release/libs/js/libs.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;build/release/libs/css/libs.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>

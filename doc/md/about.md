@@ -19,10 +19,13 @@ The official JOBAD repository is located at [https://github.com/KWARC/jobad](htt
 * added bootstrap compatibility via jQuery Bootstrap
 * refactored the build system, now easy with `make`
 * ported the config dialog to bootstrap
+* added `moduleInstance.getOrigin()` to get the origin of a module. 
+	* all urls on modules re now resolved relative to the module. 
+* added `JOBAD.util.loadExternalJS`
+* added CSS external dependencies for modules
 * added disabled menu items (use `false` instead of a callback)
 * better default handling of sidebar icons. 
 * improved styles
-
 * updated underscore to version 1.5.1
 
 

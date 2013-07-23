@@ -29,7 +29,10 @@ var template = {
 		'url': 'http://example.com', //website url (if available)
 		'version':	'1.0', //string containing the version number. May be omitted. 
 		'dependencies':	[], //Array of module dependencies. If ommited, assumed to have no dependencies. 
-		'externals': [], //external scripts this module depends on
+		'externals': {
+			"js": [], //external scripts this module depends on
+			"css": [] //external css this module depends on
+		}, 
 		'async': false, //should globalinit be async
 		'hasCleanNamespace': true // Does this module contain only standard functions?
 	},

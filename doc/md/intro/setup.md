@@ -11,8 +11,11 @@ JOBAD itself depends on:
 
 * [jQuery](http://jquery.com) - tested with version 2.0.2
 * [jQuery UI](http://jqueryui.com/) - tested with version 1.10.3
+* [Bootstrap](http://twitter.github.io/bootstrap/) - tested with version v2.3.2
+* [jQuery UI Bootstrap](http://addyosmani.github.io/jquery-ui-bootstrap/)
+	
 
-Both dependencies are bundled with JOBAD. 
+All dependencies are bundled with JOBAD. 
 
 The javascript side of the JOBAD code exists in three different versions: 
 
@@ -41,7 +44,7 @@ Your html `<head>` should look like this:
 	<link rel="stylesheet" type="text/css" href="css/libs/jquery-ui-less.css">
 ```
 
-The Libraries are also compiled into one JS and CSS file, which both can be included via: 
+The Libraries are also compiled into one JS and CSS file, which both can be included via the following code snippet. This is the recommended method for including the depencies: 
 
 ```html
 	<script src="build/release/libs/js/libs.js"></script>

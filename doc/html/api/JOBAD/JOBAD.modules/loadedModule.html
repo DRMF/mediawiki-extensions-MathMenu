@@ -496,7 +496,12 @@
 
 <ul>
 <li><strong>Function</strong> <code>.info()</code> Returns the info object of this module. </li>
-<li><p><strong>Function</strong> <code>.getJOBAD()</code> Gets the <code>JOBADInstance</code> this module is bound to. </p></li>
+<li><strong>Function</strong> <code>.getJOBAD()</code> Gets the <code>JOBADInstance</code> this module is bound to. </li>
+<li><p><strong>Function</strong> <code>.getOrigin(what)</code> Gets the origin of this module, the repository it comes from. </p>
+
+<ul>
+<li><strong>String</strong> <code>what</code>. Optional. If set to <code>file</code>, will get the file this module is defined in. If set to <code>group</code> will get the group this module was loaded in. FileName and group may be wrong if the module is registered within some callback. </li>
+</ul></li>
 <li><p><strong>Function</strong> <code>.isActive()</code> Checks if this module is active. </p></li>
 <li><strong>Function</strong> <code>.activate()</code> Activates this module. </li>
 <li><strong>Function</strong> <code>.deactivate()</code> Deactivates this module</li>

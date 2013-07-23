@@ -11,6 +11,8 @@
 
 * **Function** `.info()` Returns the info object of this module. 
 * **Function** `.getJOBAD()` Gets the `JOBADInstance` this module is bound to. 
+* **Function** `.getOrigin(what)` Gets the origin of this module, the repository it comes from. 
+	* **String** `what`. Optional. If set to `file`, will get the file this module is defined in. If set to `group` will get the group this module was loaded in. FileName and group may be wrong if the module is registered within some callback. 
 
 * **Function** `.isActive()` Checks if this module is active. 
 * **Function** `.activate()` Activates this module. 

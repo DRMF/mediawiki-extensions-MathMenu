@@ -509,12 +509,14 @@
 <li><strong>number</strong> <code>start</code> Identifier of the initial value</li>
 <li><strong>returns</strong> jQuery object</li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.util.createTabs(names, tabs, options, height)</code> - Creates a jQuery UI tabs
+<li><strong>Function</strong> <code>JOBAD.util.createTabs(names, tabs, options, height)</code> - Creates tab data compatible with Bootstrap. 
 <ul>
 <li><strong>Array</strong> <code>names</code> Texts to use as names for tab titles</li>
 <li><strong>Array</strong> <code>tabs</code> Elements to use as tabs</li>
-<li><strong>Array</strong> <code>options</code> Options to pass to jQuery UI Tabs</li>
-<li><strong>number</strong> <code>height</code> Optional. Height of the tabs</li>
+<li><strong>Object</strong> <code>config</code> Configuration. Optional. 
+    * <strong>String</strong> <code>config.type</code> Type of tabs to use. CSS Class. 
+    * <strong>Function</strong> <code>config.select(tabName, tab)</code> Select Hook. To be called on selection of a tab. 
+    * <strong>Function</strong> <code>config.unselect(tabName, tab)</code> Deselect Hook. To be called on the deselection of a tab. </li>
 <li><strong>returns</strong> jQuery object</li>
 </ul></li>
 <li><strong>Function</strong> <code>JOBAD.util.closest(element, check)</code> - Similar to jQuery's closest. Travels up the DOM tree and finds the first element which matches check. This includes element itself
@@ -580,7 +582,7 @@
 <li><strong>jQuery</strong> <code>contained</code> Contained elements to look for. </li>
 <li><strong>Boolean</strong> <code>includeSelf</code> Optional. Include the container element iteself in the search. Default: False. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.util.loadExternalJS(names, callback, scope)</code> - Loads one or more external JavaScript files. 
+<li><strong>Function</strong> <code>JOBAD.util.loadExternalJS(names, callback, scope, preLoadHack)</code> - Loads one or more external JavaScript files. 
 <ul>
 <li><strong>Array|String</strong> <code>names</code> Name (URL) of file to load or array of file names. </li>
 <li><strong>Function</strong> <code>callback(urls, success)</code> Callback once files have loaded
@@ -589,8 +591,22 @@
 <li><strong>Array</strong> <code>urls</code> Originally given urls. </li>
 <li><strong>Boolean</strong> <code>success</code> Have the files been loaded or has there been a timeout?</li>
 </ul></li>
+<li><strong>Function</strong> <code>preLoadHack(url)</code> Optional. Called directly before a (single) file is loaded. </li>
 </ul></li>
-<li><strong>Function</strong> <code>JOBAD.util.escapeHTML(str)</code> - Escapes a string for use within html. 
+<li><strong>Function</strong> <code>JOBAD.util.loadExternalCSS(names, callback, scope, preLoadHack)</code> - Loads one or more external CSS files. 
+<ul>
+<li><strong>Array|String</strong> <code>names</code> Name (URL) of file to load or array of file names. </li>
+<li><strong>Function</strong> <code>callback(urls, success)</code> Callback once files have loaded
+<ul>
+<li><strong>this</strong> <code>scope</code></li>
+<li><strong>Array</strong> <code>urls</code> Originally given urls. </li>
+<li><strong>Boolean</strong> <code>success</code> Have the files been loaded or has there been a timeout?</li>
+</ul></li>
+<li><strong>Function</strong> <code>preLoadHack(url)</code> Optional. Called directly before a (single) file is loaded. </li>
+</ul></li>
+<li><p><strong>Function</strong> <code>JOBAD.util.getCurrentOrigin()</code> - Gets the current file being executed. Works only directly in a script file. </p></li>
+<li><p><strong>Function</strong> <code>JOBAD.util.escapeHTML(str)</code> - Escapes a string for use within html. </p>
+
 <ul>
 <li><strong>String</strong> <code>str</code> String to escape</li>
 </ul></li>

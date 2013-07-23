@@ -160,7 +160,6 @@ JOBAD.ifaces.push(function(me, args){
 		config = (typeof config == "function")?{"ready": config}:config; 
 		config = (typeof config == "booelan")?{"activate": config}:config; 
 
-
 		var ready = JOBAD.util.forceFunction(config.ready, function(){});
 		var load = JOBAD.util.forceFunction(config.load, function(){});
 
@@ -449,6 +448,7 @@ JOBAD.modules.cleanProperties = ["init", "activate", "deactivate", "globalinit",
 
 var moduleList = {};
 var moduleStorage = {};
+var moduleOrigins = {}; 
 
 /* 
 	Registers a new JOBAD module with JOBAD. 
@@ -457,6 +457,7 @@ var moduleStorage = {};
 */
 JOBAD.modules.register = function(ModuleObject){
 	var moduleObject = JOBAD.modules.createProperModuleObject(ModuleObject);
+
 	if(!moduleObject){
 		return false;	
 	}
@@ -464,10 +465,36 @@ JOBAD.modules.register = function(ModuleObject){
 	if(JOBAD.modules.available(identifier)){
 		return false;	
 	} else {
+		//set the origins
+		if(JOBAD.repo.__currentFile){
+			moduleOrigins[identifier] = [JOBAD.repo.__currentFile, JOBAD.repo.__currentLoad, JOBAD.repo.__currentRepo]; //The current origin
+		} else {
+			moduleOrigins[identifier] = [JOBAD.util.getCurrentOrigin()];
+		}
+
+		//resolving all the relative urls
+		if(moduleObject.info.url){
+			moduleObject.info.url = JOBAD.modules.resolveModuleResourceURL(identifier, moduleObject.info.url); 
+		}
+
+		moduleObject.info.externals.js = JOBAD.util.map(moduleObject.info.externals.js, function(e){
+			return JOBAD.modules.resolveModuleResourceURL(identifier, e); 
+		});
+
+		moduleObject.info.externals.css = JOBAD.util.map(moduleObject.info.externals.css, function(e){
+			return JOBAD.modules.resolveModuleResourceURL(identifier, e); 
+		});
+
 		moduleList[identifier] = moduleObject;
+
+
 		moduleStorage[identifier] = {};
+		
+		
 		return true;
 	}
+
+
 };
 
 /* 
@@ -514,12 +541,26 @@ JOBAD.modules.createProperModuleObject = function(ModuleObject){
 
 		if(info.hasOwnProperty('externals')){
 			if(JOBAD.util.isArray(info["externals"])){
-				properObject.info.externals = info["externals"];
+				properObject.info.externals = {"js": info["externals"], "css": []};
+			} else if(JOBAD.util.isObject(info["externals"])){
+				properObject.info.externals = {}
+				if(info["externals"].hasOwnProperty("css")){
+					if(!JOBAD.util.isArray(info["externals"].css)){
+						return false; 
+					}
+					properObject.info.externals.css = info["externals"].css; 
+				}
+				if(info["externals"].hasOwnProperty("js")){
+					if(!JOBAD.util.isArray(info["externals"].js)){
+						return false; 
+					}
+					properObject.info.externals.js = info["externals"].js; 
+				}
 			} else {
 				return false;
 			}
 		} else {
-			properObject.info.externals = [];
+			properObject.info.externals = {"js":[], "css": []};
 		}
 
 		if(info.hasOwnProperty('async')){
@@ -647,6 +688,33 @@ JOBAD.modules.available = function(name, checkDeps){
 		return selfAvailable;
 	}
 };
+
+/*
+	Gets the origin of a module. 
+	@param	name Name of module to get origin from. 
+	@param  what what kind of orgin to get. (Optional, "file" or "group", otehrwise "repo"))
+*/
+JOBAD.modules.getOrigin = function(name, what){
+	var origin = moduleOrigins[name]; 
+	if(JOBAD.util.equalsIgnoreCase(what, "file")){
+		return origin[0]; 
+	} else if(JOBAD.util.equalsIgnoreCase(what, "group")){
+		return origin[1] || [origin[0]]; 
+	} else {
+		return origin[2]; 
+	}
+}
+
+/*
+	Resolves a resource URL for the specefied module. 
+	@param	mod	Name of module to resolve url for. 
+	@param	url Url to resolve. 
+*/
+JOBAD.modules.resolveModuleResourceURL = function(mod, url){
+	var origin = JOBAD.modules.getOrigin(mod, "file");
+	origin = origin.substring(0, origin.lastIndexOf('/'));
+	return JOBAD.util.resolve(url, origin); 
+}
 
 /* 
 	Returns an array of dependencies of name including name in such an order, thet they can all be loaded without unresolved dependencies. 
@@ -826,6 +894,13 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 		return JOBADInstance;	
 	};
 
+	/*
+		Gets the origin of this module. 
+	*/
+	this.getOrigin = function(what){
+		return JOBAD.modules.getOrigin(name, what); 
+	}
+
 
 	this.isActive = function(){
 		return JOBADInstance.modules.isActive(this.info().identifier);
@@ -890,7 +965,7 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 
 	var do_next = function(){
 		ServiceObject.init.apply(me, params); 
-		next(true);
+		next.call(me, true);
 	};
 
 	if(!moduleStorage[name]["init"]){
@@ -904,14 +979,23 @@ JOBAD.modules.loadedModule = function(name, args, JOBADInstance, next){
 			}
 		}
 
-		JOBAD.util.loadExternalJS(ServiceObject.info.externals, function(urls, suc){
+		JOBAD.util.loadExternalCSS(ServiceObject.info.externals.css, function(urls, suc){
 			if(!suc){
-				next(false, "Can't load external dependencies: Timeout. "); 
+				next(false, "Can't load external CSS dependencies: Timeout. "); 
 			} else {
-				ServiceObject.globalinit.call(limited, do_next);
+				JOBAD.util.loadExternalJS(ServiceObject.info.externals.js, function(urls, suc){
+					if(!suc){
+						next(false, "Can't load external JavaScript dependencies: Timeout. "); 
+					} else {
+						ServiceObject.globalinit.call(limited, do_next);
+					}
+					
+				});
 			}
 			
 		});
+
+		
 	} else {
 		do_next();
 	}
