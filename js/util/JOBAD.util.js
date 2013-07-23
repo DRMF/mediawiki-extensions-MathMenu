@@ -520,7 +520,6 @@ JOBAD.util.loadExternalJS = function(url, callback, scope, preLoadHack){
 	    document.getElementsByTagName("head")[0].appendChild(script);
 
 	    window.setTimeout(function(){
-	    	document.getElementsByTagName("head")[0].removeChild(script); 
 	    	do_call(false);
 	    }, TIMEOUT_CONST);
 	    return 1;
@@ -617,8 +616,7 @@ JOBAD.util.loadExternalCSS = function(url, callback, scope, preLoadHack){
 
 		timeout_id = setTimeout(function(){
 			clearInterval(interval_id); 
-			head.removeChild(link); 
-			do_call(false); 
+			do_call(false);
 		}, TIMEOUT_CONST);
 
 

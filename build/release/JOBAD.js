@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 23 Jul 2013 19:08:16 +0200
+	built: Tue, 23 Jul 2013 19:26:58 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1944,7 +1944,6 @@ JOBAD.util.loadExternalJS = function(url, callback, scope, preLoadHack){
 	    document.getElementsByTagName("head")[0].appendChild(script);
 
 	    window.setTimeout(function(){
-	    	document.getElementsByTagName("head")[0].removeChild(script); 
 	    	do_call(false);
 	    }, TIMEOUT_CONST);
 	    return 1;
@@ -2041,8 +2040,7 @@ JOBAD.util.loadExternalCSS = function(url, callback, scope, preLoadHack){
 
 		timeout_id = setTimeout(function(){
 			clearInterval(interval_id); 
-			head.removeChild(link); 
-			do_call(false); 
+			do_call(false);
 		}, TIMEOUT_CONST);
 
 
