@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 23 Jul 2013 15:40:37 +0200
+	built: Tue, 23 Jul 2013 19:08:16 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1478,31 +1478,58 @@ JOBAD.util.UID = function(prefix){
 };
 
 /*
-	Creates a radio button for use with jQuery UI. 
+	Creates a radio button for use with Bootsrap
 	@param texts	Texts to use. 
 	@param start	Initial selection
 */
 JOBAD.util.createRadio = function(texts, start){
-	var id = JOBAD.util.UID();
-	
+	var id = JOBAD.util.UID(); //Id for the radio buttons
+	var selfChange = false; 
+
 	if(typeof start !== 'number'){
 		start = 0;
 	}
-	
-	var Labeller = JOBAD.refs.$('<span>');
-	
+
+	var Div = JOBAD.refs.$('<div>').addClass("btn-group");
+	var Div2 = JOBAD.refs.$('<div>').hide(); 
 					
 	for(var i=0;i<texts.length;i++){
-		var nid = JOBAD.util.UID();
-		Labeller.append(
-			JOBAD.refs.$("<input type='radio' name='"+id+"' id='"+nid+"'>"),
-			JOBAD.refs.$("<label>").attr("for", nid).text(texts[i])
-		)
+		Div.append(
+			JOBAD.refs.$("<button>").addClass("btn").text(texts[i])
+		);
+		Div2.append(
+			JOBAD.refs.$("<input type='radio' name='"+id+"' value='"+JOBAD.util.UID()+"'>")
+		);
 	}
+
+
+	var Buttons = Div.find("button"); 
+	var Inputs = Div2.find("input"); 
+
+	Buttons.on("click", function(){
+		var radio = Inputs.eq(Buttons.index(this)); 
+		radio[0].checked = true; 
+		Inputs.change(); 
+	})
+
+	Inputs
+	.change(function(e){
+		Buttons.removeClass("active"); 
+
+		Inputs.each(function(i){
+			var me = JOBAD.refs.$(this); 
+			if(me.is(":checked")){
+				Buttons.eq(i).addClass("active"); 
+			}
+		})
+		e.stopPropagation(); 
+	});
 	
-	Labeller.find("input").eq(start)[0].checked = true;
+	Inputs.eq(start)[0].checked = true;
+	Inputs.change(); 
+
 	
-	return Labeller.buttonset();
+	return JOBAD.refs.$("<div>").append(Div, Div2); 
 };
 
 /*
