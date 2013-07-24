@@ -210,7 +210,7 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
 					} else {
 						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
-						for(var j=0;j<edps.length;j++){
+						for(var j=0;j<edeps.length;j++){
 							cell.append(
 								"\"", 
 								JOBAD.refs.$("<span>")
@@ -231,7 +231,7 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
 					} else {
 						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
-						for(var j=0;j<edps.length;j++){
+						for(var j=0;j<edeps.length;j++){
 							cell.append(
 								"\"", 
 								JOBAD.refs.$("<span>")

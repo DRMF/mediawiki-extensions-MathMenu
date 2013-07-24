@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Tue, 23 Jul 2013 19:26:58 +0200
+	built: Wed, 24 Jul 2013 10:38:42 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -2520,7 +2520,7 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
 					} else {
 						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
-						for(var j=0;j<edps.length;j++){
+						for(var j=0;j<edeps.length;j++){
 							cell.append(
 								"\"", 
 								JOBAD.refs.$("<span>")
@@ -2541,7 +2541,7 @@ JOBAD.repo.buildPage = function(element, repo, callback){
 						JOBAD.refs.$("<td></td>").text("(None)").appendTo(row);
 					} else {
 						var cell = JOBAD.refs.$("<td></td>").appendTo(row); 
-						for(var j=0;j<edps.length;j++){
+						for(var j=0;j<edeps.length;j++){
 							cell.append(
 								"\"", 
 								JOBAD.refs.$("<span>")
