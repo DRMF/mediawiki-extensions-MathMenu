@@ -5,7 +5,7 @@ var gear_lib = require('gear-lib');
 var build = new gear.Queue({registry: new gear.Registry({module: 'gear-lib'})})
     .read([__dirname + "/release/JOBAD.css"])
     .concat()
-    .cssminify()
+    .less()
     .write([__dirname + "/release/JOBAD.min.css.tmp"]);
 
 build.run(function (error, results) {

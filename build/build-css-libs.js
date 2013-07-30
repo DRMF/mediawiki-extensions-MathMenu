@@ -12,7 +12,7 @@ files.pop();
 var build = new gear.Queue({registry: new gear.Registry({module: 'gear-lib'})})
     .read(files)
     .concat()
-    //.cssminify() //gives errors
+    .less()
     .write([__dirname + "/release/libs/css/libs.css"]);
 
 build.run(function (error, results) {

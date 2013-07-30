@@ -54,6 +54,28 @@ JOBAD.util.UID = function(prefix){
 };
 
 /*
+	Creates a dropdown (<select>) control. 
+	@param values	Values to use. 
+	@param texts	Texts to use. 
+	@param start	Initially selected id. 
+*/
+JOBAD.util.buildDropDown = function(values, texts, start){
+	var select = JOBAD.refs.$("<select>"); 
+
+	for(var i=0;i<texts.length;i++){
+		select.append(
+			JOBAD.refs.$("<option>")
+			.attr("value", values[i])
+			.text(texts[i])
+		);
+	}
+
+	select.find("option").eq((typeof start == "number")?start:0).prop('selected', true); 
+
+	return select; 
+}
+
+/*
 	Creates a radio button for use with Bootsrap
 	@param texts	Texts to use. 
 	@param start	Initial selection

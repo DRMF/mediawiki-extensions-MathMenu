@@ -1,6 +1,6 @@
 /*
 	JOBAD CSS File (Minified Version)
-	built: Tue, 23 Jul 2013 19:27:00 +0200
+	built: Wed, 31 Jul 2013 09:13:59 +0200
 
 	Contains all JOBAD related CSS data
 	
@@ -42,6 +42,7 @@
 .JOBAD.JOBAD_Folding_left.JOBAD_Folding_Container{position:relative;float:left;margin-right:5px;}
 .JOBAD.JOBAD_Folding_left.JOBAD_Folding_Spacing,.JOBAD.JOBAD_Folding_right.JOBAD_Folding_Spacing{width:1px;height:1px;overflow:hidden;display:block;}
 .modal.large{width:80%;margin-left:-40%;}
+.wide{width:150px !important;}
 .JOBAD{}
 .JOBAD.JOBAD_InlineIcon{background-size:18px 18px;width:18px;height:18px;}
 .JOBAD.JOBAD_Hover{background-color:#ffffca;-webkit-border-radius:5;-moz-border-radius:5;border-radius:5;border:1px solid #000023;}

@@ -166,3 +166,7 @@
     width: 80%; /* respsonsive width */
     margin-left:-40%; /* width/2) */
 }
+
+.wide {
+	width: 150px !important;
+}

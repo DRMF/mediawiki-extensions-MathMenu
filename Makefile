@@ -10,7 +10,7 @@ deps: npmdeps pipdeps
 clean-deps:
 	rm -rf node_modules
 npmdeps:
-	npm install gear gear-lib # To build compressed things
+	node build/npm-install-deps.js
 pipdeps:
 	pip install markdown2 pygments beautifulsoup4 # To build the doc
 
