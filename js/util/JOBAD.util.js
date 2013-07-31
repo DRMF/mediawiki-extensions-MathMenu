@@ -59,7 +59,7 @@ JOBAD.util.UID = function(prefix){
 	@param texts	Texts to use. 
 	@param start	Initially selected id. 
 */
-JOBAD.util.buildDropDown = function(values, texts, start){
+JOBAD.util.createDropDown = function(values, texts, start){
 	var select = JOBAD.refs.$("<select>"); 
 
 	for(var i=0;i<texts.length;i++){

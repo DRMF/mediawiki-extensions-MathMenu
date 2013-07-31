@@ -15,7 +15,12 @@ In addition to these functions, JOBAD.util also contains all underscore (version
 	* **Function** `func()` Function to wrap
 	* **Number** `from` 
 	* **Number** `to`
-* **Function** `JOBAD.util.createRadio(texts, start)` - Creates a Bootsrap radio button (Button group)
+* **Function** `JOBAD.util.createDropDown(values, texts, start)` - Creates a Dropdown Box.  
+	* **Array** `values` Values to use. 
+	* **Array** `texts` Texts to use. 
+	* **number** `start` Number of the initial value. 
+	* **returns** jQuery object
+* **Function** `JOBAD.util.createRadio(texts, start)` - Creates a Bootstrap radio button (Button group)
 	* **Array** `texts` Texts to use as names
 	* **number** `start` Identifier of the initial value
 	* **returns** jQuery object

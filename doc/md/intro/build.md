@@ -30,14 +30,16 @@ The following targets are available:
 * `all`: Builds all of JOBAD
 * `clean`: Removes all previous built stuff. If possible, also cleans dependencies. 
 * `deps`: Gets all dependencies. 
-    * `make npmdeps` - Gets the node dependencies
-    * `make pipdeps` - Gets the pip dependencies
-* `release` - Builds release JS + CSS. 
-    * `js` - Builds Release JS. 
+    * `npmdeps` - Gets the node dependencies (if not already available)
+    * `pipdeps` - Gets the python dependencies (if not already available)
+* `release` - Builds JS + CSS. 
+    * `js` - Builds JS. 
         * `js-dev`- Builds the JS Development version
         * `js-min`- Builds the JS Production version
-    * `css` - Builds Release CSS. 
+        * `js-libs` - Compress JavaScript Libraries into one file
+    * `css` - Builds CSS. 
         * `css-dev`- Builds the CSS Development version
         * `css-min`- Builds the CSS Production version
+        * `css-libs` - Compress CSS Libraries into one file
 * `doc` - Documentation
 * `templates` - Builds the templates.  

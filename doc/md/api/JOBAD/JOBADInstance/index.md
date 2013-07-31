@@ -11,7 +11,7 @@ An instance of `JOBAD` has the following properties:
 * **Object** [`.Sidebar`](sidebar.md) Namespace for Sidebar Functions. 
 * **Object** [`.Folding`](folding.md) Namespace for Folding Functions. 
 * **Array** `.args` An array containing the parameters originally parsed to the module constructor. 
-* **Function** `.showConfigUI()` Displays the configuration UI. 
 * **Function** `.contains(element)` - Checks if `element` is a memer of this JOBADInstance. 
 	* **jQuery** Element to check. 
 	* **returns** boolean. 
+* **Function** `.showConfigUI()` Displays the configuration UI. **Moved to the JOBAD.config module**

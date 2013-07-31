@@ -1,7 +1,7 @@
 /*
 	JOBAD v3
 	Development version
-	built: Wed, 31 Jul 2013 09:13:55 +0200
+	built: Wed, 31 Jul 2013 10:36:43 +0200
 
 	
 	Copyright (C) 2013 KWARC Group <kwarc.info>
@@ -1483,7 +1483,7 @@ JOBAD.util.UID = function(prefix){
 	@param texts	Texts to use. 
 	@param start	Initially selected id. 
 */
-JOBAD.util.buildDropDown = function(values, texts, start){
+JOBAD.util.createDropDown = function(values, texts, start){
 	var select = JOBAD.refs.$("<select>"); 
 
 	for(var i=0;i<texts.length;i++){

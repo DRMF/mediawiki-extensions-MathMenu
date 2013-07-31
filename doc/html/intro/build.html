@@ -520,20 +520,22 @@
 <li><code>clean</code>: Removes all previous built stuff. If possible, also cleans dependencies. </li>
 <li><code>deps</code>: Gets all dependencies. 
 <ul>
-<li><code>make npmdeps</code> - Gets the node dependencies</li>
-<li><code>make pipdeps</code> - Gets the pip dependencies</li>
+<li><code>npmdeps</code> - Gets the node dependencies (if not already available)</li>
+<li><code>pipdeps</code> - Gets the python dependencies (if not already available)</li>
 </ul></li>
-<li><code>release</code> - Builds release JS + CSS. 
+<li><code>release</code> - Builds JS + CSS. 
 <ul>
-<li><code>js</code> - Builds Release JS. 
+<li><code>js</code> - Builds JS. 
 <ul>
 <li><code>js-dev</code>- Builds the JS Development version</li>
 <li><code>js-min</code>- Builds the JS Production version</li>
+<li><code>js-libs</code> - Compress JavaScript Libraries into one file</li>
 </ul></li>
-<li><code>css</code> - Builds Release CSS. 
+<li><code>css</code> - Builds CSS. 
 <ul>
 <li><code>css-dev</code>- Builds the CSS Development version</li>
 <li><code>css-min</code>- Builds the CSS Production version</li>
+<li><code>css-libs</code> - Compress CSS Libraries into one file</li>
 </ul></li>
 </ul></li>
 <li><code>doc</code> - Documentation</li>

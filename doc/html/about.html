@@ -504,14 +504,22 @@
 <h3>Version 3.1.7 (In Development)</h3>
 
 <ul>
+<li>refactored the build system, now easy with <code>make</code>
+<ul>
+<li>also compressing all required libraries in a js and css file</li>
+<li>building will automatically pull all dependencies (npm &amp; pip needed)</li>
+</ul></li>
 <li>added bootstrap compatibility via jQuery Bootstrap</li>
-<li>refactored the build system, now easy with <code>make</code></li>
+<li>updated the config dialog
+<ul>
 <li>ported the config dialog to bootstrap</li>
+<li>moved to the module <code>jobad.config</code></li>
+</ul></li>
 <li>added <code>moduleInstance.getOrigin()</code> to get the origin of a module. 
 <ul>
-<li>all urls on modules re now resolved relative to the module. </li>
+<li>all urls on modules are now resolved relative to the module. </li>
 </ul></li>
-<li>added <code>JOBAD.util.loadExternalJS</code></li>
+<li>added <code>JOBAD.util.loadExternalCSS</code></li>
 <li>added CSS external dependencies for modules</li>
 <li>added disabled menu items (use <code>false</code> instead of a callback)</li>
 <li>better default handling of sidebar icons. </li>
