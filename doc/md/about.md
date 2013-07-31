@@ -15,7 +15,9 @@ It is known not to be compatible with:
 The official JOBAD repository is located at [https://github.com/KWARC/jobad](https://github.com/KWARC/jobad). 
 
 ## Changelog
-### Version 3.1.7 (In Development)
+### Version 3.1.8 (In Development)
+* nothing yet
+### Version 3.1.7 (Stable)
 * refactored the build system, now easy with `make`
 	* also compressing all required libraries in a js and css file
 	* building will automatically pull all dependencies (npm & pip needed)

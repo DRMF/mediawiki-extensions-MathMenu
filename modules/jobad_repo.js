@@ -56,7 +56,7 @@ JOBAD.repo.config({
 			"test.config": "core/test/test.config.js"
 			
 	},
-	"versions": ["3.1.7"], //compatible JOBAD versions
+	"versions": ["3.1.8"], //compatible JOBAD versions
 	"name": "Core JOBAD Modules Repository", //name
 	"description": "JOBAD Modules repository from the Core" //description
 });
