@@ -26,7 +26,7 @@
 			'author':	'Tom Wiesing',
 			'description':	'This module provides a simple configuration dialog. For backwards compatibility, this module adds the .showConfigUI() function to modules. ',
 			'hasCleanNamespace': false,
-			'version': '3.1.7'
+			'version': '3.1.7a'
 		},
 		globalinit: function(){
 			//icon source: http://openiconlibrary.sourceforge.net/gallery2/?./Icons/actions/configure-5.png, license: gplv2
@@ -47,7 +47,7 @@
 			return [
 				["Show Config UI", function(element){
 					me.showConfigUI();
-				}, "jobad.icons.config"]
+				}, "jobad.icons.config", {"id": "awesome"}]
 			];
 		},
 		/* builds a jQuery Config Item */

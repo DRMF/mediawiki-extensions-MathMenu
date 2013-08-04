@@ -35,6 +35,7 @@ JOBAD.repo.config({
 			"test.hover", 
 			"test.menu1", 
 			"test.menu2", 
+			"test.menu3",
 			"test.sidebar",
 			"test.config"
 	],
@@ -52,6 +53,7 @@ JOBAD.repo.config({
 			"test.hover": "core/test/test.hover.js",
 			"test.menu1": "core/test/test.menu1.js",
 			"test.menu2": "core/test/test.menu2.js",
+			"test.menu3": "core/test/test.menu3.js",
 			"test.sidebar": "core/test/test.sidebar.js",
 			"test.config": "core/test/test.config.js"
 			

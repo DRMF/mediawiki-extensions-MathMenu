@@ -47,6 +47,7 @@ var ContextMenus = JOBAD.refs.$([]);
 		config.callBackOrg	Optional. Element to use for callback. 
 		config.unbindListener	Optional. Element to listen to for unbinds. 
 		config.block	Optional. Always block the Browser context menu. 
+		config.stopPropagnate	Optional. If set to true, will not propagnate menus (check parents if no menu is available). 
 	@return the jquery element. 
 */
 JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
@@ -62,11 +63,13 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 	//Force functions for all of this
 	var typeFunction = JOBAD.util.forceFunction(config.type);
 	var onCallBack = JOBAD.util.forceFunction(config.callback, true);
-	var onOpen = JOBAD.util.forceFunction(config.enable, true);
+	var onOpen = JOBAD.util.forceFunction(config.open, true);
+	var onShow = JOBAD.util.forceFunction(config.show, true);
 	var onEmpty = JOBAD.util.forceFunction(config.empty, true);
-	var onClose = JOBAD.util.forceFunction(config.disable, true);
+	var onClose = JOBAD.util.forceFunction(config.close, true);
 	var parents = JOBAD.refs.$(config.parents); 
 	var block = JOBAD.util.forceBool(config.block, false);
+	var stop = JOBAD.util.forceBool(config.stopPropagnate, false); 
 
 	element.on('contextmenu.JOBAD.UI.ContextMenu', function(e){
 		//control overrides
@@ -87,7 +90,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		var result = false;
 		while(true){
 			result = demandFunction(targetElement, orgElement);
-			if(result || element.is(this)){
+			result = JOBAD.UI.ContextMenu.generateMenuList(result); //generate the menu
+			if(result.length > 0 || element.is(this) || stop){
 				break;				
 			}
 			targetElement = targetElement.parent();
@@ -181,7 +185,8 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 					eventDispatcher.trigger('JOBAD.UI.ContextMenu.unbind');
 				},
 				"callback": closeHandler,
-				"block": true
+				"block": true,
+				"stopPropagnate": stop
 			}); 
 		} else {
 			JOBAD.console.warn("JOBAD.UI.ContextMenu: Can't show Context Menu: Unkown Menu Type '"+menuType+"'. ")
@@ -201,18 +206,26 @@ JOBAD.UI.ContextMenu.enable = function(element, demandFunction, config){
 		})
 		.appendTo(JOBAD.refs.$("body"))
 
+		onShow(menuBuild, result); 
+
 
 		//unbind listener
-		JOBAD.refs.$(document).add(config.unbindListener).add(menuBuild).on('JOBAD.UI.ContextMenu.unbind', function(e){
+		JOBAD.refs.$(document).add(config.unbindListener).add(menuBuild)
+		.on("JOBAD.UI.ContextMenu.hide", function(){
+			menuBuild.hide();
+		})
+		.on('JOBAD.UI.ContextMenu.unbind', function(e){
 				closeHandler();
-				JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBAD.UI.ContextMenu.unbind');
+				JOBAD.refs.$(document).unbind('mousedown.UI.ContextMenu.Unbind JOBAD.UI.ContextMenu.unbind JOBAD.UI.ContextMenu.hide');
 				e.stopPropagation();
 				ContextMenus = ContextMenus.not(menuBuild);
 		});
 
-		JOBAD.refs.$(document).on('mousedown.UI.ContextMenu.Unbind', function(){
+		JOBAD.refs.$(document)
+		.one('mousedown.UI.ContextMenu.Unbind', function(){
 			JOBAD.UI.ContextMenu.clear(); 
-		});
+		})
+
 
 		//add to all ContextMenus
 		ContextMenus = ContextMenus.add(menuBuild);
@@ -283,15 +296,20 @@ JOBAD.UI.ContextMenu.buildContextMenuList = function(items, element, orgElement,
 			)
 			
 		}
+
+		if(typeof item[3] == "string"){
+			$li.attr("id", item[3]); 
+		}
 		
 		(function(){
 			if(typeof item[1] == 'function'){
 				var callback = item[1];
 
 				$a.on('click', function(e){
-					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.hide');
 					callback(element, orgElement);
 					cb(element, orgElement);
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
 				});	
 			} else if(item[1] === false){
 				$a.parent().addClass("ui-state-disabled"); 
@@ -370,6 +388,10 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 			.width(2*r)
 			.height(2*r)
 		);
+
+		if(typeof item[3] == "string"){
+			$item.attr("id", item[3]); 
+		}
 		
 		(function(){
 			var text = JOBAD.refs.$("<span>").text(item[0]);
@@ -378,9 +400,10 @@ JOBAD.UI.ContextMenu.buildPieMenuList = function(items, element, orgElement, cal
 
 				$item.click(function(e){
 					JOBAD.UI.hover.disable();
-					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.hide');
 					callback(element, orgElement);
 					cb(element, orgElement);
+					JOBAD.refs.$(document).trigger('JOBAD.UI.ContextMenu.unbind');
 				});		
 			} else if(item[1] === false){
 				$item.addClass("JOBAD_ContextMenu_Radial_Disabled");
@@ -410,37 +433,98 @@ JOBAD.UI.ContextMenu.generateMenuList = function(menu){
 	if(typeof menu == 'undefined'){
 		return [];
 	}
-	var res = [];
-	if(JOBAD.util.isArray(menu)){
-		for(var i=0;i<menu.length;i++){
-			var key = menu[i][0];
-			var val = menu[i][1];
-			var icon = (typeof menu[i][2] == 'undefined')?DEFAULT_ICON:menu[i][2];
-			if(typeof val == 'function' || val === false){
-				res.push([key, val, icon]);		
-			} else {
-				res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), icon]);
+
+	if(menu === false){
+		return []; 
+	}
+
+	var generateMenuItem = function(v){
+		if(typeof v == "function" || v === false){
+			return v; 
+		} else {
+			return JOBAD.UI.ContextMenu.generateMenuList(v);
+		}
+	};
+
+	var generateMenuConfig = function(a, b){
+		var config = {
+			"icon": DEFAULT_ICON,
+			"id": false
+		}; 
+
+		var a = JOBAD.util.defined(a); 
+		var b = JOBAD.util.defined(b); 
+
+		if(typeof a == "string"){
+			config["icon"] = a; 
+		} else if(JOBAD.util.isObject(a)){
+			if(typeof a.icon == "string"){
+				config["icon"] = a.icon; 
+			}
+			if(typeof a["id"] == "string"){
+				config["id"] = a["id"]; 
+			}
+			return config; 
+		}
+
+		if(typeof b == "string"){
+			config["id"] = b; 
+		} else if(JOBAD.util.isObject(b)){
+			if(typeof b.icon == "string"){
+				config["icon"] = b.icon; 
+			}
+			if(typeof b["id"] == "string"){
+				config["id"] = b["id"]; 
 			}
 		}
+			
+
+		return config; 
+	}
+
+	var res = [];
+	if(JOBAD.util.isArray(menu)){
+		//We have an array as the menu
+		//=> generate an object style representation
+		var newmenu = {}; 
+
+		for(var i=0;i<menu.length;i++){
+			var key = menu[i][0];
+			var val = menu[i].slice(1); 
+
+			newmenu[key] = val;
+		}
+
+		return (JOBAD.UI.ContextMenu.generateMenuList(newmenu)); 
 	} else {
 		for(var key in menu){
 			if(menu.hasOwnProperty(key)){
 				var val = menu[key];
-				if(typeof val == 'function' || val === false){
-					res.push([key, val, DEFAULT_ICON]);	
-				} else if(JOBAD.util.isArray(val)){
-					if(typeof val[1] == 'string'){ //we have a string there => we have an icon
-						if(typeof val[0] == 'function' || val[0] === false){
-							res.push([key, val[0], val[1]]);
-						} else {
-							res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val[0]), val[1]]);
-						}
+				
+				if(JOBAD.util.isArray(val)){
+					//we have an array
+					//check got everything individually 
+					if(val.length == 0){
+						//nothing here, lets disable it
+						res.push([key, false, DEFAULT_ICON, false]);
+					} else if(val.length == 1){
+						//we have exactly length 1
+						//we should act as if we are only that. 
+						res.push([key, generateMenuItem(val[0]), DEFAULT_ICON, false]);
+					} else if(val.length == 2 || val.length == 3){
+						//we are of length 2 or 3 => generate config
+						//if we have a string, then treat it as icon, otherwise assume a config style object
+
+						var cfg = generateMenuConfig(val[1], val[2]); //generate the config
+
+						res.push([key, generateMenuItem(val[0]), cfg["icon"], cfg["id"]]);
 					} else {
-						res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), DEFAULT_ICON]);
+						//overlength
+						console.warn("JOBAD.UI.ContextMenu.generateMenuList: menu too long. ")
 					}
-					
 				} else {
-					res.push([key, JOBAD.UI.ContextMenu.generateMenuList(val), DEFAULT_ICON]);
+					//we are a single item. 
+					res.push([key, generateMenuItem(val), DEFAULT_ICON, false]);
 				}
 			}
 		}

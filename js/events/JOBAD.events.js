@@ -154,7 +154,14 @@ JOBAD.events.contextMenuEntries =
 			}, {
 				"type": function(target){
 					return me.Config.get("cmenu_type");
-				}
+				}, 
+				"show": function(){
+					root.trigger('JOBAD.Event', ['contextMenuOpen']);
+				},
+				"close": function(){
+					root.trigger('JOBAD.Event', ['contextMenuClose']);
+				},
+				"stopPropagnate": true
 			});
 		},
 		'disable': function(root){
@@ -166,8 +173,18 @@ JOBAD.events.contextMenuEntries =
 		'getResult': function(target){
 			var res = [];
 			var mods = this.modules.iterate(function(module){
-				var entries = module.contextMenuEntries.call(module, target, module.getJOBAD());
-				return JOBAD.UI.ContextMenu.generateMenuList(entries);
+				var mtarget = target;
+				var res = []; 
+				while(true){
+					if(mtarget.length == 0 
+						|| res.length > 0){
+						
+						return res; 
+					}
+					res = module.contextMenuEntries.call(module, mtarget, module.getJOBAD());
+					res = JOBAD.UI.ContextMenu.generateMenuList(res); 
+					mtarget = mtarget.parent(); 
+				}
 			});
 			for(var i=0;i<mods.length;i++){
 				var mod = mods[i];
