@@ -11,6 +11,9 @@
       if (! math.is('math')) { return false;}
 
       var tex = math.find('annotation[encoding="application/x-tex"]').text();
+      tex = tex.replace(/\{{4}([^\{\}]+)\}{4}/g,"{$1}");
+      tex = tex.replace(/\{{3}([^\{\}]+)\}{3}/g,"{$1}");
+      tex = tex.replace(/\{{2}([^\{\}]+)\}{2}/g,"{$1}");
       tex = tex.replace(/\[/g,"obrackett").replace(/\]/g,"cbrackett").replace(/\{/g,"obracee").replace(/\}/g,"cbracee");
       tex = encodeURIComponent(tex);//.replace(/\(/g, "%28").replace(/\\\\/g,"\\").replace(/\)/g,"%29").replace(/\*/g,"%@A").replace(/\\/g,"%5C");        
 
