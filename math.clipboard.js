@@ -5,6 +5,9 @@ JOBAD.modules.register({
     'title':  'Math Clipboard',
     'author': 'Janelle Williams and Deyan Ginev',
     'description':  'Clipboard for math formulas realized via Zeroclipboard',
+    'externals': {
+      'js': ['ZeroClipboard.js']
+    }
   },
   init: function(){
     var $saved_text = $("<span id='math_clipboard_saved'>Clipboard Save text</span>");

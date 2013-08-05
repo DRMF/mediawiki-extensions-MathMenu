@@ -7,9 +7,6 @@
       'description':  'Simple link to proof page from MediaWiki',
     },
     contextMenuEntries: function(target){
-      if(target.is('#nomenu,#nomenu *')){ //no menu for these elements
-        return false;
-      }
       var math = target.closest('math');
       if (! math.is('math')) { return false;}
       
