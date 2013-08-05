@@ -15,11 +15,10 @@
           /*     var link = target.closest('a').attr('href');
           window.location.href = link; */
           var math_key = 'title';
-          var txt = math.find('annotation[encoding="application/x-tex"]').text();
-          var math_value= encodeURIComponent(txt).replace(/\(/g, "%28").replace(/\\\\/g,"\\").replace(/\)/g,"%29").replace(/\*/g,"%@A").replace(/\\/g,"%5C");        
-
-          var url_page=window.location.search.substr(1);
-          var new_url = url_page+"boilerplate=Template%3ADRMF";//&title=" + math_value;
+          var tex = math.find('annotation[encoding="application/x-tex"]').text();
+          tex = tex.replace(/\[/g,"obrackett").replace(/\]/g,"cbrackett").replace(/\{/g,"obracee").replace(/\}/g,"cbracee");
+          tex = encodeURIComponent(tex);//.replace(/\(/g, "%28").replace(/\\\\/g,"\\").replace(/\)/g,"%29").replace(/\*/g,"%@A").replace(/\\/g,"%5C");        
+          var new_url ="/index.php?title=" + tex+"&action=edit&boilerplate=Template%3ADRMF";
           //alert(new_url);
           //alert(decodeURIComponent(math_value));
           window.location.href = new_url;
