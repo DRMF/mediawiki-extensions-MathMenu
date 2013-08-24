@@ -1,0 +1,3 @@
+[submodule "jobad"]
+	path = jobad
+	url = git://github.com/KWARC/jobad.git
