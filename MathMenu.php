@@ -38,7 +38,7 @@ $moduleTemplate = array(
 
 $wgResourceModules['ext.MathMenu'] = $moduleTemplate + array(
   'scripts' => array(
-    'jobad/js/deps/jquery/jquery-ui-1.10.3.js',
+    'jobad/js/deps/bootstrap.js',
     'jobad/build/release/JOBAD.min.js',
     'math.showsource.js',
     'ZeroClipboard.js',
