@@ -49,7 +49,7 @@ $wgResourceModules['ext.MathMenu'] = $moduleTemplate + array(
     "JOBAD.load-global.js"
   ),
   'dependencies' =>  array('jquery','jquery.ui.core'),
-  'styles' => 'jobad/build/release/JOBAD.css',
+  'styles' => array('jobad/build/release/libs/css/libs.css','jobad/build/release/JOBAD.css')
 );
 
 ?>
