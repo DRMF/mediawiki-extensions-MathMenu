@@ -8,40 +8,64 @@ JOBAD.modules.register({
     // No external dependencies, since MediaWiki hides all JavaScript code from the other scripts
   },
   init: function(){
-    var $saved_text = $("<span id='math_clipboard_saved'>Clipboard Save text</span>");
-    $saved_text.hide();
-    $('body').append($saved_text);
-    var $clip = new ZeroClipboard($saved_text[0], {
+    var $saved_tex = $("<span id='math_clipboard_tex'>Clipboard Save TeX</span>");
+    var $saved_content = $("<span id='math_clipboard_content'>Clipboard Save Content MathML</span>");
+    $saved_tex.hide();
+    $saved_content.hide();
+    $('body').append($saved_tex);
+    $('body').append($saved_content);
+    // DEBUG: First copy doesn't work unless we have a pointless clip set.
+    var $clip_debug = new ZeroClipboard($saved_tex[0], {
       moviePath: "/extensions/MathMenu/ZeroClipboard.swf",
     });
-    $clip.setText($saved_text);
+    $clip_debug.setText("Debug");
   },
   onEvent: function(evt){
-    var $text = $("#math_clipboard_saved").text();
     if(evt == "contextMenuOpen"){ //Context Menu is opened
+      var $copy_this = $("#math_clipboard_copy_this");
+      var $tex = $("#math_clipboard_tex").text();
+      var $content = $("#math_clipboard_content").html();
       // The most important part is here -- attach a Flash ZeroClipboard object
       // to the current menu row, which will only be created __after__ this function has completed
       // in other words add the attachment into an event that will be triggered when the row is created
-      var $menu = $("#math_clipboard_menu");
-      $menu.attr("data-clipboard-ready","true");
-      var $clip = new ZeroClipboard( $menu[0], {
+      var $menu_tex = $("#mathmenu_clipboard_tex");
+      var $menu_content = $("#mathmenu_clipboard_content");
+
+      // Then copy it when requested
+      var $clip_tex = new ZeroClipboard( $menu_tex[0], {
         moviePath: "/extensions/MathMenu/ZeroClipboard.swf",
       });
-      $clip.setText($text);
+      // I'm completely confused by their API,
+      // the explanations about multiple copy buttons is very hard to understand
+      var $clip_content = new ZeroClipboard( $menu_content[0], {
+        moviePath: "/extensions/MathMenu/ZeroClipboard.swf",
+      });
+      // Set what we want to copy when we hover on the copy button
+      $menu_tex.hover(function(){
+        $clip_tex.setText($tex);
+      });      
+      $menu_content.hover(function(){
+        $clip_content.setText($content);
+      });
     }
   },
   contextMenuEntries: function(target){
-    if(target.is('#nomenu,#nomenu *')){ //no menu for these elements
-      return false; }
     var $math = target.closest('math');
     if (! $math.is('math')) { return false;}
     var $tex = $math.find('annotation[encoding="application/x-tex"]').text();
-    $("#math_clipboard_saved").text($tex);
+    var $content = $math.find('annotation-xml[encoding="MathML-Content"]').html();
+    $("#math_clipboard_tex").text($tex);
+    $("#math_clipboard_content").html($content);
         
     return {
       "Copy TeX Source": [function(element){return true;},
       {
-      "id": "math_clipboard_menu", //This is the id
+      "id": "mathmenu_clipboard_tex", //This is the id
+      "icon": "none" //set an icon if desired
+      }],
+      "Copy Content MathML": [function(element){return true;},
+      {
+      "id": "mathmenu_clipboard_content", //This is the id
       "icon": "none" //set an icon if desired
       }]
     };
