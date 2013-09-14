@@ -56,19 +56,21 @@ JOBAD.modules.register({
     var $content = $math.find('annotation-xml[encoding="MathML-Content"]').html();
     $("#math_clipboard_tex").text($tex);
     $("#math_clipboard_content").html($content);
-        
-    return {
-      "Copy TeX Source": [function(element){return true;},
+    var $menu_rows = {};
+    if ($tex && ($tex.length>0)) {
+      $menu_rows["Copy TeX Source"] = [function(element){return true;},
       {
       "id": "mathmenu_clipboard_tex", //This is the id
       "icon": "none" //set an icon if desired
-      }],
-      "Copy Content MathML": [function(element){return true;},
+      }];}
+    if ($content && ($content.length>0)) {
+      $menu_rows["Copy Content MathML"] = [function(element){return true;},
       {
       "id": "mathmenu_clipboard_content", //This is the id
       "icon": "none" //set an icon if desired
-      }]
-    };
+      }];}
+
+    return $menu_rows;
   }
 });
 })(JOBAD.refs.$);
