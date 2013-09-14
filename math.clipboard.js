@@ -22,6 +22,9 @@ JOBAD.modules.register({
   },
   onEvent: function(evt){
     if(evt == "contextMenuOpen"){ //Context Menu is opened
+      // Clean up previous clipboards
+      ZeroClipboard.destroy();
+      // Set up DOM clipboard
       var $copy_this = $("#math_clipboard_copy_this");
       var $tex = $("#math_clipboard_tex").text();
       var $content = $("#math_clipboard_content").html();
