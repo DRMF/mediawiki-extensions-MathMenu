@@ -4,7 +4,6 @@
   JOBAD_IN_PAGE.modules.load([
     "math.clipboard",
     "mathjax.mathjax",
-    "wiki.formulapage",
     'math.wolframalpha'
   ], function(mod, state){
     this.Setup();

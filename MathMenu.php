@@ -44,7 +44,6 @@ $wgResourceModules['ext.MathMenu'] = $moduleTemplate + array(
     'ZeroClipboard.js',
     'math.clipboard.js',
     "mathjax.mathjax.js",
-    "wiki.formulapage.js",
     "math.wolframalpha.js",
     "JOBAD.load-global.js"
   ),
