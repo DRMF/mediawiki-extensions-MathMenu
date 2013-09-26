@@ -1,4 +1,4 @@
-(function($){
+jQuery( document ).ready( function( $ ) {
 JOBAD.modules.register({
   info:{
     'identifier': 'math.wolframalpha',
@@ -19,6 +19,5 @@ JOBAD.modules.register({
     ];
   }
 });
-})(JOBAD.refs.$);
-
+});
 

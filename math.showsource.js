@@ -2,7 +2,9 @@
   mathc_clipboard.js - An example module for JOBAD. 
   Extracts the TeX from a selected MathML formula and shows a tooltip.
 */
-(function($){
+jQuery( document ).ready( function( $ ) {
+        // Paste snippet here
+        // Paste as many as you like, only one "jQuery document ready" wrapper is needed!
   JOBAD.modules.register({
     info:{
       'identifier': 'math.showsource',
@@ -21,4 +23,4 @@
       ];
     }
   });
-})(JOBAD.refs.$);
+} );

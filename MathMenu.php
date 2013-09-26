@@ -40,15 +40,14 @@ $wgResourceModules['ext.MathMenu'] = $moduleTemplate + array(
   'scripts' => array(
     'jobad/js/deps/bootstrap.js',
     'jobad/build/release/JOBAD.min.js',
-    'math.showsource.js',
     'ZeroClipboard.js',
     'math.clipboard.js',
     "mathjax.mathjax.js",
     "math.wolframalpha.js",
     "JOBAD.load-global.js"
   ),
-  'dependencies' =>  array('jquery','jquery.ui.core'),
-  'styles' => array('jobad/build/release/libs/css/libs.css','jobad/build/release/JOBAD.css')
+  'dependencies' =>  array('jquery'),
+  'styles' => array('jobad/build/release/libs/css/libs.css','jobad/build/release/JOBAD.min.css')
 );
 
 ?>
