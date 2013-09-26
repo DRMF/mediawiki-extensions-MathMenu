@@ -64,7 +64,7 @@ JOBAD.modules.register({
     var $math = target.closest('math');
     if (! $math.is('math')) { return false;}
     var $tex = $math.find('annotation[encoding="application/x-tex"]').text();
-    var $content = $math.find('annotation-xml[encoding="MathML-Content"]').html();
+      var $content = $math.find('annotation-xml[encoding="MathML-Content"]').clone();    
     $("#math_clipboard_tex").text($tex);
     $("#math_clipboard_content").html($content);
     var $menu_rows = {};
