@@ -1,4 +1,4 @@
-(function($){
+jQuery( document ).ready( function( $ ) {
 JOBAD.modules.register({
   info:{
     'identifier': 'math.clipboard',
@@ -24,6 +24,7 @@ JOBAD.modules.register({
     if(evt == "contextMenuOpen"){ //Context Menu is opened
       // Clean up previous clipboards
       ZeroClipboard.destroy();
+      ZeroClipboard.setDefaults({ moviePath: "/extensions/MathMenu/ZeroClipboard.swf" });
       // Set up DOM clipboard
       var $copy_this = $("#math_clipboard_copy_this");
       var $tex = $("#math_clipboard_tex").text();
@@ -33,17 +34,24 @@ JOBAD.modules.register({
       // in other words add the attachment into an event that will be triggered when the row is created
       var $menu_tex = $("#mathmenu_clipboard_tex");
       var $menu_content = $("#mathmenu_clipboard_content");
-
+      var $submenu = $menu_tex.closest('li.dropdown-submenu');
       // Then copy it when requested
-      var $clip_tex = new ZeroClipboard( $menu_tex[0], {
-        moviePath: "/extensions/MathMenu/ZeroClipboard.swf",
-      });
+      var $clip_tex = new ZeroClipboard($menu_tex);
       // I'm completely confused by their API,
       // the explanations about multiple copy buttons is very hard to understand
-      var $clip_content = new ZeroClipboard( $menu_content[0], {
-        moviePath: "/extensions/MathMenu/ZeroClipboard.swf",
-      });
+      // It seems there is a ZeroClipboard SINGLETON in JS, which makes it a pain to do
+      // several buttons and pass events around...
+      var $clip_content = new ZeroClipboard($menu_content);
+      // Keep rows active when Flash is hovered
+      $clip_tex.on('mouseover', function(client) { $menu_tex.parent().show(); });
+      $clip_tex.on('mouseout', function(client) { $menu_tex.parent().hide(); });
+      $clip_tex.on('noflash',function(){alert("WARNING: Flash is not enabled, the Math Clipboard will not be operational.")});
       // Set what we want to copy when we hover on the copy button
+      $submenu.hover(function(){
+       $menu_tex.parent().show(); 
+      },function(){
+        $menu_tex.parent().hide();
+      })
       $menu_tex.hover(function(){
         $clip_tex.setText($tex);
       });      
@@ -73,7 +81,7 @@ JOBAD.modules.register({
       "icon": "none" //set an icon if desired
       }];}
 
-    return $menu_rows;
+    return [['Copy',$menu_rows]];
   }
 });
-})(JOBAD.refs.$);
+});
